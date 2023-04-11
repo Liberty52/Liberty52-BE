@@ -2,7 +2,7 @@ package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.exception.external.ForbiddenException;
 import com.liberty52.product.global.exception.external.ResourceNotFoundException;
-import com.liberty52.product.service.entity.CartItem;
+import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.repository.CartItemRepository;
 import com.liberty52.product.service.repository.ProductCartOptionRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class CartItemRemoveServiceImpl implements CartItemRemoveService {
 
     @Override
     public void removeCartItem(String authId, String cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, PARAM_NAME_ID, cartItemId));
+        CustomProduct cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, PARAM_NAME_ID, cartItemId));
         if(!authId.equals(cartItem.getAuthId()))
             throw new ForbiddenException(RESOURCE_NAME, authId);
         productCartOptionRepository.deleteAll(cartItem.getOptions());
