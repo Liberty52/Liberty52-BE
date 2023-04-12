@@ -24,7 +24,7 @@ class CartItemRemoveServiceImplTest {
     @Autowired
     private OptionDetailRepository optionDetailRepository;
     @Autowired
-    private ProductCartOptionRepository productCartOptionRepository;
+    private CustomProductOptionRepository productCartOptionRepository;
     String authId = "auth_id";
     String imageUrl = "url";
 

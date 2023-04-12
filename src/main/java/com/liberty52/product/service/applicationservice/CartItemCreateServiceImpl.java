@@ -22,7 +22,7 @@ public class CartItemCreateServiceImpl implements CartItemCreateService{
     private final ProductOptionRepository productOptionRepository;
     private final OptionDetailRepository optionDetailRepository;
     private final CartItemRepository cartItemRepository;
-    private final ProductCartOptionRepository productCartOptionRepository;
+    private final CustomProductOptionRepository productCartOptionRepository;
 
     @Override
     public void createCartItem(String authId, MultipartFile imageFile, CartItemRequest dto) {

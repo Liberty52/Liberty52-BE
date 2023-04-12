@@ -4,7 +4,7 @@ import com.liberty52.product.global.exception.external.ForbiddenException;
 import com.liberty52.product.global.exception.external.ResourceNotFoundException;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.repository.CartItemRepository;
-import com.liberty52.product.service.repository.ProductCartOptionRepository;
+import com.liberty52.product.service.repository.CustomProductOptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CartItemRemoveServiceImpl implements CartItemRemoveService {
     private final CartItemRepository cartItemRepository;
-    private final ProductCartOptionRepository productCartOptionRepository;
+    private final CustomProductOptionRepository productCartOptionRepository;
     private static final String RESOURCE_NAME = "CartItem";
     private static final String PARAM_NAME_ID = "ID";
 

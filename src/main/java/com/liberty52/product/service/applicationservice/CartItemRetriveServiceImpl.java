@@ -21,7 +21,7 @@ public class CartItemRetriveServiceImpl implements CartItemRetriveService {
     private final ProductOptionRepository productOptionRepository;
     private final OptionDetailRepository optionDetailRepository;
     private final CartItemRepository cartItemRepository;
-    private final ProductCartOptionRepository productCartOptionRepository;
+    private final CustomProductOptionRepository productCartOptionRepository;
 
     @Override
     public List<CartItemResponse> retriveCartItem(String authId) {
