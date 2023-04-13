@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootTest
@@ -74,9 +75,8 @@ class CartItemRemoveServiceImplTest {
         return customProductRepository.save(customProduct);
     }
     private CustomProduct createMockOrderAndGetItem() {
-        Orders order = ordersRepository.save(MockFactory.createOrder(authId));
         CustomProduct customProduct = customProductRepository.findById(this.cartItemId).get();
-        customProduct.associate(order);
+        Orders order = ordersRepository.save(MockFactory.createOrder(authId, List.of(customProduct)));
         return customProductRepository.save(customProduct);
     }
 
