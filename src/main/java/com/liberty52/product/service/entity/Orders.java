@@ -32,19 +32,25 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+
+    private int deliveryPrice;
+
+    private String destination;
+
     @OneToMany(mappedBy = "orders")
     private List<CustomProduct> customProducts = new ArrayList<>();
 
-    public Orders(String authId) {
+    private Orders(String authId, int deliveryPrice, String destination) {
         this.authId = authId;
-        orderDate = LocalDate.now();
         orderStatus = OrderStatus.ORDERED;
+        this.deliveryPrice = deliveryPrice;
+        this.destination = destination;
     }
 
     // 따로 addCustomProduct 를 만들지 않은 이유는
     // Orders는 이미 결제 완료된 상태이기 때문에 제품이 변하지 않을 것이라고 생각.
-    public static Orders create(String authId, List<CustomProduct> customProducts){
-        Orders orders = new Orders(authId);
+    public static Orders create(String authId, int deliveryPrice, String destination, List<CustomProduct> customProducts){
+        Orders orders = new Orders(authId,deliveryPrice,destination);
         Assert.notEmpty(customProducts,"주문에서 제품이 없을 수 없습니다.");
 
         customProducts.forEach(cp ->
