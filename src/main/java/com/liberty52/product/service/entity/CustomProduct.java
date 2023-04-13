@@ -8,8 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
-import org.springframework.util.StringUtils;
+
+import org.springframework.lang.NonNull;
 
 @Entity
 @Getter
@@ -36,7 +38,7 @@ public class CustomProduct {
     private Product product;
 
     @OneToMany(mappedBy = "customProduct")
-    private List<CustomProductOption> options;
+    private List<CustomProductOption> options = new ArrayList<>();
 
 
 
@@ -54,29 +56,32 @@ public class CustomProduct {
     }
 
     @Builder
-    private CustomProduct(String imageUrl, int quantity, String authId) {
-        this.userCustomPictureUrl = imageUrl;
+    private CustomProduct(String userCustomPictureUrl, int quantity, String authId) {
+        this.userCustomPictureUrl = this.modelingPictureUrl = this.thumbnailPictureUrl = userCustomPictureUrl;
         this.quantity = quantity;
         this.authId = authId;
-        this.options = new ArrayList<>();
     }
 
-    public static CustomProduct create(String imageUrl, int quantity, String authId) {
-        return builder().imageUrl(imageUrl).quantity(quantity).authId(authId).build();
+    public static CustomProduct create(String userCustomPictureUrl, int quantity, String authId) {
+        return builder().userCustomPictureUrl(userCustomPictureUrl).quantity(quantity).authId(authId).build();
     }
 
-    public void associateWithProduct(Product product) {
+    public void associate(Product product) {
         this.product = product;
     }
 
-    public void addToCart(Cart cart){
+    public void associate(@NonNull Cart cart){
+        Objects.requireNonNull(cart);
         this.cart = cart;
         cart.addCustomProduct(this);
+        this.orders = null;
     }
-    public void addToOrders(Orders orders){
+    public void associate(@NonNull Orders orders){
+        Objects.requireNonNull(orders);
         verifyQuantity();
         removedFromCart();
         this.orders = orders;
+        this.cart = null;
     }
 
     public void addCartOption(CustomProductOption productCartOption) {
@@ -90,5 +95,13 @@ public class CustomProduct {
 
     private void removedFromCart() {
         this.cart = null;
+    }
+
+    public boolean isInCartOf() {
+        return (this.cart != null) && (this.orders == null);
+    }
+
+    public boolean isInOrder() {
+        return (this.cart == null) && (this.orders != null);
     }
 }
