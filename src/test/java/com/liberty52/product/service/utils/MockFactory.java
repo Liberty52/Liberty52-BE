@@ -29,10 +29,6 @@ public class MockFactory {
         return Cart.create(authId);
     }
 
-    public static Orders createOrder(String authId) {
-        return new Orders(authId);
-    }
-
     public static Orders createOrder(String authId, List<CustomProduct> customProducts) {
         return Orders.create(authId, customProducts);
     }

@@ -28,7 +28,7 @@ public class CartItemCreateServiceImpl implements CartItemCreateService{
     public void createCartItem(String authId, MultipartFile imageFile, CartItemRequest dto) {
         CustomProduct cartItem = CustomProduct.createCartItem(authId, dto.getEa(), uploadImage(imageFile));
         Product product = productRepository.findById(dto.getProductId()).orElseThrow(() -> new ProductNotFoundException(dto.getProductId())); //예외처리 해야함
-        cartItem.associate(product);
+        cartItem.associateWithProduct(product);
         cartItemRepository.save(cartItem);
         for (CartItemRequest.OptionRequest optionRequest :dto.getOptionRequestList()){
             CustomProductOption productCartOption = CustomProductOption.create();

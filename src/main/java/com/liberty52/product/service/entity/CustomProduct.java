@@ -66,22 +66,26 @@ public class CustomProduct {
         return builder().userCustomPictureUrl(userCustomPictureUrl).quantity(quantity).authId(authId).build();
     }
 
-    public void associate(Product product) {
+    public void associateWithProduct(Product product) {
         this.product = product;
     }
 
-    public void associate(@NonNull Cart cart){
+    public void associateWithCart(@NonNull Cart cart){
         Objects.requireNonNull(cart);
         this.cart = cart;
         cart.addCustomProduct(this);
-        this.orders = null;
+        removedFromOrder();
     }
-    public void associate(@NonNull Orders orders){
+
+    /**
+     * Orders만 이 메스드를 호출한다.
+     * Visibility: package
+     */
+    void associateWithOrder(@NonNull Orders orders){
         Objects.requireNonNull(orders);
         verifyQuantity();
-        removedFromCart();
         this.orders = orders;
-        this.cart = null;
+        removedFromCart();
     }
 
     public void addCartOption(CustomProductOption productCartOption) {
@@ -95,6 +99,10 @@ public class CustomProduct {
 
     private void removedFromCart() {
         this.cart = null;
+    }
+
+    private void removedFromOrder() {
+        this.orders = null;
     }
 
     public boolean isInCart() {

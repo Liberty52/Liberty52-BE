@@ -48,7 +48,7 @@ public class Orders {
         Assert.notEmpty(customProducts,"주문에서 제품이 없을 수 없습니다.");
 
         customProducts.forEach(cp ->
-                cp.associate(orders));
+                cp.associateWithOrder(orders));
         orders.customProducts = customProducts;
         return orders;
     }

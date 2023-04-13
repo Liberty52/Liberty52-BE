@@ -57,7 +57,7 @@ class CartItemRemoveServiceImplTest {
         detailWall = optionDetailRepository.save(detailWall);
 
         CustomProduct customProduct = MockFactory.createCustomProduct(imageUrl, 1, authId);
-        customProduct.associate(product);
+        customProduct.associateWithProduct(product);
         customProduct = customProductRepository.save(customProduct);
 
         CustomProductOption customProductOption = MockFactory.createProductCartOption();
@@ -71,7 +71,7 @@ class CartItemRemoveServiceImplTest {
     private CustomProduct createMockCartAndGetItem() {
         Cart cart = cartRepository.findByAuthId(authId).orElse(cartRepository.save(MockFactory.createCart(authId)));
         CustomProduct customProduct = customProductRepository.findById(this.cartItemId).get();
-        customProduct.associate(cart);
+        customProduct.associateWithCart(cart);
         return customProductRepository.save(customProduct);
     }
     private CustomProduct createMockOrderAndGetItem() {
@@ -83,7 +83,6 @@ class CartItemRemoveServiceImplTest {
     @Test
     void removeCartItem() {
         CustomProduct customProduct = createMockCartAndGetItem();
-//        CustomProduct customProduct = customProductRepository.findByAuthId(authId).get(0);
 
         Assertions.assertFalse(customProduct.getOptions().isEmpty());
 
