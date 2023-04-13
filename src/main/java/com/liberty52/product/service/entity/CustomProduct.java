@@ -97,7 +97,7 @@ public class CustomProduct {
         this.cart = null;
     }
 
-    public boolean isInCartOf() {
+    public boolean isInCart() {
         return (this.cart != null) && (this.orders == null);
     }
 
