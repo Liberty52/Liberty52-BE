@@ -1,6 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.exception.external.ForbiddenException;
+import com.liberty52.product.global.exception.external.NotYourResource;
 import com.liberty52.product.global.exception.external.ResourceNotFoundException;
 import com.liberty52.product.global.exception.external.UnRemovableResourceException;
 import com.liberty52.product.service.entity.CustomProduct;
@@ -30,7 +30,7 @@ public class CartItemRemoveServiceImpl implements CartItemRemoveService {
     public void removeCartItem(String authId, String cartItemId) {
         CustomProduct cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_CART_ITEM, PARAM_NAME_ID, cartItemId));
         if(!authId.equals(cartItem.getAuthId()))
-            throw new ForbiddenException(RESOURCE_NAME_CART_ITEM, authId);
+            throw new NotYourResource(RESOURCE_NAME_CART_ITEM, authId);
         if (cartItem.isInOrder()) {
             throw new UnRemovableResourceException(RESOURCE_NAME_ORDER_ITEM, cartItemId);
         }

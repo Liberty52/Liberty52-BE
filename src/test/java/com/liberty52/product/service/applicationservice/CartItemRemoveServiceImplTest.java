@@ -1,6 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.exception.external.ForbiddenException;
+import com.liberty52.product.global.exception.external.NotYourResource;
 import com.liberty52.product.global.exception.external.UnRemovableResourceException;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.repository.*;
@@ -108,6 +108,6 @@ class CartItemRemoveServiceImplTest {
     @Test
     void forbiddenCausedByInvalidAuthId() {
         createMockCartAndGetItem();
-        Assertions.assertThrows(ForbiddenException.class, () -> cartItemRemoveService.removeCartItem(UUID.randomUUID().toString(), cartItemId));
+        Assertions.assertThrows(NotYourResource.class, () -> cartItemRemoveService.removeCartItem(UUID.randomUUID().toString(), cartItemId));
     }
 }
