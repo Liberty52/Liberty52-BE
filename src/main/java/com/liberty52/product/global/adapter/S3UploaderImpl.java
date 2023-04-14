@@ -105,7 +105,6 @@ public class S3UploaderImpl implements S3Uploader {
         int extensionIndex = multipartFile.getOriginalFilename().lastIndexOf(".");
 
         if (!multipartFile.getContentType().contains("image") || extensionIndex < 0) {
-            log.error("IS NOT IMAGE");
             throw new FileTypeIsNotImageException();
         }
 
