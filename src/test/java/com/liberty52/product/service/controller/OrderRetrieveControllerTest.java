@@ -2,6 +2,7 @@ package com.liberty52.product.service.controller;
 
 import static com.liberty52.product.service.utils.MockConstants.*;
 
+import static com.liberty52.product.service.utils.MockFactory.createMockOrderDetailRetrieveResponse;
 import static com.liberty52.product.service.utils.MockFactory.createMockOrderRetrieveResponse;
 import static com.liberty52.product.service.utils.MockFactory.createMockOrderRetrieveResponseList;
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +44,6 @@ class OrderRetrieveControllerTest {
         //given
         given(orderRetrieveService.retrieveOrders(MOCK_AUTH_ID))
                 .willReturn(createMockOrderRetrieveResponseList());
-
         //when
         mockMvc.perform(get("/product/orders")
                 .header(HttpHeaders.AUTHORIZATION,MOCK_AUTH_ID ))
@@ -62,9 +62,35 @@ class OrderRetrieveControllerTest {
                 .andExpect(jsonPath("$.[0].products[0].quantity").value(MOCK_QUANTITY))
                 .andExpect(jsonPath("$.[0].products[0].price").value(MOCK_PRICE))
                 .andDo(print());
+    }
 
+    @Test
+    void retrieveOrderDetail () throws Exception{
+        //given
+        given(orderRetrieveService.retrieveOrderDetail(MOCK_AUTH_ID, MOCK_ORDER_ID))
+                .willReturn(createMockOrderDetailRetrieveResponse());
 
-
+        //when
+        mockMvc.perform(get("/product/orders/"+MOCK_ORDER_ID)
+                .header(HttpHeaders.AUTHORIZATION,MOCK_AUTH_ID))
+        //then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orderId").value(MOCK_ORDER_ID))
+                .andExpect(jsonPath("$.orderDate").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.orderStatus").value(MOCK_ORDER_STATUS_ORDERED.name()))
+                .andExpect(jsonPath("$.address").value(MOCK_ADDRESS))
+                .andExpect(jsonPath("$.receiverEmail").value(MOCK_RECEIVER_EMAIL))
+                .andExpect(jsonPath("$.receiverPhoneNumber").value(MOCK_RECEIVER_PHONE_NUMBER))
+                .andExpect(jsonPath("$.receiverName").value(MOCK_RECEIVER_NAME))
+                .andExpect(jsonPath("$.productRepresentUrl").value(MOCK_PRODUCT_REPRESENT_URL))
+                .andExpect(jsonPath("$.totalProductPrice").value(MOCK_TOTAL_PRODUCT_PRICE))
+                .andExpect(jsonPath("$.deliveryFee").value(MOCK_DELIVERY_FEE))
+                .andExpect(jsonPath("$.totalPrice").value(MOCK_TOTAL_PRICE))
+                .andExpect(jsonPath("$.products[0].name").value(MOCK_PRODUCT_NAME))
+                .andExpect(jsonPath("$.products[0].quantity").value(MOCK_QUANTITY))
+                .andExpect(jsonPath("$.products[0].price").value(MOCK_PRICE))
+                .andExpect(jsonPath("$.products[0].productUrl").value(MOCK_PRODUCT_REPRESENT_URL))
+                .andDo(print());
 
 
     }

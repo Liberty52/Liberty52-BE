@@ -1,5 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
+import com.liberty52.product.service.controller.dto.OrderDetailRetrieveResponse;
 import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
 import com.liberty52.product.service.repository.OrderQueryDslRepository;
 import com.liberty52.product.service.repository.OrdersRepository;
@@ -19,7 +20,11 @@ public class OrderRetrieveServiceImpl implements
 
     @Override
     public List<OrdersRetrieveResponse> retrieveOrders(String authId) {
-
         return orderQueryDslRepository.retrieveOrders(authId);
+    }
+
+    @Override
+    public OrderDetailRetrieveResponse retrieveOrderDetail(String authId, String orderId) {
+        return orderQueryDslRepository.retrieveOrderDetail(authId, orderId);
     }
 }

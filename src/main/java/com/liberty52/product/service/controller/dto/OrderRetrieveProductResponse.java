@@ -14,11 +14,21 @@ public class OrderRetrieveProductResponse {
     private int quantity;
     private Long price;
 
+    private String productUrl;
+
 
     @QueryProjection
     public OrderRetrieveProductResponse(String name, int quantity, Long price) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    @QueryProjection
+    public OrderRetrieveProductResponse(String name, int quantity, Long price, String productUrl) {
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.productUrl = productUrl;
     }
 }

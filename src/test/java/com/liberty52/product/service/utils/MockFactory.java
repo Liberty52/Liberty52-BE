@@ -2,6 +2,7 @@ package com.liberty52.product.service.utils;
 
 import static com.liberty52.product.service.utils.MockConstants.*;
 
+import com.liberty52.product.service.controller.dto.OrderDetailRetrieveResponse;
 import com.liberty52.product.service.controller.dto.OrderRetrieveProductResponse;
 import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
 import com.liberty52.product.service.entity.*;
@@ -60,6 +61,13 @@ public class MockFactory {
         return list;
     }
     public static OrderRetrieveProductResponse createMockOrderRetrieveProductResponse(){
-        return new OrderRetrieveProductResponse(MOCK_PRODUCT_NAME,MOCK_QUANTITY,MOCK_PRICE);
+        return new OrderRetrieveProductResponse(MOCK_PRODUCT_NAME,MOCK_QUANTITY,MOCK_PRICE,MOCK_PRODUCT_REPRESENT_URL);
+    }
+
+    public static OrderDetailRetrieveResponse createMockOrderDetailRetrieveResponse(){
+        return new OrderDetailRetrieveResponse(MOCK_ORDER_ID,LocalDate.now().toString(),
+                MOCK_ORDER_STATUS_ORDERED.name(),MOCK_ADDRESS,MOCK_RECEIVER_NAME,MOCK_RECEIVER_EMAIL
+                ,MOCK_RECEIVER_PHONE_NUMBER, MOCK_PRODUCT_REPRESENT_URL,
+                MOCK_TOTAL_PRODUCT_PRICE,MOCK_DELIVERY_FEE,createMockOrderRetrieveProductResponseList());
     }
 }
