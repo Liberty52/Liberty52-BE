@@ -81,7 +81,7 @@ class OrderQueryDslRepositoryImplTest {
         assertThat(response.getReceiverPhoneNumber()).isEqualTo(MOCK_RECEIVER_PHONE_NUMBER);
         assertThat(response.getProductRepresentUrl()).isEqualTo(MOCK_PRODUCT_REPRESENT_URL);
 
-        assertThat(response.getAddress()).isEqualTo(MOCK_ADDRESS);
+        assertThat(response.getAddress()).isEqualTo(MOCK_ADDRESS+" "+MOCK_ADDRESS);
         assertThat(response.getProducts().get(0).getName()).isEqualTo(MOCK_PRODUCT_NAME);
         assertThat(response.getProducts().get(0).getPrice()).isEqualTo(MOCK_PRICE);
         assertThat(response.getProducts().get(0).getQuantity()).isEqualTo(MOCK_QUANTITY);

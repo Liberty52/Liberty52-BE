@@ -20,29 +20,32 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import java.time.LocalDate;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @SpringBootTest
 class OrderRetrieveServiceTest {
 
     @Autowired
     OrderRetrieveService orderRetrieveService;
 
-
     @Autowired
-    EntityManagerFactory emf;
+    EntityManager em;
 
     String orderId;
     @BeforeEach
     void beforeEach(){
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
         orderId = initDataForTestingOrder(em);
-        tx.commit();
+    }
+
+    @AfterEach
+    void afterEach(){
+        em.clear();
     }
     
     
@@ -77,7 +80,7 @@ class OrderRetrieveServiceTest {
         assertThat(response.getReceiverPhoneNumber()).isEqualTo(MOCK_RECEIVER_PHONE_NUMBER);
         assertThat(response.getProductRepresentUrl()).isEqualTo(MOCK_PRODUCT_REPRESENT_URL);
 
-        assertThat(response.getAddress()).isEqualTo(MOCK_ADDRESS);
+        assertThat(response.getAddress()).isEqualTo(MOCK_ADDRESS+" "+MOCK_ADDRESS);
         assertThat(response.getProducts().get(0).getName()).isEqualTo(MOCK_PRODUCT_NAME);
         assertThat(response.getProducts().get(0).getPrice()).isEqualTo(MOCK_PRICE);
         assertThat(response.getProducts().get(0).getQuantity()).isEqualTo(MOCK_QUANTITY);

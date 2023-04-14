@@ -40,7 +40,6 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository{
 
     public List<OrdersRetrieveResponse> retrieveOrders(String authId) {
 
-        // TODO address 부분 수정
         return queryFactory
                 .from(orders)
                 .join(orderDestination).on(orderDestination.orders.id.eq(orders.id))
@@ -52,7 +51,7 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository{
                         orders.id,
                         orders.orderDate.stringValue(),
                         orders.orderStatus.stringValue(),
-                        orderDestination.address1,
+                        orderDestination.address1.append(" ").append(orderDestination.address2),
                         orderDestination.receiverName,
                         orderDestination.receiverEmail,
                         orderDestination.receiverPhoneNumber,
@@ -77,7 +76,7 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository{
                         orders.id,
                         orders.orderDate.stringValue(),
                         orders.orderStatus.stringValue(),
-                        orderDestination.address1,
+                        orderDestination.address1.append(" ").append(orderDestination.address2),
                         orderDestination.receiverName,
                         orderDestination.receiverEmail,
                         orderDestination.receiverPhoneNumber,
