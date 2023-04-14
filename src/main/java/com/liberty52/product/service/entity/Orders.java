@@ -49,14 +49,15 @@ public class Orders {
 
     // 따로 addCustomProduct 를 만들지 않은 이유는
     // Orders는 이미 결제 완료된 상태이기 때문에 제품이 변하지 않을 것이라고 생각.
-    public static Orders create(String authId, int deliveryPrice, String destination, List<CustomProduct> customProducts){
-        Orders orders = new Orders(authId,deliveryPrice,destination);
-        Assert.notEmpty(customProducts,"주문에서 제품이 없을 수 없습니다.");
+    public static Orders create(String authId, int deliveryPrice, String destination){
 
+        return new Orders(authId,deliveryPrice,destination);
+    }
+
+    public void associateWithCustomProduct(List<CustomProduct> customProducts){
         customProducts.forEach(cp ->
-                cp.associateWithOrder(orders));
-        orders.customProducts = customProducts;
-        return orders;
+                cp.associateWithOrder(this));
+        this.customProducts = customProducts;
     }
     public void changeOrderStatusToNextStep(){
         if(orderStatus.equals(OrderStatus.COMPLETE))
