@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -27,13 +28,15 @@ public class CartItemRetriveServiceImpl implements CartItemRetriveService {
 
     @Override
     public List<CartItemResponse> retriveCartItem(String authId) {
-        Cart cart = cartRepository.findByAuthId(authId).orElseThrow(()-> new NotFoundAuthIdException());
+        List<CartItemResponse> cartItemResponseList = new ArrayList<CartItemResponse>();
+        Cart cart = cartRepository.findByAuthId(authId).orElse(null);
 
-        if (cart.getCustomProducts().size() == 0){
-            throw new NotFoundCartProductException();
+
+        if (cart==null || cart.getCustomProducts().size() == 0){
+            return cartItemResponseList;
         }
 
-        List<CartItemResponse> cartItemResponseList = new ArrayList<CartItemResponse>();
+
         List<CustomProduct> cartItemList = cart.getCustomProducts();
 
         for(CustomProduct cartItem:cartItemList){
