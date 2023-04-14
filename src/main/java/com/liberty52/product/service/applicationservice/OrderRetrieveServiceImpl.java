@@ -1,5 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
+import com.liberty52.product.global.exception.external.CannotAccessOrderException;
 import com.liberty52.product.service.controller.dto.OrderDetailRetrieveResponse;
 import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
 import com.liberty52.product.service.repository.OrderQueryDslRepository;
@@ -25,6 +26,7 @@ public class OrderRetrieveServiceImpl implements
 
     @Override
     public OrderDetailRetrieveResponse retrieveOrderDetail(String authId, String orderId) {
-        return orderQueryDslRepository.retrieveOrderDetail(authId, orderId);
+        return orderQueryDslRepository.retrieveOrderDetail(authId, orderId)
+                .orElseThrow(CannotAccessOrderException::new);
     }
 }

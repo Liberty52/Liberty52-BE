@@ -17,6 +17,7 @@ import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -64,8 +65,8 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository{
     }
 
     @Override
-    public OrderDetailRetrieveResponse retrieveOrderDetail(String authId, String orderId) {
-        return queryFactory
+    public Optional<OrderDetailRetrieveResponse> retrieveOrderDetail(String authId, String orderId) {
+        return Optional.ofNullable(queryFactory
                 .from(orders)
                 .join(orderDestination).on(orderDestination.orders.id.eq(orders.id))
                 .join(customProduct).on(customProduct.orders.id.eq(orders.id))
@@ -73,25 +74,22 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository{
                 .where(orders.authId.eq(authId).and(orders.id.eq(orderId)))
                 .transform(groupBy(orders.id).as(
                         (new QOrderDetailRetrieveResponse(
-                        orders.id,
-                        orders.orderDate.stringValue(),
-                        orders.orderStatus.stringValue(),
-                        orderDestination.address1.append(" ").append(orderDestination.address2),
-                        orderDestination.receiverName,
-                        orderDestination.receiverEmail,
-                        orderDestination.receiverPhoneNumber,
-                        customProduct.thumbnailPictureUrl,
-                        sum(product.price),
-                        orders.deliveryPrice,
-                        list(new QOrderRetrieveProductResponse(
-                                product.name, customProduct.quantity, product.price,
-                                customProduct.modelingPictureUrl
-                        ))
-                )
-                ))).get(orderId);
-
-
-
+                                orders.id,
+                                orders.orderDate.stringValue(),
+                                orders.orderStatus.stringValue(),
+                                orderDestination.address1.append(" ").append(orderDestination.address2),
+                                orderDestination.receiverName,
+                                orderDestination.receiverEmail,
+                                orderDestination.receiverPhoneNumber,
+                                customProduct.thumbnailPictureUrl,
+                                sum(product.price),
+                                orders.deliveryPrice,
+                                list(new QOrderRetrieveProductResponse(
+                                        product.name, customProduct.quantity, product.price,
+                                        customProduct.modelingPictureUrl
+                                ))
+                        )
+                        ))).get(orderId));
     }
 
 

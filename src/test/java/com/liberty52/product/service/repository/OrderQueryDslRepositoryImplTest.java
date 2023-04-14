@@ -66,10 +66,10 @@ class OrderQueryDslRepositoryImplTest {
 
     @Test
     void retrieveOrderDetailTest () throws Exception{
-        //given
+        //given   //when
         OrderDetailRetrieveResponse response = orderQueryDslRepositoryImpl.retrieveOrderDetail(
-                MOCK_AUTH_ID, orderId);
-        //when
+                MOCK_AUTH_ID, orderId).get();
+       //then
         assertThat(response.getOrderId()).isEqualTo(orderId);
         assertThat(response.getOrderDate()).isEqualTo(LocalDate.now().toString());
         assertThat(response.getDeliveryFee()).isEqualTo(0);
@@ -86,7 +86,7 @@ class OrderQueryDslRepositoryImplTest {
         assertThat(response.getProducts().get(0).getPrice()).isEqualTo(MOCK_PRICE);
         assertThat(response.getProducts().get(0).getQuantity()).isEqualTo(MOCK_QUANTITY);
         assertThat(response.getProducts().get(0).getProductUrl()).isEqualTo(MOCK_PRODUCT_REPRESENT_URL);
-        //then
+
 
 
 

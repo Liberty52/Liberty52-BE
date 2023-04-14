@@ -12,7 +12,9 @@ import static com.liberty52.product.service.utils.MockConstants.MOCK_RECEIVER_NA
 import static com.liberty52.product.service.utils.MockConstants.MOCK_RECEIVER_PHONE_NUMBER;
 import static com.liberty52.product.service.utils.TestInitiator.initDataForTestingOrder;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.liberty52.product.global.exception.external.CannotAccessOrderException;
 import com.liberty52.product.service.controller.dto.OrderDetailRetrieveResponse;
 import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
 import jakarta.persistence.EntityManager;
@@ -85,8 +87,18 @@ class OrderRetrieveServiceTest {
         assertThat(response.getProducts().get(0).getPrice()).isEqualTo(MOCK_PRICE);
         assertThat(response.getProducts().get(0).getQuantity()).isEqualTo(MOCK_QUANTITY);
         assertThat(response.getProducts().get(0).getProductUrl()).isEqualTo(MOCK_PRODUCT_REPRESENT_URL);
-        
-    
+    }
+    @Test
+    void retrieveOrderDetail_Throw_cannot_access_order () throws Exception{
+        //given
+        //when
+        assertThatThrownBy(() ->  orderRetrieveService.retrieveOrderDetail(
+                "WrongID", "WrongID"))
+                .isInstanceOf(CannotAccessOrderException.class);
+
+        //then
+
+
     }
 
 
