@@ -5,8 +5,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class OrderDestination {
