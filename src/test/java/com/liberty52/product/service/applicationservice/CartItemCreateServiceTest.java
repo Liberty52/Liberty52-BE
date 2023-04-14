@@ -40,7 +40,6 @@ public class CartItemCreateServiceTest {
         String[] option = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
         dto1.create("Liberty 52_Frame", 1, option);
 
-
         CartItemRequest dto2 = new CartItemRequest();
         dto2.create("L", 2, option);
 
@@ -60,6 +59,7 @@ public class CartItemCreateServiceTest {
 
         List<CustomProductOption> productCartOptionList = customProduct.getOptions();
         System.out.println(customProduct.getOptions().size());
+
         Assertions.assertEquals(productCartOptionList.get(0).getOptionDetail().getName(), "이젤 거치형");
         Assertions.assertEquals(productCartOptionList.get(1).getOptionDetail().getName(), "1mm 두께 승화전사 인쇄용 알루미늄시트");
         Assertions.assertEquals(productCartOptionList.get(2).getOptionDetail().getName(), "무광실버");
@@ -68,6 +68,7 @@ public class CartItemCreateServiceTest {
 
 
         Assertions.assertThrows(OptionDetailNotFoundException.class, () -> cartItemCreateService.createCartItem("aaa", null, dto3));
+
 
     }
 }
