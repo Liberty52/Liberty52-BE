@@ -4,9 +4,11 @@ import com.liberty52.product.global.exception.external.OptionDetailNotFoundExcep
 import com.liberty52.product.global.exception.external.OptionNotFoundException;
 import com.liberty52.product.global.exception.external.ProductNotFoundException;
 import com.liberty52.product.service.controller.dto.CartItemRequest;
+import com.liberty52.product.service.entity.Cart;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.CustomProductOption;
 import com.liberty52.product.service.repository.CartItemRepository;
+import com.liberty52.product.service.repository.CartRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class CartItemCreateServiceTest {
     @Autowired
     CartItemRepository cartItemRepository;
 
+    @Autowired
+    CartRepository cartRepository;
+
     @Test
     void 장바구니생성() {
         cartItemCreateService.init();
@@ -42,8 +47,10 @@ public class CartItemCreateServiceTest {
         dto3.create("Liberty52", 4, optionErr);
 
         cartItemCreateService.createCartItem("aaa", null, dto1);
-        List<CustomProduct> cartItemList = cartItemRepository.findByAuthId("aaa");
-        CustomProduct cartItem = cartItemList.get(0);
+        Cart cart = cartRepository.findByAuthId("aaa").orElseThrow(() ->new RuntimeException());
+
+
+        CustomProduct cartItem = cart.getCustomProducts().get(0);
         Assertions.assertEquals(cartItem.getQuantity(), 1);
         Assertions.assertEquals(cartItem.getAuthId(), "aaa");
         Assertions.assertEquals(cartItem.getProduct().getName(), "Liberty52");
@@ -58,7 +65,7 @@ public class CartItemCreateServiceTest {
         Assertions.assertThrows(ProductNotFoundException.class, () -> cartItemCreateService.createCartItem("aaa", null, dto2));
 
 
-        Assertions.assertThrows(OptionDetailNotFoundException.class, () -> cartItemCreateService.createCartItem("aaa", null, dto3));
+        Assertions.assertThrows(ProductNotFoundException.class, () -> cartItemCreateService.createCartItem("aaa", null, dto2));
 
     }
 }

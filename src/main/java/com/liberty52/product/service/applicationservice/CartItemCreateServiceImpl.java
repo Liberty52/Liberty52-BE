@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -22,10 +25,13 @@ public class CartItemCreateServiceImpl implements CartItemCreateService{
     private final ProductOptionRepository productOptionRepository;
     private final OptionDetailRepository optionDetailRepository;
     private final CartItemRepository cartItemRepository;
+    private final CartRepository cartRepository;
     private final CustomProductOptionRepository productCartOptionRepository;
 
     @Override
     public void createCartItem(String authId, MultipartFile imageFile, CartItemRequest dto) {
+        Cart cart = cartRepository.findByAuthId(authId).orElseGet(() -> createCart(authId));
+
         CustomProduct cartItem = CustomProduct.createCartItem(authId, dto.getQuantity(), uploadImage(imageFile));
         Product product = productRepository.findByName(dto.getProductName()).orElseThrow(() -> new ProductNotFoundException(dto.getProductName())); //예외처리 해야함
         cartItem.associateWithProduct(product);
@@ -38,9 +44,18 @@ public class CartItemCreateServiceImpl implements CartItemCreateService{
             productCartOption.associate(cartItem);
             productCartOptionRepository.save(productCartOption);
         }
+        cartItem.associateWithCart(cart);
         cartItemRepository.save(cartItem);
+        cartRepository.save(cart);
     }
-//데모용 나중에 지워야 한다
+
+    private Cart createCart(String authId) {
+        Cart cart = Cart.create(authId);
+        cartRepository.save(cart);
+        return cart;
+    }
+
+    //데모용 나중에 지워야 한다
     @Override
     public void init() {
         Product product = Product.create("Liberty52",ProductState.ON_SAIL, (long)1000000);
