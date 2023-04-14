@@ -14,8 +14,15 @@ public enum ProductErrorCode implements ErrorCode{
 
     INVALID_QUANTITY(HttpStatus.BAD_REQUEST, "구입할 상품의 수량이 0이하일 수 없습니다."),
 
-    ALREADY_COMPLETED_ORDER(HttpStatus.BAD_REQUEST, "이미 완료된 거래입니다.")
+    ALREADY_COMPLETED_ORDER(HttpStatus.BAD_REQUEST, "이미 완료된 거래입니다."),
 
+    FILE_CONVERT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 변환 작업에서 오류가 발생하였습니다."),
+
+    FILE_TYPE_IS_NOT_IMAGE_ERROR(HttpStatus.BAD_REQUEST, "이미지 형식의 파일만 업로드할 수 있습니다."),
+
+    FILE_NULL_ERROR(HttpStatus.BAD_REQUEST, "업로드할 파일이 없습니다."),
+
+    FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 작업에 오류가 발생하였습니다."),
 
 
     ;
