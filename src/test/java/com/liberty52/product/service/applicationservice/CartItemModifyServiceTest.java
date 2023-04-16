@@ -1,21 +1,14 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.exception.external.InvalidQuantityException;
-import com.liberty52.product.global.exception.external.ResourceNotFoundException;
 import com.liberty52.product.service.controller.dto.CartModifyRequestDto;
-import com.liberty52.product.service.controller.dto.MonoItemOrderRequestDto;
-import com.liberty52.product.service.controller.dto.MonoItemOrderResponseDto;
 import com.liberty52.product.service.entity.Cart;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.CustomProductOption;
-import com.liberty52.product.service.entity.OrderStatus;
-import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.entity.Product;
 import com.liberty52.product.service.repository.CartItemRepository;
 import com.liberty52.product.service.repository.CartRepository;
 import com.liberty52.product.service.repository.CustomProductOptionRepository;
 import com.liberty52.product.service.repository.OptionDetailRepository;
-import com.liberty52.product.service.repository.OrdersRepository;
 import com.liberty52.product.service.repository.ProductOptionRepository;
 import com.liberty52.product.service.repository.ProductRepository;
 import java.io.FileInputStream;
@@ -32,7 +25,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,8 +44,6 @@ class CartItemModifyServiceTest {
 
   @Autowired
   OptionDetailRepository optionDetailRepository;
-  @Autowired
-  private OrdersRepository ordersRepository;
   @Autowired
   CartRepository cartRepository;
 
@@ -95,7 +85,7 @@ class CartItemModifyServiceTest {
 
   @Test
   void modify() {
-    List<String> options = new ArrayList<>(List.of("유광백색","벽걸이형"));
+    List<String> options = new ArrayList<>(List.of("유광백색","벽걸이형")); //불변 객체를 ArrayList로 감싸 변할 수 있게
     int quantity = 5;
     CartModifyRequestDto cartModifyRequestDto = CartModifyRequestDto.create(options, quantity);
 
@@ -107,7 +97,9 @@ class CartItemModifyServiceTest {
     Assertions.assertEquals(options.size(),customProduct.getOptions().size());
 
     Collections.sort(options);
-    List<String> actualList = customProduct.getOptions().stream().map(cpo -> cpo.getOptionDetail().getName()).sorted()
+    List<String> actualList = customProduct.getOptions().stream()
+        .map(cpo -> cpo.getOptionDetail().getName())
+        .sorted()
         .toList();
     for (int i = 0; i < options.size(); i++) {
       Assertions.assertEquals(options.get(i), actualList.get(i));

@@ -2,14 +2,13 @@ package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.adapter.S3Uploader;
 import com.liberty52.product.global.exception.external.CustomProductNotFoundExcpetion;
-import com.liberty52.product.global.exception.external.NotYourResourceException;
+import com.liberty52.product.global.exception.external.NotYourResource;
 import com.liberty52.product.global.exception.external.OptionDetailNotFoundException;
 import com.liberty52.product.global.exception.external.OrderItemCannotModifiedException;
 import com.liberty52.product.service.controller.dto.CartModifyRequestDto;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.CustomProductOption;
 import com.liberty52.product.service.entity.OptionDetail;
-import com.liberty52.product.service.repository.CartItemRepository;
 import com.liberty52.product.service.repository.CustomProductOptionRepository;
 import com.liberty52.product.service.repository.CustomProductRepository;
 import com.liberty52.product.service.repository.OptionDetailRepository;
@@ -24,7 +23,6 @@ public class CartItemModifyServiceImpl implements CartItemModifyService{
 
   private final S3Uploader s3Uploader;
   private final CustomProductRepository customProductRepository;
-  private final CartItemRepository cartItemRepository;
   private final OptionDetailRepository optionDetailRepository;
 
   private final CustomProductOptionRepository customProductOptionRepository;
@@ -38,18 +36,21 @@ public class CartItemModifyServiceImpl implements CartItemModifyService{
     }
 
     if(!customProduct.getCart().getAuthId().equals(authId)){
-      throw new NotYourResourceException("customProduct",authId);
+      throw new NotYourResource("customProduct",authId);
     }
 
-    customProduct.modifyQuantity(dto.getQuantity());
     String customPictureUrl = uploadImage(imageFile);
     if (customPictureUrl != null){
       customProduct.modifyCustomPictureUrl(customPictureUrl);
     }
 
-    customProductOptionRepository.deleteAll(customProduct.getOptions());
+    customProduct.modifyQuantity(dto.getQuantity());
+    modifyOptionsDetail(dto, customProduct);
+  }
 
-    for (String optionDetailName :dto.getOptions()){
+  private void modifyOptionsDetail(CartModifyRequestDto dto, CustomProduct customProduct) {
+    customProductOptionRepository.deleteAll(customProduct.getOptions());
+    for (String optionDetailName : dto.getOptions()){
       CustomProductOption customProductOption = CustomProductOption.create();
       OptionDetail optionDetail = optionDetailRepository.findByName(optionDetailName)
           .orElseThrow(() -> new OptionDetailNotFoundException(optionDetailName));
