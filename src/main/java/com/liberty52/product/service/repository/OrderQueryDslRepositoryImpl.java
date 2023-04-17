@@ -81,7 +81,7 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository{
                                 orderDestination.receiverName,
                                 orderDestination.receiverEmail,
                                 orderDestination.receiverPhoneNumber,
-                                customProduct.thumbnailPictureUrl,
+                                customProduct.userCustomPictureUrl,
                                 sum(product.price),
                                 orders.deliveryPrice,
                                 list(new QOrderRetrieveProductResponse(
