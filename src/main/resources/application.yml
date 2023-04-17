@@ -20,6 +20,9 @@ spring:
       label: main
   jpa:
     show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
 
 logging:
   level:
