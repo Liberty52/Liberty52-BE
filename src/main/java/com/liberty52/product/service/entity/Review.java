@@ -1,6 +1,6 @@
 package com.liberty52.product.service.entity;
 
-import com.liberty52.product.global.exception.external.InvalidRatingException;
+import com.liberty52.product.global.exception.internal.InvalidRatingException;
 import com.liberty52.product.global.exception.internal.InvalidReviewImageSize;
 import com.liberty52.product.global.exception.internal.InvalidTextSize;
 import jakarta.persistence.*;
