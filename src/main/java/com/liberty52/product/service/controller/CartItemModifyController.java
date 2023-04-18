@@ -25,4 +25,12 @@ public class CartItemModifyController {
       @RequestPart(value = "file",required = false) MultipartFile imageFile) {
     cartItemModifyService.modifyCartItemList(authId,dto,imageFile);
   }
+
+  @PatchMapping("/guest/carts/custom-products")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void modifyGuestCartItemList(@RequestHeader(HttpHeaders.AUTHORIZATION) String guestId, @RequestPart List<CartModifyRequestDto> dto,
+      @RequestPart(value = "file",required = false) MultipartFile imageFile) {
+    cartItemModifyService.modifyGuestCartItemList(guestId,dto,imageFile);
+  }
+
 }
