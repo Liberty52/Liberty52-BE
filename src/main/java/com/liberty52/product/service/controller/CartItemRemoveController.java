@@ -3,15 +3,11 @@ package com.liberty52.product.service.controller;
 import com.liberty52.product.service.applicationservice.CartItemRemoveService;
 import com.liberty52.product.service.controller.dto.CartItemListRemoveRequestDto;
 import com.liberty52.product.service.controller.dto.GuestCartItemListRemoveDto;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
