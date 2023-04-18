@@ -29,9 +29,11 @@ public class CartItemRemoveController {
 
     @DeleteMapping("/guest/carts/custom-products")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void guestCartItemListRemove(@RequestBody
+    public void guestCartItemListRemove(@RequestHeader(HttpHeaders.AUTHORIZATION)
+                                        String guestId,
+                                        @RequestBody
                                         @Validated
-                                        GuestCartItemListRemoveDto dto) {
-        cartItemRemoveService.removeGuestCartItemList(dto);
+                                        CartItemListRemoveRequestDto dto) {
+        cartItemRemoveService.removeGuestCartItemList(guestId, dto);
     }
 }

@@ -4,7 +4,6 @@ import com.liberty52.product.global.exception.external.NotYourResourceException;
 import com.liberty52.product.global.exception.external.ResourceNotFoundException;
 import com.liberty52.product.global.exception.external.UnRemovableResourceException;
 import com.liberty52.product.service.controller.dto.CartItemListRemoveRequestDto;
-import com.liberty52.product.service.controller.dto.GuestCartItemListRemoveDto;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.repository.CartItemRepository;
 import com.liberty52.product.service.repository.CustomProductOptionRepository;
@@ -38,8 +37,8 @@ public class CartItemRemoveServiceImpl implements CartItemRemoveService {
     }
 
     @Override
-    public void removeGuestCartItemList(GuestCartItemListRemoveDto dto) {
-        removeCartItems(dto.getGuestId(), dto.getIds());
+    public void removeGuestCartItemList(String guestId, CartItemListRemoveRequestDto dto) {
+        removeCartItems(guestId, dto.getIds());
     }
 
     private CustomProduct validAndGetCartItem(String authId, String cartItemId) {
