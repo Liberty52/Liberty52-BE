@@ -39,13 +39,23 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
     modifyCartItem(guestId, dto, imageFile);
   }
 
-  private void modifyCartItem(String ownerId, List<CartModifyRequestDto> dto, MultipartFile imageFile) {
-    dto.forEach(cmrd -> {
+  private void modifyCartItem(String ownerId, List<CartModifyRequestDto> cmrdDto, MultipartFile imageFile) {
+    cmrdDto.forEach(cmrd -> {
       CustomProduct customProduct = customProductRepository.findById(cmrd.getCustomProductId())
           .orElseThrow((CustomProductNotFoundExcpetion::new));
       validCartItem(ownerId, customProduct);
       modifyOptionsDetail(cmrd, customProduct, imageFile);
     });
+  }
+
+  private static void validCartItem(String ownerId, CustomProduct customProduct) {
+    if (customProduct.isInOrder()) {
+      throw new OrderItemCannotModifiedException();
+    }
+
+    if (!customProduct.getCart().getAuthId().equals(ownerId)) {
+      throw new NotYourResourceException("customProduct", ownerId);
+    }
   }
 
   private void modifyOptionsDetail(CartModifyRequestDto dto, CustomProduct customProduct, MultipartFile imageFile) {
@@ -63,16 +73,6 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
       customProductOption.associate(optionDetail);
       customProductOption.associate(customProduct);
       customProductOptionRepository.save(customProductOption);
-    }
-  }
-
-  private static void validCartItem(String ownerId, CustomProduct customProduct) {
-    if (customProduct.isInOrder()) {
-      throw new OrderItemCannotModifiedException();
-    }
-
-    if (!customProduct.getCart().getAuthId().equals(ownerId)) {
-      throw new NotYourResourceException("customProduct", ownerId);
     }
   }
 
