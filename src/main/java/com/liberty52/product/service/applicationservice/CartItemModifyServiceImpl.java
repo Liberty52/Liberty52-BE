@@ -34,6 +34,11 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
     modifyCartItem(authId, dto, imageFile);
   }
 
+  @Override
+  public void modifyGuestCartItemList(String guestId, List<CartModifyRequestDto> dto, MultipartFile imageFile) {
+    modifyCartItem(guestId, dto, imageFile);
+  }
+
   private void modifyCartItem(String ownerId, List<CartModifyRequestDto> dto, MultipartFile imageFile) {
     dto.forEach(cmrd -> {
       CustomProduct customProduct = customProductRepository.findById(cmrd.getCustomProductId())
