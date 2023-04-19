@@ -57,8 +57,8 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
   }
 
   private void modifyOptionsDetail(CartModifyRequestDto dto, CustomProduct customProduct, MultipartFile imageFile) {
-    String customPictureUrl = uploadImage(imageFile);
-    if (customPictureUrl != null) {
+    if (imageFile.getSize() != 0) {
+      String customPictureUrl = uploadImage(imageFile);
       customProduct.modifyCustomPictureUrl(customPictureUrl);
     }
     customProduct.modifyQuantity(dto.getQuantity());
