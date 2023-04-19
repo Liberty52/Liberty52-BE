@@ -89,7 +89,7 @@ class CartItemModifyServiceTest {
     int quantity = 5;
     CartModifyRequestDto cartModifyRequestDto = CartModifyRequestDto.create(options, quantity);
 
-    cartItemModifyService.modifyCartItem(authId,cartModifyRequestDto,imageFile,customProductId);
+    cartItemModifyService.modifyUserCartItem(authId,cartModifyRequestDto,imageFile,customProductId);
 
     CustomProduct customProduct = customProductRepository.findById(customProductId).get();
     Assertions.assertEquals(quantity,customProduct.getQuantity());

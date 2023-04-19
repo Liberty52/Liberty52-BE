@@ -2,7 +2,7 @@ package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.adapter.S3Uploader;
 import com.liberty52.product.global.exception.external.CustomProductNotFoundExcpetion;
-import com.liberty52.product.global.exception.external.NotYourResource;
+import com.liberty52.product.global.exception.external.NotYourResourceException;
 import com.liberty52.product.global.exception.external.OptionDetailNotFoundException;
 import com.liberty52.product.global.exception.external.OrderItemCannotModifiedException;
 import com.liberty52.product.service.controller.dto.CartModifyRequestDto;
@@ -29,26 +29,28 @@ public class CartItemModifyServiceImpl implements CartItemModifyService{
 
   @Transactional
   @Override
-  public void modifyCartItem(String authId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
-    CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow((CustomProductNotFoundExcpetion::new));
-    validCartItem(authId, customProduct);
-    modifyOptionsDetail(dto, customProduct,imageFile);
+  public void modifyUserCartItem(String authId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
+    modifyCartItem(authId,dto,imageFile,customProductId);
   }
-
+  @Transactional
   @Override
   public void modifyGuestCartItem(String guestId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
+    modifyCartItem(guestId,dto,imageFile,customProductId);
+  }
+
+  private void modifyCartItem(String ownerId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
     CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow((CustomProductNotFoundExcpetion::new));
-    validCartItem(guestId, customProduct);
+    validCartItem(ownerId, customProduct);
     modifyOptionsDetail(dto, customProduct,imageFile);
   }
 
-  private static void validCartItem(String authId, CustomProduct customProduct) {
+  private void validCartItem(String authId, CustomProduct customProduct) {
     if(customProduct.isInOrder()){
       throw new OrderItemCannotModifiedException();
     }
 
     if(!customProduct.getCart().getAuthId().equals(authId)){
-      throw new NotYourResource("customProduct", authId);
+      throw new NotYourResourceException("customProduct", authId);
     }
   }
 
