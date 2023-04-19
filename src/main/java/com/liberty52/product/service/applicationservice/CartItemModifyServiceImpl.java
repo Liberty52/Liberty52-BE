@@ -31,24 +31,34 @@ public class CartItemModifyServiceImpl implements CartItemModifyService{
   @Override
   public void modifyCartItem(String authId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
     CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow((CustomProductNotFoundExcpetion::new));
+    validCartItem(authId, customProduct);
+    modifyOptionsDetail(dto, customProduct,imageFile);
+  }
+
+  @Override
+  public void modifyGuestCartItem(String guestId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
+    CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow((CustomProductNotFoundExcpetion::new));
+    validCartItem(guestId, customProduct);
+    modifyOptionsDetail(dto, customProduct,imageFile);
+  }
+
+  private static void validCartItem(String authId, CustomProduct customProduct) {
     if(customProduct.isInOrder()){
       throw new OrderItemCannotModifiedException();
     }
 
     if(!customProduct.getCart().getAuthId().equals(authId)){
-      throw new NotYourResource("customProduct",authId);
+      throw new NotYourResource("customProduct", authId);
     }
+  }
 
+  private void modifyOptionsDetail(CartModifyRequestDto dto, CustomProduct customProduct,MultipartFile imageFile) {
     String customPictureUrl = uploadImage(imageFile);
     if (customPictureUrl != null){
       customProduct.modifyCustomPictureUrl(customPictureUrl);
     }
 
     customProduct.modifyQuantity(dto.getQuantity());
-    modifyOptionsDetail(dto, customProduct);
-  }
-
-  private void modifyOptionsDetail(CartModifyRequestDto dto, CustomProduct customProduct) {
     customProductOptionRepository.deleteAll(customProduct.getOptions());
     for (String optionDetailName : dto.getOptions()){
       CustomProductOption customProductOption = CustomProductOption.create();
