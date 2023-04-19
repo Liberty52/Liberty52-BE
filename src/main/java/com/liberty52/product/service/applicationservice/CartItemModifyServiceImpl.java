@@ -20,34 +20,32 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class CartItemModifyServiceImpl implements CartItemModifyService {
-
   private final S3Uploader s3Uploader;
   private final CustomProductRepository customProductRepository;
   private final OptionDetailRepository optionDetailRepository;
 
   private final CustomProductOptionRepository customProductOptionRepository;
 
-  @Transactional
   @Override
-  public void modifyCartItemList(String authId, List<CartModifyRequestDto> dto, MultipartFile imageFile) {
+  public void modifyCartItemList(String authId, List<CartModifyRequestDto> dto, List<MultipartFile> imageFile) {
     modifyCartItem(authId, dto, imageFile);
   }
 
   @Override
-  public void modifyGuestCartItemList(String guestId, List<CartModifyRequestDto> dto, MultipartFile imageFile) {
+  public void modifyGuestCartItemList(String guestId, List<CartModifyRequestDto> dto, List<MultipartFile> imageFile) {
     modifyCartItem(guestId, dto, imageFile);
   }
 
-  private void modifyCartItem(String ownerId, List<CartModifyRequestDto> cmrdDto, MultipartFile imageFile) {
-    cmrdDto.forEach(cmrd -> {
-      CustomProduct customProduct = customProductRepository.findById(cmrd.getCustomProductId())
+  private void modifyCartItem(String ownerId, List<CartModifyRequestDto> cmrdDto, List<MultipartFile> imageFile) {
+    for (int i=0;i< cmrdDto.size();i++){
+      CustomProduct customProduct = customProductRepository.findById(cmrdDto.get(i).getCustomProductId())
           .orElseThrow((CustomProductNotFoundExcpetion::new));
       validCartItem(ownerId, customProduct);
-      modifyOptionsDetail(cmrd, customProduct, imageFile);
-    });
+      modifyOptionsDetail(cmrdDto.get(i), customProduct, imageFile.get(i));
+    }
   }
-
   private static void validCartItem(String ownerId, CustomProduct customProduct) {
     if (customProduct.isInOrder()) {
       throw new OrderItemCannotModifiedException();

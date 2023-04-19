@@ -25,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -64,6 +65,7 @@ class CartItemModifyServiceTest {
   MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg",
       new FileInputStream("src/test/resources/static/test.jpg"));
 
+  List<MultipartFile> imageFiles;
   @BeforeEach
   void beforeEach() {
     Cart cart = cartRepository.save(Cart.create(authId));
@@ -104,6 +106,8 @@ class CartItemModifyServiceTest {
     customProductId1 = customProduct1.getId();
     customProductId2 = customProduct2.getId();
     customProductId3 = customProduct3.getId();
+
+    imageFiles = new ArrayList<>();
   }
 
 
@@ -121,7 +125,11 @@ class CartItemModifyServiceTest {
     cartModifyRequestDtoList.add(cartModifyRequestDto2);
     cartModifyRequestDtoList.add(cartModifyRequestDto3);
 
-    cartItemModifyService.modifyCartItemList(authId,cartModifyRequestDtoList,imageFile);
+    imageFiles.add(imageFile);
+    imageFiles.add(null);
+    imageFiles.add(imageFile);
+
+    cartItemModifyService.modifyCartItemList(authId,cartModifyRequestDtoList,imageFiles);
 
     cartModifyRequestDtoList.forEach(cmrd -> {
       CustomProduct customProduct = customProductRepository.findById(cmrd.getCustomProductId()).get();
