@@ -113,6 +113,11 @@ public class DBInitConfig {
             review.associate(order);
             review.associate(product);
             ReviewImage.create(review, imageUrl);
+
+            for(int i = 0; i<3; i++){
+                Reply reply = Reply.create("맛있따"+i,AUTH_ID);
+                reply.associate(review);
+            }
             reviewRepository.save(review);
 
 

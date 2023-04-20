@@ -100,4 +100,17 @@ public class Review {
     public boolean isImageAddable() {
         return this.reviewImages.size() + 1 <= IMAGES_MAX_COUNT;
     }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id='" + id + '\'' +
+                ", rating=" + rating +
+                ", content='" + content + '\'' +
+                ", replies=" + replies +
+                ", reviewImages=" + reviewImages +
+                ", product=" + product +
+                ", order=" + order +
+                '}';
+    }
 }
