@@ -24,10 +24,10 @@ public class ReviewRetrieveServiceImpl implements
 
     @Override
     public ReviewRetrieveResponse retrieveReviews(String productId, String authorId,
-            Pageable pageable) {
+            Pageable pageable,  boolean isPhotoFilter ) {
 
         ReviewRetrieveResponse response = reviewQueryRepository.retrieveReview(
-                productId, authorId, pageable);
+                productId, authorId, pageable, isPhotoFilter);
 
         Map<String, AuthClientDataResponse> data = authClient.retrieveAuthData(
                 response.getAuthorIds());

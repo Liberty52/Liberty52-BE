@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -21,9 +22,12 @@ public class ReviewRetrieveController {
     private final ReviewRetrieveService reviewRetrieveService;
 
     @GetMapping("/reviews/product/{productId}")
-    public ResponseEntity<ReviewRetrieveResponse> retrieveReview(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false)String identifier, @PathVariable String productId, Pageable pageable){
+    public ResponseEntity<ReviewRetrieveResponse> retrieveReview(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false)String identifier,
+            @PathVariable String productId, Pageable pageable,
+            @RequestParam(required = false) boolean photoFilter
+    ){
         ReviewRetrieveResponse response = reviewRetrieveService.retrieveReviews(
-                productId, identifier, pageable);
+                productId, identifier, pageable, photoFilter);
 
         return ResponseEntity.ok(response);
     }

@@ -121,6 +121,15 @@ public class DBInitConfig {
             reviewRepository.save(review);
 
 
+            Orders order2 = ordersRepository.save(Orders.create(AUTH_ID+2, 10000, OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가", "101동 101호", "12345")));
+
+            Review noPhotoReview = Review.create(3, "good");
+            noPhotoReview.associate(order2);
+            noPhotoReview.associate(product);
+
+            reviewRepository.save(noPhotoReview);
+
+
         }
 
         public static Orders getOrder() {

@@ -7,15 +7,18 @@ import static com.liberty52.product.service.entity.QReviewImage.reviewImage;
 
 import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse;
 import com.liberty52.product.service.entity.Review;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Transactional
 @Repository
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
@@ -32,9 +35,10 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
         this.queryFactory = new JPAQueryFactory(this.em);
     }
 
-    public ReviewRetrieveResponse retrieveReview(String productId, String authorId, Pageable pageable){
+    public ReviewRetrieveResponse retrieveReview(String productId, String authorId, Pageable pageable,
+            boolean isPhotoFilter){
 
-        List<Review> reviews = fetchReviews(productId, pageable);
+        List<Review> reviews = fetchReviews(productId, pageable,isPhotoFilter);
 
         if(reviews.isEmpty())
             return noReviewExistCase(authorId, reviews); // 리뷰가 0인 경우에 리턴하는 케이스
@@ -46,16 +50,14 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
                 pageInfo.get(currentPage),
                 pageInfo.get(lastPage)
                 ,authorId);
-
-
     }
 
-    private List<Review> fetchReviews(String productId, Pageable pageable) {
+    private List<Review> fetchReviews(String productId, Pageable pageable,boolean isPhotoFilter) {
         return queryFactory.selectFrom(review)
-                .leftJoin(reply).on(reply.review.eq(review)).fetchJoin()
-                .leftJoin(reviewImage).on(reviewImage.review.eq(review)).fetchJoin()
-                .leftJoin(orders).on(review.order.eq(orders)).fetchJoin()
-                .where(review.product.id.eq(productId))
+                .leftJoin(reply).on(reply.review.eq(review))
+                .leftJoin(reviewImage).on(reviewImage.review.eq(review))
+                .leftJoin(orders).on(review.order.eq(orders))
+                .where(review.product.id.eq(productId), photoFilter(isPhotoFilter))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -65,6 +67,17 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
                 .from(review)
                 .where(review.product.id.eq(productId))
                 .fetchOne();
+    }
+
+    private BooleanExpression photoFilter(boolean isPhotoFilter){
+        log.info("isPhotoFilter = {}", isPhotoFilter);
+        if (!isPhotoFilter) {
+            log.info("null");
+            return null;
+        }
+        log.info("active where");
+        return review.reviewImages.size().gt(0);
+
     }
 
     private Map<String,Long> getPageInfo(Pageable pageable, String productId){

@@ -5,6 +5,7 @@ import static com.liberty52.product.service.utils.MockConstants.MOCK_PRODUCT_REP
 import static com.liberty52.product.service.utils.MockFactory.createMockReviewRetrieveResponse;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +40,7 @@ class ReviewRetrieveControllerTest {
     @Test
     void reviewRetrieveTest() throws Exception {
         //given
-        BDDMockito.given(reviewRetrieveService.retrieveReviews(any(), any(), any()))
+        BDDMockito.given(reviewRetrieveService.retrieveReviews(any(), any(), any(), anyBoolean()))
                 .willReturn(createMockReviewRetrieveResponse());
 
         ResultActions actions = mvc.perform(

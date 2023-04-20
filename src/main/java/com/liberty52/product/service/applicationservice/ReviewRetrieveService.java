@@ -5,6 +5,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReviewRetrieveService {
 
-    ReviewRetrieveResponse retrieveReviews(String productId, String authorId, Pageable pageable);
+    ReviewRetrieveResponse retrieveReviews(String productId, String authorId, Pageable pageable, boolean isPhotoFilter);
 
 }

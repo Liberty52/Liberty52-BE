@@ -40,7 +40,7 @@ class ReviewRetrieveServiceImplTest {
         //given
         //when
         ReviewRetrieveResponse response = reviewRetrieveService.retrieveReviews(
-                product.getId(), order.getAuthId(), PageRequest.of(0, 5));
+                product.getId(), order.getAuthId(), PageRequest.of(0, 5), false);
 
         //then
         assertThat(response.getCurrentPage()).isSameAs(1L);
