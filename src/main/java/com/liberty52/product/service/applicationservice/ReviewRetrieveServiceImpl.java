@@ -25,15 +25,14 @@ public class ReviewRetrieveServiceImpl implements
     @Override
     public ReviewRetrieveResponse retrieveReviews(String productId, String authorId,
             Pageable pageable,  boolean isPhotoFilter ) {
-
         ReviewRetrieveResponse response = reviewQueryRepository.retrieveReview(
                 productId, authorId, pageable, isPhotoFilter);
 
-        Map<String, AuthClientDataResponse> data = authClient.retrieveAuthData(
-                response.getAuthorIds());
-
-        response.setReviewAuthor(data);
-
+        setAuthorDataFromAuthService(response);
         return response;
+    }
+
+    private void setAuthorDataFromAuthService(ReviewRetrieveResponse response) {
+        response.setReviewAuthor(authClient.retrieveAuthData(response.getAuthorIds()));
     }
 }

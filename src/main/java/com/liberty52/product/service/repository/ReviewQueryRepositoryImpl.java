@@ -41,7 +41,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
         List<Review> reviews = fetchReviews(productId, pageable,isPhotoFilter);
 
         if(reviews.isEmpty())
-            return noReviewExistCase(authorId, reviews); // 리뷰가 0인 경우에 리턴하는 케이스
+            return noReviewExistCase(authorId, reviews);
 
         Map<String, Long> pageInfo = getPageInfo(pageable, productId);
 
@@ -70,19 +70,17 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
     }
 
     private BooleanExpression photoFilter(boolean isPhotoFilter){
-        log.info("isPhotoFilter = {}", isPhotoFilter);
         if (!isPhotoFilter) {
-            log.info("null");
             return null;
         }
-        log.info("active where");
+
         return review.reviewImages.size().gt(0);
 
     }
 
     private Map<String,Long> getPageInfo(Pageable pageable, String productId){
         long currentPage = pageable.getPageNumber() +1;
-        long startPage = 10 * (currentPage/10) +1 ; // 1 11 21 31..
+        long startPage = 10 * (currentPage/10) +1 ;
         Long total = getTotalCount(productId);
         long totalLastPage = total%pageable.getPageSize() == 0 ? total / pageable.getPageSize() :
                 total / pageable.getPageSize()+1;
