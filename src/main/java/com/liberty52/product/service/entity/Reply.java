@@ -44,4 +44,11 @@ public class Reply {
             throw new InvalidTextSize();
         }
     }
+    public static Reply create(String content, String authId) {
+        Reply reply = new Reply();
+        reply.content = content;
+        reply.authId = authId;
+        reply.validContent();
+        return reply;
+    }
 }

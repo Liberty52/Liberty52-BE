@@ -108,7 +108,6 @@ public class DBInitConfig {
 
             // Add Order
             Orders order = ordersRepository.save(Orders.create(AUTH_ID, 10000, OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가", "101동 101호", "12345")));
-            Orders order1 = ordersRepository.save(Orders.create("authId2", 10000, OrderDestination.create("receiver", "email", "01012345678", "경기도 어딘가", "101동 101호", "12345")));
             DBInitService.order = order;
 
             customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);

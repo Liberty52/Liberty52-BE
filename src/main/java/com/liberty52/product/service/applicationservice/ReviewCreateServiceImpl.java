@@ -3,9 +3,12 @@ package com.liberty52.product.service.applicationservice;
 import com.liberty52.product.global.adapter.S3UploaderImpl;
 import com.liberty52.product.global.exception.external.OrderNotFoundException;
 import com.liberty52.product.global.exception.external.ProductNotFoundException;
+import com.liberty52.product.global.exception.external.ResourceNotFoundException;
+import com.liberty52.product.service.controller.dto.ReplyCreateRequestDto;
 import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.entity.Product;
+import com.liberty52.product.service.entity.Reply;
 import com.liberty52.product.service.entity.Review;
 import com.liberty52.product.service.entity.ReviewImage;
 import com.liberty52.product.service.repository.OrdersRepository;
@@ -46,5 +49,13 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
       }
     }
     reviewRepository.save(review);
+  }
+
+  @Override
+  public void createReply(String reviewerId, ReplyCreateRequestDto dto, String reviewId) {
+    Review review = reviewRepository.findById(reviewId)
+        .orElseThrow(() -> new ResourceNotFoundException("Review", "ID", reviewId));
+    Reply reply = Reply.create(dto.getContent(),reviewerId);
+    reply.associate(review);
   }
 }
