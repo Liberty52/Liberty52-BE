@@ -120,11 +120,13 @@ public class CartItemRetriveServiceTest {
         dto1.create("Liberty 52_Frame", 1, option);
         cartItemCreateService.createGuestCartItem("aaa", imageFile, dto1);
 
+
         CartItemRequest dto2 = new CartItemRequest();
         String[] option2 = {"벽걸이형", "무광백색"};
 
         dto2.create("Liberty 52_Frame", 2, option2);
         cartItemCreateService.createGuestCartItem("aaa", imageFile, dto2);
+
 
         List<CartItemResponse> cartItemResponseList = cartItemRetriveService.retriveGuestCartItem("aaa");
         Assertions.assertEquals(cartItemResponseList.size(), 2);

@@ -78,11 +78,11 @@ class OrderRetrieveControllerTest {
                 .andDo(print());
     }
 
-    //@Test
+    @Test
     void retrieveOrderDetail () throws Exception{
         //given
-        //given(orderRetrieveService.retrieveOrderDetail(MOCK_AUTH_ID, MOCK_ORDER_ID))
-        //        .willReturn(createMockOrderDetailRetrieveResponse());
+        given(orderRetrieveService.retrieveOrderDetail(MOCK_AUTH_ID, MOCK_ORDER_ID))
+                .willReturn(createMockOrderDetailRetrieveResponse());
 
         //when
         mockMvc.perform(get(ORDER_URL+"/"+MOCK_ORDER_ID)
