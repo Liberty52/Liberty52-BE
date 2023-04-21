@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
@@ -40,20 +41,20 @@ public class CartItemRetriveServiceTest {
         CartItemRequest dto1 = new CartItemRequest();
         String[] option = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
         dto1.create("Liberty 52_Frame", 1, option);
-        cartItemCreateService.createCartItem("aaa", imageFile, dto1);
+        cartItemCreateService.createAuthCartItem("aaa", imageFile, dto1);
+
 
         CartItemRequest dto2 = new CartItemRequest();
         String[] option2 = {"벽걸이형", "무광백색"};
 
         dto2.create("Liberty 52_Frame", 2, option2);
-        cartItemCreateService.createCartItem("aaa", imageFile, dto2);
+        cartItemCreateService.createAuthCartItem("aaa", imageFile, dto2);
 
         List<CartItemResponse> cartItemResponseList = cartItemRetriveService.retriveAuthCartItem("aaa");
         Assertions.assertEquals(cartItemResponseList.size(), 2);
 
         CartItemResponse cartItemResponse1 = cartItemResponseList.get(0);
         Assertions.assertEquals(cartItemResponse1.getName(), "Liberty 52_Frame");
-        Assertions.assertEquals(cartItemResponse1.getImageUrl(), "");
         Assertions.assertEquals(cartItemResponse1.getPrice(), 10000000);
         Assertions.assertEquals(cartItemResponse1.getQuantity(), 1);
 
@@ -81,7 +82,6 @@ public class CartItemRetriveServiceTest {
 
         CartItemResponse cartItemResponse2 = cartItemResponseList.get(1);
         Assertions.assertEquals(cartItemResponse2.getName(), "Liberty 52_Frame");
-        Assertions.assertEquals(cartItemResponse2.getImageUrl(), "");
         Assertions.assertEquals(cartItemResponse2.getPrice(), 10000000);
         Assertions.assertEquals(cartItemResponse2.getQuantity(), 2);
 
@@ -118,20 +118,19 @@ public class CartItemRetriveServiceTest {
         CartItemRequest dto1 = new CartItemRequest();
         String[] option = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
         dto1.create("Liberty 52_Frame", 1, option);
-        cartItemCreateService.createCartItem("aaa", imageFile, dto1);
+        cartItemCreateService.createGuestCartItem("aaa", imageFile, dto1);
 
         CartItemRequest dto2 = new CartItemRequest();
         String[] option2 = {"벽걸이형", "무광백색"};
 
         dto2.create("Liberty 52_Frame", 2, option2);
-        cartItemCreateService.createCartItem("aaa", imageFile, dto2);
+        cartItemCreateService.createGuestCartItem("aaa", imageFile, dto2);
 
-        List<CartItemResponse> cartItemResponseList = cartItemRetriveService.retriveAuthCartItem("aaa");
+        List<CartItemResponse> cartItemResponseList = cartItemRetriveService.retriveGuestCartItem("aaa");
         Assertions.assertEquals(cartItemResponseList.size(), 2);
 
         CartItemResponse cartItemResponse1 = cartItemResponseList.get(0);
         Assertions.assertEquals(cartItemResponse1.getName(), "Liberty 52_Frame");
-        Assertions.assertEquals(cartItemResponse1.getImageUrl(), "");
         Assertions.assertEquals(cartItemResponse1.getPrice(), 10000000);
         Assertions.assertEquals(cartItemResponse1.getQuantity(), 1);
 
@@ -159,7 +158,6 @@ public class CartItemRetriveServiceTest {
 
         CartItemResponse cartItemResponse2 = cartItemResponseList.get(1);
         Assertions.assertEquals(cartItemResponse2.getName(), "Liberty 52_Frame");
-        Assertions.assertEquals(cartItemResponse2.getImageUrl(), "");
         Assertions.assertEquals(cartItemResponse2.getPrice(), 10000000);
         Assertions.assertEquals(cartItemResponse2.getQuantity(), 2);
 
@@ -179,10 +177,16 @@ public class CartItemRetriveServiceTest {
         Assertions.assertEquals(cartOptionResponse22.getPrice(), 500000);
         Assertions.assertEquals(cartOptionResponse22.isRequire(), true);
 
-        List<CartItemResponse> cartItemResponseList1 = cartItemRetriveService.retriveAuthCartItem("bbb");
+        List<CartItemResponse> cartItemResponseList1 = cartItemRetriveService.retriveGuestCartItem("bbb");
         Assertions.assertEquals(cartItemResponseList1.size(), 0);
 
-        List<CartItemResponse> cartItemResponseList2 = cartItemRetriveService.retriveAuthCartItem("ccc");
+        List<CartItemResponse> cartItemResponseList2 = cartItemRetriveService.retriveGuestCartItem("ccc");
         Assertions.assertEquals(cartItemResponseList2.size(), 0);
+
+        Cart cart1 = cartRepository.findByAuthId("aaa").orElseThrow();
+        cart1.updateExpiryDate(LocalDate.now().minusDays(7));
+        cartRepository.save(cart1);
+        List<CartItemResponse> cartItemResponseList3 = cartItemRetriveService.retriveGuestCartItem("aaa");
+        Assertions.assertEquals(cartItemResponseList3.size(), 0);
     }
 }
