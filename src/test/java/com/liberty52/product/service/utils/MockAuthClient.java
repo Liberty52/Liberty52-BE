@@ -8,8 +8,12 @@ import com.liberty52.product.service.controller.dto.AuthClientDataResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+@Profile("test")
+@Primary
 @Service
 public class MockAuthClient implements AuthClient {
 
