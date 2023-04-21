@@ -30,10 +30,6 @@ public class Reply {
         this.authId = authId;
     }
 
-    public static Reply create(String content, String authId){
-        return new Reply(content,authId);
-    }
-
     public void associate(Review review) {
         this.review = review;
         review.addReply(this);
