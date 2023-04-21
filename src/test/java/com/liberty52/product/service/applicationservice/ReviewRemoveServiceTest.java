@@ -1,13 +1,11 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.config.DBInitConfig;
-import com.liberty52.product.global.exception.external.NotMatchReviewerIdException;
-import com.liberty52.product.global.exception.external.OptionDetailNotFoundException;
+import com.liberty52.product.global.exception.external.NoYourReviewException;
 import com.liberty52.product.global.exception.external.ReviewNotFoundException;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.entity.Product;
 import com.liberty52.product.service.entity.Review;
-import com.liberty52.product.service.entity.ReviewImage;
 import com.liberty52.product.service.repository.ReviewRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.stream.IntStream;
 
 @SpringBootTest
 @Transactional
@@ -50,7 +46,7 @@ public class ReviewRemoveServiceTest {
         Assertions.assertNotNull(reviewBefore);
 
         Assertions.assertThrows(ReviewNotFoundException.class, () -> reviewRemoveService.removeReview("authId", "123"));
-        Assertions.assertThrows(NotMatchReviewerIdException.class, () -> reviewRemoveService.removeReview("123", review.getId()));
+        Assertions.assertThrows(NoYourReviewException.class, () -> reviewRemoveService.removeReview("123", review.getId()));
 
         reviewRemoveService.removeReview("authId", review.getId());
         Review reviewAfter = reviewRepository.findById(review.getId()).orElse(null);

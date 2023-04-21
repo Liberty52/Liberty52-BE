@@ -1,6 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.exception.external.NotMatchReviewerIdException;
+import com.liberty52.product.global.exception.external.NoYourReviewException;
 import com.liberty52.product.global.exception.external.ReviewNotFoundException;
 import com.liberty52.product.service.entity.Review;
 import com.liberty52.product.service.repository.ReviewRepository;
@@ -19,7 +19,7 @@ public class ReviewRemoveServiceImpl implements ReviewRemoveService {
     public void removeReview(String reviewerId, String reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException());
         if(!reviewerId.equals(review.getOrder().getAuthId())){
-            throw new NotMatchReviewerIdException();
+            throw new NoYourReviewException();
         }
 
         this.reviewRepository.delete(review);
