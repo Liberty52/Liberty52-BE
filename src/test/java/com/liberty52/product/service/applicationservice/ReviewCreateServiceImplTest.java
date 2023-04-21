@@ -33,8 +33,7 @@ class ReviewCreateServiceImplTest {
   private ReviewRepository reviewRepository;
   @Autowired
   private ReviewCreateService reviewCreateService;
-
-  private Orders order;
+  Orders order;
   private final List<MultipartFile> testImageList = new ArrayList<>();
   private final String reviewerId = "authId2";
 
@@ -53,15 +52,16 @@ class ReviewCreateServiceImplTest {
   @Test
   @Order(1)
   void createReview() {
-    order = ordersRepository.save(Orders.create("authId2", 10000, OrderDestination.create("receiver",
+    order= ordersRepository.save(Orders.create("authId2", 10000, OrderDestination.create("receiver",
         "email", "01012341234", "경기도 어딘가", "101동 101호", "12345")));
+
     Integer rating = 3;
     String content = "is very nice review";
     testImageList.add(imageFile);
 
     ReviewCreateRequestDto dto = ReviewCreateRequestDto.createForTest(productName, rating, content);
 
-    reviewCreateService.createReview(reviewerId, dto, testImageList);
+    reviewCreateService.createReview(reviewerId,dto, testImageList, order.getId());
     Review review = reviewRepository.findByOrderId(order.getId()).get();
 
     Assertions.assertEquals(rating, review.getRating());

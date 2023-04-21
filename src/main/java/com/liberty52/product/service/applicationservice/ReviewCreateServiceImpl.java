@@ -1,6 +1,7 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.adapter.S3UploaderImpl;
+import com.liberty52.product.global.exception.external.NotYourResourceException;
 import com.liberty52.product.global.exception.external.OrderNotFoundException;
 import com.liberty52.product.global.exception.external.ProductNotFoundException;
 import com.liberty52.product.global.exception.external.ResourceNotFoundException;
@@ -31,12 +32,16 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
   private final S3UploaderImpl s3Uploader;
 
   @Override
-  public void createReview(String reviewerId, ReviewCreateRequestDto dto, List<MultipartFile> imageFiles) {
+  public void createReview(String reviewerId,ReviewCreateRequestDto dto, List<MultipartFile> imageFiles,String orderId) {
     Product product = productRepository.findByName(dto.getProductName())
         .orElseThrow(() -> new ProductNotFoundException(dto.getProductName()));
 
-    Orders order = ordersRepository.findByAuthId(reviewerId)
+    Orders order = ordersRepository.findById(orderId)
         .orElseThrow(OrderNotFoundException::new);
+
+    if(!(order.getAuthId().equals(reviewerId))){
+      throw new NotYourResourceException(reviewerId,order.getAuthId());
+    }
 
     Review review = Review.create(dto.getRating(), dto.getContent());
     review.associate(product);
