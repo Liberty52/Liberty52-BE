@@ -21,7 +21,7 @@ public class ReviewRetrieveController {
 
     private final ReviewRetrieveService reviewRetrieveService;
 
-    @GetMapping("/reviews/product/{productId}")
+    @GetMapping("/reviews/products/{productId}")
     public ResponseEntity<ReviewRetrieveResponse> retrieveReview(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false)String identifier,
             @PathVariable String productId, Pageable pageable,
             @RequestParam(required = false) boolean photoFilter

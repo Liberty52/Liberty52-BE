@@ -3,7 +3,6 @@ package com.liberty52.product.service.controller;
 import static com.liberty52.product.service.utils.MockConstants.MOCK_AUTH_ID;
 import static com.liberty52.product.service.utils.MockConstants.MOCK_PRODUCT_REPRESENT_URL;
 import static com.liberty52.product.service.utils.MockFactory.createMockReviewRetrieveResponse;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -11,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.liberty52.product.service.applicationservice.ReviewRetrieveService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
@@ -44,7 +42,7 @@ class ReviewRetrieveControllerTest {
                 .willReturn(createMockReviewRetrieveResponse());
 
         ResultActions actions = mvc.perform(
-                        MockMvcRequestBuilders.get("/reviews/product/1?size=5&page=0")
+                        MockMvcRequestBuilders.get("/reviews/products/LIB-001?size=5&page=0")
                                 .header(HttpHeaders.AUTHORIZATION, MOCK_AUTH_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.currentPage").value(1))
