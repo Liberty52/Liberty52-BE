@@ -2,11 +2,15 @@ package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.service.controller.dto.ReplyCreateRequestDto;
 import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
+import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.OrderDestination;
 import com.liberty52.product.service.entity.Orders;
+import com.liberty52.product.service.entity.Product;
 import com.liberty52.product.service.entity.Reply;
 import com.liberty52.product.service.entity.Review;
+import com.liberty52.product.service.repository.CustomProductRepository;
 import com.liberty52.product.service.repository.OrdersRepository;
+import com.liberty52.product.service.repository.ProductRepository;
 import com.liberty52.product.service.repository.ReviewRepository;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,10 +34,15 @@ class ReviewCreateServiceImplTest {
   @Autowired
   private OrdersRepository ordersRepository;
   @Autowired
+  private ProductRepository productRepository;
+  @Autowired
+  private CustomProductRepository customProductRepository;
+  @Autowired
   private ReviewRepository reviewRepository;
   @Autowired
   private ReviewCreateService reviewCreateService;
   Orders order;
+  CustomProduct customProduct;
   private final List<MultipartFile> testImageList = new ArrayList<>();
   private final String reviewerId = "authId2";
 
@@ -54,6 +63,12 @@ class ReviewCreateServiceImplTest {
   void createReview() {
     order= ordersRepository.save(Orders.create("authId2", 10000, OrderDestination.create("receiver",
         "email", "01012341234", "경기도 어딘가", "101동 101호", "12345")));
+    Product product = productRepository.findByName(productName).get();
+
+    customProduct = CustomProduct.create("aa", 3, "authId2");
+    customProduct.associateWithProduct(product);
+    customProduct.associateWithOrder(order);
+    customProduct = customProductRepository.save(customProduct);
 
     Integer rating = 3;
     String content = "is very nice review";
