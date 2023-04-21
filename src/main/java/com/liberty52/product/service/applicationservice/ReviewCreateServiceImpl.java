@@ -53,7 +53,7 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
     review.associate(product);
     review.associate(order);
 
-    if(!(imageFiles.size() > Review.IMAGES_MAX_COUNT || imageFiles.get(0).getSize()==0)){//이미지를 안 넣을거면 null 값 보내기
+    if(!(imageFiles.size() > Review.IMAGES_MAX_COUNT || ( imageFiles.get(0) != null && imageFiles.get(0).getSize()==0))){//이미지를 안 넣을거면 null 값 보내기
       for (MultipartFile imageFile : imageFiles) {
         String reviewImageUrl = s3Uploader.upload(imageFile);
         review.addImage(ReviewImage.create(review, reviewImageUrl));
