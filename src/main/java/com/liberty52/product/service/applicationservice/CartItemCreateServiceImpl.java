@@ -73,7 +73,7 @@ public class CartItemCreateServiceImpl implements CartItemCreateService{
 
     private String uploadImage(MultipartFile multipartFile) {
         if(multipartFile == null) {
-            return ""; //수정해야 할 부분
+            return null;
         }
         return s3Uploader.upload(multipartFile);
     }

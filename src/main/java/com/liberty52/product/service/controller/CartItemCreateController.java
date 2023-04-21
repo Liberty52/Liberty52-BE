@@ -19,7 +19,7 @@ public class CartItemCreateController {
         cartItemCreateService.createAuthCartItem(authId, imageFile, dto);
     }
 
-    //@PostMapping("/carts/custom-products")
+    @PostMapping("/guest/carts/custom-products")
     @ResponseStatus(HttpStatus.CREATED)
     public void createGuestCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String guestId, @RequestPart(value = "file") MultipartFile imageFile, @RequestPart CartItemRequest dto) {
         cartItemCreateService.createGuestCartItem(guestId, imageFile, dto);
