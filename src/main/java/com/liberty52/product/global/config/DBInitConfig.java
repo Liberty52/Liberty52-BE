@@ -4,6 +4,7 @@ import com.liberty52.product.service.applicationservice.MonoItemOrderService;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.repository.*;
 import jakarta.annotation.PostConstruct;
+import java.lang.reflect.Field;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +38,19 @@ public class DBInitConfig {
         private final ReviewRepository reviewRepository;
 
         public void init() {
-            Product product = productRepository.save(Product.create(LIBERTY, ProductState.ON_SAIL, 10000000L));
-            DBInitService.product = product;
+            try {
+                Product product = Product.create(LIBERTY, ProductState.ON_SAIL, 10000000L);
+                Field id = product.getClass().getDeclaredField("id");
+                id.setAccessible(true);
+                id.set(product, "LIB-001");
+
+                productRepository.save(product);
+                DBInitService.product = product;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
 
             ProductOption option1 = ProductOption.create("거치 방식", true);
             option1.associate(product);
