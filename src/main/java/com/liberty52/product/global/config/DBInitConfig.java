@@ -54,6 +54,9 @@ public class DBInitConfig {
                 productRepository.save(product);
                 DBInitService.product = product;
 
+
+
+
                 ProductOption option1 = ProductOption.create("거치 방식", true);
                 option1.associate(product);
                 option1 = productOptionRepository.save(option1);
@@ -97,12 +100,11 @@ public class DBInitConfig {
                 // Add Cart & CartItems
                 Cart cart = cartRepository.save(Cart.create(AUTH_ID));
 
-                final String imageUrl = env.getProperty(
-                        "product.representative-url.liberty52-frame");
-                CustomProduct customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
-                customProduct.associateWithProduct(product);
-                customProduct.associateWithCart(cart);
-                customProduct = customProductRepository.save(customProduct);
+            final String imageUrl = env.getProperty("product.representative-url.liberty52-frame");
+            CustomProduct customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
+            customProduct.associateWithProduct(product);
+            customProduct.associateWithCart(cart);
+            customProduct = customProductRepository.save(customProduct);
 
                 CustomProductOption customProductOption = CustomProductOption.create();
                 customProductOption.associate(customProduct);
