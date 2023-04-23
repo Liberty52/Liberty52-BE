@@ -41,7 +41,7 @@ public class Orders {
     @OneToOne(cascade = CascadeType.ALL, optional = false)
     private OrderDestination orderDestination;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Payment payment;
 
     private Orders(String authId, int deliveryPrice, OrderDestination orderDestination) {
@@ -102,5 +102,9 @@ public class Orders {
 
     public void setPayment(Payment<?> payment) {
         this.payment = payment;
+    }
+
+    public void changeOrderStatusToOrdered() {
+        this.orderStatus = OrderStatus.ORDERED;
     }
 }

@@ -33,8 +33,8 @@ public abstract class Payment<T extends Payment.PaymentInfo> {
 
     protected String info = "";
 
-    public static Payment<? extends PaymentInfo> cardOf(Orders orders) {
-        return CardPayment.of(orders);
+    public static Payment<? extends PaymentInfo> cardOf() {
+        return CardPayment.of();
     }
 
     public static Payment<? extends PaymentInfo> vbankOf(Orders orders) {
@@ -53,9 +53,17 @@ public abstract class Payment<T extends Payment.PaymentInfo> {
 //        return payment;
 //    }
 
-    protected void associate(Orders orders) {
+    public void associate(Orders orders) {
         this.orders = orders;
         this.orders.setPayment(this);
+    }
+
+    public void changeStatusToPaid() {
+        this.status = PaymentStatus.PAID;
+    }
+
+    public void changeStatusToForgery() {
+        this.status = PaymentStatus.FORGERY;
     }
 
     public abstract <T extends PaymentInfo> void setInfo(T dto);

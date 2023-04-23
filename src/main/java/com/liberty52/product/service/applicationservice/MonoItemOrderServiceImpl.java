@@ -1,38 +1,42 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.adapter.S3Uploader;
+import com.liberty52.product.global.exception.external.InternalServerException;
+import com.liberty52.product.global.exception.external.ProductErrorCode;
+import com.liberty52.product.global.exception.external.RequestForgeryPayException;
 import com.liberty52.product.global.exception.external.ResourceNotFoundException;
-import com.liberty52.product.service.controller.dto.MonoItemOrderRequestDto;
-import com.liberty52.product.service.controller.dto.MonoItemOrderResponseDto;
-import com.liberty52.product.service.controller.dto.PreregisterOrderRequestDto;
-import com.liberty52.product.service.controller.dto.PreregisterOrderResponseDto;
+import com.liberty52.product.service.controller.dto.*;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.entity.payment.Payment;
 import com.liberty52.product.service.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MonoItemOrderServiceImpl implements MonoItemOrderService {
 
     private static final String RESOURCE_NAME_PRODUCT = "Product";
     private static final String PARAM_NAME_PRODUCT_NAME = "name";
     private static final String RESOURCE_NAME_OPTION_DETAIL = "OptionDetail";
     private static final String PARAM_NAME_OPTION_DETAIL_NAME = "name";
-    private final ProductRepository productRepository;
     private final S3Uploader s3Uploader;
+    private final ProductRepository productRepository;
     private final CustomProductRepository customProductRepository;
     private final OrdersRepository ordersRepository;
     private final OptionDetailRepository optionDetailRepository;
     private final CustomProductOptionRepository customProductOptionRepository;
     private final PaymentRepository paymentRepository;
+    private final ConfirmPaymentMapRepository confirmPaymentMapRepository;
 
     @Override
     @Deprecated
@@ -94,25 +98,60 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         Orders order = ordersRepository.save(Orders.create(authId, orderDestination)); // OrderDestination will be saved by cascading
 
         // Upload Image
-        String imgUrl = s3Uploader.upload(imageFile);
+        String imgUrl = "";
+        if (imageFile != null) {
+            imgUrl = s3Uploader.upload(imageFile);
+        }
 
         // Save CustomProduct
-        CustomProduct customProduct = customProductRepository.save(CustomProduct.create(imgUrl, dto.getProductDto().getQuantity(), authId));
+        CustomProduct customProduct = CustomProduct.create(imgUrl, dto.getProductDto().getQuantity(), authId);
         customProduct.associateWithProduct(product);
         customProduct.associateWithOrder(order);
+        customProductRepository.save(customProduct);
 
         // Save CustomProductOption
         for (OptionDetail detail : optionDetails) {
-            CustomProductOption customProductOption = customProductOptionRepository.save(CustomProductOption.create());
+            CustomProductOption customProductOption = CustomProductOption.create();
             customProductOption.associate(customProduct);
             customProductOption.associate(detail);
+            customProductOptionRepository.save(customProductOption);
         }
 
         order.calcTotalAmountAndSet();
 
-        paymentRepository.save(Payment.cardOf(order));
+        Payment<?> payment = Payment.cardOf();
+        payment.associate(order);
 
         return PreregisterOrderResponseDto.of(order.getId(), order.getAmount());
+    }
+
+    @Override
+    public ConfirmCardPaymentResponseDto confirmFinalApprovalOfCardPayment(String authId, String orderId) {
+        AtomicInteger offset = new AtomicInteger();
+
+        while (!confirmPaymentMapRepository.containsOrderId(orderId)) {
+            offset.getAndIncrement();
+            try {
+                Thread.sleep(1000);
+
+                if(offset.get() > 80) {
+                    log.error("카드 결제 정보를 확인하는 시간이 초과했습니다. 웹훅 서버를 확인해주세요. OrderId: {}", orderId);
+                    throw new InternalServerException(ProductErrorCode.CONFIRM_PAYMENT_ERROR);
+                }
+            } catch (InterruptedException e) {
+                log.error("카드 결제 스레드의 문제가 발생하였습니다.");
+                throw new InternalServerException(ProductErrorCode.CONFIRM_PAYMENT_ERROR);
+            }
+        }
+
+        Orders orders = confirmPaymentMapRepository.get(orderId);
+
+        return switch (orders.getPayment().getStatus()) {
+            case PAID -> ConfirmCardPaymentResponseDto.of(orderId);
+            case FORGERY -> throw new RequestForgeryPayException();
+            default -> throw new InternalServerException(ProductErrorCode.CONFIRM_PAYMENT_ERROR);
+        };
+
     }
 
 
