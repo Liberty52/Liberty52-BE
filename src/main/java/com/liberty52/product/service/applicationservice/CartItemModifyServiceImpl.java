@@ -12,7 +12,6 @@ import com.liberty52.product.service.entity.OptionDetail;
 import com.liberty52.product.service.repository.CustomProductOptionRepository;
 import com.liberty52.product.service.repository.CustomProductRepository;
 import com.liberty52.product.service.repository.OptionDetailRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,62 +19,62 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
-public class CartItemModifyServiceImpl implements CartItemModifyService {
+public class CartItemModifyServiceImpl implements CartItemModifyService{
+
   private final S3Uploader s3Uploader;
   private final CustomProductRepository customProductRepository;
   private final OptionDetailRepository optionDetailRepository;
 
   private final CustomProductOptionRepository customProductOptionRepository;
 
+  @Transactional
   @Override
-  public void modifyCartItemList(String authId, List<CartModifyRequestDto> dto, List<MultipartFile> imageFile) {
-    modifyCartItem(authId, dto, imageFile);
+  public void modifyUserCartItem(String authId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
+    modifyCartItem(authId,dto,imageFile,customProductId);
+  }
+  @Transactional
+  @Override
+  public void modifyGuestCartItem(String guestId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
+    modifyCartItem(guestId,dto,imageFile,customProductId);
   }
 
-  @Override
-  public void modifyGuestCartItemList(String guestId, List<CartModifyRequestDto> dto, List<MultipartFile> imageFile) {
-    modifyCartItem(guestId, dto, imageFile);
+  private void modifyCartItem(String ownerId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
+    CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow((CustomProductNotFoundExcpetion::new));
+    validCartItem(ownerId, customProduct);
+    modifyOptionsDetail(dto, customProduct,imageFile);
   }
 
-  private void modifyCartItem(String ownerId, List<CartModifyRequestDto> cmrdDto, List<MultipartFile> imageFile) {
-    for (int i=0;i< cmrdDto.size();i++){
-      CustomProduct customProduct = customProductRepository.findById(cmrdDto.get(i).getCustomProductId())
-          .orElseThrow((CustomProductNotFoundExcpetion::new));
-      validCartItem(ownerId, customProduct);
-      modifyOptionsDetail(cmrdDto.get(i), customProduct, imageFile.get(i));
-    }
-  }
-  private static void validCartItem(String ownerId, CustomProduct customProduct) {
-    if (customProduct.isInOrder()) {
+  private void validCartItem(String authId, CustomProduct customProduct) {
+    if(customProduct.isInOrder()){
       throw new OrderItemCannotModifiedException();
     }
 
-    if (!customProduct.getCart().getAuthId().equals(ownerId)) {
-      throw new NotYourResourceException("customProduct", ownerId);
+    if(!customProduct.getCart().getAuthId().equals(authId)){
+      throw new NotYourResourceException("customProduct", authId);
     }
   }
 
-  private void modifyOptionsDetail(CartModifyRequestDto dto, CustomProduct customProduct, MultipartFile imageFile) {
-    if (imageFile.getSize() != 0) {
+  private void modifyOptionsDetail(CartModifyRequestDto dto, CustomProduct customProduct,MultipartFile imageFile) {
+    if (imageFile != null){
       String customPictureUrl = uploadImage(imageFile);
       customProduct.modifyCustomPictureUrl(customPictureUrl);
     }
     customProduct.modifyQuantity(dto.getQuantity());
-
-    customProductOptionRepository.deleteAll(customProduct.getOptions());
-    for (String optionDetailName : dto.getOptions()) {
-      CustomProductOption customProductOption = CustomProductOption.create();
-      OptionDetail optionDetail = optionDetailRepository.findByName(optionDetailName)
-          .orElseThrow(() -> new OptionDetailNotFoundException(optionDetailName));
-      customProductOption.associate(optionDetail);
-      customProductOption.associate(customProduct);
-      customProductOptionRepository.save(customProductOption);
+    if (!dto.getOptions().isEmpty()){
+      customProductOptionRepository.deleteAll(customProduct.getOptions());
+      for (String optionDetailName : dto.getOptions()){
+        CustomProductOption customProductOption = CustomProductOption.create();
+        OptionDetail optionDetail = optionDetailRepository.findByName(optionDetailName)
+            .orElseThrow(() -> new OptionDetailNotFoundException(optionDetailName));
+        customProductOption.associate(optionDetail);
+        customProductOption.associate(customProduct);
+        customProductOptionRepository.save(customProductOption);
+      }
     }
   }
 
   private String uploadImage(MultipartFile multipartFile) {
-    if (multipartFile == null) {
+    if(multipartFile == null) {
       return null;
     }
     return s3Uploader.upload(multipartFile);

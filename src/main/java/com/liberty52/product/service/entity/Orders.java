@@ -12,6 +12,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import java.util.concurrent.atomic.AtomicLong;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,7 +25,7 @@ public class Orders {
     @Id
     private String id = UUID.randomUUID().toString();
 
-    @Column(unique = true, updatable = false)
+    @Column(updatable = false, nullable = false)
     private String authId;
 
     private LocalDate orderDate = LocalDate.now();

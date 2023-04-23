@@ -25,6 +25,11 @@ public class Reply {
     @JoinColumn(name = "review_id")
     private Review review;
 
+    private Reply(String content, String authId) {
+        this.content = content;
+        this.authId = authId;
+    }
+
     public void associate(Review review) {
         this.review = review;
         review.addReply(this);
@@ -34,5 +39,12 @@ public class Reply {
         if(this.content.length() > 1000) {
             throw new InvalidTextSize();
         }
+    }
+    public static Reply create(String content, String authId) {
+        Reply reply = new Reply();
+        reply.content = content;
+        reply.authId = authId;
+        reply.validContent();
+        return reply;
     }
 }

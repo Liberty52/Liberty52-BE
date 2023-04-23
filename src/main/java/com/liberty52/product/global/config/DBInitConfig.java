@@ -1,16 +1,21 @@
 package com.liberty52.product.global.config;
 
+import static com.liberty52.product.global.contants.RepresentImageUrl.LIBERTY52_FRAME_REPRESENTATIVE_URL;
+
 import com.liberty52.product.service.applicationservice.MonoItemOrderService;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.repository.*;
 import jakarta.annotation.PostConstruct;
+import java.lang.reflect.Field;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
 public class DBInitConfig {
+
     private final DBInitService initService;
 
     @PostConstruct
@@ -22,6 +27,7 @@ public class DBInitConfig {
     @Transactional
     @RequiredArgsConstructor
     public static class DBInitService {
+
         private final MonoItemOrderService monoItemOrderService;
         private final CartItemRepository customProductRepository;
         private final ProductRepository productRepository;
@@ -30,92 +36,138 @@ public class DBInitConfig {
         private final CartRepository cartRepository;
         private final CustomProductOptionRepository customProductOptionRepository;
         private final OrdersRepository ordersRepository;
-        public static final String AUTH_ID = "authId";
+        public static final String AUTH_ID = "TESTER-001";
         public static final String LIBERTY = "Liberty 52_Frame";
         private static Orders order;
         private static Product product;
         private final ReviewRepository reviewRepository;
 
+        private final Environment env;
+
         public void init() {
-            Product product = productRepository.save(Product.create(LIBERTY, ProductState.ON_SAIL, 10000000L));
-            DBInitService.product = product;
+            try {
+                Product product = Product.create(LIBERTY, ProductState.ON_SAIL, 10000000L);
+                Field id = product.getClass().getDeclaredField("id");
+                id.setAccessible(true);
+                id.set(product, "LIB-001");
 
-            ProductOption option1 = ProductOption.create("거치 방식", true);
-            option1.associate(product);
-            option1 = productOptionRepository.save(option1);
+                productRepository.save(product);
+                DBInitService.product = product;
 
-            OptionDetail detailEasel = OptionDetail.create("이젤 거치형", 100000);
-            detailEasel.associate(option1);
-            detailEasel = optionDetailRepository.save(detailEasel);
 
-            OptionDetail detailWall = OptionDetail.create("벽걸이형", 200000);
-            detailWall.associate(option1);
-            detailWall = optionDetailRepository.save(detailWall);
 
-            ProductOption option2 = ProductOption.create("기본소재", true);
-            option2.associate(product);
-            option2 = productOptionRepository.save(option2);
 
-            OptionDetail material = OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 0);
-            material.associate(option2);
-            material = optionDetailRepository.save(material);
+                ProductOption option1 = ProductOption.create("거치 방식", true);
+                option1.associate(product);
+                option1 = productOptionRepository.save(option1);
 
-            ProductOption option3 = ProductOption.create("기본소재 옵션", true);
-            option3.associate(product);
-            option3 = productOptionRepository.save(option3);
+                OptionDetail detailEasel = OptionDetail.create("이젤 거치형", 100000);
+                detailEasel.associate(option1);
+                detailEasel = optionDetailRepository.save(detailEasel);
 
-            OptionDetail materialOption1 = OptionDetail.create("유광실버", 600000);
-            materialOption1.associate(option3);
-            materialOption1 = optionDetailRepository.save(materialOption1);
+                OptionDetail detailWall = OptionDetail.create("벽걸이형", 200000);
+                detailWall.associate(option1);
+                detailWall = optionDetailRepository.save(detailWall);
 
-            OptionDetail materialOption2 = OptionDetail.create("무광실버", 400000);
-            materialOption2.associate(option3);
-            materialOption2 = optionDetailRepository.save(materialOption2);
+                ProductOption option2 = ProductOption.create("기본소재", true);
+                option2.associate(product);
+                option2 = productOptionRepository.save(option2);
 
-            OptionDetail materialOption3 = OptionDetail.create("유광백색", 300000);
-            materialOption3.associate(option3);
-            materialOption3 = optionDetailRepository.save(materialOption3);
+                OptionDetail material = OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 0);
+                material.associate(option2);
+                material = optionDetailRepository.save(material);
 
-            OptionDetail materialOption4 = OptionDetail.create("무광백색", 500000);
-            materialOption4.associate(option3);
-            materialOption4 = optionDetailRepository.save(materialOption4);
+                ProductOption option3 = ProductOption.create("기본소재 옵션", true);
+                option3.associate(product);
+                option3 = productOptionRepository.save(option3);
 
-            // Add Cart & CartItems
-            Cart cart = cartRepository.save(Cart.create(AUTH_ID));
+                OptionDetail materialOption1 = OptionDetail.create("유광실버", 600000);
+                materialOption1.associate(option3);
+                materialOption1 = optionDetailRepository.save(materialOption1);
 
-            final String imageUrl = "imageUrl";
+                OptionDetail materialOption2 = OptionDetail.create("무광실버", 400000);
+                materialOption2.associate(option3);
+                materialOption2 = optionDetailRepository.save(materialOption2);
+
+                OptionDetail materialOption3 = OptionDetail.create("유광백색", 300000);
+                materialOption3.associate(option3);
+                materialOption3 = optionDetailRepository.save(materialOption3);
+
+                OptionDetail materialOption4 = OptionDetail.create("무광백색", 500000);
+                materialOption4.associate(option3);
+                materialOption4 = optionDetailRepository.save(materialOption4);
+
+                // Add Cart & CartItems
+                Cart cart = cartRepository.save(Cart.create(AUTH_ID));
+
+            final String imageUrl = env.getProperty("product.representative-url.liberty52-frame");
             CustomProduct customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
             customProduct.associateWithProduct(product);
             customProduct.associateWithCart(cart);
             customProduct = customProductRepository.save(customProduct);
 
-            CustomProductOption customProductOption = CustomProductOption.create();
-            customProductOption.associate(customProduct);
-            customProductOption.associate(detailEasel);
-            customProductOption = customProductOptionRepository.save(customProductOption);
+                CustomProductOption customProductOption = CustomProductOption.create();
+                customProductOption.associate(customProduct);
+                customProductOption.associate(detailEasel);
+                customProductOption = customProductOptionRepository.save(customProductOption);
 
-            // Add Order
-            Orders order = ordersRepository.save(Orders.create(AUTH_ID, 10000, OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가", "101동 101호", "12345")));
-            DBInitService.order = order;
+                // Add Order
+                Orders order = ordersRepository.save(Orders.create(AUTH_ID, 10000,
+                        OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
+                                "101동 101호", "12345")));
+                DBInitService.order = order;
 
-            customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
-            customProduct.associateWithProduct(product);
-            customProduct.associateWithOrder(order);
-            customProduct = customProductRepository.save(customProduct);
+                customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
+                customProduct.associateWithProduct(product);
+                customProduct.associateWithOrder(order);
+                customProduct = customProductRepository.save(customProduct);
 
-            customProductOption = CustomProductOption.create();
-            customProductOption.associate(customProduct);
-            customProductOption.associate(detailEasel);
-            customProductOption = customProductOptionRepository.save(customProductOption);
+                customProductOption = CustomProductOption.create();
+                customProductOption.associate(customProduct);
+                customProductOption.associate(detailEasel);
+                customProductOption = customProductOptionRepository.save(customProductOption);
 
-            // Add Review
-            Review review = Review.create(3, "good");
-            review.associate(order);
-            review.associate(product);
-            ReviewImage.create(review, imageUrl);
-            reviewRepository.save(review);
+                // Add Review
+                Review review = Review.create(3, "good");
+                review.associate(order);
+                review.associate(product);
+                ReviewImage.create(review, imageUrl);
 
+                for (int i = 0; i < 3; i++) {
+                    Reply reply = Reply.create("맛있따" + i, AUTH_ID);
+                    reply.associate(review);
+                }
+                reviewRepository.save(review);
 
+                Orders guestOrder = Orders.create("GUEST-001", 10000,
+                        OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
+                                "101동 101호", "12345"));
+
+                Field guestOrderId = guestOrder.getClass().getDeclaredField("id");
+                guestOrderId.setAccessible(true);
+                guestOrderId.set(guestOrder, "GORDER-001");
+
+                ordersRepository.save(guestOrder);
+
+                customProduct = CustomProduct.create(imageUrl, 1, "GUEST-001");
+                customProduct.associateWithProduct(product);
+                customProduct.associateWithOrder(guestOrder);
+                customProduct = customProductRepository.save(customProduct);
+
+                customProductOption = CustomProductOption.create();
+                customProductOption.associate(customProduct);
+                customProductOption.associate(detailEasel);
+                customProductOption = customProductOptionRepository.save(customProductOption);
+
+                Review noPhotoReview = Review.create(3, "good");
+                noPhotoReview.associate(guestOrder);
+                noPhotoReview.associate(product);
+
+                reviewRepository.save(noPhotoReview);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         public static Orders getOrder() {
