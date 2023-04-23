@@ -74,9 +74,9 @@ class ReviewCreateServiceImplTest {
     String content = "is very nice review";
     testImageList.add(imageFile);
 
-    ReviewCreateRequestDto dto = ReviewCreateRequestDto.createForTest(productName, rating, content);
+    ReviewCreateRequestDto dto = ReviewCreateRequestDto.createForTest(productName, rating, content,order.getId());
 
-    reviewCreateService.createReview(reviewerId,dto, testImageList, order.getId());
+    reviewCreateService.createReview(reviewerId,dto, testImageList);
     Review review = reviewRepository.findByOrderId(order.getId()).get();
 
     Assertions.assertEquals(rating, review.getRating());

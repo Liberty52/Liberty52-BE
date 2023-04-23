@@ -36,16 +36,14 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
   private final S3UploaderImpl s3Uploader;
 
   @Override
-  public void createReview(String reviewerId, ReviewCreateRequestDto dto,
-      List<MultipartFile> imageFiles, String orderId) {
+  public void createReview(String reviewerId, ReviewCreateRequestDto dto, List<MultipartFile> images) {
     Product product = productRepository.findByName(dto.getProductName())
         .orElseThrow(() -> new ProductNotFoundException(dto.getProductName()));
 
-    Orders order = ordersRepository.findById(orderId)
+    Orders order = ordersRepository.findById(dto.getOrderId())
         .orElseThrow(OrderNotFoundException::new);
 
-    customProductRepository.findByOrderIdAndProductId(orderId,
-            product.getId())//해당 order가  해당 product를 구매했는지 확인
+    customProductRepository.findByOrderIdAndProductId(dto.getOrderId(), product.getId())
         .orElseThrow(CustomProductNotFoundExcpetion::new);
 
     if (!(order.getAuthId().equals(reviewerId))) {
@@ -56,8 +54,8 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
     review.associate(product);
     review.associate(order);
 
-    if (imageFiles != null){
-      addImage(imageFiles, review);
+    if (images != null){
+      addImage(images, review);
     }
     reviewRepository.save(review);
   }
