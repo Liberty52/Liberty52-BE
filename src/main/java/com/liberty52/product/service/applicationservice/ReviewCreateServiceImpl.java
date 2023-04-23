@@ -7,7 +7,7 @@ import com.liberty52.product.global.exception.external.NotYourResourceException;
 import com.liberty52.product.global.exception.external.OrderNotFoundException;
 import com.liberty52.product.global.exception.external.ProductNotFoundException;
 import com.liberty52.product.global.exception.external.ResourceNotFoundException;
-import com.liberty52.product.global.exception.external.ReviewAlreadyExistByOrder;
+import com.liberty52.product.global.exception.external.ReviewAlreadyExistByOrderException;
 import com.liberty52.product.service.controller.dto.ReplyCreateRequestDto;
 import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
 import com.liberty52.product.service.entity.Orders;
@@ -51,13 +51,12 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
       throw new NotYourResourceException(reviewerId, order.getAuthId());
     }
 
+    reviewRepository.findByOrderId(order.getId())
+        .orElseThrow(ReviewAlreadyExistByOrderException::new);
+
     Review review = Review.create(dto.getRating(), dto.getContent());
     review.associate(product);
     review.associate(order);
-
-    if(review.getOrder() == order){
-      throw new ReviewAlreadyExistByOrder();
-    }
 
     if (images != null){
       addImage(images, review);
