@@ -13,8 +13,6 @@ import javax.annotation.Nullable;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/product")
-@CrossOrigin(origins = "http://localhost:3000/")
 public class MonoItemOrderController {
     private final MonoItemOrderService monoItemOrderService;
 

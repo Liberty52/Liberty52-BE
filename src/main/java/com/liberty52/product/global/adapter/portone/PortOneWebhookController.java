@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"https://52.78.100.19", "https://52.78.48.223"})
 public class PortOneWebhookController {
 
     private final PortOneWebhookService portOneWebhookService;
