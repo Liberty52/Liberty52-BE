@@ -8,10 +8,10 @@ public class ReviewModifyRequestDto {
     @NotNull
     @Min(1)
     @Max(5)
-    private Integer rating;
+    protected Integer rating;
     @NotEmpty
     @Size(min = 1, max = 1000)
-    private String content;
+    protected String content;
 
     public static ReviewModifyRequestDto createForTest(Integer rating, String content) {
         ReviewModifyRequestDto dto = new ReviewModifyRequestDto();
