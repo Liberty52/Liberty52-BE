@@ -127,29 +127,31 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
 
     @Override
     public ConfirmCardPaymentResponseDto confirmFinalApprovalOfCardPayment(String authId, String orderId) {
-        AtomicInteger offset = new AtomicInteger();
+        AtomicInteger secTimeout = new AtomicInteger();
 
         while (!confirmPaymentMapRepository.containsOrderId(orderId)) {
-            offset.getAndIncrement();
             try {
                 Thread.sleep(1000);
-
-                if(offset.get() > 80) {
+                if(secTimeout.incrementAndGet() > 60) {
                     log.error("카드 결제 정보를 확인하는 시간이 초과했습니다. 웹훅 서버를 확인해주세요. OrderId: {}", orderId);
                     throw new InternalServerException(ProductErrorCode.CONFIRM_PAYMENT_ERROR);
                 }
+
             } catch (InterruptedException e) {
                 log.error("카드 결제 스레드의 문제가 발생하였습니다.");
                 throw new InternalServerException(ProductErrorCode.CONFIRM_PAYMENT_ERROR);
             }
         }
 
-        Orders orders = confirmPaymentMapRepository.get(orderId);
+        Orders orders = confirmPaymentMapRepository.getAndRemove(orderId);
 
         return switch (orders.getPayment().getStatus()) {
             case PAID -> ConfirmCardPaymentResponseDto.of(orderId);
             case FORGERY -> throw new RequestForgeryPayException();
-            default -> throw new InternalServerException(ProductErrorCode.CONFIRM_PAYMENT_ERROR);
+            default -> {
+                log.error("주문 결제 상태의 PAID or FORGERY 이외의 상태로 요청되었습니다. 요청주문의 상태: {}", orders.getPayment().getStatus());
+                throw new InternalServerException(ProductErrorCode.CONFIRM_PAYMENT_ERROR);
+            }
         };
 
     }

@@ -27,8 +27,8 @@ public abstract class Payment<T extends Payment.PaymentInfo> {
     @Column(updatable = false, nullable = false)
     protected LocalDateTime reqAt = LocalDateTime.now();
 
-    @JoinColumn(name = "order_id", nullable = false)
-    @OneToOne(mappedBy = "payment")
+    @JoinColumn(name = "order_id", nullable = false, updatable = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     protected Orders orders;
 
     protected String info = "";

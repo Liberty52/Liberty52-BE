@@ -12,9 +12,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import java.util.concurrent.atomic.AtomicLong;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,7 +41,8 @@ public class Orders {
     @OneToOne(cascade = CascadeType.ALL, optional = false)
     private OrderDestination orderDestination;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "orders")
+    @JoinColumn(updatable = false)
     private Payment payment;
 
     private Orders(String authId, int deliveryPrice, OrderDestination orderDestination) {
