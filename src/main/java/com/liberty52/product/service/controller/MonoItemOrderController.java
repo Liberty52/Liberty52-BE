@@ -9,10 +9,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Nullable;
-
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000") // 테스트
+@RequestMapping("/product") // 테스트
 public class MonoItemOrderController {
     private final MonoItemOrderService monoItemOrderService;
 
@@ -30,14 +30,14 @@ public class MonoItemOrderController {
     public PreregisterOrderResponseDto preregisterCardPaymentOrders(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
             @RequestPart("dto") @Validated PreregisterOrderRequestDto dto,
-            @RequestPart("imageFile") @Nullable MultipartFile imageFile
+            @RequestPart("imageFile") MultipartFile imageFile
     ) {
         return monoItemOrderService.preregisterCardPaymentOrders(authId, dto, imageFile);
     }
 
     @GetMapping("/orders/payment/card/confirm/{orderId}")
     @ResponseStatus(HttpStatus.OK)
-    public ConfirmCardPaymentResponseDto confirmFinalApprovalOfCardPayment(
+    public PaymentConfirmResponseDto confirmFinalApprovalOfCardPayment(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
             @PathVariable("orderId") String orderId
     ) {

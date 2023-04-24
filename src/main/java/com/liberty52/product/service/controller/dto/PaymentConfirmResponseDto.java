@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ConfirmCardPaymentResponseDto {
+public class PaymentConfirmResponseDto {
 
     private String orderId;
 
-    public static ConfirmCardPaymentResponseDto of(String orderId) {
-        return new ConfirmCardPaymentResponseDto(orderId);
+    public static PaymentConfirmResponseDto of(String orderId) {
+        return new PaymentConfirmResponseDto(orderId);
     }
 
 }
