@@ -11,8 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000") // 테스트
-@RequestMapping("/product") // 테스트
 public class MonoItemOrderController {
     private final MonoItemOrderService monoItemOrderService;
 
@@ -23,6 +21,25 @@ public class MonoItemOrderController {
             @RequestPart("imageFile") MultipartFile imageFile,
             @RequestPart("dto") @Validated MonoItemOrderRequestDto dto) {
         return monoItemOrderService.save(authId, imageFile, dto);
+    }
+
+    @PostMapping("/orders/payment/card/prepare")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PreregisterOrderResponseDto preregisterCardPaymentOrders(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
+            @RequestPart("dto") @Validated PreregisterOrderRequestDto dto,
+            @RequestPart("imageFile") @Nullable MultipartFile imageFile
+    ) {
+        return monoItemOrderService.preregisterCardPaymentOrders(authId, dto, imageFile);
+    }
+
+    @GetMapping("/orders/payment/card/confirm/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ConfirmCardPaymentResponseDto confirmFinalApprovalOfCardPayment(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
+            @PathVariable("orderId") String orderId
+    ) {
+        return monoItemOrderService.confirmFinalApprovalOfCardPayment(authId, orderId);
     }
 
     @PostMapping("/orders/payment/card/prepare")
