@@ -2,6 +2,7 @@ package com.liberty52.product.global.config;
 
 import static com.liberty52.product.global.contants.RepresentImageUrl.LIBERTY52_FRAME_REPRESENTATIVE_URL;
 
+import com.liberty52.product.global.contants.PriceConstants;
 import com.liberty52.product.service.applicationservice.MonoItemOrderService;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.repository.*;
@@ -112,7 +113,7 @@ public class DBInitConfig {
                 customProductOption = customProductOptionRepository.save(customProductOption);
 
                 // Add Order
-                Orders order = ordersRepository.save(Orders.create(AUTH_ID, 10000,
+                Orders order = ordersRepository.save(Orders.create(AUTH_ID, PriceConstants.DEFAULT_DELIVERY_PRICE,
                         OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
                                 "101동 101호", "12345")));
                 DBInitService.order = order;
@@ -139,7 +140,7 @@ public class DBInitConfig {
                 }
                 reviewRepository.save(review);
 
-                Orders guestOrder = Orders.create("GUEST-001", 10000,
+                Orders guestOrder = Orders.create("GUEST-001", PriceConstants.DEFAULT_DELIVERY_PRICE,
                         OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
                                 "101동 101호", "12345"));
 
@@ -165,6 +166,9 @@ public class DBInitConfig {
 
                 reviewRepository.save(noPhotoReview);
 
+                // 아래 save가 없어도 DB엔 정상적으로 들어가지만, 테스트에선 반영이 안 됨.
+                DBInitService.order = ordersRepository.save(order);
+                DBInitService.product = productRepository.save(product);
             } catch (Exception e) {
                 e.printStackTrace();
             }
