@@ -1,13 +1,13 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.adapter.S3UploaderImpl;
-import com.liberty52.product.global.exception.external.BadRequestException;
-import com.liberty52.product.global.exception.external.CustomProductNotFoundExcpetion;
-import com.liberty52.product.global.exception.external.NotYourResourceException;
-import com.liberty52.product.global.exception.external.OrderNotFoundException;
-import com.liberty52.product.global.exception.external.ProductNotFoundException;
-import com.liberty52.product.global.exception.external.ResourceNotFoundException;
-import com.liberty52.product.global.exception.external.ReviewAlreadyExistByOrderException;
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.product.global.exception.external.badrequest.ReviewAlreadyExistByOrderException;
+import com.liberty52.product.global.exception.external.forbidden.NotYourOrderException;
+import com.liberty52.product.global.exception.external.notfound.CustomProductNotFoundByIdException;
+import com.liberty52.product.global.exception.external.notfound.OrderNotFoundByIdException;
+import com.liberty52.product.global.exception.external.notfound.ProductNotFoundByNameException;
+import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.controller.dto.ReplyCreateRequestDto;
 import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
 import com.liberty52.product.service.entity.Orders;
@@ -38,16 +38,16 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
   @Override
   public void createReview(String reviewerId, ReviewCreateRequestDto dto, List<MultipartFile> images) {
     Product product = productRepository.findByName(dto.getProductName())
-        .orElseThrow(() -> new ProductNotFoundException(dto.getProductName()));
+        .orElseThrow(() -> new ProductNotFoundByNameException(dto.getProductName()));
 
     Orders order = ordersRepository.findById(dto.getOrderId())
-        .orElseThrow(OrderNotFoundException::new);
+        .orElseThrow(() -> new OrderNotFoundByIdException(dto.getOrderId()));
 
     customProductRepository.findByOrderIdAndProductId(dto.getOrderId(), product.getId())
-        .orElseThrow(CustomProductNotFoundExcpetion::new);
+        .orElseThrow(() -> new CustomProductNotFoundByIdException(product.getId()));
 
     if (!(order.getAuthId().equals(reviewerId))) {
-      throw new NotYourResourceException(reviewerId, order.getAuthId());
+      throw new NotYourOrderException(reviewerId);
     }
 
     if (reviewRepository.findByOrder(order).isPresent()) {
@@ -78,7 +78,7 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
     if (imageFiles.size() > Review.IMAGES_MAX_COUNT)
       throw new BadRequestException(1 + " <= Size of images <= " + Review.IMAGES_MAX_COUNT);
     for (MultipartFile imageFile : imageFiles) {
-      String reviewImageUrl = s3Uploader.upload(imageFile);
+      String reviewImageUrl = s3Uploader.uploadOrThrowApiException(imageFile);
       review.addImage(ReviewImage.create(review, reviewImageUrl));
     }
   }

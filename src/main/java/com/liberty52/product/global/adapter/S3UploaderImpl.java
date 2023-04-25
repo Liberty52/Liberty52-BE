@@ -4,10 +4,11 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.liberty52.product.global.exception.external.FileConvertException;
-import com.liberty52.product.global.exception.external.FileNullException;
-import com.liberty52.product.global.exception.external.FileTypeIsNotImageException;
-import com.liberty52.product.global.exception.external.S3UploaderException;
+import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
+import com.liberty52.product.global.exception.internal.FileConvertException;
+import com.liberty52.product.global.exception.internal.FileNullException;
+import com.liberty52.product.global.exception.internal.FileTypeIsNotImageException;
+import com.liberty52.product.global.exception.internal.S3UploaderException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,17 +36,41 @@ public class S3UploaderImpl implements S3Uploader {
     private String customProductPath;
 
     @Override
-    public String upload(MultipartFile multipartFile) {
+    public String upload(MultipartFile multipartFile) throws S3UploaderException {
         try {
             Objects.requireNonNull(multipartFile);
-
             return uploadFile(multipartFile);
-
         } catch (NullPointerException e) {
             throw new FileNullException();
-
         } catch (IOException e) {
             throw new S3UploaderException();
+        }
+    }
+
+    @Override
+    public String uploadOrThrowApiException(MultipartFile multipartFile) {
+        try {
+            return upload(multipartFile);
+        } catch (S3UploaderException e) {
+            throw new InternalServerErrorException("S3 에러로 인해 이미지 업로드에 실패하였습니다.");
+        }
+    }
+
+    @Override
+    public String uploadOrEmpty(MultipartFile multipartFile) {
+        try {
+            return upload(multipartFile);
+        } catch (S3UploaderException e) {
+            return "";
+        }
+    }
+
+    @Override
+    public String uploadOrNull(MultipartFile multipartFile) {
+        try {
+            return upload(multipartFile);
+        } catch (S3UploaderException e) {
+            return null;
         }
     }
 
@@ -57,7 +82,7 @@ public class S3UploaderImpl implements S3Uploader {
         deleteS3(imageUrl);
     }
 
-    private String uploadFile(MultipartFile multipartFile) throws IOException {
+    private String uploadFile(MultipartFile multipartFile) throws IOException, FileTypeIsNotImageException, FileConvertException {
         String fileName = this.makeFileName(multipartFile);
 
         File file = this.convert(multipartFile);
@@ -93,7 +118,7 @@ public class S3UploaderImpl implements S3Uploader {
     }
 
     // 로컬에 파일 업로드 하기
-    private File convert(MultipartFile multipartFile) throws IOException {
+    private File convert(MultipartFile multipartFile) throws IOException, FileConvertException {
         File file = new File(System.getProperty("user.dir") + "/" + multipartFile.getOriginalFilename());
         if (file.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
             try (FileOutputStream fos = new FileOutputStream(file)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
@@ -104,13 +129,13 @@ public class S3UploaderImpl implements S3Uploader {
         throw new FileConvertException();
     }
 
-    private String makeFileName(MultipartFile multipartFile) {
+    private String makeFileName(MultipartFile multipartFile) throws FileTypeIsNotImageException {
         String extension = this.getExtension(multipartFile);
 
         return UUID.randomUUID() + extension;
     }
 
-    private String getExtension(MultipartFile multipartFile) throws NullValueException {
+    private String getExtension(MultipartFile multipartFile) throws NullValueException, FileTypeIsNotImageException {
         int extensionIndex = multipartFile.getOriginalFilename().lastIndexOf(".");
 
         if (!multipartFile.getContentType().contains("image") || extensionIndex < 0) {

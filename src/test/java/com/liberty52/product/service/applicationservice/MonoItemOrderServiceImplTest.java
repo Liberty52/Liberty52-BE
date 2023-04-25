@@ -1,10 +1,9 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.adapter.S3Uploader;
-import com.liberty52.product.global.adapter.S3Uploader;
 import com.liberty52.product.global.config.DBInitConfig;
-import com.liberty52.product.global.exception.external.InvalidQuantityException;
-import com.liberty52.product.global.exception.external.ResourceNotFoundException;
+import com.liberty52.product.global.exception.internal.InvalidQuantityException;
+import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.controller.dto.MonoItemOrderRequestDto;
 import com.liberty52.product.service.controller.dto.MonoItemOrderResponseDto;
 import com.liberty52.product.service.controller.dto.PreregisterOrderRequestDto;

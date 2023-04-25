@@ -1,10 +1,9 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.adapter.S3Uploader;
-import com.liberty52.product.global.exception.external.InternalServerException;
-import com.liberty52.product.global.exception.external.ProductErrorCode;
-import com.liberty52.product.global.exception.external.RequestForgeryPayException;
-import com.liberty52.product.global.exception.external.ResourceNotFoundException;
+import com.liberty52.product.global.exception.external.badrequest.RequestForgeryPayException;
+import com.liberty52.product.global.exception.external.internalservererror.ConfirmPaymentException;
+import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.controller.dto.*;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.entity.payment.Payment;
@@ -57,7 +56,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         Orders order = ordersRepository.save(Orders.create(authId, dto.getDeliveryPrice(), orderDestination)); // OrderDestination will be saved by cascading
 
         // Upload Image
-        String imgUrl = s3Uploader.upload(imageFile);
+        String imgUrl = s3Uploader.uploadOrThrowApiException(imageFile);
 
         // Save CustomProduct
         CustomProduct customProduct = CustomProduct.create(imgUrl, dto.getQuantity(), authId);
@@ -94,12 +93,12 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
                 Thread.sleep(1000);
                 if(secTimeout.incrementAndGet() > 60) {
                     log.error("카드 결제 정보를 확인하는 시간이 초과했습니다. 웹훅 서버를 확인해주세요. OrderId: {}", orderId);
-                    throw new InternalServerException(ProductErrorCode.CONFIRM_PAYMENT_ERROR);
+                    throw new ConfirmPaymentException();
                 }
 
             } catch (InterruptedException e) {
                 log.error("카드 결제 스레드의 문제가 발생하였습니다.");
-                throw new InternalServerException(ProductErrorCode.CONFIRM_PAYMENT_ERROR);
+                throw new ConfirmPaymentException();
             }
         }
 
@@ -110,7 +109,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
             case FORGERY -> throw new RequestForgeryPayException();
             default -> {
                 log.error("주문 결제 상태의 PAID or FORGERY 이외의 상태로 요청되었습니다. 요청주문의 상태: {}", orders.getPayment().getStatus());
-                throw new InternalServerException(ProductErrorCode.CONFIRM_PAYMENT_ERROR);
+                throw new ConfirmPaymentException();
             }
         };
 
@@ -156,7 +155,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         // Upload Image
         String imgUrl = "";
         if (imageFile != null) {
-            imgUrl = s3Uploader.upload(imageFile);
+            imgUrl = s3Uploader.uploadOrThrowApiException(imageFile);
         }
 
         // Save CustomProduct

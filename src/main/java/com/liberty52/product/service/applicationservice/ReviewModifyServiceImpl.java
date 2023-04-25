@@ -1,9 +1,9 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.adapter.S3Uploader;
-import com.liberty52.product.global.exception.external.BadRequestException;
-import com.liberty52.product.global.exception.external.NotYourResourceException;
-import com.liberty52.product.global.exception.external.ResourceNotFoundException;
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.product.global.exception.external.forbidden.NotYourReviewException;
+import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.controller.dto.ReviewImagesRemoveRequestDto;
 import com.liberty52.product.service.controller.dto.ReviewModifyRequestDto;
 import com.liberty52.product.service.entity.Review;
@@ -47,7 +47,6 @@ public class ReviewModifyServiceImpl implements ReviewModifyService {
     public void removeImages(String reviewerId, String reviewId, ReviewImagesRemoveRequestDto dto) {
         Review review = validAndGetReview(reviewerId, reviewId);
         List<ReviewImage> reviewImages = review.getReviewImages().stream().filter(ri -> dto.getUrls().contains(ri.getUrl())).toList();
-//        review.removeImagesByUrl(new HashSet<>(dto.getUrls()));
         reviewImages.forEach(review::removeImage);
         reviewImages.forEach(ri -> eventPublisher.publishEvent(new ImageRemovedEvent(this, new ImageRemovedEventDto(ri.getUrl()))));
     }
@@ -65,7 +64,7 @@ public class ReviewModifyServiceImpl implements ReviewModifyService {
     private <T extends MultipartFile> void addImagesInReview(Review review, List<T> images) {
         for (MultipartFile image : images) {
             if(!review.isImageAddable()) break;
-            String url = s3Uploader.upload(image);
+            String url = s3Uploader.uploadOrThrowApiException(image);
             ReviewImage.create(review, url);
         }
     }
@@ -74,7 +73,7 @@ public class ReviewModifyServiceImpl implements ReviewModifyService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_REVIEW, PARAM_NAME_ID, reviewId));
         if(!reviewerId.equals(review.getOrder().getAuthId()))
-            throw new NotYourResourceException(RESOURCE_NAME_REVIEW, reviewerId);
+            throw new NotYourReviewException(reviewerId);
         return review;
     }
 }
