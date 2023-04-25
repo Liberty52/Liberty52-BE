@@ -10,6 +10,7 @@ import com.liberty52.product.service.entity.Review;
 import com.liberty52.product.service.entity.ReviewImage;
 import com.liberty52.product.service.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,7 @@ import java.util.List;
 public class ReviewModifyServiceImpl implements ReviewModifyService {
     private static final String RESOURCE_NAME_REVIEW = "Review";
     private static final String PARAM_NAME_ID = "ID";
+    private final ApplicationEventPublisher eventPublisher;
     private final ReviewRepository reviewRepository;
     private final S3Uploader s3Uploader;
 
@@ -42,8 +44,10 @@ public class ReviewModifyServiceImpl implements ReviewModifyService {
 
     @Override
     public void removeImages(String reviewerId, String reviewId, ReviewImagesRemoveRequestDto dto) {
+        // TODO
         Review review = validAndGetReview(reviewerId, reviewId);
         review.removeImagesByUrl(new HashSet<>(dto.getUrls()));
+        List<ReviewImage> removed = review.getReviewImages();
     }
 
     @Override
