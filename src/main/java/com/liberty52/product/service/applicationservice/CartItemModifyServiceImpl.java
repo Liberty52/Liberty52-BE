@@ -1,6 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.adapter.S3Uploader;
+import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.badrequest.CartItemRequiredButOrderItemFoundException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourCartItemException;
 import com.liberty52.product.global.exception.external.notfound.CustomProductNotFoundByIdException;
@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class CartItemModifyServiceImpl implements CartItemModifyService{
 
-  private final S3Uploader s3Uploader;
+  private final S3UploaderApi s3Uploader;
   private final ApplicationEventPublisher eventPublisher;
   private final CustomProductRepository customProductRepository;
   private final OptionDetailRepository optionDetailRepository;
@@ -73,7 +73,7 @@ public class CartItemModifyServiceImpl implements CartItemModifyService{
     }
     if (imageFile != null){
       String url = customProduct.getUserCustomPictureUrl();
-      String customPictureUrl = s3Uploader.uploadOrThrowApiException(imageFile);
+      String customPictureUrl = s3Uploader.upload(imageFile);
       customProduct.modifyCustomPictureUrl(customPictureUrl);
       eventPublisher.publishEvent(new ImageRemovedEvent(this, new ImageRemovedEventDto(url)));
     }

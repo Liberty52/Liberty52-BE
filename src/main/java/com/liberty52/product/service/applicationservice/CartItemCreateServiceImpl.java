@@ -1,6 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.adapter.S3Uploader;
+import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.notfound.OptionDetailNotFoundByNameException;
 import com.liberty52.product.global.exception.external.notfound.ProductNotFoundByNameException;
 import com.liberty52.product.service.controller.dto.CartItemRequest;
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Transactional
 public class CartItemCreateServiceImpl implements CartItemCreateService{
 
-    private final S3Uploader s3Uploader;
+    private final S3UploaderApi s3Uploader;
     private final ProductRepository productRepository;
     private final OptionDetailRepository optionDetailRepository;
     private final CartItemRepository cartItemRepository;
@@ -40,7 +40,7 @@ public class CartItemCreateServiceImpl implements CartItemCreateService{
     }
 
     private void createCartItem(Cart cart, String authId, MultipartFile imageFile, CartItemRequest dto) {
-        CustomProduct customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), s3Uploader.uploadOrThrowApiException(imageFile));
+        CustomProduct customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), s3Uploader.upload(imageFile));
         customProduct.associateWithCart(cart);
 
         Product product = productRepository.findByName(dto.getProductName()).orElseThrow(() -> new ProductNotFoundByNameException(dto.getProductName())); //예외처리 해야함

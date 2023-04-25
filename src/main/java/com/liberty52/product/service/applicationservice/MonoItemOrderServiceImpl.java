@@ -1,6 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.adapter.S3Uploader;
+import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.badrequest.RequestForgeryPayException;
 import com.liberty52.product.global.exception.external.internalservererror.ConfirmPaymentException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
@@ -29,7 +29,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
     private static final String PARAM_NAME_PRODUCT_NAME = "name";
     private static final String RESOURCE_NAME_OPTION_DETAIL = "OptionDetail";
     private static final String PARAM_NAME_OPTION_DETAIL_NAME = "name";
-    private final S3Uploader s3Uploader;
+    private final S3UploaderApi s3Uploader;
     private final ProductRepository productRepository;
     private final CustomProductRepository customProductRepository;
     private final OrdersRepository ordersRepository;
@@ -56,7 +56,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         Orders order = ordersRepository.save(Orders.create(authId, dto.getDeliveryPrice(), orderDestination)); // OrderDestination will be saved by cascading
 
         // Upload Image
-        String imgUrl = s3Uploader.uploadOrThrowApiException(imageFile);
+        String imgUrl = s3Uploader.upload(imageFile);
 
         // Save CustomProduct
         CustomProduct customProduct = CustomProduct.create(imgUrl, dto.getQuantity(), authId);
@@ -155,7 +155,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         // Upload Image
         String imgUrl = "";
         if (imageFile != null) {
-            imgUrl = s3Uploader.uploadOrThrowApiException(imageFile);
+            imgUrl = s3Uploader.upload(imageFile);
         }
 
         // Save CustomProduct

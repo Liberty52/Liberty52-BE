@@ -1,6 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.adapter.S3UploaderImpl;
+import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.badrequest.ReviewAlreadyExistByOrderException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourOrderException;
@@ -33,7 +33,7 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
   private final ProductRepository productRepository;
   private final OrdersRepository ordersRepository;
   private final CustomProductRepository customProductRepository;
-  private final S3UploaderImpl s3Uploader;
+  private final S3UploaderApi s3Uploader;
 
   @Override
   public void createReview(String reviewerId, ReviewCreateRequestDto dto, List<MultipartFile> images) {
@@ -78,7 +78,7 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
     if (imageFiles.size() > Review.IMAGES_MAX_COUNT)
       throw new BadRequestException(1 + " <= Size of images <= " + Review.IMAGES_MAX_COUNT);
     for (MultipartFile imageFile : imageFiles) {
-      String reviewImageUrl = s3Uploader.uploadOrThrowApiException(imageFile);
+      String reviewImageUrl = s3Uploader.upload(imageFile);
       review.addImage(ReviewImage.create(review, reviewImageUrl));
     }
   }

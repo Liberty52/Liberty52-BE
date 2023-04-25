@@ -1,6 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.adapter.S3Uploader;
+import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourReviewException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
@@ -27,7 +27,7 @@ public class ReviewModifyServiceImpl implements ReviewModifyService {
     private static final String PARAM_NAME_ID = "ID";
     private final ApplicationEventPublisher eventPublisher;
     private final ReviewRepository reviewRepository;
-    private final S3Uploader s3Uploader;
+    private final S3UploaderApi s3Uploader;
 
     @Override
     public void modifyRatingContent(String reviewerId, String reviewId, ReviewModifyRequestDto dto) {
@@ -64,7 +64,7 @@ public class ReviewModifyServiceImpl implements ReviewModifyService {
     private <T extends MultipartFile> void addImagesInReview(Review review, List<T> images) {
         for (MultipartFile image : images) {
             if(!review.isImageAddable()) break;
-            String url = s3Uploader.uploadOrThrowApiException(image);
+            String url = s3Uploader.upload(image);
             ReviewImage.create(review, url);
         }
     }

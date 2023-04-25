@@ -1,10 +1,9 @@
-package com.liberty52.product.global.adapter;
+package com.liberty52.product.global.adapter.s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.global.exception.internal.FileConvertException;
 import com.liberty52.product.global.exception.internal.FileNullException;
 import com.liberty52.product.global.exception.internal.FileTypeIsNotImageException;
@@ -44,33 +43,6 @@ public class S3UploaderImpl implements S3Uploader {
             throw new FileNullException();
         } catch (IOException e) {
             throw new S3UploaderException();
-        }
-    }
-
-    @Override
-    public String uploadOrThrowApiException(MultipartFile multipartFile) {
-        try {
-            return upload(multipartFile);
-        } catch (S3UploaderException e) {
-            throw new InternalServerErrorException("S3 에러로 인해 이미지 업로드에 실패하였습니다.");
-        }
-    }
-
-    @Override
-    public String uploadOrEmpty(MultipartFile multipartFile) {
-        try {
-            return upload(multipartFile);
-        } catch (S3UploaderException e) {
-            return "";
-        }
-    }
-
-    @Override
-    public String uploadOrNull(MultipartFile multipartFile) {
-        try {
-            return upload(multipartFile);
-        } catch (S3UploaderException e) {
-            return null;
         }
     }
 
@@ -136,9 +108,9 @@ public class S3UploaderImpl implements S3Uploader {
     }
 
     private String getExtension(MultipartFile multipartFile) throws NullValueException, FileTypeIsNotImageException {
-        int extensionIndex = multipartFile.getOriginalFilename().lastIndexOf(".");
+        int extensionIndex = Objects.requireNonNull(multipartFile.getOriginalFilename()).lastIndexOf(".");
 
-        if (!multipartFile.getContentType().contains("image") || extensionIndex < 0) {
+        if (!Objects.requireNonNull(multipartFile.getContentType()).contains("image") || extensionIndex < 0) {
             throw new FileTypeIsNotImageException();
         }
 
