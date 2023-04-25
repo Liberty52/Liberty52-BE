@@ -1,13 +1,12 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.adapter.S3Uploader;
 import com.liberty52.product.global.exception.external.NotYourResourceException;
 import com.liberty52.product.global.exception.external.ResourceNotFoundException;
 import com.liberty52.product.global.exception.external.UnRemovableResourceException;
 import com.liberty52.product.service.controller.dto.CartItemListRemoveRequestDto;
 import com.liberty52.product.service.entity.CustomProduct;
-import com.liberty52.product.service.event.internal.CustomProductRemovedEvent;
-import com.liberty52.product.service.event.internal.dto.CustomProductRemovedEventDto;
+import com.liberty52.product.service.event.internal.ImageRemovedEvent;
+import com.liberty52.product.service.event.internal.dto.ImageRemovedEventDto;
 import com.liberty52.product.service.repository.CartItemRepository;
 import com.liberty52.product.service.repository.CustomProductOptionRepository;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +72,6 @@ public class CartItemRemoveServiceImpl implements CartItemRemoveService {
             cartItemRepository.delete(customProduct);
             urlsWillBeDeleted.add(customProduct.getUserCustomPictureUrl());
         });
-        urlsWillBeDeleted.forEach(url -> eventPublisher.publishEvent(new CustomProductRemovedEvent(this, new CustomProductRemovedEventDto(url))));
+        urlsWillBeDeleted.forEach(url -> eventPublisher.publishEvent(new ImageRemovedEvent(this, new ImageRemovedEventDto(url))));
     }
 }

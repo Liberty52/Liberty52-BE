@@ -2,7 +2,7 @@ package com.liberty52.product.service.event;
 
 import com.liberty52.product.global.adapter.S3Uploader;
 import com.liberty52.product.global.adapter.kafka.KafkaProducer;
-import com.liberty52.product.service.event.internal.CustomProductRemovedEvent;
+import com.liberty52.product.service.event.internal.ImageRemovedEvent;
 import com.liberty52.product.service.event.kafka.KafkaEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +25,11 @@ public class ApplicationEventHandler {
     }
 
     @EventListener
-    public void deleteImageInS3OnCustomProductRemoved(CustomProductRemovedEvent event) {
-        String imageUrl = event.getBody().imageUrl();
+    public void deleteImageInS3OnCustomProductRemoved(ImageRemovedEvent event) {
+        String imageUrl = event.getBody().url();
         try {
             s3Uploader.delete(imageUrl);
-            log.info("Image of CustomProduct is deleted from s3. The url was {}", imageUrl);
+            log.info("An Image is deleted from s3. The url was {}", imageUrl);
         } catch (Exception e) {
             log.error("Unexpected Error in {}. Trying to delete image in s3. The url was {}", this.getClass().getName(), imageUrl);
             e.printStackTrace();

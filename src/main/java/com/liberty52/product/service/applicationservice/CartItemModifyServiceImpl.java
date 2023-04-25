@@ -9,8 +9,8 @@ import com.liberty52.product.service.controller.dto.CartModifyRequestDto;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.CustomProductOption;
 import com.liberty52.product.service.entity.OptionDetail;
-import com.liberty52.product.service.event.internal.CustomProductRemovedEvent;
-import com.liberty52.product.service.event.internal.dto.CustomProductRemovedEventDto;
+import com.liberty52.product.service.event.internal.ImageRemovedEvent;
+import com.liberty52.product.service.event.internal.dto.ImageRemovedEventDto;
 import com.liberty52.product.service.repository.CustomProductOptionRepository;
 import com.liberty52.product.service.repository.CustomProductRepository;
 import com.liberty52.product.service.repository.OptionDetailRepository;
@@ -75,7 +75,7 @@ public class CartItemModifyServiceImpl implements CartItemModifyService{
       String url = customProduct.getUserCustomPictureUrl();
       String customPictureUrl = uploadImage(imageFile);
       customProduct.modifyCustomPictureUrl(customPictureUrl);
-      eventPublisher.publishEvent(new CustomProductRemovedEvent(this, new CustomProductRemovedEventDto(url)));
+      eventPublisher.publishEvent(new ImageRemovedEvent(this, new ImageRemovedEventDto(url)));
     }
   }
 
