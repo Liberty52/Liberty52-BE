@@ -17,7 +17,7 @@ public class PreregisterOrderRequestDto {
     private DestinationDto destinationDto;
     private VBankDto vBankDto;
 
-    public static PreregisterOrderRequestDto forTest(
+    public static PreregisterOrderRequestDto forTestCard(
             String productName, List<String> options, int quantity, List<String> orderOptions,
             String receiverName, String receiverEmail, String receiverPhoneNumber, String address1, String address2, String zipCode) {
         return new PreregisterOrderRequestDto(
@@ -26,6 +26,17 @@ public class PreregisterOrderRequestDto {
                 null
         );
     }
+    public static PreregisterOrderRequestDto forTestVBank(
+            String productName, List<String> options, int quantity, List<String> orderOptions,
+            String receiverName, String receiverEmail, String receiverPhoneNumber, String address1, String address2, String zipCode,
+            String vBank, String vBankAccount, String depositorBank, String depositorName, String depositorAccount) {
+        return new PreregisterOrderRequestDto(
+                PaymentProductDto.forTest(productName, options, quantity, orderOptions),
+                DestinationDto.create(receiverName, receiverEmail, receiverPhoneNumber, address1, address2, zipCode),
+                VBankDto.forTest(vBank, vBankAccount, depositorBank, depositorName, depositorAccount)
+        );
+    }
+
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class PaymentProductDto {
@@ -68,6 +79,10 @@ public class PreregisterOrderRequestDto {
         private String depositorBank;
         private String depositorName;
         private String depositorAccount;
+
+        public static VBankDto forTest(String vBank, String vBankAccount, String depositorBank, String depositorName, String depositorAccount) {
+            return new VBankDto(vBank, vBankAccount, depositorBank, depositorName, depositorAccount);
+        }
     }
 
 

@@ -10,9 +10,7 @@ import com.liberty52.product.service.entity.payment.PaymentStatus;
 import com.liberty52.product.service.entity.payment.PaymentType;
 import com.liberty52.product.service.repository.*;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,7 +51,7 @@ class MonoItemOrderServiceImplTest extends MockS3Test {
     @Test
     void test_preregisterCardPaymentOrders() {
         PreregisterOrderResponseDto dto = monoItemOrderService.preregisterCardPaymentOrders(authId,
-                PreregisterOrderRequestDto.forTest(
+                PreregisterOrderRequestDto.forTestCard(
                         LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), 2, List.of(),
                         "receiverName", "receiverEmail", "receiverPhoneNumber", "address1", "address2", "zipCode"),
                         imageFile);
