@@ -1,6 +1,10 @@
 package com.liberty52.product.service.applicationservice;
 
+import com.liberty52.product.global.adapter.cloud.AuthServiceClient;
+import com.liberty52.product.global.adapter.cloud.dto.AuthProfileDto;
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
+import com.liberty52.product.global.event.Events;
+import com.liberty52.product.global.event.events.OrderRequestDepositEvent;
 import com.liberty52.product.global.exception.external.badrequest.RequestForgeryPayException;
 import com.liberty52.product.global.exception.external.internalservererror.ConfirmPaymentException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
@@ -30,6 +34,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
     private static final String RESOURCE_NAME_OPTION_DETAIL = "OptionDetail";
     private static final String PARAM_NAME_OPTION_DETAIL_NAME = "name";
     private final S3UploaderApi s3Uploader;
+    private final AuthServiceClient authServiceClient;
     private final ProductRepository productRepository;
     private final CustomProductRepository customProductRepository;
     private final OrdersRepository ordersRepository;
@@ -122,10 +127,12 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
 
         Payment<?> payment = Payment.vbankOf();
         payment.associate(order);
-        payment.setInfo(VBankPayment.VBankPaymentInfo.of(dto.getVBankDto()));
+        payment.setInfo(VBankPayment.VBankPaymentInfo.ofWaitingDeposit(dto.getVBankDto()));
 
         // 메일 발송
-
+        AuthProfileDto auth = authServiceClient.getAuthProfile(authId);
+        log.info("Auth DTO: {}, {}", auth.getEmail(), auth.getName());
+        Events.raise(new OrderRequestDepositEvent(auth.getEmail(), auth.getName(), order));
 
         return PaymentConfirmResponseDto.of(order.getId());
     }
@@ -173,6 +180,8 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         }
 
         order.calcTotalAmountAndSet();
+        order.calcTotalQuantityAndSet();
+
         return order;
     }
 

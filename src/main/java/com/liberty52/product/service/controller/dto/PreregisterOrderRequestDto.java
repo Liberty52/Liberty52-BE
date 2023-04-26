@@ -29,11 +29,11 @@ public class PreregisterOrderRequestDto {
     public static PreregisterOrderRequestDto forTestVBank(
             String productName, List<String> options, int quantity, List<String> orderOptions,
             String receiverName, String receiverEmail, String receiverPhoneNumber, String address1, String address2, String zipCode,
-            String vBank, String vBankAccount, String depositorBank, String depositorName, String depositorAccount) {
+            String vBankInfo, String depositorName) {
         return new PreregisterOrderRequestDto(
                 PaymentProductDto.forTest(productName, options, quantity, orderOptions),
                 DestinationDto.create(receiverName, receiverEmail, receiverPhoneNumber, address1, address2, zipCode),
-                VBankDto.forTest(vBank, vBankAccount, depositorBank, depositorName, depositorAccount)
+                VBankDto.forTest(vBankInfo, depositorName)
         );
     }
 
@@ -74,14 +74,11 @@ public class PreregisterOrderRequestDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class VBankDto {
-        private String vBank;
-        private String vBankAccount;
-        private String depositorBank;
+        private String vBankInfo;
         private String depositorName;
-        private String depositorAccount;
 
-        public static VBankDto forTest(String vBank, String vBankAccount, String depositorBank, String depositorName, String depositorAccount) {
-            return new VBankDto(vBank, vBankAccount, depositorBank, depositorName, depositorAccount);
+        public static VBankDto forTest(String vBankInfo, String depositorName) {
+            return new VBankDto(vBankInfo, depositorName);
         }
     }
 
