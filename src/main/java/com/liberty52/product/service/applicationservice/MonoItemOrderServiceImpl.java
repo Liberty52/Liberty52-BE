@@ -86,16 +86,16 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
 
     @Override
     public PaymentConfirmResponseDto confirmFinalApprovalOfCardPayment(String authId, String orderId) {
-        AtomicInteger secTimeout = new AtomicInteger();
+        AtomicInteger secTimeout = new AtomicInteger(0);
 
         while (!confirmPaymentMapRepository.containsOrderId(orderId)) {
             try {
                 Thread.sleep(1000);
+                log.info("DELAY WEBHOOK - OrderID: {}, Delay Time: {}", orderId, secTimeout.get());
                 if(secTimeout.incrementAndGet() > 60) {
                     log.error("카드 결제 정보를 확인하는 시간이 초과했습니다. 웹훅 서버를 확인해주세요. OrderId: {}", orderId);
                     throw new ConfirmPaymentException();
                 }
-
             } catch (InterruptedException e) {
                 log.error("카드 결제 스레드의 문제가 발생하였습니다.");
                 throw new ConfirmPaymentException();
