@@ -2,6 +2,7 @@ package com.liberty52.product.global.adapter.mail;
 
 import com.liberty52.product.global.adapter.mail.content.RequestDepositMail;
 import com.liberty52.product.global.contants.ProductConstants;
+import com.liberty52.product.global.contants.RepresentImageUrl;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.entity.payment.VBankPayment;
@@ -33,7 +34,7 @@ public class MailContentMaker {
         for (CustomProduct product : order.getCustomProducts()) {
             String productInfo = String.format(
                     RequestDepositMail.ORDERED_PRODUCT_INFO,
-                    product.getUserCustomPictureUrl(),
+                    RepresentImageUrl.LIBERTY52_FRAME_REPRESENTATIVE_URL,
                     product.getProduct().getName(),
                     product.getOptionsMap().get(ProductConstants.PROD_OPT_1),
                     product.getOptionsMap().get(ProductConstants.PROD_OPT_2),

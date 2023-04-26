@@ -131,7 +131,6 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
 
         // 메일 발송
         AuthProfileDto auth = authServiceClient.getAuthProfile(authId);
-        log.info("Auth DTO: {}, {}", auth.getEmail(), auth.getName());
         Events.raise(new OrderRequestDepositEvent(auth.getEmail(), auth.getName(), order));
 
         return PaymentConfirmResponseDto.of(order.getId());

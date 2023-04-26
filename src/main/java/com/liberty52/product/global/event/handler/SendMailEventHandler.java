@@ -24,7 +24,6 @@ public class SendMailEventHandler {
                 sendMailEvent.getContent(),
                 sendMailEvent.isUseHtml()
         );
-        System.out.println(mail.getContent());
         mailSender.prepareAndSend(mail);
     }
 
