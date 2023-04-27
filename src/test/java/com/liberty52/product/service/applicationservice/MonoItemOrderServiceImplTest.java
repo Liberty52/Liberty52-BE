@@ -4,7 +4,7 @@ import com.liberty52.product.MockS3Test;
 import com.liberty52.product.TestBeanConfig;
 import com.liberty52.product.global.adapter.cloud.AuthServiceClient;
 import com.liberty52.product.global.config.DBInitConfig;
-import com.liberty52.product.service.controller.dto.PaymentConfirmResponseDto;
+import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.controller.dto.PreregisterOrderRequestDto;
 import com.liberty52.product.service.controller.dto.PreregisterOrderResponseDto;
 import com.liberty52.product.service.entity.OrderStatus;
@@ -107,7 +107,7 @@ class MonoItemOrderServiceImplTest extends MockS3Test {
                 "receiverName", "receiverEmail", "receiverPhoneNumber", "address1", "address2", "zipCode",
                 "하나은행 25691006208604 블룸즈베리랩", "tester"
         );
-        PaymentConfirmResponseDto responseDto = monoItemOrderService.registerVBankPaymentOrders("AUTH_ID", requestDto, imageFile);
+        PaymentVBankResponseDto responseDto = monoItemOrderService.registerVBankPaymentOrders("AUTH_ID", requestDto, imageFile);
 
         String orderId = responseDto.getOrderId();
 
