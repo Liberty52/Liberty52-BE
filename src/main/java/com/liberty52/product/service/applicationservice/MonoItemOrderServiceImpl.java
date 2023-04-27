@@ -95,14 +95,14 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
 
         while (!confirmPaymentMapRepository.containsOrderId(orderId)) {
             try {
-                Thread.sleep(1000);
                 log.info("DELAY WEBHOOK - OrderID: {}, Delay Time: {}", orderId, secTimeout.get());
+                Thread.sleep(1000);
                 if(secTimeout.incrementAndGet() > 60) {
                     log.error("카드 결제 정보를 확인하는 시간이 초과했습니다. 웹훅 서버를 확인해주세요. OrderId: {}", orderId);
                     throw new ConfirmPaymentException();
                 }
             } catch (InterruptedException e) {
-                log.error("카드 결제 스레드의 문제가 발생하였습니다.");
+                log.error("카드결제 검증요청 스레드에 문제가 발생하였습니다. OrderId: {}", orderId);
                 throw new ConfirmPaymentException();
             }
         }
@@ -117,7 +117,6 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
                 throw new ConfirmPaymentException();
             }
         };
-
     }
 
     @Override
@@ -129,7 +128,6 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         payment.associate(order);
         payment.setInfo(VBankPayment.VBankPaymentInfo.ofWaitingDeposit(dto.getVBankDto()));
 
-        // 메일 발송
         AuthProfileDto auth = authServiceClient.getAuthProfile(authId);
         Events.raise(new OrderRequestDepositEvent(auth.getEmail(), auth.getName(), order));
 
