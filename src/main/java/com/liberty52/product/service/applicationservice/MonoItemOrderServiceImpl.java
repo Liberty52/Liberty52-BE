@@ -121,7 +121,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
     }
 
     @Override
-    public PaymentConfirmResponseDto registerVBankPaymentOrders(String authId, PreregisterOrderRequestDto dto, MultipartFile imageFile) {
+    public PaymentVBankResponseDto registerVBankPaymentOrders(String authId, PreregisterOrderRequestDto dto, MultipartFile imageFile) {
         Orders order = saveOrder(authId, dto, imageFile);
         order.changeOrderStatusToWaitingDeposit();
 
@@ -133,7 +133,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         AuthProfileDto auth = authServiceClient.getAuthProfile(authId);
         Events.raise(new OrderRequestDepositEvent(auth.getEmail(), auth.getName(), order));
 
-        return PaymentConfirmResponseDto.of(order.getId());
+        return PaymentVBankResponseDto.of(order.getId());
     }
 
     private Orders saveOrder(String authId, PreregisterOrderRequestDto dto, MultipartFile imageFile) {
