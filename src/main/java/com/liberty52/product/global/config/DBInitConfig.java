@@ -175,32 +175,35 @@ public class DBInitConfig {
                 customProductOption.associate(detailEasel);
                 customProductOption = customProductOptionRepository.save(customProductOption);
 
-                Orders guestOrder = Orders.create("GUEST-001",
-                        PriceConstants.DEFAULT_DELIVERY_PRICE,
-                        OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
-                                "101동 101호", "12345"));
+                for (int i = 0; i < 10; i++) {
+                    Orders guestOrder = Orders.create("GUEST-00"+i,
+                            PriceConstants.DEFAULT_DELIVERY_PRICE,
+                            OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
+                                    "101동 101호", "12345"));
 
-                Field guestOrderId = guestOrder.getClass().getDeclaredField("id");
-                guestOrderId.setAccessible(true);
-                guestOrderId.set(guestOrder, "GORDER-001");
+                    Field guestOrderId = guestOrder.getClass().getDeclaredField("id");
+                    guestOrderId.setAccessible(true);
+                    guestOrderId.set(guestOrder, "GORDER-00"+i);
 
-                ordersRepository.save(guestOrder);
+                    ordersRepository.save(guestOrder);
 
-                customProduct = CustomProduct.create(imageUrl, 1, "GUEST-001");
-                customProduct.associateWithProduct(product);
-                customProduct.associateWithOrder(guestOrder);
-                customProduct = customProductRepository.save(customProduct);
+                    customProduct = CustomProduct.create(imageUrl, 1, "GUEST-001");
+                    customProduct.associateWithProduct(product);
+                    customProduct.associateWithOrder(guestOrder);
+                    customProduct = customProductRepository.save(customProduct);
 
-                customProductOption = CustomProductOption.create();
-                customProductOption.associate(customProduct);
-                customProductOption.associate(detailEasel);
-                customProductOption = customProductOptionRepository.save(customProductOption);
+                    customProductOption = CustomProductOption.create();
+                    customProductOption.associate(customProduct);
+                    customProductOption.associate(detailEasel);
+                    customProductOption = customProductOptionRepository.save(customProductOption);
 
-                Review noPhotoReview = Review.create(3, "good");
-                noPhotoReview.associate(guestOrder);
-                noPhotoReview.associate(product);
+                    Review noPhotoReview = Review.create(3, "good");
+                    noPhotoReview.associate(guestOrder);
+                    noPhotoReview.associate(product);
 
-                reviewRepository.save(noPhotoReview);
+                    reviewRepository.save(noPhotoReview);
+                }
+
 
                 VBank vBank_hana = VBank.of("하나은행 1234123412341234 리버티");
                 VBank vBank_kb = VBank.of("국민은행 4321432143214321 리버티");
