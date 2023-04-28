@@ -1,8 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.MockS3Test;
-import com.liberty52.product.TestBeanConfig;
-import com.liberty52.product.global.adapter.cloud.AuthServiceClient;
 import com.liberty52.product.global.config.DBInitConfig;
 import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.controller.dto.PreregisterOrderRequestDto;
@@ -21,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +29,6 @@ import java.util.UUID;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Import({TestBeanConfig.class})
 class MonoItemOrderServiceImplTest extends MockS3Test {
     @Autowired
     MonoItemOrderService monoItemOrderService;
@@ -44,8 +40,6 @@ class MonoItemOrderServiceImplTest extends MockS3Test {
     ProductOptionRepository productOptionRepository;
     @Autowired
     private OrdersRepository ordersRepository;
-    @Autowired
-    private AuthServiceClient authServiceClient;
 
     MonoItemOrderServiceImplTest() throws IOException {
     }
