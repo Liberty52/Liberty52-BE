@@ -1,7 +1,5 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.adapter.cloud.AuthServiceClient;
-import com.liberty52.product.global.adapter.cloud.dto.AuthProfileDto;
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.event.Events;
 import com.liberty52.product.global.event.events.OrderRequestDepositEvent;
@@ -35,7 +33,6 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
     private static final String RESOURCE_NAME_OPTION_DETAIL = "OptionDetail";
     private static final String PARAM_NAME_OPTION_DETAIL_NAME = "name";
     private final S3UploaderApi s3Uploader;
-    private final AuthServiceClient authServiceClient;
     private final ProductRepository productRepository;
     private final CustomProductRepository customProductRepository;
     private final OrdersRepository ordersRepository;
@@ -134,8 +131,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         payment.associate(order);
         payment.setInfo(VBankPayment.VBankPaymentInfo.ofWaitingDeposit(dto.getVbankDto()));
 
-        AuthProfileDto auth = authServiceClient.getAuthProfile(authId);
-        Events.raise(new OrderRequestDepositEvent(auth.getEmail(), auth.getName(), order));
+        Events.raise(new OrderRequestDepositEvent(dto.getDestinationDto().getReceiverEmail(), dto.getDestinationDto().getReceiverName(), order));
 
         return PaymentVBankResponseDto.of(order.getId());
     }
