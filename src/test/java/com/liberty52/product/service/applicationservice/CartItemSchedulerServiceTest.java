@@ -9,6 +9,7 @@ import com.liberty52.product.service.event.internal.dto.ImageRemovedEventDto;
 import com.liberty52.product.service.repository.CartRepository;
 import com.liberty52.product.service.repository.CustomProductOptionRepository;
 import com.liberty52.product.service.repository.CustomProductRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,9 @@ public class CartItemSchedulerServiceTest {
     @Autowired
     CartItemSchedulerService cartItemSchedulerService;
 
+    @Autowired
+    EntityManager entityManager;
+
     List<String> productID = new ArrayList<>();
     List<String> optionId = new ArrayList<>();
     String authId = "guest";
@@ -72,6 +76,8 @@ public class CartItemSchedulerServiceTest {
 
         cart.updateExpiryDate(LocalDate.now().minusDays(7));
         cartRepository.save(cart);
+        entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
@@ -79,8 +85,8 @@ public class CartItemSchedulerServiceTest {
         Cart beforeCart = cartRepository.findByAuthId(authId).orElse(null);
         Assertions.assertEquals(beforeCart.getAuthId(), authId);
         cartItemSchedulerService.deleteNonMemberCart();
-        //Cart afterCart = cartRepository.findByAuthId(authId).orElse(null); //얘는 작동 안함
-        Cart afterCart = cartRepository.findById(beforeCart.getId()).orElse(null); //근데 얘는 왜 될까?
+        Cart afterCart = cartRepository.findByAuthId(authId).orElse(null);
+        //Cart afterCart = cartRepository.findById(beforeCart.getId()).orElse(null);
         Assertions.assertNull(afterCart);
         for(String product : productID){
             CustomProduct customProduct= customProductRepository.findById(product).orElse(null);
