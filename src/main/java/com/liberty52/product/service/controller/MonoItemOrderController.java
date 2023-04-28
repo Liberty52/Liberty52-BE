@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(value = "http://localhost:3000")
 public class MonoItemOrderController {
     private final MonoItemOrderService monoItemOrderService;
 
@@ -50,6 +51,12 @@ public class MonoItemOrderController {
             @RequestPart("imageFile") MultipartFile imageFile
     ) {
         return monoItemOrderService.registerVBankPaymentOrders(authId, dto, imageFile);
+    }
+
+    @GetMapping("/orders/payment/vbank")
+    @ResponseStatus(HttpStatus.OK)
+    public VBankInfoListResponseDto getVBankInfoList() {
+        return monoItemOrderService.getVBankInfoList();
     }
 
 }

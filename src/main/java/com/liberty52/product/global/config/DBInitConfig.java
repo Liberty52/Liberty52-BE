@@ -4,6 +4,7 @@ import com.liberty52.product.global.contants.PriceConstants;
 import com.liberty52.product.global.contants.ProductConstants;
 import com.liberty52.product.service.applicationservice.MonoItemOrderService;
 import com.liberty52.product.service.entity.*;
+import com.liberty52.product.service.entity.payment.VBank;
 import com.liberty52.product.service.repository.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -43,6 +45,7 @@ public class DBInitConfig {
         private static Product product;
         private static Review review;
         private final ReviewRepository reviewRepository;
+        private final VBankRepository vBankRepository;
 
         private final Environment env;
 
@@ -198,6 +201,10 @@ public class DBInitConfig {
                 noPhotoReview.associate(product);
 
                 reviewRepository.save(noPhotoReview);
+
+                VBank vBank_hana = VBank.of("하나은행 1234123412341234 리버티");
+                VBank vBank_kb = VBank.of("국민은행 4321432143214321 리버티");
+                vBankRepository.saveAll(List.of(vBank_hana, vBank_kb));
 
                 // 아래 save가 없어도 DB엔 정상적으로 들어가지만, 테스트에선 반영이 안 됨.
                 DBInitService.order = ordersRepository.save(order);

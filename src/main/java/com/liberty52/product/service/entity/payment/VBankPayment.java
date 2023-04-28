@@ -67,16 +67,18 @@ public class VBankPayment extends Payment<VBankPayment.VBankPaymentInfo> {
         private String depositorBank;
         private String depositorName;
         private String depositorAccount;
+        private Boolean isApplyCashReceipt;
         private LocalDateTime paidAt;
 
-        public static VBankPaymentInfo of(String vBankInfo, String depositorBank, String depositorName, String depositorAccount) {
-            return new VBankPaymentInfo(vBankInfo, depositorBank, depositorName, depositorAccount, LocalDateTime.now());
+        public static VBankPaymentInfo of(String vBankInfo, String depositorBank, String depositorName, String depositorAccount, Boolean isApplyCashReceipt) {
+            return new VBankPaymentInfo(vBankInfo, depositorBank, depositorName, depositorAccount, isApplyCashReceipt, LocalDateTime.now());
         }
 
-        public static VBankPaymentInfo ofWaitingDeposit(PreregisterOrderRequestDto.VBankDto dto) {
+        public static VBankPaymentInfo ofWaitingDeposit(PreregisterOrderRequestDto.VbankDto dto) {
             VBankPaymentInfo info = new VBankPaymentInfo();
-            info.vbankInfo = dto.getVBankInfo();
+            info.vbankInfo = dto.getVbankInfo();
             info.depositorName = dto.getDepositorName();
+            info.isApplyCashReceipt = dto.getIsApplyCashReceipt();
             return info;
         }
 

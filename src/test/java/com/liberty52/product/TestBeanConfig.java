@@ -10,7 +10,6 @@ public class TestBeanConfig {
 
     @Bean
     public AuthServiceClient authServiceClient() {
-        System.out.println("Create Mock Bean Auth Service Client");
         return new StubAuthServiceClient();
     }
 

@@ -11,6 +11,7 @@ import com.liberty52.product.global.exception.external.notfound.ResourceNotFound
 import com.liberty52.product.service.controller.dto.*;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.entity.payment.Payment;
+import com.liberty52.product.service.entity.payment.VBank;
 import com.liberty52.product.service.entity.payment.VBankPayment;
 import com.liberty52.product.service.repository.*;
 import jakarta.transaction.Transactional;
@@ -41,6 +42,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
     private final OptionDetailRepository optionDetailRepository;
     private final CustomProductOptionRepository customProductOptionRepository;
     private final ConfirmPaymentMapRepository confirmPaymentMapRepository;
+    private final VBankRepository vBankRepository;
 
     @Override
     @Deprecated
@@ -124,14 +126,27 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         Orders order = saveOrder(authId, dto, imageFile);
         order.changeOrderStatusToWaitingDeposit();
 
+        if (!vBankRepository.existsByAccount(dto.getVbankDto().getVbankInfo())) {
+            throw new ResourceNotFoundException("VBANK", "ACCOUNT", dto.getVbankDto().getVbankInfo());
+        }
+
         Payment<?> payment = Payment.vbankOf();
         payment.associate(order);
-        payment.setInfo(VBankPayment.VBankPaymentInfo.ofWaitingDeposit(dto.getVBankDto()));
+        payment.setInfo(VBankPayment.VBankPaymentInfo.ofWaitingDeposit(dto.getVbankDto()));
 
         AuthProfileDto auth = authServiceClient.getAuthProfile(authId);
         Events.raise(new OrderRequestDepositEvent(auth.getEmail(), auth.getName(), order));
 
         return PaymentVBankResponseDto.of(order.getId());
+    }
+
+    @Override
+    public VBankInfoListResponseDto getVBankInfoList() {
+        List<VBank> vbanks = vBankRepository.findAll();
+
+        return VBankInfoListResponseDto.of(
+            vbanks.stream().map(vBank -> VBankInfoListResponseDto.VBankInfoDto.of(vBank.getAccount())).toList()
+        );
     }
 
     private Orders saveOrder(String authId, PreregisterOrderRequestDto dto, MultipartFile imageFile) {

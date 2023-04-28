@@ -13,4 +13,6 @@ public interface MonoItemOrderService {
     PaymentConfirmResponseDto confirmFinalApprovalOfCardPayment(String authId, String orderId);
 
     PaymentVBankResponseDto registerVBankPaymentOrders(String authId, PreregisterOrderRequestDto dto, MultipartFile imageFile);
+
+    VBankInfoListResponseDto getVBankInfoList();
 }
