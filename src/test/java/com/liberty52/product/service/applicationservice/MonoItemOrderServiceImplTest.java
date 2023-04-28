@@ -105,7 +105,7 @@ class MonoItemOrderServiceImplTest extends MockS3Test {
         PreregisterOrderRequestDto requestDto = PreregisterOrderRequestDto.forTestVBank(
                 LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
                 "receiverName", "receiverEmail", "receiverPhoneNumber", "address1", "address2", "zipCode",
-                "하나은행 25691006208604 블룸즈베리랩", "tester"
+                "하나은행 1234123412341234 리버티", "tester"
         );
         PaymentVBankResponseDto responseDto = monoItemOrderService.registerVBankPaymentOrders("AUTH_ID", requestDto, imageFile);
 
