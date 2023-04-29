@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(value = "http://localhost:3000")
 public class MonoItemOrderController {
     private final MonoItemOrderService monoItemOrderService;
 
