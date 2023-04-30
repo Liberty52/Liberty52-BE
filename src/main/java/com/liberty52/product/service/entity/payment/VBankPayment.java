@@ -1,9 +1,6 @@
 package com.liberty52.product.service.entity.payment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.liberty52.product.service.controller.dto.PreregisterOrderRequestDto;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -15,13 +12,7 @@ import java.time.LocalDateTime;
 @DiscriminatorValue(value = "VBANK")
 public class VBankPayment extends Payment<VBankPayment.VBankPaymentInfo> {
 
-    //TODO bean 으로 생성할 것
-    private static final ObjectMapper objectMapper;
-    static {
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    }
+
 
     public VBankPayment() {
         super();
