@@ -25,8 +25,7 @@ public class Utils {
         }
 
         private static String delimGen(int year) {
-            String y = String.valueOf(year);
-            return y.substring(2, 4);
+            return String.valueOf(year).substring(2, 4);
         }
 
         private static String appendZeroOrNot(int num) {
