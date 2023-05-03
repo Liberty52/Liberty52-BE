@@ -1,6 +1,7 @@
 package com.liberty52.product.service.entity;
 
 import com.liberty52.product.global.contants.PriceConstants;
+import com.liberty52.product.global.util.Utils;
 import com.liberty52.product.service.entity.payment.Payment;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,7 +54,7 @@ public class Orders {
     private Orders(String authId, int deliveryPrice, OrderDestination orderDestination) {
         this.authId = authId;
         orderStatus = OrderStatus.ORDERED;
-        this.orderNum = createOrderNum();
+        this.orderNum = Utils.OrderNumberBuilder.createOrderNum();
         this.deliveryPrice = deliveryPrice;
         this.orderDestination = orderDestination;
     }
@@ -62,7 +62,7 @@ public class Orders {
     private Orders(String authId, OrderDestination orderDestination) {
         this.authId = authId;
         this.orderStatus = OrderStatus.READY;
-        this.orderNum = createOrderNum();
+        this.orderNum = Utils.OrderNumberBuilder.createOrderNum();
         this.orderDestination = orderDestination;
     }
 
@@ -124,23 +124,4 @@ public class Orders {
         this.orderStatus = OrderStatus.WAITING_DEPOSIT;
     }
 
-    private String createOrderNum() {
-        Calendar cal = Calendar.getInstance();
-
-        int y = cal.get(Calendar.YEAR);
-        int m = cal.get(Calendar.MONTH) + 1;
-        int d = cal.get(Calendar.DATE);
-
-        StringBuilder sb = new StringBuilder()
-                .append(y)
-                .append(m < 10 ? "0"+m : m)
-                .append(d < 10 ? "0"+d : d);
-
-        for (int i = 0; i < 5; i++) {
-            int random = (int) (Math.random() * 5);
-            sb.append(random);
-        }
-
-        return sb.toString();
-    }
 }
