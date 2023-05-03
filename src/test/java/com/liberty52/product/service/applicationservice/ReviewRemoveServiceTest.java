@@ -3,6 +3,7 @@ package com.liberty52.product.service.applicationservice;
 import com.liberty52.product.MockS3Test;
 import com.liberty52.product.global.config.DBInitConfig;
 import com.liberty52.product.global.exception.external.forbidden.NotYourReviewException;
+import com.liberty52.product.global.exception.external.forbidden.NotYourRoleException;
 import com.liberty52.product.global.exception.external.notfound.ReviewNotFoundByIdException;
 import com.liberty52.product.service.entity.Review;
 import com.liberty52.product.service.repository.ReviewRepository;
@@ -53,6 +54,21 @@ public class ReviewRemoveServiceTest extends MockS3Test {
         Assertions.assertNull(reviewAfter);
     }
 
+    @Test
+    void 고객리뷰삭제() {
+        Review reviewBefore = reviewRepository.findById(review.getId()).orElse(null);
+        Assertions.assertNotNull(reviewBefore);
+
+        String role = "ADMIN";
+
+        Assertions.assertThrows(NotYourRoleException.class, () -> reviewRemoveService.removeCustomerReview(randomString(), review.getId()));
+        Assertions.assertThrows(ReviewNotFoundByIdException.class, () -> reviewRemoveService.removeCustomerReview(role, randomString()));
+
+
+        reviewRemoveService.removeCustomerReview(role, review.getId());
+        Review reviewAfter = reviewRepository.findById(review.getId()).orElse(null);
+        Assertions.assertNull(reviewAfter);
+    }
     private String randomString() {
         return UUID.randomUUID().toString();
     }
