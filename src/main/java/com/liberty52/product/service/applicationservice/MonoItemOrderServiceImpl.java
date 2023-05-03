@@ -139,7 +139,6 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
     @Override
     public VBankInfoListResponseDto getVBankInfoList() {
         List<VBank> vbanks = vBankRepository.findAll();
-
         return VBankInfoListResponseDto.of(
             vbanks.stream().map(vBank -> VBankInfoListResponseDto.VBankInfoDto.of(vBank.getAccount())).toList()
         );
@@ -168,10 +167,7 @@ public class MonoItemOrderServiceImpl implements MonoItemOrderService {
         Orders order = ordersRepository.save(Orders.create(authId, orderDestination)); // OrderDestination will be saved by cascading
 
         // Upload Image
-        String imgUrl = "";
-        if (imageFile != null) {
-            imgUrl = s3Uploader.upload(imageFile);
-        }
+        String imgUrl = s3Uploader.upload(imageFile);
 
         // Save CustomProduct
         CustomProduct customProduct = CustomProduct.create(imgUrl, dto.getProductDto().getQuantity(), authId);

@@ -2,6 +2,7 @@ package com.liberty52.product.global.config;
 
 import com.liberty52.product.global.contants.PriceConstants;
 import com.liberty52.product.global.contants.ProductConstants;
+import com.liberty52.product.global.contants.VBankConstants;
 import com.liberty52.product.service.applicationservice.MonoItemOrderService;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.entity.payment.VBank;
@@ -205,8 +206,8 @@ public class DBInitConfig {
                 }
 
 
-                VBank vBank_hana = VBank.of("하나은행 1234123412341234 리버티");
-                VBank vBank_kb = VBank.of("국민은행 4321432143214321 리버티");
+                VBank vBank_hana = VBank.of(VBankConstants.VBANK_HANA);
+                VBank vBank_kb = VBank.of(VBankConstants.VBANK_KB);
                 vBankRepository.saveAll(List.of(vBank_hana, vBank_kb));
 
                 // 아래 save가 없어도 DB엔 정상적으로 들어가지만, 테스트에선 반영이 안 됨.
