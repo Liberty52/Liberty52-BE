@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,6 +37,8 @@ public class Orders {
 
     private Integer totalQuantity;
 
+    private String orderNum;
+
     @OneToMany(mappedBy = "orders")
     private List<CustomProduct> customProducts = new ArrayList<>();
 
@@ -47,9 +50,11 @@ public class Orders {
     @JoinColumn(updatable = false)
     private Payment payment;
 
+    @Deprecated
     private Orders(String authId, int deliveryPrice, OrderDestination orderDestination) {
         this.authId = authId;
         orderStatus = OrderStatus.ORDERED;
+        this.orderNum = createOrderNum();
         this.deliveryPrice = deliveryPrice;
         this.orderDestination = orderDestination;
     }
@@ -57,9 +62,11 @@ public class Orders {
     private Orders(String authId, OrderDestination orderDestination) {
         this.authId = authId;
         this.orderStatus = OrderStatus.READY;
+        this.orderNum = createOrderNum();
         this.orderDestination = orderDestination;
     }
 
+    @Deprecated
     public static Orders create(String authId, int deliveryPrice, OrderDestination orderDestination){
         return new Orders(authId,deliveryPrice,orderDestination);
     }
@@ -115,5 +122,25 @@ public class Orders {
 
     public void changeOrderStatusToWaitingDeposit() {
         this.orderStatus = OrderStatus.WAITING_DEPOSIT;
+    }
+
+    private String createOrderNum() {
+        Calendar cal = Calendar.getInstance();
+
+        int y = cal.get(Calendar.YEAR);
+        int m = cal.get(Calendar.MONTH) + 1;
+        int d = cal.get(Calendar.DATE);
+
+        StringBuilder sb = new StringBuilder()
+                .append(y)
+                .append(m < 10 ? "0"+m : m)
+                .append(d < 10 ? "0"+d : d);
+
+        for (int i = 0; i < 5; i++) {
+            int random = (int) (Math.random() * 5);
+            sb.append(random);
+        }
+
+        return sb.toString();
     }
 }
