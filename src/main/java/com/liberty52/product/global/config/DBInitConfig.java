@@ -3,7 +3,7 @@ package com.liberty52.product.global.config;
 import com.liberty52.product.global.contants.PriceConstants;
 import com.liberty52.product.global.contants.ProductConstants;
 import com.liberty52.product.global.contants.VBankConstants;
-import com.liberty52.product.service.applicationservice.MonoItemOrderService;
+import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.entity.payment.VBank;
 import com.liberty52.product.service.repository.*;
@@ -32,7 +32,7 @@ public class DBInitConfig {
     @RequiredArgsConstructor
     public static class DBInitService {
 
-        private final MonoItemOrderService monoItemOrderService;
+        private final OrderCreateService orderCreateService;
         private final CartItemRepository customProductRepository;
         private final ProductRepository productRepository;
         private final ProductOptionRepository productOptionRepository;

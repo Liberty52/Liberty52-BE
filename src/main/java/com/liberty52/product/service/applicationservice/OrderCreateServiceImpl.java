@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class MonoItemOrderServiceImpl implements MonoItemOrderService {
+public class OrderCreateServiceImpl implements OrderCreateService {
 
     private static final String RESOURCE_NAME_PRODUCT = "Product";
     private static final String PARAM_NAME_PRODUCT_NAME = "name";

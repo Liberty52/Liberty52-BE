@@ -1,6 +1,6 @@
 package com.liberty52.product.service.controller.guest;
 
-import com.liberty52.product.service.applicationservice.MonoItemOrderService;
+import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.controller.dto.PaymentConfirmResponseDto;
 import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.controller.dto.PreregisterOrderRequestDto;
@@ -14,9 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-public class GuestMonoItemOrderController {
+public class GuestOrderCreateController {
 
-    private final MonoItemOrderService monoItemOrderService;
+    private final OrderCreateService orderCreateService;
 
     @PostMapping("/guest/orders/payment/card/prepare")
     @ResponseStatus(HttpStatus.CREATED)
@@ -25,7 +25,7 @@ public class GuestMonoItemOrderController {
             @RequestPart("dto") @Validated PreregisterOrderRequestDto dto,
             @RequestPart("imageFile") MultipartFile imageFile
     ) {
-        return monoItemOrderService.preregisterCardPaymentOrders(guestId, dto, imageFile);
+        return orderCreateService.preregisterCardPaymentOrders(guestId, dto, imageFile);
     }
 
     @GetMapping("/guest/orders/payment/card/confirm/{orderId}")
@@ -34,7 +34,7 @@ public class GuestMonoItemOrderController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
             @PathVariable("orderId") String orderId
     ) {
-        return monoItemOrderService.confirmFinalApprovalOfCardPayment(guestId, orderId);
+        return orderCreateService.confirmFinalApprovalOfCardPayment(guestId, orderId);
     }
 
     @PostMapping("/guest/orders/payment/vbank")
@@ -44,7 +44,7 @@ public class GuestMonoItemOrderController {
             @RequestPart("dto") @Validated PreregisterOrderRequestDto dto,
             @RequestPart("imageFile") MultipartFile imageFile
     ) {
-        return monoItemOrderService.registerVBankPaymentOrders(guestId, dto, imageFile);
+        return orderCreateService.registerVBankPaymentOrders(guestId, dto, imageFile);
     }
 
 }
