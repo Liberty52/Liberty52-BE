@@ -101,7 +101,9 @@ public class OrderCreateRequestDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class VbankDto {
+        @NotBlank
         private String vbankInfo;
+        @NotBlank
         private String depositorName;
         private Boolean isApplyCashReceipt;
 
