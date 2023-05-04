@@ -4,7 +4,7 @@ import com.liberty52.product.MockS3Test;
 import com.liberty52.product.global.config.DBInitConfig;
 import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
-import com.liberty52.product.service.controller.dto.PreregisterOrderResponseDto;
+import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
 import com.liberty52.product.service.entity.OrderStatus;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.entity.payment.PaymentStatus;
@@ -56,7 +56,7 @@ class OrderCreateServiceImplTest extends MockS3Test {
 
     @Test
     void test_preregisterCardPaymentOrders() {
-        PreregisterOrderResponseDto dto = orderCreateService.createCardPaymentOrders(authId,
+        PaymentCardResponseDto dto = orderCreateService.createCardPaymentOrders(authId,
                 OrderCreateRequestDto.forTestCard(
                         LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), 2, List.of(),
                         "receiverName", "receiverEmail", "receiverPhoneNumber", "address1", "address2", "zipCode"),

@@ -66,7 +66,7 @@ public class OrderCreateServiceByCartsTest extends MockS3Test {
         List<String> customProductIdList = cartItemRetriveService.retriveAuthCartItem(aid).stream()
                 .map(CartItemResponse::getId).toList();
 
-        PreregisterOrderResponseDto orderResponseDto = orderCreateService.createCardPaymentOrdersByCarts(
+        PaymentCardResponseDto orderResponseDto = orderCreateService.createCardPaymentOrdersByCarts(
                 aid,
                 OrderCreateRequestDto.forTestCardByCarts(customProductIdList, "receiverName", "receiverEmail", "receiverPhoneNumber", "address1", "address2", "zipCode")
         );

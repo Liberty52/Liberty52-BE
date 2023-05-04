@@ -4,7 +4,7 @@ import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.controller.dto.PaymentConfirmResponseDto;
 import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
-import com.liberty52.product.service.controller.dto.PreregisterOrderResponseDto;
+import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class GuestOrderCreateController {
 
     @PostMapping("/guest/orders/payment/card/prepare")
     @ResponseStatus(HttpStatus.CREATED)
-    public PreregisterOrderResponseDto preregisterCardPaymentOrdersByGuest(
+    public PaymentCardResponseDto preregisterCardPaymentOrdersByGuest(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
             @RequestPart("dto") @Validated OrderCreateRequestDto dto,
             @RequestPart("imageFile") MultipartFile imageFile

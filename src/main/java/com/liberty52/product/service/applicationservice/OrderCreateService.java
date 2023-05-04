@@ -10,9 +10,9 @@ public interface OrderCreateService {
 
     PaymentConfirmResponseDto confirmFinalApprovalOfCardPayment(String authId, String orderId);
 
-    PreregisterOrderResponseDto createCardPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile);
+    PaymentCardResponseDto createCardPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile);
 
-    PreregisterOrderResponseDto createCardPaymentOrdersByCarts(String authId, OrderCreateRequestDto dto);
+    PaymentCardResponseDto createCardPaymentOrdersByCarts(String authId, OrderCreateRequestDto dto);
 
     PaymentVBankResponseDto createVBankPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile);
 

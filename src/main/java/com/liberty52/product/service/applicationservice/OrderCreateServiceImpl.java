@@ -65,17 +65,17 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
-    public PreregisterOrderResponseDto createCardPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile) {
+    public PaymentCardResponseDto createCardPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile) {
         Orders order = this.saveOrder(authId, dto, imageFile);
         this.saveCardPayment(order);
-        return PreregisterOrderResponseDto.of(order.getId(), order.getAmount());
+        return PaymentCardResponseDto.of(order.getId(), order.getAmount());
     }
 
     @Override
-    public PreregisterOrderResponseDto createCardPaymentOrdersByCarts(String authId, OrderCreateRequestDto dto) {
+    public PaymentCardResponseDto createCardPaymentOrdersByCarts(String authId, OrderCreateRequestDto dto) {
         Orders order = this.saveOrderByCarts(authId, dto);
         this.saveCardPayment(order);
-        return PreregisterOrderResponseDto.of(order.getId(), order.getAmount());
+        return PaymentCardResponseDto.of(order.getId(), order.getAmount());
     }
 
     @Override

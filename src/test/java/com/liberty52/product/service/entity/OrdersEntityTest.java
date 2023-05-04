@@ -4,7 +4,7 @@ import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.contants.PriceConstants;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
-import com.liberty52.product.service.controller.dto.PreregisterOrderResponseDto;
+import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
 import com.liberty52.product.service.repository.OptionDetailRepository;
 import com.liberty52.product.service.repository.OrdersRepository;
 import com.liberty52.product.service.repository.ProductRepository;
@@ -58,7 +58,7 @@ class OrdersEntityTest {
                 "receiverName", "receiverEmail", "receiverPhoneNumber", "address1", "address2", "zipCode"
         );
 
-        PreregisterOrderResponseDto save = orderCreateService.createCardPaymentOrders(authId, requestDto, imageFile);
+        PaymentCardResponseDto save = orderCreateService.createCardPaymentOrders(authId, requestDto, imageFile);
         orderId = save.getMerchantId();
 
         Orders orders = ordersRepository.findById(orderId).get();

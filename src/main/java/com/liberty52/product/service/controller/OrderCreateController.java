@@ -27,7 +27,7 @@ public class OrderCreateController {
     // /orders/card
     @PostMapping("/orders/payment/card/prepare")
     @ResponseStatus(HttpStatus.CREATED)
-    public PreregisterOrderResponseDto createCardPaymentOrders(
+    public PaymentCardResponseDto createCardPaymentOrders(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
             @RequestPart("dto") @Validated OrderCreateRequestDto dto,
             @RequestPart("imageFile") MultipartFile imageFile
@@ -59,7 +59,7 @@ public class OrderCreateController {
     // /orders/card/carts
     @PostMapping("/orders/payment/card/prepare/carts")
     @ResponseStatus(HttpStatus.CREATED)
-    public PreregisterOrderResponseDto createCardPaymentOrdersByCarts(
+    public PaymentCardResponseDto createCardPaymentOrdersByCarts(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
             @RequestBody @Validated OrderCreateRequestDto dto
     ) {
