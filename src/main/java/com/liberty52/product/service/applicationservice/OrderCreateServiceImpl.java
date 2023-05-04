@@ -113,9 +113,9 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     private Orders saveOrderByCarts(String authId, OrderCreateRequestDto dto) {
-        List<CustomProduct> customProducts = getCustomProducts(authId, dto);
+        List<CustomProduct> customProducts = this.getCustomProducts(authId, dto);
 
-        OrderDestination orderDestination = createOrderDestination(dto);
+        OrderDestination orderDestination = this.createOrderDestination(dto);
         Orders order = ordersRepository.save(Orders.create(authId, orderDestination)); // OrderDestination will be saved by cascading
 
         customProducts.forEach(customProduct -> customProduct.associateWithOrder(order));
