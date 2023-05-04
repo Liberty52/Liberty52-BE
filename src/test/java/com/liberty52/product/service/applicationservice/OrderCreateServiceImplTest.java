@@ -1,10 +1,9 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.MockS3Test;
-import com.liberty52.product.global.config.DBInitConfig;
-import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
 import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
+import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.entity.OrderStatus;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.entity.payment.PaymentStatus;
@@ -85,13 +84,6 @@ class OrderCreateServiceImplTest extends MockS3Test {
         Assertions.assertEquals(PaymentStatus.READY, orders.getPayment().getStatus());
         Assertions.assertSame(orders, orders.getPayment().getOrders());
         Assertions.assertTrue(orders.getPayment().getInfoAsString().isBlank());
-    }
-
-    @Test
-    public void calcTotalPrice() {
-        Orders order = DBInitConfig.DBInitService.getOrder();
-        order.calculateTotalValueAndSet();
-        System.out.println(order.getAmount());
     }
 
     @Test
