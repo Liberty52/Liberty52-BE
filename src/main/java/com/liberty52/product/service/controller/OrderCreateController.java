@@ -24,10 +24,10 @@ public class OrderCreateController {
         return orderCreateService.save(authId, imageFile, dto);
     }
 
-    // /orders/card/register
+    // /orders/card
     @PostMapping("/orders/payment/card/prepare")
     @ResponseStatus(HttpStatus.CREATED)
-    public PreregisterOrderResponseDto preregisterCardPaymentOrders(
+    public PreregisterOrderResponseDto createCardPaymentOrders(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
             @RequestPart("dto") @Validated OrderCreateRequestDto dto,
             @RequestPart("imageFile") MultipartFile imageFile
@@ -45,10 +45,10 @@ public class OrderCreateController {
         return orderCreateService.confirmFinalApprovalOfCardPayment(authId, orderId);
     }
 
-    // /orders/vbank/register
+    // /orders/vbank
     @PostMapping("/orders/payment/vbank")
     @ResponseStatus(HttpStatus.CREATED)
-    public PaymentVBankResponseDto registerVBankPaymentOrders(
+    public PaymentVBankResponseDto createVBankPaymentOrders(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
             @RequestPart("dto") @Validated OrderCreateRequestDto dto,
             @RequestPart("imageFile") MultipartFile imageFile
@@ -56,20 +56,20 @@ public class OrderCreateController {
         return orderCreateService.createVBankPaymentOrders(authId, dto, imageFile);
     }
 
-    // /orders/card/register/carts
+    // /orders/card/carts
     @PostMapping("/orders/payment/card/prepare/carts")
     @ResponseStatus(HttpStatus.CREATED)
-    public PreregisterOrderResponseDto preregisterCardPaymentOrdersByCarts(
+    public PreregisterOrderResponseDto createCardPaymentOrdersByCarts(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
             @RequestBody @Validated OrderCreateRequestDto dto
     ) {
         return orderCreateService.createCardPaymentOrdersByCarts(authId, dto);
     }
 
-    // /orders/vbank/register/carts
+    // /orders/vbank/carts
     @PostMapping("/orders/payment/vbank/carts")
     @ResponseStatus(HttpStatus.CREATED)
-    public PaymentVBankResponseDto registerVBankPaymentOrdersByCarts(
+    public PaymentVBankResponseDto createVBankPaymentOrdersByCarts(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
             @RequestBody @Validated OrderCreateRequestDto dto
     ) {
