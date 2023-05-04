@@ -8,11 +8,14 @@ public interface OrderCreateService {
     @Deprecated
     MonoItemOrderResponseDto save(String authId, MultipartFile imageFile, MonoItemOrderRequestDto dto);
 
-    PreregisterOrderResponseDto preregisterCardPaymentOrders(String authId, PreregisterOrderRequestDto dto, MultipartFile imageFile);
-
     PaymentConfirmResponseDto confirmFinalApprovalOfCardPayment(String authId, String orderId);
 
-    PaymentVBankResponseDto registerVBankPaymentOrders(String authId, PreregisterOrderRequestDto dto, MultipartFile imageFile);
+    PreregisterOrderResponseDto createCardPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile);
 
-    VBankInfoListResponseDto getVBankInfoList();
+    PreregisterOrderResponseDto createCardPaymentOrdersByCarts(String authId, OrderCreateRequestDto dto);
+
+    PaymentVBankResponseDto createVBankPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile);
+
+    PaymentVBankResponseDto createVBankPaymentOrdersByCarts(String authId, OrderCreateRequestDto dto);
+
 }
