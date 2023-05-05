@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum PaymentType {
-    CARD("신용카드"), VBANK("계좌"), NAVER_PAY("네이버 페이")
+    CARD("신용카드"), VBANK("가상 계좌"), NAVER_PAY("네이버 페이")
 
 
     ;
