@@ -122,8 +122,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
 
         order.calculateTotalValueAndSet();
 
-        cartRepository.deleteByAuthId(authId);
-
         return order;
     }
 
