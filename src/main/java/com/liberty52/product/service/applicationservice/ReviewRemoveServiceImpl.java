@@ -1,7 +1,7 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.exception.external.forbidden.NotYourReviewException;
-import com.liberty52.product.global.exception.external.forbidden.NotYourRoleException;
+import com.liberty52.product.global.exception.external.forbidden.InvalidRoleException;
 import com.liberty52.product.global.exception.external.notfound.ReviewNotFoundByIdException;
 import com.liberty52.product.service.entity.Review;
 import com.liberty52.product.service.event.internal.ImageRemovedEvent;
@@ -46,7 +46,7 @@ public class ReviewRemoveServiceImpl implements ReviewRemoveService {
     @Override
     public void removeCustomerReview(String role, String reviewId) {
         if(!role.equals("ADMIN")){
-            throw new NotYourRoleException(role);
+            throw new InvalidRoleException(role);
         }
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundByIdException(reviewId));
         this.reviewRepository.delete(review);
