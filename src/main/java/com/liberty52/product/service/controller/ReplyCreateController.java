@@ -22,10 +22,10 @@ public class ReplyCreateController {
 
     @PostMapping("/reviews/{reviewId}/replies")
     @ResponseStatus(HttpStatus.CREATED)
-    public void replyCreate(@RequestHeader(HttpHeaders.AUTHORIZATION) String reviewerId,
+    public void createReply(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
             @RequestHeader("X-ROLE") String role,
             @Validated @RequestBody ReplyCreateRequestDto dto, @PathVariable String reviewId) {
-        replyCreateService.createReply(reviewerId,dto,reviewId,  role);
+        replyCreateService.createReply(adminId,dto,reviewId,  role);
     }
 
 }
