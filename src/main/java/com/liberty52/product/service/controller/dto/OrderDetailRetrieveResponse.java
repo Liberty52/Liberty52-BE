@@ -24,6 +24,9 @@ public class OrderDetailRetrieveResponse {
     private long totalProductPrice;
     private int deliveryFee;
     private long totalPrice;
+    private String orderNum;
+    private String paymentType;
+
 
     private List<OrderRetrieveProductResponse> products;
     public OrderDetailRetrieveResponse(Orders orders) {
@@ -36,6 +39,8 @@ public class OrderDetailRetrieveResponse {
         this.receiverEmail = destination.getReceiverEmail();
         this.receiverPhoneNumber = destination.getReceiverPhoneNumber();
         this.productRepresentUrl = LIBERTY52_FRAME_REPRESENTATIVE_URL;
+        this.orderNum = orders.getOrderNum();
+        this.paymentType = orders.getPayment().getType().getKorName();
         this.products = orders.getCustomProducts().stream().map(c ->
             new OrderRetrieveProductResponse(c.getProduct().getName(), c.getQuantity(),
                     c.getProduct().getPrice() + c.getOptions()
@@ -49,9 +54,8 @@ public class OrderDetailRetrieveResponse {
                             o.getOptionDetail().getName()).toList())
         ).toList();
         this.deliveryFee = orders.getDeliveryPrice();
-        this.products.forEach(p ->
-                    this.totalProductPrice += p.getPrice());
-        this.totalPrice = totalProductPrice + deliveryFee;
+        this.totalPrice = orders.getAmount();
+        this.totalProductPrice = totalPrice - deliveryFee;
     }
 
     public OrderDetailRetrieveResponse(String orderId, String orderDate, String orderStatus,
