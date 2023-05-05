@@ -1,9 +1,11 @@
 package com.liberty52.product.global.config;
 
+import com.liberty52.product.global.adapter.portone.dto.PortOnePaymentInfo;
 import com.liberty52.product.global.contants.PriceConstants;
 import com.liberty52.product.global.contants.ProductConstants;
 import com.liberty52.product.global.contants.VBankConstants;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
+import com.liberty52.product.service.controller.dto.PreregisterOrderRequestDto.VbankDto;
 import com.liberty52.product.service.entity.Cart;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.CustomProductOption;
@@ -16,8 +18,11 @@ import com.liberty52.product.service.entity.ProductState;
 import com.liberty52.product.service.entity.Reply;
 import com.liberty52.product.service.entity.Review;
 import com.liberty52.product.service.entity.ReviewImage;
+import com.liberty52.product.service.entity.payment.CardPayment;
 import com.liberty52.product.service.entity.payment.Payment;
+import com.liberty52.product.service.entity.payment.Payment.PaymentInfo;
 import com.liberty52.product.service.entity.payment.VBank;
+import com.liberty52.product.service.entity.payment.VBankPayment;
 import com.liberty52.product.service.repository.CartItemRepository;
 import com.liberty52.product.service.repository.CartRepository;
 import com.liberty52.product.service.repository.CustomProductOptionRepository;
@@ -30,6 +35,7 @@ import com.liberty52.product.service.repository.VBankRepository;
 import jakarta.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -166,7 +172,11 @@ public class DBInitConfig {
                 customProductOption.associate(customProduct);
                 customProductOptionRepository.save(customProductOption);
                 Payment<?> payment = Payment.cardOf();
+                PortOnePaymentInfo info = PortOnePaymentInfo.testOf(
+                        UUID.randomUUID().toString(), UUID.randomUUID().toString(), 100L,
+                        UUID.randomUUID().toString());
                 payment.associate(order);
+                payment.setInfo(CardPayment.CardPaymentInfo.of(info));
                 order.calcTotalAmountAndSet();
                 order.calcTotalQuantityAndSet();
 
@@ -200,7 +210,9 @@ public class DBInitConfig {
                 customProductOption.associate(detailEasel);
                 customProductOption.associate(customProduct);
                 customProductOptionRepository.save(customProductOption);
-                Payment.cardOf().associate(orderSub);
+                Payment<? extends PaymentInfo> vbank = Payment.vbankOf();
+                vbank.setInfo(VBankPayment.VBankPaymentInfo.of("하나은행 1234123412341234 리버티","하나은행", "김테스터", "138-978554-10547",false));
+                vbank.associate(orderSub);
                 orderSub.calcTotalAmountAndSet();
                 orderSub.calcTotalQuantityAndSet();
 
