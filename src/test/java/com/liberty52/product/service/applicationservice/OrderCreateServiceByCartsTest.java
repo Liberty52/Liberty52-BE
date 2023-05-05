@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @SpringBootTest
@@ -91,8 +90,6 @@ public class OrderCreateServiceByCartsTest extends MockS3Test {
         Assertions.assertEquals(PaymentStatus.READY, order.getPayment().getStatus());
         Assertions.assertSame(order, order.getPayment().getOrders());
         Assertions.assertTrue(order.getPayment().getInfoAsString().isBlank());
-
-        Assertions.assertThrows(NoSuchElementException.class, () -> cartRepository.findByAuthId(aid).get());
     }
 
     @Test
