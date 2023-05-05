@@ -5,5 +5,5 @@ public interface ReviewRemoveService {
 
     void removeAllReview(String reviewerId);
 
-    void removeReply(String reviewerId, String role, String reviewId);
+    void removeReply(String reviewerId, String role, String replyId);
 }
