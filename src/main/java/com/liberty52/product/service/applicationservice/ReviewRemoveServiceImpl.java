@@ -1,11 +1,15 @@
 package com.liberty52.product.service.applicationservice;
 
+import com.liberty52.product.global.exception.external.forbidden.InvalidRoleException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourReviewException;
 import com.liberty52.product.global.exception.external.forbidden.InvalidRoleException;
+import com.liberty52.product.global.exception.external.notfound.ReplyNotFoundByIdException;
 import com.liberty52.product.global.exception.external.notfound.ReviewNotFoundByIdException;
+import com.liberty52.product.service.entity.Reply;
 import com.liberty52.product.service.entity.Review;
 import com.liberty52.product.service.event.internal.ImageRemovedEvent;
 import com.liberty52.product.service.event.internal.dto.ImageRemovedEventDto;
+import com.liberty52.product.service.repository.ReplyRepository;
 import com.liberty52.product.service.repository.ReviewQueryDslRepository;
 import com.liberty52.product.service.repository.ReviewRepository;
 import java.util.List;
@@ -22,6 +26,7 @@ public class ReviewRemoveServiceImpl implements ReviewRemoveService {
     private final ReviewRepository reviewRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final ReviewQueryDslRepository reviewQueryDslRepository;
+    private final ReplyRepository replyRepository;
 
     @Override
     public void removeReview(String reviewerId, String reviewId) {
@@ -45,12 +50,21 @@ public class ReviewRemoveServiceImpl implements ReviewRemoveService {
 
     @Override
     public void removeCustomerReview(String role, String reviewId) {
-        if(!role.equals("ADMIN")){
+        if (!role.equals("ADMIN")) {
             throw new InvalidRoleException(role);
         }
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundByIdException(reviewId));
         this.reviewRepository.delete(review);
         review.getReviewImages().forEach(ri -> eventPublisher.publishEvent(new ImageRemovedEvent(this, new ImageRemovedEventDto(ri.getUrl()))));
+    }
 
+    @Override
+    public void removeReply(String reviewerId, String role, String replyId) {
+        if(!role.equals("ADMIN")){
+            throw new InvalidRoleException(role);
+        }
+        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new ReplyNotFoundByIdException(replyId));
+        reply.removeReview();
+        replyRepository.delete(reply);
     }
 }

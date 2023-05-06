@@ -14,19 +14,21 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import lombok.extern.slf4j.Slf4j;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@Slf4j
 public class Orders {
 
     @Id
-    private String id = UUID.randomUUID().toString();
+    private final String id = UUID.randomUUID().toString();
 
     @Column(updatable = false, nullable = false)
     private String authId;
 
-    private LocalDate orderDate = LocalDate.now();
+    private final LocalDate orderDate = LocalDate.now();
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
@@ -75,41 +77,8 @@ public class Orders {
         return new Orders(authId, orderDestination);
     }
 
-    public void associateWithCustomProduct(List<CustomProduct> customProducts){
-        customProducts.forEach(cp ->
-                cp.associateWithOrder(this));
-        this.customProducts = customProducts;
-    }
-
     void addCustomProduct(CustomProduct customProduct) {
         this.customProducts.add(customProduct);
-    }
-
-
-    public void calcTotalAmountAndSet() {
-        AtomicLong totalAmount = new AtomicLong();
-
-        this.customProducts.forEach(customProduct -> {
-            // 기본금
-            totalAmount.getAndAdd(customProduct.getProduct().getPrice());
-            // 옵션 추가금액
-            customProduct.getOptions().forEach(customProductOption ->
-                    totalAmount.getAndAdd(customProductOption.getOptionDetail().getPrice()));
-            // 수량
-            totalAmount.getAndUpdate(x -> customProduct.getQuantity() * x);
-        });
-        // 배송비
-        totalAmount.getAndAdd(this.deliveryPrice);
-
-        this.amount = totalAmount.get();
-    }
-
-    public void calcTotalQuantityAndSet() {
-        AtomicInteger quantity = new AtomicInteger();
-
-        this.customProducts.forEach(customProduct -> quantity.getAndAdd(customProduct.getQuantity()));
-
-        this.totalQuantity = quantity.get();
     }
 
     public void setPayment(Payment<?> payment) {
@@ -123,5 +92,37 @@ public class Orders {
     public void changeOrderStatusToWaitingDeposit() {
         this.orderStatus = OrderStatus.WAITING_DEPOSIT;
     }
+
+    public void calculateTotalValueAndSet() {
+        this.calcTotalAmountAndSet();
+        this.calcTotalQuantityAndSet();
+    }
+
+    private void calcTotalAmountAndSet() {
+        AtomicLong totalAmount = new AtomicLong();
+
+        this.customProducts.forEach(customProduct -> {
+            // 기본금
+            totalAmount.getAndAdd(customProduct.getProduct().getPrice());
+            // 옵션 추가금액
+            customProduct.getOptions().forEach(customProductOption ->
+                        totalAmount.getAndAdd(customProductOption.getOptionDetail().getPrice()));
+            // 수량
+            totalAmount.getAndUpdate(x -> customProduct.getQuantity() * x);
+        });
+        // 배송비
+        totalAmount.getAndAdd(this.deliveryPrice);
+
+        this.amount = totalAmount.get();
+    }
+
+    private void calcTotalQuantityAndSet() {
+        AtomicInteger quantity = new AtomicInteger();
+
+        this.customProducts.forEach(customProduct -> quantity.getAndAdd(customProduct.getQuantity()));
+
+        this.totalQuantity = quantity.get();
+    }
+
 
 }

@@ -1,20 +1,27 @@
 package com.liberty52.product.global.config;
 
+import com.liberty52.product.global.adapter.portone.dto.PortOnePaymentInfo;
 import com.liberty52.product.global.contants.PriceConstants;
 import com.liberty52.product.global.contants.ProductConstants;
 import com.liberty52.product.global.contants.VBankConstants;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.entity.*;
+import com.liberty52.product.service.entity.payment.CardPayment;
+import com.liberty52.product.service.entity.payment.Payment;
+import com.liberty52.product.service.entity.payment.Payment.PaymentInfo;
 import com.liberty52.product.service.entity.payment.VBank;
+import com.liberty52.product.service.entity.payment.VBankPayment;
 import com.liberty52.product.service.repository.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +37,7 @@ public class DBInitConfig {
     @Component
     @Transactional
     @RequiredArgsConstructor
+    @Slf4j
     public static class DBInitService {
 
         private final OrderCreateService orderCreateService;
@@ -62,55 +70,55 @@ public class DBInitConfig {
 
                 ProductOption option1 = ProductOption.create(ProductConstants.PROD_OPT_1, true);
                 option1.associate(product);
-                option1 = productOptionRepository.save(option1);
+                productOptionRepository.save(option1);
 
                 OptionDetail detailEasel = OptionDetail.create("이젤 거치형", 100);
                 detailEasel.associate(option1);
                 Field detailEaselId = detailEasel.getClass().getDeclaredField("id");
                 detailEaselId.setAccessible(true);
                 detailEaselId.set(detailEasel, "OPT-001");
-                detailEasel = optionDetailRepository.save(detailEasel);
+                optionDetailRepository.save(detailEasel);
 
                 OptionDetail detailWall = OptionDetail.create("벽걸이형", 100);
                 detailWall.associate(option1);
                 Field detailWallId = detailWall.getClass().getDeclaredField("id");
                 detailWallId.setAccessible(true);
                 detailWallId.set(detailWall, "OPT-002");
-                detailWall = optionDetailRepository.save(detailWall);
+                optionDetailRepository.save(detailWall);
 
                 ProductOption option2 = ProductOption.create(ProductConstants.PROD_OPT_2, true);
                 option2.associate(product);
-                option2 = productOptionRepository.save(option2);
+                productOptionRepository.save(option2);
 
                 OptionDetail material = OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100);
                 material.associate(option2);
                 Field materialId = material.getClass().getDeclaredField("id");
                 materialId.setAccessible(true);
                 materialId.set(material, "OPT-003");
-                material = optionDetailRepository.save(material);
+                optionDetailRepository.save(material);
 
                 ProductOption option3 = ProductOption.create(ProductConstants.PROD_OPT_3, true);
                 option3.associate(product);
-                option3 = productOptionRepository.save(option3);
+                productOptionRepository.save(option3);
 
                 OptionDetail materialOption1 = OptionDetail.create("유광실버", 100);
                 materialOption1.associate(option3);
                 Field materialOption1Id = materialOption1.getClass().getDeclaredField("id");
                 materialOption1Id.setAccessible(true);
                 materialOption1Id.set(materialOption1, "OPT-004");
-                materialOption1 = optionDetailRepository.save(materialOption1);
+                optionDetailRepository.save(materialOption1);
 
                 OptionDetail materialOption2 = OptionDetail.create("무광실버", 100);
                 materialOption2.associate(option3);
-                materialOption2 = optionDetailRepository.save(materialOption2);
+                optionDetailRepository.save(materialOption2);
 
                 OptionDetail materialOption3 = OptionDetail.create("유광백색", 100);
                 materialOption3.associate(option3);
-                materialOption3 = optionDetailRepository.save(materialOption3);
+                optionDetailRepository.save(materialOption3);
 
                 OptionDetail materialOption4 = OptionDetail.create("무광백색", 100);
                 materialOption4.associate(option3);
-                materialOption4 = optionDetailRepository.save(materialOption4);
+                optionDetailRepository.save(materialOption4);
 
                 // Add Cart & CartItems
                 Cart cart = cartRepository.save(Cart.create(AUTH_ID));
@@ -120,12 +128,12 @@ public class DBInitConfig {
                 CustomProduct customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
                 customProduct.associateWithProduct(product);
                 customProduct.associateWithCart(cart);
-                customProduct = customProductRepository.save(customProduct);
+                customProductRepository.save(customProduct);
 
                 CustomProductOption customProductOption = CustomProductOption.create();
-                customProductOption.associate(customProduct);
                 customProductOption.associate(detailEasel);
-                customProductOption = customProductOptionRepository.save(customProductOption);
+                customProductOption.associate(customProduct);
+                customProductOptionRepository.save(customProductOption);
 
                 // Add Order
                 Orders order = ordersRepository.save(
@@ -138,12 +146,19 @@ public class DBInitConfig {
                 customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
                 customProduct.associateWithProduct(product);
                 customProduct.associateWithOrder(order);
-                customProduct = customProductRepository.save(customProduct);
+                customProductRepository.save(customProduct);
 
                 customProductOption = CustomProductOption.create();
-                customProductOption.associate(customProduct);
                 customProductOption.associate(detailEasel);
-                customProductOption = customProductOptionRepository.save(customProductOption);
+                customProductOption.associate(customProduct);
+                customProductOptionRepository.save(customProductOption);
+                Payment<?> payment = Payment.cardOf();
+                PortOnePaymentInfo info = PortOnePaymentInfo.testOf(
+                        UUID.randomUUID().toString(), UUID.randomUUID().toString(), 100L,
+                        UUID.randomUUID().toString());
+                payment.associate(order);
+                payment.setInfo(CardPayment.CardPaymentInfo.of(info));
+                order.calculateTotalValueAndSet();
 
                 // Add Review
                 Review review = Review.create(3, "good");
@@ -169,12 +184,16 @@ public class DBInitConfig {
                 customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
                 customProduct.associateWithProduct(product);
                 customProduct.associateWithOrder(orderSub);
-                customProduct = customProductRepository.save(customProduct);
+                customProductRepository.save(customProduct);
 
                 customProductOption = CustomProductOption.create();
-                customProductOption.associate(customProduct);
                 customProductOption.associate(detailEasel);
-                customProductOption = customProductOptionRepository.save(customProductOption);
+                customProductOption.associate(customProduct);
+                customProductOptionRepository.save(customProductOption);
+                Payment<? extends PaymentInfo> vbank = Payment.vbankOf();
+                vbank.setInfo(VBankPayment.VBankPaymentInfo.of("하나은행 1234123412341234 리버티","하나은행", "김테스터", "138-978554-10547",false));
+                vbank.associate(orderSub);
+                orderSub.calculateTotalValueAndSet();
 
                 for (int i = 0; i < 10; i++) {
                     Orders guestOrder = Orders.create("GUEST-00"+i,
@@ -185,24 +204,27 @@ public class DBInitConfig {
                     Field guestOrderId = guestOrder.getClass().getDeclaredField("id");
                     guestOrderId.setAccessible(true);
                     guestOrderId.set(guestOrder, "GORDER-00"+i);
-
                     ordersRepository.save(guestOrder);
+                    Payment.cardOf().associate(guestOrder);
 
-                    customProduct = CustomProduct.create(imageUrl, 1, "GUEST-001");
+                    customProduct = CustomProduct.create(imageUrl, 1, "GUEST-00"+i);
                     customProduct.associateWithProduct(product);
                     customProduct.associateWithOrder(guestOrder);
-                    customProduct = customProductRepository.save(customProduct);
+                    customProductRepository.save(customProduct);
 
                     customProductOption = CustomProductOption.create();
                     customProductOption.associate(customProduct);
                     customProductOption.associate(detailEasel);
-                    customProductOption = customProductOptionRepository.save(customProductOption);
+                    customProductOptionRepository.save(customProductOption);
 
                     Review noPhotoReview = Review.create(3, "good");
                     noPhotoReview.associate(guestOrder);
                     noPhotoReview.associate(product);
 
                     reviewRepository.save(noPhotoReview);
+
+                    guestOrder.calculateTotalValueAndSet();
+                    ordersRepository.save(guestOrder);
                 }
 
 
