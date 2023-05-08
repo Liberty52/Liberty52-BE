@@ -45,10 +45,15 @@ class OrderQueryDslRepositoryImplTest {
         em.flush();
 
         //when
-        List<Orders> list = repository.retrieveOrders(AUTH_ID);
+        List<Orders> filtered = repository.retrieveOrders(AUTH_ID);
+        List<Orders> notFiltered = em.createQuery("select o from Orders o where o.authId = :authId",
+                        Orders.class)
+                .setParameter("authId", AUTH_ID)
+                .getResultList();
 
         //then
-        assertThat(list).hasSize(1);
+        assertThat(filtered).hasSize(1);
+        assertThat(notFiltered).hasSize(11);
 
 
     }
