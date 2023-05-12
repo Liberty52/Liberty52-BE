@@ -10,6 +10,7 @@ import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.repository.OrderQueryDslRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 
 @Transactional(readOnly = true)
@@ -55,7 +57,7 @@ public class OrderRetrieveServiceImpl implements OrderRetrieveService {
         Validation.isAdmin(role);
 
         List<Orders> orders = orderQueryDslRepository.retrieveOrdersByAdmin(pageable);
-        if (orders == null || orders.isEmpty()) {
+        if (CollectionUtils.isEmpty(orders)) {
             return AdminOrderListResponse.empty();
         }
         OrderQueryDslRepositoryImpl.PageInfo pageInfo = orderQueryDslRepository.getPageInfo(pageable);
