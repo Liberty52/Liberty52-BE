@@ -82,7 +82,9 @@ public class OrderRetrieveServiceImpl implements OrderRetrieveService {
         Orders order = orderQueryDslRepository.retrieveOrderDetailByOrderId(orderId)
                 .orElseThrow(CannotAccessOrderException::new);
 
-        String customerName = authServiceClient.getAuthProfile(order.getAuthId()).getName();
+        String customerId = order.getAuthId();
+        String customerName = authServiceClient.retrieveAuthData(Set.of(customerId))
+                .get(customerId).getAuthorName();
 
         return OrderDetailRetrieveResponse.of(order, customerName);
     }
