@@ -2,7 +2,7 @@ package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.global.adapter.cloud.AuthServiceClient;
 import com.liberty52.product.global.exception.external.badrequest.CannotAccessOrderException;
-import com.liberty52.product.global.util.Validation;
+import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.controller.dto.AdminOrderListResponse;
 import com.liberty52.product.service.controller.dto.AuthClientDataResponse;
 import com.liberty52.product.service.controller.dto.OrderDetailRetrieveResponse;
@@ -10,7 +10,6 @@ import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.repository.OrderQueryDslRepository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -54,7 +53,7 @@ public class OrderRetrieveServiceImpl implements OrderRetrieveService {
 
     @Override
     public AdminOrderListResponse retrieveOrdersByAdmin(String role, Pageable pageable) {
-        Validation.isAdmin(role);
+        Validator.isAdmin(role);
 
         List<Orders> orders = orderQueryDslRepository.retrieveOrdersByAdmin(pageable);
         if (CollectionUtils.isEmpty(orders)) {

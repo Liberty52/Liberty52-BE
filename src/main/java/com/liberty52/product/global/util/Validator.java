@@ -5,7 +5,7 @@ import com.liberty52.product.global.exception.external.forbidden.InvalidRoleExce
 
 import java.util.Objects;
 
-public class Validation {
+public class Validator {
 
     public static void isAdmin(String target) {
         if (isNotEquals(RoleConstants.ADMIN, target)) {
