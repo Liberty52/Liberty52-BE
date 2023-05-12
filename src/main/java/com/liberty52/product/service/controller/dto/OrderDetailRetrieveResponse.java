@@ -33,9 +33,9 @@ public class OrderDetailRetrieveResponse {
     private String orderNum;
     private String paymentType;
     private Payment.PaymentInfo paymentInfo;
-
-
     private List<OrderRetrieveProductResponse> products;
+    private String customerName;
+
     public OrderDetailRetrieveResponse(Orders orders) {
         this.orderId = orders.getId();
         this.orderDate = orders.getOrderDate().toString();
@@ -88,7 +88,10 @@ public class OrderDetailRetrieveResponse {
         this.totalPrice = totalProductPrice + deliveryFee;
     }
 
-
-
+    public static OrderDetailRetrieveResponse of(Orders entity, String customerName) {
+        OrderDetailRetrieveResponse response = new OrderDetailRetrieveResponse(entity);
+        response.customerName = customerName;
+        return response;
+    }
 
 }
