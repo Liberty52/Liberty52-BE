@@ -85,14 +85,15 @@ public class ReviewQueryDslRepositoryImpl implements ReviewQueryDslRepository {
 
     private List<Review> fetchReviews(String productId, Pageable pageable, Boolean isPhotoFilter) {
         return queryFactory.selectFrom(review).distinct()
-            .leftJoin(reply).on(reply.review.eq(review))
-            .leftJoin(reviewImage).on(reviewImage.review.eq(review))
-            .leftJoin(orders).on(review.order.eq(orders))
-            .where(productIdFilter(productId), photoFilter(isPhotoFilter))
-            .orderBy(review.createdAt.desc())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
+                .leftJoin(reply).on(reply.review.eq(review))
+                .leftJoin(reviewImage).on(reviewImage.review.eq(review))
+                .leftJoin(customProduct).on(review.customProduct.eq(customProduct))
+                .leftJoin(orders).on(review.customProduct.orders.eq(orders))
+                .where(productIdFilter(productId), photoFilter(isPhotoFilter))
+                .orderBy(review.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
     }
 
     private List<Review> fetchReviews(Pageable pageable) {

@@ -22,11 +22,11 @@ public class MockFactory {
     }
 
     public static ProductOption createProductOption(String name, boolean require) {
-        return ProductOption.create(name, require);
+        return ProductOption.create(name, require, true);
     }
 
     public static OptionDetail createOptionDetail(String name, Integer price) {
-        return OptionDetail.create(name, price);
+        return OptionDetail.create(name, price, true);
     }
 
     public static CustomProductOption createProductCartOption() {

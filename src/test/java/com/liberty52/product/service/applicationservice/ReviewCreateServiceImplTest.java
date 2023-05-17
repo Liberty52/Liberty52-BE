@@ -38,7 +38,6 @@ class ReviewCreateServiceImplTest extends MockS3Test {
   private ReviewRepository reviewRepository;
   @Autowired
   private ReviewCreateService reviewCreateService;
-  Orders order;
   CustomProduct customProduct;
   private final List<MultipartFile> testImageList = new ArrayList<>();
   private final String reviewerId = "authId2";
@@ -58,8 +57,6 @@ class ReviewCreateServiceImplTest extends MockS3Test {
   @Test
   @Order(1)
   void createReview() {
-    order= ordersRepository.save(Orders.create("authId2", 10000, OrderDestination.create("receiver",
-        "email", "01012341234", "경기도 어딘가", "101동 101호", "12345")));
     Product product = productRepository.findByName(productName).get();
     final String LIBERTY = "Liberty 52_Frame";
 
@@ -69,7 +66,7 @@ class ReviewCreateServiceImplTest extends MockS3Test {
     String content = "is very nice review";
     testImageList.add(imageFile);
 
-    ReviewCreateRequestDto dto = ReviewCreateRequestDto.createForTest(productName, rating, content,order.getId());
+    ReviewCreateRequestDto dto = ReviewCreateRequestDto.createForTest(productName, rating, content,customProduct.getOrders().getId());
 
     reviewCreateService.createReview(reviewerId,dto,testImageList);
     Review review = reviewRepository.findByCustomProduct_Orders(customProduct.getOrders()).get();

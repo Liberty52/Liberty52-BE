@@ -70,7 +70,7 @@ public class DBInitConfig {
                 productRepository.save(product);
                 DBInitService.product = product;
 
-                ProductOption option1 = ProductOption.create(ProductConstants.PROD_OPT_1, true);
+                ProductOption option1 = ProductOption.create(ProductConstants.PROD_OPT_1, true, true);
                 option1.associate(product);
                 productOptionRepository.save(option1);
 
@@ -88,7 +88,7 @@ public class DBInitConfig {
                 detailWallId.set(detailWall, "OPT-002");
                 optionDetailRepository.save(detailWall);
 
-                ProductOption option2 = ProductOption.create(ProductConstants.PROD_OPT_2, true);
+                ProductOption option2 = ProductOption.create(ProductConstants.PROD_OPT_2, true, true);
                 option2.associate(product);
                 productOptionRepository.save(option2);
 
@@ -99,7 +99,7 @@ public class DBInitConfig {
                 materialId.set(material, "OPT-003");
                 optionDetailRepository.save(material);
 
-                ProductOption option3 = ProductOption.create(ProductConstants.PROD_OPT_3, true);
+                ProductOption option3 = ProductOption.create(ProductConstants.PROD_OPT_3, true, true);
                 option3.associate(product);
                 productOptionRepository.save(option3);
 
