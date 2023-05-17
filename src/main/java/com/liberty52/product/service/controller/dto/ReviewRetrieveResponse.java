@@ -27,11 +27,11 @@ public class ReviewRetrieveResponse {
             long lastPage, long totalLastPage, String authorId) {
 
         contents = reviews.stream().map(r -> {
-            String orderAuthId = r.getOrder().getAuthId();
+            String orderAuthId = r.getCustomProduct().getOrders().getAuthId();
             ReviewContent content = new ReviewContent(r.getId(),r.getRating(), r.getContent(),
                             r.getReviewImages().stream().map(
                                     ReviewImage::getUrl).toList(), r.getReplies().size(),
-                    r.getOrder().getAuthId().equals(authorId),
+                    orderAuthId.equals(authorId),
                     orderAuthId, r.getReplies().stream()
                             .map(rp -> new ReplyContent(rp.getAuthId(), rp.getContent(), rp.getId(),rp.getAuthId().equals(authorId))).toList()
                     );

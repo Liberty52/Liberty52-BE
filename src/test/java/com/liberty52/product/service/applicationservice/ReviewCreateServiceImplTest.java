@@ -1,7 +1,7 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.MockS3Test;
-import com.liberty52.product.service.controller.dto.ReplyCreateRequestDto;
+import com.liberty52.product.global.config.DBInitConfig;
 import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.repository.CustomProductRepository;
@@ -61,11 +61,9 @@ class ReviewCreateServiceImplTest extends MockS3Test {
     order= ordersRepository.save(Orders.create("authId2", 10000, OrderDestination.create("receiver",
         "email", "01012341234", "경기도 어딘가", "101동 101호", "12345")));
     Product product = productRepository.findByName(productName).get();
+    final String LIBERTY = "Liberty 52_Frame";
 
-    customProduct = CustomProduct.create("aa", 3, "authId2");
-    customProduct.associateWithProduct(product);
-    customProduct.associateWithOrder(order);
-    customProduct = customProductRepository.save(customProduct);
+    CustomProduct customProduct = customProductRepository.findByProductName(LIBERTY).get();
 
     Integer rating = 3;
     String content = "is very nice review";
@@ -74,7 +72,7 @@ class ReviewCreateServiceImplTest extends MockS3Test {
     ReviewCreateRequestDto dto = ReviewCreateRequestDto.createForTest(productName, rating, content,order.getId());
 
     reviewCreateService.createReview(reviewerId,dto,testImageList);
-    Review review = reviewRepository.findByOrder(order).get();
+    Review review = reviewRepository.findByCustomProduct_Orders(customProduct.getOrders()).get();
 
     Assertions.assertEquals(rating, review.getRating());
     Assertions.assertEquals(content, review.getContent());
