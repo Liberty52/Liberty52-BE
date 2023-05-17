@@ -143,6 +143,10 @@ public class DBInitConfig {
                 DBInitService.order = order;
 
                 customProduct0 = CustomProduct.create(imageUrl, 1, AUTH_ID);
+                Field customProductId = customProduct0.getClass().getDeclaredField("id");
+                customProductId.setAccessible(true);
+                customProductId.set(customProduct0, "Custom_Product_Id");
+
                 customProduct0.associateWithProduct(product);
                 customProduct0.associateWithOrder(order);
                 customProductRepository.save(customProduct0);
@@ -156,9 +160,8 @@ public class DBInitConfig {
                 payment.setInfo(CardPayment.CardPaymentInfo.of(info));
                 order.calculateTotalValueAndSet();
 
-                // Add Review
+//                 Add Review
                 Review review = Review.create(3, "good");
-
                 review.associate(customProduct0);
                 ReviewImage.create(review, imageUrl);
 
