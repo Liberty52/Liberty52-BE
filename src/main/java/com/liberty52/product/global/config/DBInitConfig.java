@@ -160,16 +160,6 @@ public class DBInitConfig {
                 payment.setInfo(CardPayment.CardPaymentInfo.of(info));
                 order.calculateTotalValueAndSet();
 
-//                 Add Review
-                Review review = Review.create(3, "good");
-                review.associate(customProduct0);
-                ReviewImage.create(review, imageUrl);
-
-                for (int i = 0; i < 3; i++) {
-                    Reply reply = Reply.create("맛있따" + i, AUTH_ID);
-                    reply.associate(review);
-                }
-                reviewRepository.save(review);
 
                 // Add Order
                 Orders orderSub
@@ -184,6 +174,17 @@ public class DBInitConfig {
                 customProduct.associateWithProduct(product);
                 customProduct.associateWithOrder(orderSub);
                 customProductRepository.save(customProduct);
+
+               // Add Review
+                Review review = Review.create(3, "good");
+                review.associate(customProduct);
+                ReviewImage.create(review, imageUrl);
+
+                for (int i = 0; i < 3; i++) {
+                    Reply reply = Reply.create("맛있따" + i, AUTH_ID);
+                    reply.associate(review);
+                }
+                reviewRepository.save(review);
 
                 associateCustomProductOption(detailEasel, material, materialOption2, customProduct);
                 Payment<? extends PaymentInfo> vbank = Payment.vbankOf();
