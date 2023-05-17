@@ -127,12 +127,12 @@ public class DBInitConfig {
 
                 final String imageUrl = env.getProperty(
                         "product.representative-url.liberty52-frame");
-                CustomProduct customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
-                customProduct.associateWithProduct(product);
-                customProduct.associateWithCart(cart);
-                customProductRepository.save(customProduct);
+                CustomProduct customProduct0 = CustomProduct.create(imageUrl, 1, AUTH_ID);
+                customProduct0.associateWithProduct(product);
+                customProduct0.associateWithCart(cart);
+                customProductRepository.save(customProduct0);
 
-                associateCustomProductOption(detailEasel, material, materialOption2, customProduct);
+                associateCustomProductOption(detailEasel, material, materialOption2, customProduct0);
 
                 // Add Order
                 Orders order = ordersRepository.save(
@@ -142,12 +142,12 @@ public class DBInitConfig {
                                         "101동 101호", "12345")));
                 DBInitService.order = order;
 
-                customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
-                customProduct.associateWithProduct(product);
-                customProduct.associateWithOrder(order);
-                customProductRepository.save(customProduct);
+                customProduct0 = CustomProduct.create(imageUrl, 1, AUTH_ID);
+                customProduct0.associateWithProduct(product);
+                customProduct0.associateWithOrder(order);
+                customProductRepository.save(customProduct0);
 
-                associateCustomProductOption(detailEasel, material, materialOption2, customProduct);
+                associateCustomProductOption(detailEasel, material, materialOption2, customProduct0);
                 Payment<?> payment = Payment.cardOf();
                 PortOnePaymentInfo info = PortOnePaymentInfo.testOf(
                         UUID.randomUUID().toString(), UUID.randomUUID().toString(), 100L,
@@ -159,7 +159,7 @@ public class DBInitConfig {
                 // Add Review
                 Review review = Review.create(3, "good");
 
-                review.associate(customProduct);
+                review.associate(customProduct0);
                 ReviewImage.create(review, imageUrl);
 
                 for (int i = 0; i < 3; i++) {
@@ -177,7 +177,7 @@ public class DBInitConfig {
                                         "101동 101호", "12345")));
                 DBInitService.order = order;
 
-                customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
+                CustomProduct customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
                 customProduct.associateWithProduct(product);
                 customProduct.associateWithOrder(orderSub);
                 customProductRepository.save(customProduct);
@@ -230,7 +230,7 @@ public class DBInitConfig {
                 DBInitService.order = ordersRepository.save(order);
                 DBInitService.product = productRepository.save(product);
                 DBInitService.review = reviewRepository.save(review);
-                DBInitService.customProduct = customProductRepository.save(customProduct);
+                DBInitService.customProduct = customProductRepository.save(customProduct0);
 
             } catch (Exception e) {
                 e.printStackTrace();
