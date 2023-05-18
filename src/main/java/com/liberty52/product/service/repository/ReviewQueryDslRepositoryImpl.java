@@ -63,9 +63,8 @@ public class ReviewQueryDslRepositoryImpl implements ReviewQueryDslRepository {
     public List<Review> retrieveReviewByWriterId(String writerId) {
         return queryFactory
                 .selectFrom(review)
-                .leftJoin(orders).on(orders.eq(review.customProduct.orders)).fetchJoin()
-                .leftJoin(reviewImage).on(reviewImage.review.eq(review))
-                .where(orders.authId.eq(writerId))
+                .leftJoin(reviewImage).on(reviewImage.review.eq(review)).fetchJoin()
+                .where(review.customProduct.authId.eq(writerId))
                 .fetch();
 
     }
@@ -88,7 +87,6 @@ public class ReviewQueryDslRepositoryImpl implements ReviewQueryDslRepository {
                 .leftJoin(reply).on(reply.review.eq(review))
                 .leftJoin(reviewImage).on(reviewImage.review.eq(review))
                 .leftJoin(customProduct).on(review.customProduct.eq(customProduct))
-                .leftJoin(orders).on(review.customProduct.orders.eq(orders))
                 .where(productIdFilter(productId), photoFilter(isPhotoFilter))
                 .orderBy(review.createdAt.desc())
                 .offset(pageable.getOffset())

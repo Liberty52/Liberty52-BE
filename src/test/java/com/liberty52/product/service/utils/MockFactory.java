@@ -84,7 +84,7 @@ public class MockFactory {
 
     public static Review createMockReview(){
         Review review = Review.create(3, "good");
-        review.associate(createCustomProduct(MOCK_PRODUCT_REPRESENT_URL,1,MOCK_AUTH_ID));
+        review.associate(createCustomProduct(MOCK_PRODUCT_REPRESENT_URL, 1, MOCK_AUTH_ID));
 
         ReviewImage.create(review,MOCK_PRODUCT_REPRESENT_URL);
 
