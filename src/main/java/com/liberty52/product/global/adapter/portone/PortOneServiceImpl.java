@@ -19,7 +19,7 @@ import java.util.Objects;
 @Component
 @Transactional
 @RequiredArgsConstructor
-public class PortOneWebhookServiceImpl implements PortOneWebhookService {
+public class PortOneServiceImpl implements PortOneService {
 
     private final OrdersRepository ordersRepository;
     private final PortOneRequestClient portOneRequestClient;
@@ -39,6 +39,11 @@ public class PortOneWebhookServiceImpl implements PortOneWebhookService {
     @Override
     public void hookPortOnePaymentInfoForTest(PortOneWebhookDto dto, Long amount) {
         testForhook(dto, "Liberty 52_Frame", amount, "");
+    }
+
+    @Override
+    public void requestCancelPayment(String orderId, String reason) {
+
     }
 
     public void testForhook(PortOneWebhookDto dto, String pName, Long amount, String authId) {
