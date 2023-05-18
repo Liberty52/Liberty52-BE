@@ -1,4 +1,4 @@
-package com.liberty52.product.service.applicationservice;
+package com.liberty52.product.service.applicationservice.impl;
 
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
@@ -6,11 +6,10 @@ import com.liberty52.product.global.exception.external.badrequest.ReviewAlreadyE
 import com.liberty52.product.global.exception.external.forbidden.NotYourOrderException;
 import com.liberty52.product.global.exception.external.notfound.OrderNotFoundByIdException;
 import com.liberty52.product.global.exception.external.notfound.ProductNotFoundByNameException;
+import com.liberty52.product.service.applicationservice.ReviewCreateService;
 import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
-import com.liberty52.product.service.entity.Orders;
-import com.liberty52.product.service.entity.Product;
-import com.liberty52.product.service.entity.Review;
-import com.liberty52.product.service.entity.ReviewImage;
+import com.liberty52.product.service.entity.*;
+import com.liberty52.product.service.repository.CustomProductRepository;
 import com.liberty52.product.service.repository.OrdersRepository;
 import com.liberty52.product.service.repository.ProductRepository;
 import com.liberty52.product.service.repository.ReviewRepository;
@@ -28,12 +27,14 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
   private final ReviewRepository reviewRepository;
   private final ProductRepository productRepository;
   private final OrdersRepository ordersRepository;
+  private final CustomProductRepository customProductRepository;
   private final S3UploaderApi s3Uploader;
 
   @Override
   public void createReview(String reviewerId, ReviewCreateRequestDto dto, List<MultipartFile> images) {
-    Product product = productRepository.findByName(dto.getProductName())
+    CustomProduct product = customProductRepository.findByProductName(dto.getProductName())
         .orElseThrow(() -> new ProductNotFoundByNameException(dto.getProductName()));
+    //TODO API 수정 - ProductName -> CustomProductId
 
     Orders order = ordersRepository.findById(dto.getOrderId())
         .orElseThrow(() -> new OrderNotFoundByIdException(dto.getOrderId()));
@@ -42,13 +43,12 @@ public class ReviewCreateServiceImpl implements ReviewCreateService {
       throw new NotYourOrderException(reviewerId);
     }
 
-    if (reviewRepository.findByOrder(order).isPresent()) {
+    if (reviewRepository.findByCustomProduct_Orders(order).isPresent()) {
       throw new ReviewAlreadyExistByOrderException();
     }
 
     Review review = Review.create(dto.getRating(), dto.getContent());
     review.associate(product);
-    review.associate(order);
 
     if (images != null){
       addImage(images, review);
