@@ -61,8 +61,23 @@ public class VBankPayment extends Payment<VBankPayment.VBankPaymentInfo> {
         private Boolean isApplyCashReceipt;
         private LocalDateTime paidAt;
 
+        // Refund
+        private String refundBank;
+        private String refundHolder;
+        private String refundAccount;
+        private String refundPhoneNum;
+
+        public VBankPaymentInfo(String vBankInfo, String depositorBank, String depositorName, String depositorAccount, Boolean isApplyCashReceipt) {
+            this.vbankInfo = vBankInfo;
+            this.depositorBank = depositorBank;
+            this.depositorName = depositorName;
+            this.depositorAccount = depositorAccount;
+            this.isApplyCashReceipt = isApplyCashReceipt;
+            this.paidAt = LocalDateTime.now();
+        }
+
         public static VBankPaymentInfo of(String vBankInfo, String depositorBank, String depositorName, String depositorAccount, Boolean isApplyCashReceipt) {
-            return new VBankPaymentInfo(vBankInfo, depositorBank, depositorName, depositorAccount, isApplyCashReceipt, LocalDateTime.now());
+            return new VBankPaymentInfo(vBankInfo, depositorBank, depositorName, depositorAccount, isApplyCashReceipt);
         }
 
         public static VBankPaymentInfo ofWaitingDeposit(OrderCreateRequestDto.VbankDto dto) {
@@ -76,5 +91,13 @@ public class VBankPayment extends Payment<VBankPayment.VBankPaymentInfo> {
         public static VBankPaymentInfo ofPaid() {
             return null;
         }
+
+        public void refund(String refundBank, String refundHolder, String refundAccount, String refundPhoneNum) {
+            this.refundBank = refundBank;
+            this.refundHolder = refundHolder;
+            this.refundAccount = refundAccount;
+            this.refundPhoneNum = refundPhoneNum;
+        }
+
     }
 }

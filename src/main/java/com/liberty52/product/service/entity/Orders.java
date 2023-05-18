@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import lombok.extern.slf4j.Slf4j;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -83,6 +83,14 @@ public class Orders {
 
     public void setPayment(Payment<?> payment) {
         this.payment = payment;
+    }
+
+    public void changeOrderStatusToCancelRequest() {
+        this.orderStatus = OrderStatus.CANCEL_REQUESTED;
+    }
+
+    public void changeOrderStatusToCanceled() {
+        this.orderStatus = OrderStatus.CANCELED;
     }
 
     public void changeOrderStatusToOrdered() {

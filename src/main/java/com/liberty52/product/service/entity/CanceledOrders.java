@@ -18,7 +18,7 @@ public class CanceledOrders {
     @Id
     private String id = UUID.randomUUID().toString();
     private String reason;
-    private LocalDateTime reqAt;
+    private LocalDateTime reqAt = LocalDateTime.now();
     private LocalDateTime canceledAt;
     private int fee;
     @OneToOne
@@ -31,11 +31,17 @@ public class CanceledOrders {
     public static CanceledOrders of(String reason, Orders order) {
         CanceledOrders canceledOrders = new CanceledOrders(reason);
         canceledOrders.associate(order);
+        order.changeOrderStatusToCancelRequest();
         return canceledOrders;
     }
 
     public void associate(Orders order) {
         this.orders = order;
+    }
+
+    public void approveCanceled(int fee) {
+        this.canceledAt = LocalDateTime.now();
+        this.fee = fee;
     }
 
 }

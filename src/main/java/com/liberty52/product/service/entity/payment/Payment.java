@@ -68,6 +68,10 @@ public abstract class Payment<T extends Payment.PaymentInfo> {
         this.status = PaymentStatus.FORGERY;
     }
 
+    public void changeStatusToRefund() {
+        this.status = PaymentStatus.REFUND;
+    }
+
     public abstract <T extends PaymentInfo> void setInfo(T dto);
     public abstract <T extends PaymentInfo> T getInfoAsDto();
     public abstract String getInfoAsString();
