@@ -2,53 +2,45 @@ package com.liberty52.product.service.applicationservice.impl;
 
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.product.global.exception.external.badrequest.CartItemRequiredButOrderItemFoundException;
 import com.liberty52.product.global.exception.external.badrequest.ReviewAlreadyExistByOrderException;
-import com.liberty52.product.global.exception.external.forbidden.NotYourOrderException;
-import com.liberty52.product.global.exception.external.notfound.OrderNotFoundByIdException;
-import com.liberty52.product.global.exception.external.notfound.ProductNotFoundByNameException;
+import com.liberty52.product.global.exception.external.notfound.CustomProductNotFoundByIdException;
 import com.liberty52.product.service.applicationservice.ReviewCreateService;
 import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
-import com.liberty52.product.service.entity.*;
+import com.liberty52.product.service.entity.CustomProduct;
+import com.liberty52.product.service.entity.Review;
+import com.liberty52.product.service.entity.ReviewImage;
 import com.liberty52.product.service.repository.CustomProductRepository;
-import com.liberty52.product.service.repository.OrdersRepository;
-import com.liberty52.product.service.repository.ProductRepository;
 import com.liberty52.product.service.repository.ReviewRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class ReviewCreateServiceImpl implements ReviewCreateService {
 
   private final ReviewRepository reviewRepository;
-  private final ProductRepository productRepository;
-  private final OrdersRepository ordersRepository;
   private final CustomProductRepository customProductRepository;
   private final S3UploaderApi s3Uploader;
 
   @Override
   public void createReview(String reviewerId, ReviewCreateRequestDto dto, List<MultipartFile> images) {
-    CustomProduct product = customProductRepository.findByProductName(dto.getProductName())
-        .orElseThrow(() -> new ProductNotFoundByNameException(dto.getProductName()));
-    //TODO API 수정 - ProductName -> CustomProductId
+    CustomProduct customProduct = customProductRepository.findById(dto.getCustomProductId())
+        .orElseThrow(() -> new CustomProductNotFoundByIdException(dto.getCustomProductId()));
 
-    Orders order = ordersRepository.findById(dto.getOrderId())
-        .orElseThrow(() -> new OrderNotFoundByIdException(dto.getOrderId()));
-
-    if (!(order.getAuthId().equals(reviewerId))) {
-      throw new NotYourOrderException(reviewerId);
+    if (customProduct.isInCart()){
+      throw new BadRequestException("구매한 제품에만 리뷰를 남길 수 있습니다");
     }
 
-    if (reviewRepository.findByCustomProduct_Orders(order).isPresent()) {
+    if (reviewRepository.findByCustomProduct_Orders(customProduct.getOrders()).isPresent()) {
       throw new ReviewAlreadyExistByOrderException();
     }
 
     Review review = Review.create(dto.getRating(), dto.getContent());
-    review.associate(product);
+    review.associate(customProduct);
 
     if (images != null){
       addImage(images, review);
