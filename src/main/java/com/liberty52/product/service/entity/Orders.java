@@ -114,7 +114,7 @@ public class Orders {
             totalAmount.getAndAdd(customProduct.getProduct().getPrice());
             // 옵션 추가금액
             customProduct.getOptions().forEach(customProductOption ->
-                        totalAmount.getAndAdd(customProductOption.getOptionDetail().getPrice()));
+                        totalAmount.getAndAdd(customProductOption.getPrice()));
             // 수량
             totalAmount.getAndUpdate(x -> customProduct.getQuantity() * x);
         });
