@@ -20,6 +20,9 @@ public class CustomProductOption {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private CustomProduct customProduct;
 
+    /**
+     * Order 이후, optionDetail 값은 null.
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     private OptionDetail optionDetail;
 
