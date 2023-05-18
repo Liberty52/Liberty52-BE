@@ -1,16 +1,15 @@
 package com.liberty52.product.service.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse.ReplyContent;
-import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse.ReviewContent;
 import com.liberty52.product.service.entity.Review;
 import com.liberty52.product.service.entity.ReviewImage;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 @Data @AllArgsConstructor
 public class AdminReviewRetrieveResponse {
   private List<ReviewContent> contents;
