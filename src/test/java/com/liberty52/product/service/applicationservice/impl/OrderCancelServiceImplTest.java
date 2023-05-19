@@ -12,7 +12,6 @@ import com.liberty52.product.service.entity.payment.VBankPayment;
 import com.liberty52.product.service.repository.OrdersRepository;
 import com.liberty52.product.service.utils.TestDtoBuilder;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
