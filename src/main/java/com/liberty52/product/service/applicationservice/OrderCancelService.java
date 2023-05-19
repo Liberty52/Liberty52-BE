@@ -1,9 +1,9 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.service.controller.dto.OrderCancelRequestDto;
+import com.liberty52.product.service.controller.dto.OrderCancelDto;
 
 public interface OrderCancelService {
 
-    void cancelOrder(String authId, OrderCancelRequestDto dto);
+    OrderCancelDto.Response cancelOrder(String authId, OrderCancelDto.Request request);
 
 }

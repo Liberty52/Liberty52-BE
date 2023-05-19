@@ -2,6 +2,7 @@ package com.liberty52.product.service.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class CanceledOrders {
     private LocalDateTime canceledAt;
     private int fee;
     @OneToOne
+    @JoinColumn(name = "order_id")
     private Orders orders;
 
     private CanceledOrders(String reason) {
@@ -31,12 +33,12 @@ public class CanceledOrders {
     public static CanceledOrders of(String reason, Orders order) {
         CanceledOrders canceledOrders = new CanceledOrders(reason);
         canceledOrders.associate(order);
-        order.changeOrderStatusToCancelRequest();
         return canceledOrders;
     }
 
     public void associate(Orders order) {
         this.orders = order;
+        this.orders.setCanceledOrders(this);
     }
 
     public void approveCanceled(int fee) {

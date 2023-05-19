@@ -34,6 +34,7 @@ public abstract class Payment<T extends Payment.PaymentInfo> {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     protected Orders orders;
 
+    @Column(length = 1000)
     protected String info = "";
 
     protected static final ObjectMapper objectMapper;
