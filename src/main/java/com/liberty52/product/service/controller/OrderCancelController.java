@@ -23,7 +23,7 @@ public class OrderCancelController {
     }
 
     @PostMapping("/orders/refund")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void refundCustomerOrder(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
                                     @RequestHeader("LB-Role") String role,
                                     @RequestBody @Validated OrderRefundDto.Request request) {
