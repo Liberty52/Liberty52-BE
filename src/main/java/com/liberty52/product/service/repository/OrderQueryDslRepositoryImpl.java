@@ -104,6 +104,15 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
                 .fetch();
     }
 
+    @Override
+    public Optional<Orders> retrieveOrderDetailWithCanceledOrdersByAdmin(String orderId) {
+        return Optional.ofNullable(
+                selectOrdersAndAssociatedEntityWithCanceledOrders()
+                    .where(orders.id.eq(orderId))
+                    .fetchOne()
+        );
+    }
+
 
     private JPAQuery<Orders> selectOrdersAndAssociatedEntity() {
         return queryFactory
@@ -148,7 +157,12 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
                 .orderBy(orders.orderDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
+    }
 
+    private JPAQuery<Orders> selectOrdersAndAssociatedEntityWithCanceledOrders() {
+        return selectOrdersAndAssociatedEntity()
+                .where(orders.orderStatus.eq(OrderStatus.CANCELED).or(orders.orderStatus.eq(OrderStatus.CANCEL_REQUESTED)))
+                .leftJoin(canceledOrders).on(canceledOrders.orders.eq(orders)).fetchJoin();
     }
 
     private Long getTotalCount() {

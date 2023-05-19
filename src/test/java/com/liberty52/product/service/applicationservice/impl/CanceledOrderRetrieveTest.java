@@ -2,6 +2,7 @@ package com.liberty52.product.service.applicationservice.impl;
 
 import com.liberty52.product.MockS3Test;
 import com.liberty52.product.TestBeanConfig;
+import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
 import com.liberty52.product.service.controller.dto.*;
@@ -33,6 +34,8 @@ public class CanceledOrderRetrieveTest extends MockS3Test {
     @Autowired
     private OrderCreateService orderCreateService;
     @Autowired
+    private OrderCancelService orderCancelService;
+    @Autowired
     private OrderRetrieveService orderRetrieveService;
 
     private final String ADMIN = "ADMIN";
@@ -59,6 +62,14 @@ public class CanceledOrderRetrieveTest extends MockS3Test {
         Assertions.assertNotNull(onlyRequestedResponse);
         Assertions.assertFalse(onlyRequestedResponse.getOrders().isEmpty());
         Assertions.assertEquals(4, onlyRequestedResponse.getOrders().size());
+    }
+
+    @Test
+    void test_retrieveCanceledOrderDetailByAdmin() {
+        String orderId = save_one_canceledOrder();
+
+        AdminCanceledOrderDetailResponse response = orderRetrieveService.retrieveCanceledOrderDetailByAdmin(ADMIN, orderId);
+        System.out.println(response);
     }
 
     MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
@@ -103,5 +114,28 @@ public class CanceledOrderRetrieveTest extends MockS3Test {
             order.changeOrderStatusToCancelRequest();
             ordersRepository.save(order);
         }
+    }
+
+    private String save_one_canceledOrder() {
+        final String aid = UUID.randomUUID().toString();
+
+        OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestVBank(
+                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                "name", "hsh47607@naver.com", "phone", "add1", "add2", "zip",
+                "하나은행 1234123412341234 리버티", "tester"
+        );
+        PaymentVBankResponseDto responseDto = orderCreateService.createVBankPaymentOrders(aid, requestDto, imageFile);
+
+        String orderId = responseDto.getOrderId();
+        Orders order = ordersRepository.findById(orderId).get();
+        order.changeOrderStatusToOrdered();
+        ordersRepository.save(order);
+
+        OrderCancelDto.Request cancelRequest = TestDtoBuilder.orderCancelRequestDto(
+                orderId, "취소사유", "국민은행", "김테스터", "1304124-31232-12", "01012341234"
+        );
+        orderCancelService.cancelOrder(aid, cancelRequest);
+
+        return orderId;
     }
 }

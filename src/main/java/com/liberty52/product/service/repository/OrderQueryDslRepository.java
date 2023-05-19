@@ -24,6 +24,8 @@ public interface OrderQueryDslRepository {
 
     List<Orders> retrieveOnlyCanceledOrdersByAdmin(Pageable pageable);
 
+    Optional<Orders> retrieveOrderDetailWithCanceledOrdersByAdmin(String orderId);
+
     OrderQueryDslRepositoryImpl.PageInfo getPageInfo(Pageable pageable);
 
 }

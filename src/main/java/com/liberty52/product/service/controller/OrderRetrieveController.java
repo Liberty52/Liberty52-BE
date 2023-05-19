@@ -2,10 +2,7 @@ package com.liberty52.product.service.controller;
 
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
-import com.liberty52.product.service.controller.dto.AdminCanceledOrderListResponse;
-import com.liberty52.product.service.controller.dto.AdminOrderListResponse;
-import com.liberty52.product.service.controller.dto.OrderDetailRetrieveResponse;
-import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
+import com.liberty52.product.service.controller.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -60,6 +57,13 @@ public class OrderRetrieveController {
                 default -> throw new BadRequestException("type 파라미터가 유효하지 않습니다.");
             };
         }
+    }
+
+    @GetMapping("/admin/orders/cancel/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AdminCanceledOrderDetailResponse retrieveCanceledOrderDetailByAdmin(@RequestHeader("LB-Role") String role,
+                                                                               @PathVariable String orderId) {
+        return orderRetrieveService.retrieveCanceledOrderDetailByAdmin(role, orderId);
     }
 
 }

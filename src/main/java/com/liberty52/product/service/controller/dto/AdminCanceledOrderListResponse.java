@@ -54,10 +54,8 @@ public class AdminCanceledOrderListResponse {
         private String customerId;
         private String customerName;
         private String orderStatus;
-        private String reason;
         private String reqAt;
         private String canceledAt;
-        private Integer fee;
         private String approvedAdminName;
 
         public static AdminCanceledOrderContent of(Orders entity) {
@@ -68,11 +66,9 @@ public class AdminCanceledOrderListResponse {
             response.orderDate = entity.getOrderDate().toString();
             response.customerId = entity.getAuthId();
             response.orderStatus = entity.getOrderStatus().name();
-            response.reason = entity.getCanceledOrders().getReason();
             response.reqAt = entity.getCanceledOrders().getReqAt().toString();
             response.canceledAt = entity.getCanceledOrders().getCanceledAt() != null ?
                     entity.getCanceledOrders().getCanceledAt().toString() : "대기중";
-            response.fee = entity.getCanceledOrders().getFee();
             response.approvedAdminName = entity.getCanceledOrders().getApprovedAdminName();
             return response;
         }

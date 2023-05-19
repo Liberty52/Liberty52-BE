@@ -106,6 +106,20 @@ public class OrderRetrieveServiceImpl implements OrderRetrieveService {
         return getAdminCanceledOrderListResponse(pageable, orders);
     }
 
+    @Override
+    public AdminCanceledOrderDetailResponse retrieveCanceledOrderDetailByAdmin(String role, String orderId) {
+        Validator.isAdmin(role);
+
+        Orders order = orderQueryDslRepository.retrieveOrderDetailWithCanceledOrdersByAdmin(orderId)
+                .orElseThrow(CannotAccessOrderException::new);
+
+        String customerId = order.getAuthId();
+        String customerName = authServiceClient.retrieveAuthData(Set.of(customerId))
+                .get(customerId).getAuthorName();
+
+        return AdminCanceledOrderDetailResponse.of(order, customerName);
+    }
+
     private AdminCanceledOrderListResponse getAdminCanceledOrderListResponse(Pageable pageable, List<Orders> orders) {
         if (CollectionUtils.isEmpty(orders)) {
             return AdminCanceledOrderListResponse.empty();
