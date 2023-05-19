@@ -1,5 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
+import com.liberty52.product.service.controller.dto.AdminCanceledOrderListResponse;
 import com.liberty52.product.service.controller.dto.AdminOrderListResponse;
 import com.liberty52.product.service.controller.dto.OrderDetailRetrieveResponse;
 import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
@@ -18,5 +19,11 @@ public interface OrderRetrieveService {
     AdminOrderListResponse retrieveOrdersByAdmin(String role, Pageable pageable);
 
     OrderDetailRetrieveResponse retrieveOrderDetailByAdmin(String role, String orderId);
+
+    AdminCanceledOrderListResponse retrieveCanceledOrdersByAdmin(String role, Pageable pageable);
+
+    AdminCanceledOrderListResponse retrieveOnlyRequestedCanceledOrdersByAdmin(String role, Pageable pageable);
+
+    AdminCanceledOrderListResponse retrieveOnlyCanceledOrdersByAdmin(String role, Pageable pageable);
 
 }
