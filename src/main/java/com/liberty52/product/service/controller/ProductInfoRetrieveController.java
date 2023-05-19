@@ -7,10 +7,7 @@ import com.liberty52.product.service.controller.dto.ProductListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,13 +30,13 @@ public class ProductInfoRetrieveController {
 
     @GetMapping("/productInfo")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductInfoRetrieveResponseDto> retrieveProductInfoList() {
-        return productInfoRetrieveService.retrieveProductInfoList();
+    public List<ProductInfoRetrieveResponseDto> retrieveProductInfoList(@RequestHeader("LB-Role") String role) {
+        return productInfoRetrieveService.retrieveProductInfoList(role);
     }
 
     @GetMapping("/productInfo/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductInfoRetrieveResponseDto retrieveProductInfo(@PathVariable String productId) {
-        return productInfoRetrieveService.retrieveProductInfo(productId);
+    public ProductInfoRetrieveResponseDto retrieveProductInfo(@RequestHeader("LB-Role") String role, @PathVariable String productId) {
+        return productInfoRetrieveService.retrieveProductInfo(role, productId);
     }
 }

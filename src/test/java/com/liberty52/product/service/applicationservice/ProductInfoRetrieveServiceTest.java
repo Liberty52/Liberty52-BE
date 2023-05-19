@@ -1,6 +1,5 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.exception.external.notfound.ProductNotFoundByNameException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.controller.dto.ProductInfoRetrieveResponseDto;
 import com.liberty52.product.service.entity.Product;
@@ -16,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.liberty52.product.global.contants.RoleConstants.ADMIN;
 
 @SpringBootTest
 @Transactional
@@ -37,7 +38,9 @@ public class ProductInfoRetrieveServiceTest {
 
     @Test
     void 상품조회(){
-        List<ProductInfoRetrieveResponseDto> dtoList = productInfoRetrieveService.retrieveProductInfoList();
+        List<ProductInfoRetrieveResponseDto> dtoList = productInfoRetrieveService.retrieveProductInfoList(ADMIN);
+
+
         Product product = productRepository.findByName("Liberty 52_Frame").orElseGet(null);
         List<Review> reviewList = reviewRepository.findByCustomProduct_Product(product);
         int sum = 0;
@@ -64,7 +67,7 @@ public class ProductInfoRetrieveServiceTest {
         for(Review review : reviewList){
             sum= sum+review.getRating();
         }
-        ProductInfoRetrieveResponseDto dto = productInfoRetrieveService.retrieveProductInfo(product.getId());
+        ProductInfoRetrieveResponseDto dto = productInfoRetrieveService.retrieveProductInfo(ADMIN, product.getId());
         Assertions.assertEquals(dto.getId(), "LIB-001");
         Assertions.assertEquals(dto.getPictureUrl(), null);
         Assertions.assertEquals(dto.getName(), "Liberty 52_Frame");
@@ -72,7 +75,7 @@ public class ProductInfoRetrieveServiceTest {
         Assertions.assertEquals(dto.getMeanRating(), sum/reviewList.size());
         Assertions.assertEquals(dto.getRatingCount(), reviewList.size());
         Assertions.assertEquals(dto.getState(), ProductState.ON_SAIL);
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductInfo("null"));
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductInfo(ADMIN, "null"));
 
     }
 }

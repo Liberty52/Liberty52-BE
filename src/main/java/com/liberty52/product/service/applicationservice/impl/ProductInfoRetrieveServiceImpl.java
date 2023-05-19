@@ -1,5 +1,6 @@
 package com.liberty52.product.service.applicationservice.impl;
 
+import com.liberty52.product.global.exception.external.forbidden.InvalidRoleException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.applicationservice.ProductInfoRetrieveService;
 import com.liberty52.product.service.controller.dto.ProductDetailResponseDto;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.liberty52.product.global.contants.RoleConstants.ADMIN;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +39,10 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
     }
 
     @Override
-    public List<ProductInfoRetrieveResponseDto> retrieveProductInfoList() {
+    public List<ProductInfoRetrieveResponseDto> retrieveProductInfoList(String role) {
+        if(!ADMIN.equals(role)){
+            throw new InvalidRoleException(role);
+        }
         List<ProductInfoRetrieveResponseDto> dto = new ArrayList<>();
         List<Product> productList = productRepository.findAll();
         List<Review> reviewList = reviewRepository.findAll();
@@ -62,7 +68,10 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
     }
 
     @Override
-    public ProductInfoRetrieveResponseDto retrieveProductInfo(String productId) {
+    public ProductInfoRetrieveResponseDto retrieveProductInfo(String role, String productId) {
+        if(!ADMIN.equals(role)){
+            throw new InvalidRoleException(role);
+        }
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
         int[] rate = getRate(reviewRepository.findByCustomProduct_Product(product));
         return ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), rate[0]/rate[1], rate[1],product.getState());
