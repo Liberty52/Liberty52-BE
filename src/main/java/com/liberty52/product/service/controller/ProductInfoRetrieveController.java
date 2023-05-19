@@ -2,6 +2,7 @@ package com.liberty52.product.service.controller;
 
 import com.liberty52.product.service.applicationservice.ProductInfoRetrieveService;
 import com.liberty52.product.service.controller.dto.ProductDetailResponseDto;
+import com.liberty52.product.service.controller.dto.ProductInfoRetrieveResponseDto;
 import com.liberty52.product.service.controller.dto.ProductListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +29,17 @@ public class ProductInfoRetrieveController {
     @ResponseStatus(HttpStatus.OK)
     public ProductDetailResponseDto productDetail(@PathVariable String productId) {
         return productInfoRetrieveService.retrieveProductDetail(productId);
+    }
+
+    @GetMapping("/productInfo")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ProductInfoRetrieveResponseDto> retrieveProductInfoList() {
+        return productInfoRetrieveService.retrieveProductInfoList();
+    }
+
+    @GetMapping("/productInfo/{productId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductInfoRetrieveResponseDto retrieveProductInfo(@PathVariable String productId) {
+        return productInfoRetrieveService.retrieveProductInfo(productId);
     }
 }

@@ -30,6 +30,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductOption> productOptions = new ArrayList<>();
 
+    private String pictureUrl;
 
     @Builder
     private Product(String name, ProductState state, Long price) {
