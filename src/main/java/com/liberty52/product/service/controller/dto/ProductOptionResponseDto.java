@@ -16,4 +16,8 @@ public class ProductOptionResponseDto {
     boolean require;
     boolean onSail;
     List<ProductOptionDetailResponseDto> optionDetailList;
+
+    public static ProductOptionResponseDto of(String optionName, boolean require, boolean onSale, List<ProductOptionDetailResponseDto> optionDetailList) {
+        return new ProductOptionResponseDto(optionName, require, onSale, optionDetailList);
+    }
 }
