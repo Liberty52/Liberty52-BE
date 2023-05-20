@@ -108,7 +108,7 @@ public class VBankPayment extends Payment<VBankPayment.VBankPaymentInfo> {
             return null;
         }
 
-        public static VBankPaymentInfo refund(VBankPaymentInfo prev, OrderCancelDto.Request.RefundVO refundVO) {
+        public static VBankPaymentInfo ofRefund(VBankPaymentInfo prev, OrderCancelDto.Request.RefundVO refundVO) {
             VBankPaymentInfo newInstance = new VBankPaymentInfo(prev);
             newInstance.refundBank = refundVO.getRefundBank();
             newInstance.refundHolder = refundVO.getRefundHolder();

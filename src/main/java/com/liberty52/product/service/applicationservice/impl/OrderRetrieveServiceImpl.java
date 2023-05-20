@@ -5,6 +5,7 @@ import com.liberty52.product.global.exception.external.badrequest.CannotAccessOr
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
 import com.liberty52.product.service.controller.dto.*;
+import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.repository.OrderQueryDslRepository;
 import com.liberty52.product.service.repository.OrderQueryDslRepositoryImpl;
@@ -112,6 +113,8 @@ public class OrderRetrieveServiceImpl implements OrderRetrieveService {
 
         Orders order = orderQueryDslRepository.retrieveOrderDetailWithCanceledOrdersByAdmin(orderId)
                 .orElseThrow(CannotAccessOrderException::new);
+
+        System.out.println("테스트 - " + order.getCustomProducts().stream().map(CustomProduct::getOptionsMap).toList());
 
         String customerId = order.getAuthId();
         String customerName = authServiceClient.retrieveAuthData(Set.of(customerId))

@@ -117,13 +117,11 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
     private JPAQuery<Orders> selectOrdersAndAssociatedEntity() {
         return queryFactory
                 .selectFrom(orders)
-                .leftJoin(orderDestination).on(orders.orderDestination.eq(orderDestination))
-                .fetchJoin()
+                .leftJoin(orderDestination).on(orders.orderDestination.eq(orderDestination)).fetchJoin()
                 .leftJoin(customProduct).on(customProduct.orders.eq(orders)).fetchJoin()
                 .leftJoin(product).on(customProduct.product.eq(product)).fetchJoin()
-                .leftJoin(customProductOption).on(customProductOption.customProduct.eq(
-                        customProduct)).fetchJoin()
-                .leftJoin(optionDetail).on(customProductOption.optionDetail.eq(optionDetail))
+                .leftJoin(customProductOption).on(customProductOption.customProduct.eq(customProduct)).fetchJoin()
+                .leftJoin(optionDetail).on(customProductOption.optionDetail.eq(optionDetail)).fetchJoin()
                 .leftJoin(payment).on(payment.orders.eq(orders)).fetchJoin();
     }
 

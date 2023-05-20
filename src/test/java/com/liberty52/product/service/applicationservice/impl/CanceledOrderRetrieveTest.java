@@ -1,15 +1,17 @@
 package com.liberty52.product.service.applicationservice.impl;
 
-import com.liberty52.product.MockS3Test;
+import com.liberty52.product.MockAdaptersTest;
 import com.liberty52.product.TestBeanConfig;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
 import com.liberty52.product.service.controller.dto.*;
 import com.liberty52.product.service.entity.CanceledOrders;
+import com.liberty52.product.service.entity.OrderStatus;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.repository.OrdersRepository;
 import com.liberty52.product.service.utils.TestDtoBuilder;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ import java.util.UUID;
 @SpringBootTest
 @Transactional
 @Import({TestBeanConfig.class})
-public class CanceledOrderRetrieveTest extends MockS3Test {
+public class CanceledOrderRetrieveTest extends MockAdaptersTest {
 
     @Autowired
     private OrdersRepository ordersRepository;
@@ -37,6 +39,8 @@ public class CanceledOrderRetrieveTest extends MockS3Test {
     private OrderCancelService orderCancelService;
     @Autowired
     private OrderRetrieveService orderRetrieveService;
+    @Autowired
+    private EntityManager em;
 
     private final String ADMIN = "ADMIN";
     private final PageRequest pageRequest = PageRequest.of(0, 10);
@@ -67,9 +71,19 @@ public class CanceledOrderRetrieveTest extends MockS3Test {
     @Test
     void test_retrieveCanceledOrderDetailByAdmin() {
         String orderId = save_one_canceledOrder();
-
+        em.flush();
+        em.clear();
         AdminCanceledOrderDetailResponse response = orderRetrieveService.retrieveCanceledOrderDetailByAdmin(ADMIN, orderId);
-        System.out.println(response);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(orderId, response.getBasicOrderDetail().getOrderId());
+        Assertions.assertEquals(OrderStatus.CANCEL_REQUESTED.name(), response.getBasicOrderDetail().getOrderStatus());
+        Assertions.assertEquals(3, response.getBasicOrderDetail().getProducts().get(0).getOptions().size());
+        Assertions.assertNotNull(response.getCanceledInfo());
+        Assertions.assertEquals("취소사유", response.getCanceledInfo().getReason());
+        Assertions.assertEquals(0, response.getCanceledInfo().getFee());
+
+        ordersRepository.deleteById(orderId);
     }
 
     MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));

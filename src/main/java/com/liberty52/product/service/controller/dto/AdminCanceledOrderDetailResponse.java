@@ -18,7 +18,7 @@ public class AdminCanceledOrderDetailResponse {
         );
     }
 
-    @Getter
+    @Data
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class CanceledOrderDetailResponse {
