@@ -114,8 +114,6 @@ public class OrderRetrieveServiceImpl implements OrderRetrieveService {
         Orders order = orderQueryDslRepository.retrieveOrderDetailWithCanceledOrdersByAdmin(orderId)
                 .orElseThrow(CannotAccessOrderException::new);
 
-        System.out.println("테스트 - " + order.getCustomProducts().stream().map(CustomProduct::getOptionsMap).toList());
-
         String customerId = order.getAuthId();
         String customerName = authServiceClient.retrieveAuthData(Set.of(customerId))
                 .get(customerId).getAuthorName();
