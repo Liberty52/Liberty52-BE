@@ -34,10 +34,12 @@ class ImageGenerationControllerTest {
     @Test
     void imageGenerate() throws Exception {
         String prompt = "A cute baby sea otter";
-        ImageGenerationDto.Request request = new ImageGenerationDto.Request(prompt);
-        String returnUrl = "url1";
+        int n = 2;
+        ImageGenerationDto.Request request = new ImageGenerationDto.Request(prompt, n);
+        String url1 = "url1";
+        String url2 = "url2";
         BDDMockito.given(service.generate(authId, request))
-                .willReturn(new ImageGenerationDto.Response(List.of(returnUrl)));
+                .willReturn(new ImageGenerationDto.Response(List.of(url1, url2)));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/images/generations")
@@ -45,14 +47,16 @@ class ImageGenerationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, authId))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.urls.length()").value(1))
-                .andExpect(jsonPath("$.urls[0]").value(returnUrl));
+                .andExpect(jsonPath("$.urls.length()").value(2))
+                .andExpect(jsonPath("$.urls[0]").value(url1))
+                .andExpect(jsonPath("$.urls[1]").value(url2));
     }
 
     @Test
     void validationError() throws Exception {
         String prompt = "";
-        ImageGenerationDto.Request request = new ImageGenerationDto.Request(prompt);
+        int n = 1;
+        ImageGenerationDto.Request request = new ImageGenerationDto.Request(prompt, n);
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/images/generations")
                         .content(new ObjectMapper().writeValueAsString(request))
@@ -63,7 +67,8 @@ class ImageGenerationControllerTest {
 
     @Test
     void requiredHeaderError() throws Exception {
-        ImageGenerationDto.Request request = new ImageGenerationDto.Request(UUID.randomUUID().toString());
+        int n = 1;
+        ImageGenerationDto.Request request = new ImageGenerationDto.Request(UUID.randomUUID().toString(), n);
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/images/generations")
                         .content(new ObjectMapper().writeValueAsString(request))
@@ -74,7 +79,8 @@ class ImageGenerationControllerTest {
 
     @Test
     void tooLongPrompt() throws Exception {
-        ImageGenerationDto.Request request = new ImageGenerationDto.Request("p".repeat(1001));
+        int n = 1;
+        ImageGenerationDto.Request request = new ImageGenerationDto.Request("p".repeat(1001), n);
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/images/generations")
                         .content(new ObjectMapper().writeValueAsString(request))

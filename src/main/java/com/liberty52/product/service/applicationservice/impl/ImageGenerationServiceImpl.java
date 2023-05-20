@@ -6,6 +6,7 @@ import com.liberty52.product.service.controller.dto.ImageGenerationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,7 +17,7 @@ public class ImageGenerationServiceImpl implements ImageGenerationService {
     public ImageGenerationDto.Response generate(String authId, ImageGenerationDto.Request dto) {
         List<String> urls = dallEApiClient
                 .generateImage(dto.prompt(),
-                        1,
+                        dto.n(),
                         DallEApiClient.Dto.Request.Size.S1024,
                         DallEApiClient.Dto.Request.Format.URL,
                         authId)
@@ -24,6 +25,7 @@ public class ImageGenerationServiceImpl implements ImageGenerationService {
                 .stream()
                 .map(DallEApiClient.Dto.Response.GenerationData::url)
                 .toList();
+
         return new ImageGenerationDto.Response(urls);
     }
 }
