@@ -50,4 +50,12 @@ public class Product {
                 .build();
     }
 
+    public float getRate(List<Review> productReviewList) {
+        if(productReviewList.size() > 0) {
+            int totalRate = productReviewList.stream().mapToInt(Review::getRating).sum();
+            return totalRate / productReviewList.size();
+        } else {
+            return 0;
+        }
+    }
 }

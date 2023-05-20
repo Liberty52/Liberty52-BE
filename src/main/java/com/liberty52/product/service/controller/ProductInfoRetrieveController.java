@@ -30,13 +30,13 @@ public class ProductInfoRetrieveController {
 
     @GetMapping("/productInfo")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductInfoRetrieveResponseDto> retrieveProductInfoList(@RequestHeader("LB-Role") String role) {
-        return productInfoRetrieveService.retrieveProductInfoList(role);
+    public List<ProductInfoRetrieveResponseDto> retrieveProductListByAdmin(@RequestHeader("LB-Role") String role) {
+        return productInfoRetrieveService.retrieveProductListByAdmin(role);
     }
 
     @GetMapping("/productInfo/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductInfoRetrieveResponseDto retrieveProductInfo(@RequestHeader("LB-Role") String role, @PathVariable String productId) {
-        return productInfoRetrieveService.retrieveProductInfo(role, productId);
+    public ProductInfoRetrieveResponseDto retrieveProductByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId) {
+        return productInfoRetrieveService.retrieveProductByAdmin(role, productId);
     }
 }

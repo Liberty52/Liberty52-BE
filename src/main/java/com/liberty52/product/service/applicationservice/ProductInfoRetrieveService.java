@@ -12,7 +12,7 @@ public interface ProductInfoRetrieveService {
 
     ProductDetailResponseDto retrieveProductDetail(String productId);
 
-    List<ProductInfoRetrieveResponseDto> retrieveProductInfoList(String role);
+    List<ProductInfoRetrieveResponseDto> retrieveProductListByAdmin(String role);
 
-    ProductInfoRetrieveResponseDto retrieveProductInfo(String role,String productId);
+    ProductInfoRetrieveResponseDto retrieveProductByAdmin(String role, String productId);
 }

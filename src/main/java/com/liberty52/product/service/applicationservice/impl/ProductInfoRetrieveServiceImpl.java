@@ -39,7 +39,7 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
     }
 
     @Override
-    public List<ProductInfoRetrieveResponseDto> retrieveProductInfoList(String role) {
+    public List<ProductInfoRetrieveResponseDto> retrieveProductListByAdmin(String role) {
         if(!ADMIN.equals(role)){
             throw new InvalidRoleException(role);
         }
@@ -52,28 +52,22 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
         }
 
         for (Product product : productList){
-            int[] rate = getRate(reviewList.stream().filter(r -> r.getCustomProduct().getProduct().equals(product)).collect(Collectors.toList()));
-            dto.add(ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), rate[0]/rate[1], rate[1],product.getState()));
+            List<Review> productReviewList = reviewList.stream().filter(r -> r.getCustomProduct().getProduct().equals(product)).collect(Collectors.toList());
+            float meanRate = product.getRate(productReviewList);
+            dto.add(ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getState()));
         }
 
         return dto;
     }
 
-    private int[] getRate(List<Review> productReviewList) {
-        if(productReviewList.size() > 0){
-            return new int[]{productReviewList.stream().mapToInt(Review::getRating).sum(), productReviewList.size()};
-        } else  {
-            return new int[]{0, 0};
-        }
-    }
-
     @Override
-    public ProductInfoRetrieveResponseDto retrieveProductInfo(String role, String productId) {
+    public ProductInfoRetrieveResponseDto retrieveProductByAdmin(String role, String productId) {
         if(!ADMIN.equals(role)){
             throw new InvalidRoleException(role);
         }
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
-        int[] rate = getRate(reviewRepository.findByCustomProduct_Product(product));
-        return ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), rate[0]/rate[1], rate[1],product.getState());
+        List<Review> productReviewList = reviewRepository.findByCustomProduct_Product(product);
+        float meanRate = product.getRate(productReviewList);
+        return ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getState());
     }
 }

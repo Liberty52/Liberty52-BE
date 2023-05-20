@@ -38,7 +38,7 @@ public class ProductInfoRetrieveServiceTest {
 
     @Test
     void 상품조회(){
-        List<ProductInfoRetrieveResponseDto> dtoList = productInfoRetrieveService.retrieveProductInfoList(ADMIN);
+        List<ProductInfoRetrieveResponseDto> dtoList = productInfoRetrieveService.retrieveProductListByAdmin(ADMIN);
 
 
         Product product = productRepository.findByName("Liberty 52_Frame").orElseGet(null);
@@ -67,7 +67,7 @@ public class ProductInfoRetrieveServiceTest {
         for(Review review : reviewList){
             sum= sum+review.getRating();
         }
-        ProductInfoRetrieveResponseDto dto = productInfoRetrieveService.retrieveProductInfo(ADMIN, product.getId());
+        ProductInfoRetrieveResponseDto dto = productInfoRetrieveService.retrieveProductByAdmin(ADMIN, product.getId());
         Assertions.assertEquals(dto.getId(), "LIB-001");
         Assertions.assertEquals(dto.getPictureUrl(), null);
         Assertions.assertEquals(dto.getName(), "Liberty 52_Frame");
@@ -75,7 +75,7 @@ public class ProductInfoRetrieveServiceTest {
         Assertions.assertEquals(dto.getMeanRating(), sum/reviewList.size());
         Assertions.assertEquals(dto.getRatingCount(), reviewList.size());
         Assertions.assertEquals(dto.getState(), ProductState.ON_SAIL);
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductInfo(ADMIN, "null"));
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductByAdmin(ADMIN, "null"));
 
     }
 }
