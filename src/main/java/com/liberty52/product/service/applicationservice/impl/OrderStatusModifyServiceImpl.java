@@ -29,13 +29,21 @@ public class OrderStatusModifyServiceImpl implements OrderStatusModifyService {
     OrderStatus currentStatus = order.getOrderStatus();
     OrderStatus previousStatus = OrderStatus.getPreviousStatus(requestedStatus);
 
+    validateOrderStatus(requestedStatus, currentStatus, previousStatus);
+    order.modifyOrderStatus(requestedStatus);
+  }
+
+  private void validateOrderStatus(OrderStatus requestedStatus, OrderStatus currentStatus,
+      OrderStatus previousStatus) {
+    if (requestedStatus == OrderStatus.ORDERED){
+      throw new BadRequestException("비정상적인 상태 변경 요청입니다.");
+    }
     if (currentStatus == requestedStatus) {
       throw new BadRequestException("현재와 같은 상태 변경입니다.");
     }
     if (currentStatus != previousStatus) {
       throw new BadRequestException("상태 변경이 허용되지 않습니다.");
     }
-    order.modifyOrderStatus(requestedStatus);
   }
 
   @Override
