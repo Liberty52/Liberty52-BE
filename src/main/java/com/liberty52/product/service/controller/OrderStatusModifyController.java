@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +21,7 @@ public class OrderStatusModifyController {
 
   private final OrderStatusModifyService orderStatusModifyService;
 
-  @PatchMapping("/admin/orders/{orderId}/status")
+  @PutMapping("/admin/orders/{orderId}/status")
   @ResponseStatus(HttpStatus.OK)
   public void modifyOrderStatusByAdmin(
       @RequestHeader("LB-Role") String role,
@@ -29,7 +30,7 @@ public class OrderStatusModifyController {
     orderStatusModifyService.modifyOrderStatusByAdmin(role, orderId, orderStatus);
   }
 
-  @PatchMapping("/admin/orders/{orderId}/vbank")
+  @PutMapping("/admin/orders/{orderId}/vbank")
   @ResponseStatus(HttpStatus.OK)
   public void modifyOrderStatusOfVBank(
       @RequestHeader("LB-Role") String role, @PathVariable String orderId,
