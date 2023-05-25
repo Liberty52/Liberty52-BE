@@ -4,10 +4,8 @@ import com.liberty52.product.global.exception.external.forbidden.InvalidRoleExce
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.applicationservice.ProductInfoRetrieveService;
 import com.liberty52.product.service.controller.dto.*;
-import com.liberty52.product.service.entity.OptionDetail;
-import com.liberty52.product.service.entity.Product;
-import com.liberty52.product.service.entity.ProductOption;
-import com.liberty52.product.service.entity.Review;
+import com.liberty52.product.service.entity.*;
+import com.liberty52.product.service.repository.CartRepository;
 import com.liberty52.product.service.repository.ProductRepository;
 import com.liberty52.product.service.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +23,7 @@ import static com.liberty52.product.global.contants.RoleConstants.ADMIN;
 public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveService {
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
+    private final CartRepository cartRepository;
 
     @Override
     public ProductListResponseDto retrieveProductList(Pageable pageable) {
@@ -88,5 +87,21 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
         List<Review> productReviewList = reviewRepository.findByCustomProduct_Product(product);
         float meanRate = product.getRate(productReviewList);
         return ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getState());
+    }
+
+    @Override
+    public List<ProductInfoByCartResponseDto> retrieveProductOptionListByCart(String authId) {
+        Cart cart = cartRepository.findByAuthId(authId).orElse(null);
+        List<ProductInfoByCartResponseDto> productInfoByCartResponseDtoList = new ArrayList<>();
+        if (cart==null || cart.getCustomProducts().size() == 0){
+            return productInfoByCartResponseDtoList;
+        }
+
+        List<Product> productList = cart.getCustomProducts().stream().map(c->c.getProduct()).distinct().collect(Collectors.toList());
+        for(Product product : productList){
+            productInfoByCartResponseDtoList.add(new ProductInfoByCartResponseDto(product));
+        }
+
+        return productInfoByCartResponseDtoList;
     }
 }
