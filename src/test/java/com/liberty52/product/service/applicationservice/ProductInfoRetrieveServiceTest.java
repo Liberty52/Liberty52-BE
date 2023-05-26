@@ -45,7 +45,7 @@ public class ProductInfoRetrieveServiceTest {
 
     @Test
     void 상품옵션조회(){
-        Product product = productRepository.findById("LIB-001").orElseGet(null);
+        Product product = productRepository.findById("LIB-001").orElse(null);
 
         List<ProductOptionResponseDto> productOptionResponseDtoList=productInfoRetrieveService.retrieveProductOptionInfoList("LIB-001");
         Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductOptionInfoList("null"));
