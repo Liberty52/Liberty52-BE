@@ -17,7 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import static com.liberty52.product.global.contants.RoleConstants.ADMIN;
+import static com.liberty52.product.global.constants.RoleConstants.ADMIN;
 
 @SpringBootTest
 @Transactional
