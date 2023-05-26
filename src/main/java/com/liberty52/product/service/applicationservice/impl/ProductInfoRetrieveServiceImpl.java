@@ -49,7 +49,8 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
     return productOptionResponseDtoList;
   }
 
-  private List<ProductOptionDetailResponseDto> getOptionDetails(List<OptionDetail> optionDetailList) {
+  private List<ProductOptionDetailResponseDto> getOptionDetails(
+      List<OptionDetail> optionDetailList) {
     List<ProductOptionDetailResponseDto> productOptionDetailResponseDtoList = new ArrayList<>();
     for (OptionDetail optionDetail : optionDetailList) {
       productOptionDetailResponseDtoList.add(
@@ -76,7 +77,6 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
             float meanRate = product.getRate(productReviewList);
             dto.add(ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getProductState()));
         }
-
         return dto;
     }
 
