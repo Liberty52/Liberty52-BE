@@ -1,4 +1,4 @@
-package com.liberty52.product.global.contants;
+package com.liberty52.product.global.constants;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.core.convert.converter.Converter;

@@ -1,6 +1,6 @@
 package com.liberty52.product.service.controller.dto;
 
-import com.liberty52.product.global.contants.TranslationConstants;
+import com.liberty52.product.global.constants.TranslationConstants;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 

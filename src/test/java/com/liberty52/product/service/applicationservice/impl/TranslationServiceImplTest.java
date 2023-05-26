@@ -1,7 +1,7 @@
 package com.liberty52.product.service.applicationservice.impl;
 
 import com.liberty52.product.global.adapter.PapagoApiClient;
-import com.liberty52.product.global.contants.TranslationConstants;
+import com.liberty52.product.global.constants.TranslationConstants;
 import com.liberty52.product.global.exception.internal.PapagoApiException;
 import com.liberty52.product.service.controller.dto.TranslationDto;
 import org.junit.jupiter.api.Test;

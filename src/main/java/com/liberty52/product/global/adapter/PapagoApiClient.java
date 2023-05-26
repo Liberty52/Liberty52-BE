@@ -1,7 +1,6 @@
 package com.liberty52.product.global.adapter;
 
-import com.liberty52.product.global.contants.TranslationConstants;
-import com.liberty52.product.global.exception.internal.PapagoApiException;
+import com.liberty52.product.global.constants.TranslationConstants;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
