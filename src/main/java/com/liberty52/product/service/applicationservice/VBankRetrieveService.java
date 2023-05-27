@@ -4,6 +4,6 @@ import com.liberty52.product.service.controller.dto.VBankListResponseDto;
 
 public interface VBankRetrieveService {
 
-    VBankListResponseDto getVBankInfoList();
+    VBankListResponseDto getVBankList();
 
 }

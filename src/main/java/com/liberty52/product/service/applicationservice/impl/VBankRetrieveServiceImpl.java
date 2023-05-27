@@ -18,10 +18,10 @@ public class VBankRetrieveServiceImpl implements VBankRetrieveService {
     private final VBankRepository vBankRepository;
 
     @Override
-    public VBankListResponseDto getVBankInfoList() {
+    public VBankListResponseDto getVBankList() {
         List<VBank> vbanks = vBankRepository.findAll();
         return VBankListResponseDto.of(
-                vbanks.stream().map(VBankListResponseDto.VBankInfoDto::fromEntity).toList()
+                vbanks.stream().map(VBankListResponseDto.VBankDto::fromEntity).toList()
         );
     }
 }

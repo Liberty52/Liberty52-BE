@@ -10,9 +10,9 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class VBankListResponseDto {
 
-    private List<VBankInfoDto> vbankInfos;
+    private List<VBankDto> vbankInfos;
 
-    public static VBankListResponseDto of(List<VBankInfoDto> vbankInfos) {
+    public static VBankListResponseDto of(List<VBankDto> vbankInfos) {
         return new VBankListResponseDto(vbankInfos);
     }
 
@@ -20,14 +20,14 @@ public class VBankListResponseDto {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Builder
-    public static class VBankInfoDto {
+    public static class VBankDto {
         private String bankOfVBank;
         private String account;
         private String holder;
         private String vBank;
 
-        public static VBankInfoDto fromEntity(VBank vBank) {
-            return VBankInfoDto.builder()
+        public static VBankDto fromEntity(VBank vBank) {
+            return VBankDto.builder()
                     .bankOfVBank(vBank.getBank().getKoName())
                     .account(vBank.getAccount())
                     .holder(vBank.getHolder())
