@@ -1,8 +1,8 @@
 package com.liberty52.product.service.applicationservice.impl;
 
 import com.liberty52.product.service.controller.dto.DeliveryOptionDto;
-import com.liberty52.product.service.entity.DeliveryOption;
 import com.liberty52.product.service.repository.DeliveryOptionRepository;
+import com.liberty52.product.service.utils.MockFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,24 +17,24 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class DeliveryOptionRetrieveServiceImplTest {
+class DeliveryOptionModifyServiceImplTest {
 
     @Mock
     private DeliveryOptionRepository deliveryOptionRepository;
 
     @InjectMocks
-    private DeliveryOptionRetrieveServiceImpl deliveryOptionRetrieveService;
+    private DeliveryOptionModifyServiceImpl deliveryOptionModifyService;
 
     @Test
-    @DisplayName("기본 배송비 조회")
-    void getDefaultDeliveryFee() {
+    @DisplayName("기본 배송비 수정")
+    void updateDefaultDeliveryFee() throws Exception {
         // given
         given(deliveryOptionRepository.findById(anyLong()))
-                .willReturn(Optional.of(DeliveryOption.feeOf(100000)));
+                .willReturn(Optional.of(MockFactory.mockDeliveryOptionOnlyFee(100_000)));
         // when
-        DeliveryOptionDto dto = deliveryOptionRetrieveService.getDefaultDeliveryFee();
+        DeliveryOptionDto dto = deliveryOptionModifyService.updateDefaultDeliveryFee("ADMIN", 200_000);
         // then
-        Assertions.assertEquals(100000, dto.getFee());
+        Assertions.assertNotNull(dto);
+        Assertions.assertEquals(200_000, dto.getFee());
     }
-
 }

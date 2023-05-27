@@ -108,5 +108,14 @@ public class MockFactory {
         return vBank;
     }
 
+    public static DeliveryOption mockDeliveryOptionOnlyFee(int fee) throws Exception {
+        DeliveryOption option = DeliveryOption.feeOf(fee);
+        Field id = option.getClass().getDeclaredField("id");
+        id.setAccessible(true);
+        id.set(option, 1L);
+        id.setAccessible(false);
+        return option;
+    }
+
 
 }

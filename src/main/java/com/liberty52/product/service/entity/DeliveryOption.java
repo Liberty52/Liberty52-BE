@@ -28,4 +28,8 @@ public class DeliveryOption {
         return new DeliveryOption(fee);
     }
 
+    public void updateFee(int fee) {
+        this.fee = fee;
+        this.feeUpdatedAt = LocalDateTime.now();
+    }
 }

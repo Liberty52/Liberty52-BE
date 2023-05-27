@@ -17,7 +17,7 @@ public class DeliveryOptionRetrieveController {
     @GetMapping("/options/delivery/fee")
     @ResponseStatus(HttpStatus.OK)
     public DeliveryOptionFeeRetrieve.Response getDefaultDeliveryFee() {
-        return DeliveryOptionFeeRetrieve.Response.from(
+        return DeliveryOptionFeeRetrieve.Response.fromDto(
                 deliveryOptionRetrieveService.getDefaultDeliveryFee()
         );
     }
