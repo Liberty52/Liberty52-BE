@@ -7,11 +7,8 @@ import com.liberty52.product.global.constants.VBankConstants;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.controller.dto.OrderCancelDto;
 import com.liberty52.product.service.entity.*;
-import com.liberty52.product.service.entity.payment.CardPayment;
-import com.liberty52.product.service.entity.payment.Payment;
+import com.liberty52.product.service.entity.payment.*;
 import com.liberty52.product.service.entity.payment.Payment.PaymentInfo;
-import com.liberty52.product.service.entity.payment.VBank;
-import com.liberty52.product.service.entity.payment.VBankPayment;
 import com.liberty52.product.service.repository.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -311,7 +308,7 @@ public class DBInitConfig {
 
                     Payment<? extends PaymentInfo> guestPayment = Payment.vbankOf();
                     guestPayment.associate(c_order);
-                    guestPayment.setInfo(VBankPayment.VBankPaymentInfo.of(VBankConstants.VBANK_HANA,"국민은행","취소자",
+                    guestPayment.setInfo(VBankPayment.VBankPaymentInfo.of(VBankConstants.HANA,"국민은행","취소자",
                             "123-3123123",false));
 
                     customProduct = CustomProduct.create(imageUrl, 1, "CANCELER-00"+c);
@@ -343,7 +340,7 @@ public class DBInitConfig {
 
                     Payment<? extends PaymentInfo> guestPayment = Payment.vbankOf();
                     guestPayment.associate(c_order);
-                    VBankPayment.VBankPaymentInfo prev = VBankPayment.VBankPaymentInfo.of(VBankConstants.VBANK_HANA, "국민은행", "취소자",
+                    VBankPayment.VBankPaymentInfo prev = VBankPayment.VBankPaymentInfo.of(VBankConstants.HANA, "국민은행", "취소자",
                             "123-3123123", false);
                     guestPayment.setInfo(VBankPayment.VBankPaymentInfo.ofRefund(prev, OrderCancelDto.Request.RefundVO.forTest()));
                     guestPayment.changeStatusToPaid();
@@ -365,8 +362,8 @@ public class DBInitConfig {
 
 
 
-                VBank vBank_hana = VBank.of(VBankConstants.VBANK_HANA);
-                VBank vBank_kb = VBank.of(VBankConstants.VBANK_KB);
+                VBank vBank_hana = VBank.of(BankType.valueOf(VBankConstants.HANA_BANK), VBankConstants.HANA_ACCOUNT, VBankConstants.HANA_HOLDER);
+                VBank vBank_kb = VBank.of(BankType.valueOf(VBankConstants.KB_BANK), VBankConstants.KB_ACCOUNT, VBankConstants.KB_HOLDER);
                 vBankRepository.saveAll(List.of(vBank_hana, vBank_kb));
 
                 // 아래 save가 없어도 DB엔 정상적으로 들어가지만, 테스트에선 반영이 안 됨.
