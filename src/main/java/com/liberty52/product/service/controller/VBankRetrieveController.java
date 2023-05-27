@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class VBankInfoRetrieveController {
+public class VBankRetrieveController {
 
     private final VBankRetrieveService vBankRetrieveService;
 
