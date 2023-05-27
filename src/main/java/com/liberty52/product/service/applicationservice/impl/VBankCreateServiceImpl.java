@@ -9,6 +9,7 @@ import com.liberty52.product.service.entity.payment.VBank;
 import com.liberty52.product.service.repository.VBankRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class VBankCreateServiceImpl implements VBankCreateService {
     private final VBankRepository vBankRepository;
 
     @Override
+    @Transactional
     public VBankDto createVBank(String role, String bank, String account, String holder) {
         Validator.isAdmin(role);
 

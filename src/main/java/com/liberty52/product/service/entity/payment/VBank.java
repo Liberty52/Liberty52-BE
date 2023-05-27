@@ -44,4 +44,11 @@ public class VBank {
         return VBank.of(bank, account, holder);
     }
 
+    public void update(BankType bank, String account, String holder) {
+        this.bank = bank;
+        this.account = account;
+        this.holder = holder;
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }
