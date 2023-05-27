@@ -21,7 +21,7 @@ public class VBankInfoRetrieveServiceImpl implements VBankInfoRetrieveService {
     public VBankInfoListResponseDto getVBankInfoList() {
         List<VBank> vbanks = vBankRepository.findAll();
         return VBankInfoListResponseDto.of(
-                vbanks.stream().map(vBank -> VBankInfoListResponseDto.VBankInfoDto.of(vBank.getAccount())).toList()
+                vbanks.stream().map(VBankInfoListResponseDto.VBankInfoDto::fromEntity).toList()
         );
     }
 }

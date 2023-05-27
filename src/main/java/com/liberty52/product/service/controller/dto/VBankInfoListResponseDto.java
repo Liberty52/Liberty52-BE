@@ -1,9 +1,7 @@
 package com.liberty52.product.service.controller.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.liberty52.product.service.entity.payment.VBank;
+import lombok.*;
 
 import java.util.List;
 
@@ -21,11 +19,20 @@ public class VBankInfoListResponseDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @Builder
     public static class VBankInfoDto {
+        private String bankOfVBank;
         private String account;
+        private String holder;
+        private String vBank;
 
-        public static VBankInfoDto of(String account) {
-            return new VBankInfoDto(account);
+        public static VBankInfoDto fromEntity(VBank vBank) {
+            return VBankInfoDto.builder()
+                    .bankOfVBank(vBank.getBank().getKoName())
+                    .account(vBank.getAccount())
+                    .holder(vBank.getHolder())
+                    .vBank(vBank.getBank().getKoName() + " " + vBank.getAccount() + " " + vBank.getHolder())
+                    .build();
         }
     }
 
