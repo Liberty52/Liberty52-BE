@@ -38,17 +38,17 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
   }
 
   @Override
-  public List<ProductOptionResponseDto> retrieveProductOptionInfoListByAdmin(String role, String productId, RetrieveProductOptionRequestDto dto) {
+  public List<ProductOptionResponseDto> retrieveProductOptionInfoListByAdmin(String role, String productId, boolean onSale) {
       Validator.isAdmin(role);
       Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
     if(product.getProductOptions().size() == 0){
         return Collections.emptyList();
     }
 
-    if(dto.getOnSale()){
-        return product.getProductOptions().stream().filter(ProductOption::isOnSale).map(productOption -> new ProductOptionResponseDto(productOption, dto)).collect(Collectors.toList());
+    if(onSale){
+        return product.getProductOptions().stream().filter(ProductOption::isOnSale).map(productOption -> new ProductOptionResponseDto(productOption, onSale)).collect(Collectors.toList());
     } else {
-        return product.getProductOptions().stream().sorted(Comparator.comparing(ProductOption::isOnSale).reversed()).map(productOption -> new ProductOptionResponseDto(productOption, dto)).collect(Collectors.toList());
+        return product.getProductOptions().stream().sorted(Comparator.comparing(ProductOption::isOnSale).reversed()).map(productOption -> new ProductOptionResponseDto(productOption, onSale)).collect(Collectors.toList());
 
     }
 

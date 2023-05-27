@@ -30,8 +30,8 @@ public class ProductInfoRetrieveController {
 
     @GetMapping("/admin/productOptionInfo/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductOptionResponseDto> retrieveProductOptionInfoListByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId, @Validated @RequestBody RetrieveProductOptionRequestDto dto) {
-        return productInfoRetrieveService.retrieveProductOptionInfoListByAdmin(role, productId, dto);
+    public List<ProductOptionResponseDto> retrieveProductOptionInfoListByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId, @RequestParam boolean onSale) {
+        return productInfoRetrieveService.retrieveProductOptionInfoListByAdmin(role, productId, onSale);
     }
 
     @GetMapping("/admin/productInfo")

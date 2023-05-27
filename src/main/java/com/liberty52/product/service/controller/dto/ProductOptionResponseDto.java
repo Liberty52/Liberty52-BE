@@ -23,17 +23,17 @@ public class ProductOptionResponseDto {
     boolean onSale;
     List<ProductOptionDetailResponseDto> optionDetailList;
 
-    public ProductOptionResponseDto(ProductOption productOption, RetrieveProductOptionRequestDto dto) {
-        optionId = productOption.getId();
-        optionName = productOption.getName();
-        require = productOption.isRequire();
-        onSale = productOption.isOnSale();
+    public ProductOptionResponseDto(ProductOption productOption, boolean onSale) {
+        this.optionId = productOption.getId();
+        this.optionName = productOption.getName();
+        this.require = productOption.isRequire();
+        this.onSale = productOption.isOnSale();
 
         if(productOption.getOptionDetails().size() == 0){
             optionDetailList = Collections.emptyList();
         }
 
-        if(dto.getOnSale()){
+        if(onSale){
             optionDetailList = productOption.getOptionDetails().stream().filter(OptionDetail::isOnSale).map(ProductOptionDetailResponseDto::new).collect(Collectors.toList());
 
         } else{
