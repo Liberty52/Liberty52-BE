@@ -8,12 +8,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class VBankInfoListResponseDto {
+public class VBankListResponseDto {
 
     private List<VBankInfoDto> vbankInfos;
 
-    public static VBankInfoListResponseDto of(List<VBankInfoDto> vbankInfos) {
-        return new VBankInfoListResponseDto(vbankInfos);
+    public static VBankListResponseDto of(List<VBankInfoDto> vbankInfos) {
+        return new VBankListResponseDto(vbankInfos);
     }
 
     @Getter

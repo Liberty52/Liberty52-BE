@@ -1,7 +1,7 @@
 package com.liberty52.product.service.applicationservice.impl;
 
-import com.liberty52.product.service.applicationservice.VBankInfoRetrieveService;
-import com.liberty52.product.service.controller.dto.VBankInfoListResponseDto;
+import com.liberty52.product.service.applicationservice.VBankRetrieveService;
+import com.liberty52.product.service.controller.dto.VBankListResponseDto;
 import com.liberty52.product.service.entity.payment.VBank;
 import com.liberty52.product.service.repository.VBankRepository;
 import jakarta.transaction.Transactional;
@@ -13,15 +13,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class VBankInfoRetrieveServiceImpl implements VBankInfoRetrieveService {
+public class VBankRetrieveServiceImpl implements VBankRetrieveService {
 
     private final VBankRepository vBankRepository;
 
     @Override
-    public VBankInfoListResponseDto getVBankInfoList() {
+    public VBankListResponseDto getVBankInfoList() {
         List<VBank> vbanks = vBankRepository.findAll();
-        return VBankInfoListResponseDto.of(
-                vbanks.stream().map(VBankInfoListResponseDto.VBankInfoDto::fromEntity).toList()
+        return VBankListResponseDto.of(
+                vbanks.stream().map(VBankListResponseDto.VBankInfoDto::fromEntity).toList()
         );
     }
 }
