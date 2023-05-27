@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -22,6 +23,8 @@ public class VBank {
     private BankType bank;
     private String account;
     private String holder;
+    private final LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime updatedAt;
 
     private VBank(BankType bank, String account, String holder) {
         this.bank = bank;
