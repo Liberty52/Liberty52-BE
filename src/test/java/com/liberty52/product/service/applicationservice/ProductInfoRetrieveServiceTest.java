@@ -62,7 +62,7 @@ public class ProductInfoRetrieveServiceTest {
         OptionDetail optionDetail = productOption.getOptionDetails().get(0);
 
         Assertions.assertEquals(detailDto.getOptionDetailName(), optionDetail.getName());
-        Assertions.assertEquals(detailDto.isOnSail(), optionDetail.isOnSale());
+        Assertions.assertEquals(detailDto.isOnSale(), optionDetail.isOnSale());
         Assertions.assertEquals(detailDto.getPrice(), optionDetail.getPrice());
 
     }
