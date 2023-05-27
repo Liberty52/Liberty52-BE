@@ -1,9 +1,6 @@
 package com.liberty52.product.service.entity.payment;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +17,10 @@ public class VBank {
 
     @Id
     private final String id = UUID.randomUUID().toString();
+    @Enumerated(EnumType.STRING)
+    private BankType bankOfVBank;
     private String account;
+    private String holder;
 
     private VBank(String account) {
         this.account = account;
