@@ -13,7 +13,7 @@ public class ProductOptionOnSailModifyRequestDto {
     @NotNull
     Boolean onSale;
 
-    public static ProductOptionOnSailModifyRequestDto create(boolean onSail){
-        return new ProductOptionOnSailModifyRequestDto(onSail);
+    public static ProductOptionOnSailModifyRequestDto create(boolean onSale){
+        return new ProductOptionOnSailModifyRequestDto(onSale);
     }
 }

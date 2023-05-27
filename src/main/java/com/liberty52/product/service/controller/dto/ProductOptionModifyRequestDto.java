@@ -20,7 +20,7 @@ public class ProductOptionModifyRequestDto {
     @NotNull
     Boolean onSale;
 
-    public static ProductOptionModifyRequestDto create(String name, boolean require, boolean onSail){
-        return new ProductOptionModifyRequestDto(name, require, onSail);
+    public static ProductOptionModifyRequestDto create(String name, boolean require, boolean onSale){
+        return new ProductOptionModifyRequestDto(name, require, onSale);
     }
 }

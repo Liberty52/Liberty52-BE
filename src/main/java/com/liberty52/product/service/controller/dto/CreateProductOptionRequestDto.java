@@ -18,9 +18,9 @@ public class CreateProductOptionRequestDto {
     Boolean require;
 
     @NotNull
-    Boolean onSail;
+    Boolean onSale;
 
-    public static CreateProductOptionRequestDto create(String name, boolean require, boolean onSail){
-        return new CreateProductOptionRequestDto(name, require, onSail);
+    public static CreateProductOptionRequestDto create(String name, boolean require, boolean onSale){
+        return new CreateProductOptionRequestDto(name, require, onSale);
     }
 }
