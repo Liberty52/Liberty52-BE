@@ -21,6 +21,7 @@ public class VBankListResponseDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Builder
     public static class VBankDto {
+        private String vBankId;
         private String bankOfVBank;
         private String account;
         private String holder;
@@ -28,6 +29,7 @@ public class VBankListResponseDto {
 
         public static VBankDto fromEntity(VBank vBank) {
             return VBankDto.builder()
+                    .vBankId(vBank.getId())
                     .bankOfVBank(vBank.getBank().getKoName())
                     .account(vBank.getAccount())
                     .holder(vBank.getHolder())
