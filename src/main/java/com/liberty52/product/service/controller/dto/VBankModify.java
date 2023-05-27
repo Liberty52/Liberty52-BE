@@ -31,7 +31,6 @@ public class VBankModify {
         private String accountNumber;
         private String holder;
         private String vBank;
-        private String createdAt;
         private String updatedAt;
 
         public static Response fromDto(VBankDto dto) {
@@ -41,7 +40,6 @@ public class VBankModify {
                     .accountNumber(dto.getAccountNumber())
                     .holder(dto.getHolder())
                     .vBank(dto.getVBank())
-                    .createdAt(dto.getCreatedAt().toString())
                     .updatedAt(dto.getUpdatedAt().toString())
                     .build();
         }
