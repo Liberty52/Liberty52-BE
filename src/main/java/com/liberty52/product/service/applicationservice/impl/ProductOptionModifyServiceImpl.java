@@ -4,10 +4,7 @@ import com.liberty52.product.global.exception.external.notfound.ResourceNotFound
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.ProductOptionModifyService;
 import com.liberty52.product.service.controller.dto.ProductOptionModifyRequestDto;
-<<<<<<< HEAD
-=======
 import com.liberty52.product.service.controller.dto.ProductOptionOnSailModifyRequestDto;
->>>>>>> dev
 import com.liberty52.product.service.entity.ProductOption;
 import com.liberty52.product.service.repository.ProductOptionRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,17 +26,9 @@ public class ProductOptionModifyServiceImpl implements ProductOptionModifyServic
     }
 
     @Override
-<<<<<<< HEAD
     public void modifyProductOptionOnSailStateByAdmin(String role, String productOptionId) {
         Validator.isAdmin(role);
         ProductOption productOption = productOptionRepository.findById(productOptionId).orElseThrow(() -> new ResourceNotFoundException("ProductOption", "ID", productOptionId));
         productOption.updateOnSale();
-=======
-    public void modifyProductOptionOnSailStateByAdmin(String role, String productOptionId, ProductOptionOnSailModifyRequestDto dto) {
-        Validator.isAdmin(role);
-        ProductOption productOption = productOptionRepository.findById(productOptionId).orElseThrow(() -> new ResourceNotFoundException("ProductOption", "ID", productOptionId));
-        productOption.updateOnSale(dto.getOnSale());
->>>>>>> dev
-
     }
 }
