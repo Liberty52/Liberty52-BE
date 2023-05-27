@@ -6,4 +6,5 @@ public interface ProductOptionModifyService {
     void modifyProductOptionByAdmin(String role, String productOptionId, ProductOptionModifyRequestDto dto);
 
     void modifyProductOptionOnSailStateByAdmin(String role, String productOptionId);
+
 }

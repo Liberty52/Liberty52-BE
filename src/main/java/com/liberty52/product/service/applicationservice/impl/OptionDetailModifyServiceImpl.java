@@ -28,5 +28,6 @@ public class OptionDetailModifyServiceImpl implements OptionDetailModifyService 
         Validator.isAdmin(role);
         OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId).orElseThrow(() -> new ResourceNotFoundException("OptionDetail", "ID", optionDetailId));
         optionDetail.updateOnSale();
+
     }
 }
