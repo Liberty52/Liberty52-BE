@@ -8,6 +8,7 @@ import com.liberty52.product.service.entity.payment.VBank;
 import com.liberty52.product.service.repository.VBankRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class VBankDeleteServiceImpl implements VBankDeleteService {
     private final VBankRepository vBankRepository;
 
     @Override
+    @Transactional
     public void deleteVBank(String role, String vBankId) {
         Validator.isAdmin(role);
 
