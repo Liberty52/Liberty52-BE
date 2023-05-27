@@ -69,7 +69,7 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
         List<Review> reviewList = reviewRepository.findAll();
 
         if(productList.size() == 0){
-            throw new ResourceNotFoundException("product", "product", "null");
+            throw new ResourceNotFoundException("product");
         }
 
         for (Product product : productList){
