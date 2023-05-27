@@ -71,7 +71,7 @@ public class DBInitConfig {
                 productRepository.save(product);
                 DBInitService.product = product;
 
-                ProductOption option1 = ProductOption.create(ProductConstants.PROD_OPT_1, true, true);
+                ProductOption option1 = ProductOption.create(ProductConstants.PROD_OPT_1, true, false);
                 option1.associate(product);
                 productOptionRepository.save(option1);
 
@@ -82,7 +82,7 @@ public class DBInitConfig {
                 detailEaselId.set(detailEasel, "OPT-001");
                 optionDetailRepository.save(detailEasel);
 
-                OptionDetail detailWall = OptionDetail.create("벽걸이형", 100,true);
+                OptionDetail detailWall = OptionDetail.create("벽걸이형", 100,false);
                 detailWall.associate(option1);
                 Field detailWallId = detailWall.getClass().getDeclaredField("id");
                 detailWallId.setAccessible(true);
@@ -111,7 +111,7 @@ public class DBInitConfig {
                 materialOption1Id.set(materialOption1, "OPT-004");
                 optionDetailRepository.save(materialOption1);
 
-                OptionDetail materialOption2 = OptionDetail.create("무광실버", 100,true);
+                OptionDetail materialOption2 = OptionDetail.create("무광실버", 100,false);
                 materialOption2.associate(option3);
                 optionDetailRepository.save(materialOption2);
 

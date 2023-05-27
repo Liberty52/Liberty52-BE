@@ -9,11 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -45,17 +42,19 @@ public class ProductInfoRetrieveServiceTest {
 
     @Test
     void 상품옵션조회(){
-        Product product = productRepository.findById("LIB-001").orElse(null);
 
-        List<ProductOptionResponseDto> productOptionResponseDtoList=productInfoRetrieveService.retrieveProductOptionInfoList("LIB-001");
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductOptionInfoList("null"));
+        Product product = productRepository.findById("LIB-001").orElse(null);
+        RetrieveProductOptionRequestDto dto = RetrieveProductOptionRequestDto.of(false);
+
+        List<ProductOptionResponseDto> productOptionResponseDtoList=productInfoRetrieveService.retrieveProductOptionInfoListByAdmin("LIB-001", dto);
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductOptionInfoListByAdmin("null", dto));
 
         Assertions.assertEquals(productOptionResponseDtoList.size(), product.getProductOptions().size());
         ProductOptionResponseDto optionDto = productOptionResponseDtoList.get(0);
         ProductOption productOption = product.getProductOptions().get(0);
 
         Assertions.assertEquals(optionDto.getOptionName(), productOption.getName());
-        Assertions.assertEquals(optionDto.isOnSail(), productOption.isOnSale());
+        Assertions.assertEquals(optionDto.isOnSale(), productOption.isOnSale());
         Assertions.assertEquals(optionDto.isRequire(), productOption.isRequire());
 
         Assertions.assertEquals(optionDto.getOptionDetailList().size(), productOption.getOptionDetails().size());
