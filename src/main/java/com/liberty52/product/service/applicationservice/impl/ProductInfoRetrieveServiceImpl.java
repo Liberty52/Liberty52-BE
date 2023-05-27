@@ -38,8 +38,9 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
   }
 
   @Override
-  public List<ProductOptionResponseDto> retrieveProductOptionInfoListByAdmin(String productId, RetrieveProductOptionRequestDto dto) {
-    Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
+  public List<ProductOptionResponseDto> retrieveProductOptionInfoListByAdmin(String role, String productId, RetrieveProductOptionRequestDto dto) {
+      Validator.isAdmin(role);
+      Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
     if(product.getProductOptions().size() == 0){
         return Collections.emptyList();
     }
