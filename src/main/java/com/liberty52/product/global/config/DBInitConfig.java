@@ -46,6 +46,7 @@ public class DBInitConfig {
         private final CartRepository cartRepository;
         private final CustomProductOptionRepository customProductOptionRepository;
         private final OrdersRepository ordersRepository;
+        private final DeliveryOptionRepository deliveryOptionRepository;
         public static final String AUTH_ID = "TESTER-001";
         public static final String LIBERTY = "Liberty 52_Frame";
         private static Orders order;
@@ -360,11 +361,12 @@ public class DBInitConfig {
                     ordersRepository.save(c_order);
                 }
 
-
-
                 VBank vBank_hana = VBank.of(BankType.valueOf(VBankConstants.HANA_BANK), VBankConstants.HANA_ACCOUNT, VBankConstants.HANA_HOLDER);
                 VBank vBank_kb = VBank.of(BankType.valueOf(VBankConstants.KB_BANK), VBankConstants.KB_ACCOUNT, VBankConstants.KB_HOLDER);
                 vBankRepository.saveAll(List.of(vBank_hana, vBank_kb));
+
+                DeliveryOption deliveryOption = DeliveryOption.feeOf(100000);
+                deliveryOptionRepository.save(deliveryOption);
 
                 // 아래 save가 없어도 DB엔 정상적으로 들어가지만, 테스트에선 반영이 안 됨.
                 DBInitService.order = ordersRepository.save(order);
