@@ -48,7 +48,7 @@ class DeliveryOptionModifyControllerTest {
                         .build());
         // when
         // then
-        mvc.perform(patch("/options/delivery/fee")
+        mvc.perform(patch("/admin/options/delivery/fee")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "ADMIN_ID")
                 .header("LB-Role", "ADMIN")
@@ -67,7 +67,7 @@ class DeliveryOptionModifyControllerTest {
         // given
         // when
         // then
-        mvc.perform(patch("/options/delivery/fee")
+        mvc.perform(patch("/admin/options/delivery/fee")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "ADMIN_ID")
                         .header("LB-Role", "ADMIN")
@@ -84,7 +84,7 @@ class DeliveryOptionModifyControllerTest {
         // given
         // when
         // then
-        mvc.perform(patch("/options/delivery/fee")
+        mvc.perform(patch("/admin/options/delivery/fee")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "ADMIN_ID")
                         .header("LB-Role", "ADMIN")
@@ -101,7 +101,7 @@ class DeliveryOptionModifyControllerTest {
         // given
         // when
         // then
-        mvc.perform(patch("/options/delivery/fee")
+        mvc.perform(patch("/admin/options/delivery/fee")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "ADMIN_ID")
                         .header("LB-Role", "ADMIN"))
