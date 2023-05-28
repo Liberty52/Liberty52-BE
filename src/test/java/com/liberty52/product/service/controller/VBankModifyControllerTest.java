@@ -39,7 +39,7 @@ class VBankModifyControllerTest {
     void updateVBank() throws Exception {
         LocalDateTime now = LocalDateTime.now();
         // given
-        given(vBankModifyService.updateVBank(anyString(), anyString(), anyString(), anyString(), anyString()))
+        given(vBankModifyService.updateVBankByAdmin(anyString(), anyString(), anyString(), anyString(), anyString()))
                 .willReturn(VBankDto.builder()
                         .vBankId("id")
                         .bankOfVBank("국민은행")

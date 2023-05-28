@@ -19,7 +19,7 @@ public class VBankCreateServiceImpl implements VBankCreateService {
 
     @Override
     @Transactional
-    public VBankDto createVBank(String role, String bank, String account, String holder) {
+    public VBankDto createVBankByAdmin(String role, String bank, String account, String holder) {
         Validator.isAdmin(role);
 
         BankType bankType = BankType.getBankType(bank);

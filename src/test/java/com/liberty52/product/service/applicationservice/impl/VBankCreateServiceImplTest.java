@@ -40,7 +40,7 @@ class VBankCreateServiceImplTest {
         ArgumentCaptor<VBank> captor = ArgumentCaptor.forClass(VBank.class);
 
         // when
-        VBankDto vBankDto = vBankCreateService.createVBank("ADMIN", "하나은행", "account", "holder");
+        VBankDto vBankDto = vBankCreateService.createVBankByAdmin("ADMIN", "하나은행", "account", "holder");
         
         // then
         verify(vBankRepository, times(1)).save(captor.capture());
@@ -61,7 +61,7 @@ class VBankCreateServiceImplTest {
         // then
         assertThrows(
                 InvalidRoleException.class,
-                () -> vBankCreateService.createVBank("NOT_ADMIN", "hana", "acc", "holder")
+                () -> vBankCreateService.createVBankByAdmin("NOT_ADMIN", "hana", "acc", "holder")
         );
     }
     
@@ -72,7 +72,7 @@ class VBankCreateServiceImplTest {
         // when
         BadRequestException exception = assertThrows(
                 BadRequestException.class,
-                () -> vBankCreateService.createVBank("ADMIN", "wrong", "acc", "holder")
+                () -> vBankCreateService.createVBankByAdmin("ADMIN", "wrong", "acc", "holder")
         );
         // then
         assertEquals("유효하지 않은 은행 종류입니다. 요청은행:wrong", exception.getErrorMessage());
@@ -87,7 +87,7 @@ class VBankCreateServiceImplTest {
         // when
         BadRequestException exception = assertThrows(
                 BadRequestException.class,
-                () -> vBankCreateService.createVBank("ADMIN", "하나은행", "acc", "holder")
+                () -> vBankCreateService.createVBankByAdmin("ADMIN", "하나은행", "acc", "holder")
         );
         // then
         assertEquals("이미 등록되어 있는 가상계좌입니다.", exception.getErrorMessage());

@@ -41,7 +41,7 @@ class VBankDeleteServiceImplTest {
                 .willReturn(5L);
         ArgumentCaptor<VBank> captor = ArgumentCaptor.forClass(VBank.class);
         // when
-        vBankDeleteService.deleteVBank("ADMIN", "m_vBankId");
+        vBankDeleteService.deleteVBankByAdmin("ADMIN", "m_vBankId");
         // then
         verify(vBankRepository, times(1)).delete(captor.capture());
         Assertions.assertEquals("m_vBankId", captor.getValue().getId());
@@ -54,7 +54,7 @@ class VBankDeleteServiceImplTest {
         // when
         InvalidRoleException exception = Assertions.assertThrows(
                 InvalidRoleException.class,
-                () -> vBankDeleteService.deleteVBank("NOT_ADMIN", "")
+                () -> vBankDeleteService.deleteVBankByAdmin("NOT_ADMIN", "")
         );
         // then
         Assertions.assertTrue(exception.getErrorMessage().contains("NOT_ADMIN"));
@@ -69,7 +69,7 @@ class VBankDeleteServiceImplTest {
         // when
         ResourceNotFoundException exception = Assertions.assertThrows(
                 ResourceNotFoundException.class,
-                () -> vBankDeleteService.deleteVBank("ADMIN", "")
+                () -> vBankDeleteService.deleteVBankByAdmin("ADMIN", "")
         );
         // then
         Assertions.assertTrue(exception.getErrorMessage().contains("VBANK"));
@@ -87,7 +87,7 @@ class VBankDeleteServiceImplTest {
         // when
         BadRequestException exception = Assertions.assertThrows(
                 BadRequestException.class,
-                () -> vBankDeleteService.deleteVBank("ADMIN", "m_vBankId")
+                () -> vBankDeleteService.deleteVBankByAdmin("ADMIN", "m_vBankId")
         );
         // then
         Assertions.assertTrue(exception.getErrorMessage().contains("가상계좌는 반드시 1개 이상 존재해야 합니다."));

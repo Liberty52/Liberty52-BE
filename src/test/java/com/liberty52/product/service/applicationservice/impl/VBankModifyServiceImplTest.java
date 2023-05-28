@@ -35,7 +35,7 @@ class VBankModifyServiceImplTest {
         given(vBankRepository.findById(anyString()))
                 .willReturn(Optional.of(MockFactory.mockVBank()));
         // when
-        VBankDto vBankDto = vBankModifyService.updateVBank("ADMIN", "m_vBankId", "국민은행",
+        VBankDto vBankDto = vBankModifyService.updateVBankByAdmin("ADMIN", "m_vBankId", "국민은행",
                 "u_account", "u_holder");
         // then
         Assertions.assertNotNull(vBankDto);
@@ -57,7 +57,7 @@ class VBankModifyServiceImplTest {
         // then
         Assertions.assertThrows(
                 InvalidRoleException.class,
-                () -> vBankModifyService.updateVBank("NOT_ADMIN","","","","")
+                () -> vBankModifyService.updateVBankByAdmin("NOT_ADMIN","","","","")
         );
     }
 
@@ -70,7 +70,7 @@ class VBankModifyServiceImplTest {
         // when
         ResourceNotFoundException exception = Assertions.assertThrows(
                 ResourceNotFoundException.class,
-                () -> vBankModifyService.updateVBank("ADMIN", "", "", "", "")
+                () -> vBankModifyService.updateVBankByAdmin("ADMIN", "", "", "", "")
         );
         // then
         Assertions.assertTrue(exception.getErrorMessage().contains("VBANK"));
@@ -86,7 +86,7 @@ class VBankModifyServiceImplTest {
         // when
         BadRequestException exception = Assertions.assertThrows(
                 BadRequestException.class,
-                () -> vBankModifyService.updateVBank("ADMIN", "m_vBankId", "wrong", "", "")
+                () -> vBankModifyService.updateVBankByAdmin("ADMIN", "m_vBankId", "wrong", "", "")
         );
         // then
         Assertions.assertTrue(exception.getErrorMessage().contains("유효하지 않은 은행 종류입니다."));

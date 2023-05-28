@@ -18,7 +18,7 @@ public class VBankDeleteServiceImpl implements VBankDeleteService {
 
     @Override
     @Transactional
-    public void deleteVBank(String role, String vBankId) {
+    public void deleteVBankByAdmin(String role, String vBankId) {
         Validator.isAdmin(role);
 
         VBank vBank = vBankRepository.findById(vBankId)

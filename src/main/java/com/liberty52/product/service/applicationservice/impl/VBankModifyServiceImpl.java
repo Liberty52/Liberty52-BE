@@ -20,7 +20,7 @@ public class VBankModifyServiceImpl implements VBankModifyService {
 
     @Override
     @Transactional
-    public VBankDto updateVBank(String role, String vBankId, String bank, String accountNumber, String holder) {
+    public VBankDto updateVBankByAdmin(String role, String vBankId, String bank, String accountNumber, String holder) {
         Validator.isAdmin(role);
 
         VBank vBank = vBankRepository.findById(vBankId)

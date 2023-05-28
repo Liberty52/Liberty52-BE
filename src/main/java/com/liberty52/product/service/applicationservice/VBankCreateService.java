@@ -4,6 +4,6 @@ import com.liberty52.product.service.controller.dto.VBankDto;
 
 public interface VBankCreateService {
 
-    VBankDto createVBank(String role, String bank, String account, String holder);
+    VBankDto createVBankByAdmin(String role, String bank, String account, String holder);
 
 }

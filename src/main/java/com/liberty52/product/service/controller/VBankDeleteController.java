@@ -14,10 +14,10 @@ public class VBankDeleteController {
 
     @DeleteMapping("/admin/vbanks/{vBankId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteVBank(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
-                            @RequestHeader("LB-Role") String role,
-                            @PathVariable String vBankId) {
-        vBankDeleteService.deleteVBank(role, vBankId);
+    public void deleteVBankByAdmin(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
+                                   @RequestHeader("LB-Role") String role,
+                                   @PathVariable String vBankId) {
+        vBankDeleteService.deleteVBankByAdmin(role, vBankId);
     }
 
 }

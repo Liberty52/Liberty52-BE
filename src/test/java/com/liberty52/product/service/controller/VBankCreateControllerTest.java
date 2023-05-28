@@ -36,7 +36,7 @@ class VBankCreateControllerTest {
     @DisplayName("controller-가상계좌 추가")
     void successCreateVBank() throws Exception {
         // given
-        given(vBankCreateService.createVBank(anyString(), anyString(), anyString(), anyString()))
+        given(vBankCreateService.createVBankByAdmin(anyString(), anyString(), anyString(), anyString()))
                 .willReturn(VBankDto.builder()
                         .vBankId("id")
                         .bankOfVBank("하나은행")

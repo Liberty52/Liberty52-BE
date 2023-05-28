@@ -32,7 +32,7 @@ class DeliveryOptionModifyServiceImplTest {
         given(deliveryOptionRepository.findById(anyLong()))
                 .willReturn(Optional.of(MockFactory.mockDeliveryOptionOnlyFee(100_000)));
         // when
-        DeliveryOptionDto dto = deliveryOptionModifyService.updateDefaultDeliveryFee("ADMIN", 200_000);
+        DeliveryOptionDto dto = deliveryOptionModifyService.updateDefaultDeliveryFeeByAdmin("ADMIN", 200_000);
         // then
         Assertions.assertNotNull(dto);
         Assertions.assertEquals(200_000, dto.getFee());

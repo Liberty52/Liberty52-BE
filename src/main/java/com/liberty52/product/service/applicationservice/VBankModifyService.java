@@ -4,6 +4,6 @@ import com.liberty52.product.service.controller.dto.VBankDto;
 
 public interface VBankModifyService {
 
-    VBankDto updateVBank(String role, String vBankId, String bank, String accountNumber, String holder);
+    VBankDto updateVBankByAdmin(String role, String vBankId, String bank, String accountNumber, String holder);
 
 }

@@ -16,11 +16,11 @@ public class VBankCreateController {
 
     @PostMapping("/admin/vbanks")
     @ResponseStatus(HttpStatus.CREATED)
-    public VBankCreate.Response createVBank(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
-                                            @RequestHeader("LB-Role") String role,
-                                            @RequestBody @Valid VBankCreate.Request request) {
+    public VBankCreate.Response createVBankByAdmin(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
+                                                   @RequestHeader("LB-Role") String role,
+                                                   @RequestBody @Valid VBankCreate.Request request) {
         return VBankCreate.Response.fromDto(
-            vBankCreateService.createVBank(role, request.getBank(), request.getAccountNumber(), request.getHolder())
+            vBankCreateService.createVBankByAdmin(role, request.getBank(), request.getAccountNumber(), request.getHolder())
         );
     }
 

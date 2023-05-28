@@ -16,12 +16,12 @@ public class VBankModifyController {
 
     @PutMapping("/admin/vbanks/{vBankId}")
     @ResponseStatus(HttpStatus.OK)
-    public VBankModify.Response updateVBank(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
-                                            @RequestHeader("LB-Role") String role,
-                                            @PathVariable String vBankId,
-                                            @RequestBody @Valid VBankModify.Request request) {
+    public VBankModify.Response updateVBankByAdmin(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
+                                                   @RequestHeader("LB-Role") String role,
+                                                   @PathVariable String vBankId,
+                                                   @RequestBody @Valid VBankModify.Request request) {
         return VBankModify.Response.fromDto(
-                vBankModifyService.updateVBank(role, vBankId, request.getBank(), request.getAccountNumber(), request.getHolder())
+                vBankModifyService.updateVBankByAdmin(role, vBankId, request.getBank(), request.getAccountNumber(), request.getHolder())
         );
     }
 }

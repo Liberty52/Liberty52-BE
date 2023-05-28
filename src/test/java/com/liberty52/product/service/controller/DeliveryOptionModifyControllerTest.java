@@ -40,7 +40,7 @@ class DeliveryOptionModifyControllerTest {
     void updateDefaultDeliveryFee() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        given(deliveryOptionModifyService.updateDefaultDeliveryFee(anyString(), anyInt()))
+        given(deliveryOptionModifyService.updateDefaultDeliveryFeeByAdmin(anyString(), anyInt()))
                 .willReturn(DeliveryOptionDto.builder()
                         .id(1L)
                         .fee(200_000)

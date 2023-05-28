@@ -18,7 +18,7 @@ public class DeliveryOptionModifyServiceImpl implements DeliveryOptionModifyServ
     
     @Override
     @Transactional
-    public DeliveryOptionDto updateDefaultDeliveryFee(String role, int fee) {
+    public DeliveryOptionDto updateDefaultDeliveryFeeByAdmin(String role, int fee) {
         Validator.isAdmin(role);
 
         DeliveryOption deliveryOption = deliveryOptionRepository.findById(1L)

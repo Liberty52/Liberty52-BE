@@ -16,11 +16,11 @@ public class DeliveryOptionModifyController {
 
     @PatchMapping("/admin/options/delivery/fee")
     @ResponseStatus(HttpStatus.OK)
-    public DeliveryOptionFeeModify.Response updateDefaultDeliveryFee(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
-                                                                     @RequestHeader("LB-Role") String role,
-                                                                     @RequestBody @Valid DeliveryOptionFeeModify.Request request) {
+    public DeliveryOptionFeeModify.Response updateDefaultDeliveryFeeByAdmin(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
+                                                                            @RequestHeader("LB-Role") String role,
+                                                                            @RequestBody @Valid DeliveryOptionFeeModify.Request request) {
         return DeliveryOptionFeeModify.Response.fromDto(
-                deliveryOptionModifyService.updateDefaultDeliveryFee(role, request.getFee())
+                deliveryOptionModifyService.updateDefaultDeliveryFeeByAdmin(role, request.getFee())
         );
     }
 }
