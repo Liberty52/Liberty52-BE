@@ -14,7 +14,7 @@ public class DeliveryOptionModifyController {
 
     private final DeliveryOptionModifyService deliveryOptionModifyService;
 
-    @PatchMapping("/options/delivery/fee")
+    @PatchMapping("/admin/options/delivery/fee")
     @ResponseStatus(HttpStatus.OK)
     public DeliveryOptionFeeModify.Response updateDefaultDeliveryFee(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
                                                                      @RequestHeader("LB-Role") String role,
