@@ -361,8 +361,8 @@ public class DBInitConfig {
                     ordersRepository.save(c_order);
                 }
 
-                VBank vBank_hana = VBank.of(BankType.valueOf(VBankConstants.HANA_BANK), VBankConstants.HANA_ACCOUNT, VBankConstants.HANA_HOLDER);
-                VBank vBank_kb = VBank.of(BankType.valueOf(VBankConstants.KB_BANK), VBankConstants.KB_ACCOUNT, VBankConstants.KB_HOLDER);
+                VBank vBank_hana = VBank.of(BankType.getBankType(VBankConstants.HANA_BANK), VBankConstants.HANA_ACCOUNT, VBankConstants.HANA_HOLDER);
+                VBank vBank_kb = VBank.of(BankType.getBankType(VBankConstants.KB_BANK), VBankConstants.KB_ACCOUNT, VBankConstants.KB_HOLDER);
                 vBankRepository.saveAll(List.of(vBank_hana, vBank_kb));
 
                 DeliveryOption deliveryOption = DeliveryOption.feeOf(100000);
