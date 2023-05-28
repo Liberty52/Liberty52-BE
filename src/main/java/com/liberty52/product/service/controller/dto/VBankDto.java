@@ -24,7 +24,7 @@ public class VBankDto {
                 .bankOfVBank(vBank.getBank().getKoName())
                 .accountNumber(vBank.getAccount())
                 .holder(vBank.getHolder())
-                .vBank(vBank.getBank().getKoName() + " " + vBank.getAccount() + " " + vBank.getHolder())
+                .vBank(vBank.getOneLineVBankInfo())
                 .createdAt(vBank.getCreatedAt())
                 .updatedAt(vBank.getUpdatedAt())
                 .build();

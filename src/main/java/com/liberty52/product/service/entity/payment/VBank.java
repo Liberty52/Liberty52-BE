@@ -51,4 +51,7 @@ public class VBank {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public String getOneLineVBankInfo() {
+        return this.bank.getKoName() + " " + this.account + " " + this.holder;
+    }
 }
