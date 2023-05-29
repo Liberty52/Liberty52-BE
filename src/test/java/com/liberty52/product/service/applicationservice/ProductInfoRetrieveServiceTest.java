@@ -42,10 +42,12 @@ public class ProductInfoRetrieveServiceTest {
 
     @Test
     void 상품옵션조회(){
+        String role = "ADMIN";
         Product product = productRepository.findById("LIB-001").orElse(null);
+        boolean onSale = false;
 
-        List<ProductOptionResponseDto> productOptionResponseDtoList=productInfoRetrieveService.retrieveProductOptionInfoList("LIB-001");
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductOptionInfoList("null"));
+        List<ProductOptionResponseDto> productOptionResponseDtoList=productInfoRetrieveService.retrieveProductOptionInfoListByAdmin(role, "LIB-001", onSale);
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductOptionInfoListByAdmin(role, "null", onSale));
 
         Assertions.assertEquals(productOptionResponseDtoList.size(), product.getProductOptions().size());
         ProductOptionResponseDto optionDto = productOptionResponseDtoList.get(0);
