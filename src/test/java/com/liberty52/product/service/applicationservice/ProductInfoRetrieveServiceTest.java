@@ -9,11 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -88,7 +85,7 @@ public class ProductInfoRetrieveServiceTest {
         Assertions.assertEquals(dto.getPrice(), 100);
         Assertions.assertEquals(dto.getMeanRating(), sum/reviewList.size());
         Assertions.assertEquals(dto.getRatingCount(), reviewList.size());
-        Assertions.assertEquals(dto.getState(), ProductState.ON_SAIL);
+        Assertions.assertEquals(dto.getState(), ProductState.ON_SALE);
     }
 
     @Test
@@ -106,7 +103,7 @@ public class ProductInfoRetrieveServiceTest {
         Assertions.assertEquals(dto.getPrice(), 100);
         Assertions.assertEquals(dto.getMeanRating(), sum/reviewList.size());
         Assertions.assertEquals(dto.getRatingCount(), reviewList.size());
-        Assertions.assertEquals(dto.getState(), ProductState.ON_SAIL);
+        Assertions.assertEquals(dto.getState(), ProductState.ON_SALE);
         Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductByAdmin(ADMIN, "null"));
 
     }
