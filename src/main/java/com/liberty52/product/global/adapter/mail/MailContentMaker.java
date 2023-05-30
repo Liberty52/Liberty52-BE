@@ -26,7 +26,7 @@ public class MailContentMaker {
         String vBankInfo = ((VBankPayment.VBankPaymentInfo)(order.getPayment().getInfoAsDto())).getVbankInfo();
         String customerName = order.getOrderDestination().getReceiverName();
         String orderNum = order.getOrderNum();
-        String orderedDate = order.getOrderedAt().format(Utils.DATE_FORMAT_DAY);
+        String orderedDate = order.getOrderedAt().format(Utils.DATE_FORMAT_DATE);
         String receiverName = order.getOrderDestination().getReceiverName();
         String receiverPhone = order.getOrderDestination().getReceiverPhoneNumber();
         String address1 = "(" + order.getOrderDestination().getZipCode() + ")" + " " + order.getOrderDestination().getAddress1();
@@ -53,7 +53,7 @@ public class MailContentMaker {
         // 기본정보
         String customerName = order.getOrderDestination().getReceiverName();
         String orderNum = order.getOrderNum();
-        String orderedDate = order.getOrderedAt().format(Utils.DATE_FORMAT_DAY);
+        String orderedDate = order.getOrderedAt().format(Utils.DATE_FORMAT_DATE);
 
         // 배송정보
         String receiverName = order.getOrderDestination().getReceiverName();
@@ -66,7 +66,7 @@ public class MailContentMaker {
         String cardName = paymentInfo.getCardName();
         String cardNumber = paymentInfo.getCardNumber();
         String cardQuota = paymentInfo.getCardQuota() > 0 ? paymentInfo.getCardQuota()+"개월" : "일시불";
-        String paidAt = paymentInfo.getPaidAt().format(Utils.DATE_FORMAT_DAY);
+        String paidAt = paymentInfo.getPaidAt().format(Utils.DATE_FORMAT_DATE);
 
         // 주문상품 정보
         String productInfo = orderedProductInfoSection(order);
@@ -88,7 +88,7 @@ public class MailContentMaker {
         // 기본정보
         String customerName = order.getOrderDestination().getReceiverName();
         String orderNum = order.getOrderNum();
-        String orderedDate = order.getOrderedAt().format(Utils.DATE_FORMAT_DAY);
+        String orderedDate = order.getOrderedAt().format(Utils.DATE_FORMAT_DATE);
 
         // 배송정보
         String receiverName = order.getOrderDestination().getReceiverName();
@@ -103,7 +103,7 @@ public class MailContentMaker {
         String depositorName = paymentInfo.getDepositorName();
         String depositorAcc = paymentInfo.getDepositorAccount();
         String isApplyCashReceipt = paymentInfo.getIsApplyCashReceipt() ? "신청" : "미신청";
-        String paidAt = paymentInfo.getPaidAt().format(Utils.DATE_FORMAT_DAY);
+        String paidAt = paymentInfo.getPaidAt().format(Utils.DATE_FORMAT_DATE);
 
         // 주문 상품 정보
         String productInfo = orderedProductInfoSection(order);
@@ -142,7 +142,7 @@ public class MailContentMaker {
     public static String makeOrderCanceledContent(String contentTitle, Orders order) {
         String customerName = order.getOrderDestination().getReceiverName();
         String orderNum = order.getOrderNum();
-        String orderDate = order.getOrderedAt().format(Utils.DATE_FORMAT_DAY);
+        String orderDate = order.getOrderedAt().format(Utils.DATE_FORMAT_DATE);
         String cancelReason = order.getCanceledOrders().getReason();
 
         String orderAmount = PRICE_FORMAT.format(order.getAmount() - order.getDeliveryPrice());
