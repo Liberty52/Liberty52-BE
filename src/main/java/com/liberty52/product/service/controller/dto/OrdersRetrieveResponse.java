@@ -30,7 +30,7 @@ public class OrdersRetrieveResponse {
 
     public OrdersRetrieveResponse(Orders orders) {
         this.orderId = orders.getId();
-        this.orderDate = orders.getOrderDate().toString();
+        this.orderDate = orders.getOrderedAt().toString();
         this.orderStatus = orders.getOrderStatus().name();
         this.address = orders.getOrderDestination().getAddress1() + " " + orders.getOrderDestination().getAddress2();
         this.receiverName = orders.getOrderDestination().getReceiverName();

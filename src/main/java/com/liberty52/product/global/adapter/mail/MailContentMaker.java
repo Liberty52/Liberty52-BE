@@ -30,7 +30,7 @@ public class MailContentMaker {
         String vBankInfo = ((VBankPayment.VBankPaymentInfo)(order.getPayment().getInfoAsDto())).getVbankInfo();
         String customerName = order.getOrderDestination().getReceiverName();
         String orderNum = order.getOrderNum();
-        String orderedDate = order.getOrderDate().format(DATE_FORMAT);
+        String orderedDate = order.getOrderedAt().format(DATE_FORMAT);
         String receiverName = order.getOrderDestination().getReceiverName();
         String receiverPhone = order.getOrderDestination().getReceiverPhoneNumber();
         String address1 = "(" + order.getOrderDestination().getZipCode() + ")" + " " + order.getOrderDestination().getAddress1();
@@ -57,7 +57,7 @@ public class MailContentMaker {
         // 기본정보
         String customerName = order.getOrderDestination().getReceiverName();
         String orderNum = order.getOrderNum();
-        String orderedDate = order.getOrderDate().format(DATE_FORMAT);
+        String orderedDate = order.getOrderedAt().format(DATE_FORMAT);
 
         // 배송정보
         String receiverName = order.getOrderDestination().getReceiverName();
@@ -92,7 +92,7 @@ public class MailContentMaker {
         // 기본정보
         String customerName = order.getOrderDestination().getReceiverName();
         String orderNum = order.getOrderNum();
-        String orderedDate = order.getOrderDate().format(DATE_FORMAT);
+        String orderedDate = order.getOrderedAt().format(DATE_FORMAT);
 
         // 배송정보
         String receiverName = order.getOrderDestination().getReceiverName();
@@ -146,7 +146,7 @@ public class MailContentMaker {
     public static String makeOrderCanceledContent(String contentTitle, Orders order) {
         String customerName = order.getOrderDestination().getReceiverName();
         String orderNum = order.getOrderNum();
-        String orderDate = order.getOrderDate().format(DATE_FORMAT);
+        String orderDate = order.getOrderedAt().format(DATE_FORMAT);
         String cancelReason = order.getCanceledOrders().getReason();
 
         String orderAmount = PRICE_FORMAT.format(order.getAmount() - order.getDeliveryPrice());

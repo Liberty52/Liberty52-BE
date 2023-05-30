@@ -63,7 +63,7 @@ public class AdminOrderListResponse {
             response.orderId = entity.getId();
             response.orderNumber = entity.getOrderNum();
             response.productName = getProductName(entity);
-            response.orderDate = entity.getOrderDate().toString();
+            response.orderDate = entity.getOrderedAt().toString();
             response.customerId = entity.getAuthId();
             response.orderStatus = entity.getOrderStatus().getName();
             return response;
