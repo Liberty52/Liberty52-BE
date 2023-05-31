@@ -66,7 +66,7 @@ public class AdminCanceledOrderListResponse {
             response.productName = getProductName(entity);
             response.orderDate = entity.getOrderDate().toString();
             response.customerId = entity.getAuthId();
-            response.orderStatus = entity.getOrderStatus().name();
+            response.orderStatus = entity.getOrderStatus().getKoName();
             response.reqAt = entity.getCanceledOrders().getReqAt().format(Utils.DATE_FORMAT_CUSTOM);
             response.canceledAt = entity.getCanceledOrders().getCanceledAt() != null ?
                     entity.getCanceledOrders().getCanceledAt().format(Utils.DATE_FORMAT_CUSTOM) : "대기중";
