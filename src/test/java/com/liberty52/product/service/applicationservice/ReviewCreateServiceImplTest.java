@@ -10,6 +10,7 @@ import com.liberty52.product.global.exception.external.badrequest.ReviewCannotWr
 import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
 import com.liberty52.product.service.entity.Cart;
 import com.liberty52.product.service.entity.CustomProduct;
+import com.liberty52.product.service.entity.OrderStatus;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.entity.Product;
 import com.liberty52.product.service.entity.ProductState;
@@ -21,6 +22,7 @@ import com.liberty52.product.service.repository.ReviewRepository;
 import com.liberty52.product.service.utils.MockFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -58,7 +60,7 @@ class ReviewCreateServiceImplTest extends MockS3Test {
 
 
   @BeforeEach
-  void setMockCustomProductData() throws IOException {
+  void setMockCustomProductData() throws IOException, NoSuchFieldException, IllegalAccessException {
     imageFile = new MockMultipartFile("image", "test.png", "image/jpeg",
         new FileInputStream(mockImageUrl));
 
@@ -67,7 +69,9 @@ class ReviewCreateServiceImplTest extends MockS3Test {
     productRepository.save(product);
 
     order = MockFactory.createOrder(MOCK_AUTH_ID, null);
-    order.changeOrderStatusToComplete();
+    Field orderStatus = order.getClass().getDeclaredField("orderStatus");
+    orderStatus.setAccessible(true);
+    orderStatus.set(order, OrderStatus.COMPLETE);
     ordersRepository.save(order);
 
     customProduct = MockFactory.createCustomProduct(mockImageUrl, 1, MOCK_AUTH_ID);
