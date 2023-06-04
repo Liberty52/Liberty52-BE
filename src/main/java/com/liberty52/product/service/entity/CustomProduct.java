@@ -94,7 +94,6 @@ public class CustomProduct {
         verifyQuantity();
         this.orders = orders;
         orders.addCustomProduct(this);
-        this.options.forEach(CustomProductOption::fixOption);
     }
 
     public void dissociateCart() {

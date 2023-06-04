@@ -121,7 +121,7 @@ public class Orders {
             totalAmount.getAndAdd(customProduct.getProduct().getPrice());
             // 옵션 추가금액
             customProduct.getOptions().forEach(customProductOption ->
-                        totalAmount.getAndAdd(customProductOption.getPrice()));
+                        totalAmount.getAndAdd(customProductOption.getOptionDetail().getPrice()));
             // 수량
             totalAmount.getAndUpdate(x -> customProduct.getQuantity() * x);
         });
@@ -154,7 +154,7 @@ public class Orders {
     public void finishCreation() {
         this.customProducts.forEach(e -> {
             e.dissociateCart();
-            e.getOptions().forEach(CustomProductOption::dissociateOptionDetail);
+            e.getOptions().forEach(CustomProductOption::setOptionDetailAndDissociate);
         });
     }
 
