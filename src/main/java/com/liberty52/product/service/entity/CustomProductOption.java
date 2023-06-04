@@ -51,10 +51,10 @@ public class CustomProductOption {
         price = optionDetail.getPrice();
         detailName = optionDetail.getName();
         optionName = optionDetail.getProductOption().getName();
-        removeAssociateWithOptionDetail();
     }
 
-    private void removeAssociateWithOptionDetail() {
-        optionDetail = null;
+    public void dissociateOptionDetail() {
+        this.optionDetail = null;
     }
+
 }

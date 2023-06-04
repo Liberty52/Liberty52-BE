@@ -94,7 +94,11 @@ public class CustomProduct {
         verifyQuantity();
         this.orders = orders;
         orders.addCustomProduct(this);
-        removedFromCart();
+        this.options.forEach(CustomProductOption::fixOption);
+    }
+
+    public void dissociateCart() {
+        this.cart = null;
     }
 
     public void addOption(CustomProductOption customProductOption) {
@@ -111,16 +115,16 @@ public class CustomProduct {
             throw new InvalidQuantityException();
     }
 
-    private void removedFromCart() {
-        this.cart = null;
-    }
-
     private void removedFromOrder() {
         this.orders = null;
     }
 
     public boolean isInCart() {
         return (this.cart != null) && (this.orders == null);
+    }
+
+    public boolean isInOnlyCart() {
+        return this.cart != null;
     }
 
     public boolean isInOrder() {
