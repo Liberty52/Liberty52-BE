@@ -107,6 +107,9 @@ public class Orders {
     public void changeOrderStatusToWaitingDeposit() {
         this.orderStatus = OrderStatus.WAITING_DEPOSIT;
     }
+    public void changeOrderStatusToComplete() {
+        this.orderStatus = OrderStatus.COMPLETE;
+    }
 
     public void calculateTotalValueAndSet() {
         this.calcTotalAmountAndSet();
