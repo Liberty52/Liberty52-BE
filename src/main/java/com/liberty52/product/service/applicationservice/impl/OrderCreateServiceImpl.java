@@ -48,7 +48,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     private final CustomProductOptionRepository customProductOptionRepository;
     private final ConfirmPaymentMapRepository confirmPaymentMapRepository;
     private final VBankRepository vBankRepository;
-    private final CartRepository cartRepository;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* API method area */
