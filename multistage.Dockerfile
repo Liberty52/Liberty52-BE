@@ -1,3 +1,4 @@
+FROM gradle:7.4-jdk17 AS builder
 WORKDIR /app
 COPY build.gradle .
 COPY settings.gradle .
