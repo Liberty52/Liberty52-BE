@@ -10,4 +10,6 @@ VOLUME /tmp
 ARG JAR_FILE=/app/build/libs/*.jar
 COPY --from=builder ${JAR_FILE} app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar", "app.jar"]
+ARG SPRING_PROFILES_ACTIVE=dev
+ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
+ENTRYPOINT ["java","-jar", "app.jar","-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}"]
