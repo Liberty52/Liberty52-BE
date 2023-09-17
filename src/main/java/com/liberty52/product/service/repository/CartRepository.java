@@ -14,6 +14,4 @@ public interface CartRepository extends JpaRepository<Cart, String> {
 
     List<Cart> findByExpiryDateLessThan(LocalDate expiryDate);
 
-    void deleteByAuthId(String authId);
-
 }

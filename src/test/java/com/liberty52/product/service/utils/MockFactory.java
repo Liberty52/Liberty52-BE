@@ -41,7 +41,8 @@ public class MockFactory {
     }
 
     public static Orders createOrder(String authId, List<CustomProduct> customProducts) {
-        return Orders.create(authId, 0,null);
+        OrderDestination orderDestination = OrderDestination.create("", "", "", "", "", "");
+        return Orders.create(authId, 0,orderDestination);
     }
 
     public static List<OrdersRetrieveResponse> createMockOrderRetrieveResponseList(){
@@ -71,6 +72,7 @@ public class MockFactory {
                 ,MOCK_QUANTITY
                 ,MOCK_PRICE,
                 MOCK_PRODUCT_REPRESENT_URL,
+                false,
                 null);
     }
 

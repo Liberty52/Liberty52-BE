@@ -11,7 +11,10 @@ import com.liberty52.product.global.exception.external.internalservererror.Confi
 import com.liberty52.product.global.exception.external.notfound.OrderNotFoundByIdException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
-import com.liberty52.product.service.controller.dto.*;
+import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
+import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
+import com.liberty52.product.service.controller.dto.PaymentConfirmResponseDto;
+import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.entity.payment.Payment;
 import com.liberty52.product.service.entity.payment.VBank;
@@ -23,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -46,7 +48,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     private final CustomProductOptionRepository customProductOptionRepository;
     private final ConfirmPaymentMapRepository confirmPaymentMapRepository;
     private final VBankRepository vBankRepository;
-    private final CartRepository cartRepository;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* API method area */
@@ -68,6 +69,8 @@ public class OrderCreateServiceImpl implements OrderCreateService {
 
         return switch (orders.getPayment().getStatus()) {
             case PAID -> {
+                this.finishCreation(orders);
+
                 Events.raise(new CardOrderedCompletedEvent(orders));
                 yield PaymentConfirmResponseDto.of(orderId, orders.getOrderNum());
             }
@@ -149,12 +152,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         OrderDestination orderDestination = this.createOrderDestination(dto);
         Orders order = ordersRepository.save(Orders.create(authId, orderDestination)); // OrderDestination will be saved by cascading
 
-        customProducts.forEach(customProduct -> {
-            customProduct.associateWithOrder(order);
-            customProduct.getOptions().stream()
-                    .peek(CustomProductOption::fixOption)
-                    .close();
-        });
+        customProducts.forEach(customProduct -> customProduct.associateWithOrder(order));
 
         order.calculateTotalValueAndSet();
 
@@ -197,7 +195,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         CustomProductOption customProductOption = CustomProductOption.create();
         customProductOption.associate(customProduct);
         customProductOption.associate(detail);
-        customProductOption.fixOption();
         customProductOptionRepository.save(customProductOption);
     }
 
@@ -217,6 +214,8 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         Payment<?> payment = Payment.vbankOf();
         payment.associate(order);
         payment.setInfo(VBankPayment.VBankPaymentInfo.ofWaitingDeposit(dto.getVbankDto()));
+
+        this.finishCreation(order);
 
         Events.raise(new OrderRequestDepositEvent(order));
     }
@@ -246,41 +245,8 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         }
     }
 
-    @Override
-    @Deprecated
-    public MonoItemOrderResponseDto save(String authId, MultipartFile imageFile, MonoItemOrderRequestDto dto) {
-        // Valid and get resources
-        Product product = productRepository.findByName(dto.getProductName())
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_PRODUCT, PARAM_NAME_PRODUCT_NAME, dto.getProductName()));
-        List<OptionDetail> details = new ArrayList<>();
-        for (String optionName : dto.getOptions()) {
-            OptionDetail optionDetail = optionDetailRepository.findByName(optionName)
-                    .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_OPTION_DETAIL, PARAM_NAME_OPTION_DETAIL_NAME, optionName));
-            details.add(optionDetail);
-        }
-
-        OrderDestination orderDestination = OrderDestination.create("", "", "", "", "", "");
-
-        // Save Order
-        Orders order = ordersRepository.save(Orders.create(authId, dto.getDeliveryPrice(), orderDestination)); // OrderDestination will be saved by cascading
-
-        // Upload Image
-        String imgUrl = s3Uploader.upload(imageFile);
-
-        // Save CustomProduct
-        CustomProduct customProduct = CustomProduct.create(imgUrl, dto.getQuantity(), authId);
-        customProduct.associateWithProduct(product);
-        customProduct.associateWithOrder(order);
-        customProduct = customProductRepository.save(customProduct);
-
-        // Save CustomProductOption
-        for (OptionDetail detail : details) {
-            CustomProductOption customProductOption = customProductOptionRepository.save(CustomProductOption.create());
-            customProductOption.associate(customProduct);
-            customProductOption.associate(detail);
-        }
-
-        return MonoItemOrderResponseDto.create(order.getId(), order.getOrderedAt(), order.getOrderStatus());
+    private void finishCreation(Orders order) {
+        order.finishCreation();
     }
 
 }

@@ -37,7 +37,7 @@ public class CustomProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToMany(mappedBy = "customProduct")
+    @OneToMany(mappedBy = "customProduct", orphanRemoval = true)
     private List<CustomProductOption> options = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -47,6 +47,9 @@ public class CustomProduct {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Orders orders;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "customProduct", cascade = CascadeType.ALL)
+    private Review review;
 
     public Map<String, String> getOptionsMap() {
         Map<String, String> optionsMap = new HashMap<>();
@@ -94,7 +97,15 @@ public class CustomProduct {
         verifyQuantity();
         this.orders = orders;
         orders.addCustomProduct(this);
-        removedFromCart();
+    }
+    public void associateWithReview(Review review) {
+        Objects.requireNonNull(review);
+        this.review = review;
+        this.review.associate(this);
+    }
+
+    public void dissociateCart() {
+        this.cart = null;
     }
 
     public void addOption(CustomProductOption customProductOption) {
@@ -111,16 +122,16 @@ public class CustomProduct {
             throw new InvalidQuantityException();
     }
 
-    private void removedFromCart() {
-        this.cart = null;
-    }
-
     private void removedFromOrder() {
         this.orders = null;
     }
 
     public boolean isInCart() {
         return (this.cart != null) && (this.orders == null);
+    }
+
+    public boolean isInOnlyCart() {
+        return this.cart != null;
     }
 
     public boolean isInOrder() {
@@ -134,4 +145,6 @@ public class CustomProduct {
     public void modifyQuantity(int quantity){
         this.quantity = quantity;
     }
+
+
 }
