@@ -32,7 +32,6 @@ public class Product {
 
     private String pictureUrl;
 
-    @Column(nullable = false)
     private String productIntroductionImageUrl;
 
     @Builder

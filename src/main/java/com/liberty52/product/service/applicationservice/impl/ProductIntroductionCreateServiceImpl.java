@@ -25,8 +25,10 @@ public class ProductIntroductionCreateServiceImpl implements ProductIntroduction
 		Validator.isAdmin(role);
 		Product product = productRepository.findById(productId)
 			.orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
-		String imageUrl = uploadImage(productIntroductionImageFile);
-		product.createProductIntroduction(imageUrl);
+		if (productIntroductionImageFile != null) {
+			String imageUrl = uploadImage(productIntroductionImageFile);
+			product.createProductIntroduction(imageUrl);
+		}
 	}
 
 	private String uploadImage(MultipartFile multipartFile) {
