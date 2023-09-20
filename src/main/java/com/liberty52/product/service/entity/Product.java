@@ -32,6 +32,9 @@ public class Product {
 
     private String pictureUrl;
 
+    @Column(nullable = false)
+    private String productIntroductionImageUrl;
+
     @Builder
     private Product(String name, ProductState productState, Long price) {
         this.name = name;
@@ -39,6 +42,9 @@ public class Product {
         this.price = price;
     }
 
+    public void createProductIntroduction(String productIntroductionImageUrl) {
+        this.productIntroductionImageUrl = productIntroductionImageUrl;
+    }
     public void addOption(ProductOption productOption) {
         this.productOptions.add(productOption);
     }
