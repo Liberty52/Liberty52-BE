@@ -1,9 +1,8 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Dev Image
 
 on:
   push:
     branches:
-      - main
       - dev
 
 jobs:
@@ -28,12 +27,6 @@ jobs:
           docker build --build-arg SPRING_PROFILES_ACTIVE=dev -t my-product-server:latest -f multistage.Dockerfile .
           docker tag my-product-server:latest ghcr.io/liberty52/liberty52-product-server:dev-v${{ github.sha }}
           docker push ghcr.io/liberty52/liberty52-product-server:dev-v${{ github.sha }}
-
-      - name: Build and Push Docker Prod Image
-        run: |
-          docker build --build-arg SPRING_PROFILES_ACTIVE=prod -t my-product-server:latest -f multistage.Dockerfile .
-          docker tag my-product-server:latest ghcr.io/liberty52/liberty52-product-server:prod-v${{ github.sha }}
-          docker push ghcr.io/liberty52/liberty52-product-server:prod-v${{ github.sha }}
 
       - name: Clean up
         run: docker logout ghcr.io
