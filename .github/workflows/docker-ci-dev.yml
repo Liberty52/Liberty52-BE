@@ -33,7 +33,7 @@ jobs:
           docker push ghcr.io/liberty52/liberty52-product-server:dev-v${{ github.sha }}
 
       - name: Create Release
-        if: github.ref == 'refs/heads/dev'
+#        if: github.ref == 'refs/heads/dev'
         run: |
           RELEASE_NAME="v-$(date +'%Y.%m.%d-%H%M%S')"
           git tag "$RELEASE_NAME"
