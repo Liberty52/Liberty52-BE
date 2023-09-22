@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - dev
-      - ci/docker-ci-pipeline
 
 jobs:
   build-and-push:
@@ -32,8 +31,8 @@ jobs:
         run: |
           RELEASE_NAME="${{ steps.release_name.outputs.release_name }}"
           docker build --build-arg SPRING_PROFILES_ACTIVE=dev -t my-product-server:latest -f multistage.Dockerfile .
-          docker tag my-product-server:latest ghcr.io/liberty52/liberty52-product-server:dev-v$RELEASE_NAME
-          docker push ghcr.io/liberty52/liberty52-product-server:dev-v$RELEASE_NAME
+          docker tag my-product-server:latest ghcr.io/liberty52/liberty52-product-server:dev$RELEASE_NAME
+          docker push ghcr.io/liberty52/liberty52-product-server:dev$RELEASE_NAME
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
