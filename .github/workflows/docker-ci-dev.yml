@@ -30,27 +30,22 @@ jobs:
           docker push ghcr.io/liberty52/liberty52-product-server:dev-v${{ github.sha }}
 
 
-      - name: Create Release Tag
-        if: github.ref == 'refs/heads/ci/docker-ci-pipeline'
-        run: |
-          RELEASE_NAME="v-$(date +'%Y.%m.%d-%H%M%S')"
-          git tag "$RELEASE_NAME"
-          git push origin "$RELEASE_NAME"
-
       - name: Create GitHub Release
         if: github.ref == 'refs/heads/ci/docker-ci-pipeline'
         env:
-          GITHUB_TOKEN: ${{ secrets.GTOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GHTOKEN }}
         run: |
           RELEASE_NAME="v-$(date +'%Y.%m.%d-%H%M%S')"
           git tag "$RELEASE_NAME"
           git push origin "$RELEASE_NAME"
-
-          # Get commit messages between the previous release and the current commit
-          PREVIOUS_RELEASE=$(git describe --tags --abbrev=0 HEAD^)
-          COMMIT_MESSAGES=$(git log --pretty=format:"- %s%n" "$PREVIOUS_RELEASE"..HEAD)
-
-          # Create the release with commit messages
+          
+          PREVIOUS_RELEASE=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -z "$PREVIOUS_RELEASE" ]; then
+            COMMIT_MESSAGES=$(git log --pretty=format:"- %s%n")
+          else
+            COMMIT_MESSAGES=$(git log --pretty=format:"- %s%n" "$PREVIOUS_RELEASE"..HEAD)
+          fi
+          
           curl -X POST \
             -H "Authorization: token $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
