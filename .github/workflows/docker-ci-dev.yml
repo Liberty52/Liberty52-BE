@@ -23,34 +23,29 @@ jobs:
       - name: Login to GitHub Container Registry
         run: echo ${{ secrets.GTOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+      - name: Create Release Name
+        id: release_name
+        run: |
+          echo "::set-output name=release_name::v-$(date +'%Y.%m.%d-%H%M%S')"
+
       - name: Build And Push Docker Dev Image
         run: |
+          RELEASE_NAME="${{ steps.release_name.outputs.release_name }}"
           docker build --build-arg SPRING_PROFILES_ACTIVE=dev -t my-product-server:latest -f multistage.Dockerfile .
-          docker tag my-product-server:latest ghcr.io/liberty52/liberty52-product-server:dev-v${{ github.sha }}
-          docker push ghcr.io/liberty52/liberty52-product-server:dev-v${{ github.sha }}
-
+          docker tag my-product-server:latest ghcr.io/liberty52/liberty52-product-server:dev-v$RELEASE_NAME
+          docker push ghcr.io/liberty52/liberty52-product-server:dev-v$RELEASE_NAME
 
       - name: Create GitHub Release
-        if: github.ref == 'refs/heads/ci/docker-ci-pipeline'
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.release_name.outputs.release_name }}
+          release_name: Release ${{ steps.release_name.outputs.release_name }}
+          generateReleaseNotes: true
+          body: Auto-generated release for Docker dev image.
+          draft: false
+          prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GHTOKEN }}
-        run: |
-          RELEASE_NAME="v-$(date +'%Y.%m.%d-%H%M%S')"
-          git tag "$RELEASE_NAME"
-          git push origin "$RELEASE_NAME"
-          
-          PREVIOUS_RELEASE=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
-          if [ -z "$PREVIOUS_RELEASE" ]; then
-            COMMIT_MESSAGES=$(git log --pretty=format:"- %s%n")
-          else
-            COMMIT_MESSAGES=$(git log --pretty=format:"- %s%n" "$PREVIOUS_RELEASE"..HEAD)
-          fi
-          
-          curl -X POST \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/releases \
-            -d "{\"tag_name\":\"$RELEASE_NAME\",\"name\":\"$RELEASE_NAME\",\"body\":\"$COMMIT_MESSAGES\",\"draft\":false,\"prerelease\":false}"
+          GITHUB_TOKEN: ${{ secrets.GTOKEN }}
 
       - name: Clean up
         run: docker logout ghcr.io
