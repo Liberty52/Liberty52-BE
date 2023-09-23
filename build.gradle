@@ -44,7 +44,10 @@ dependencies {
 
 	// Querydsl 추가
 	implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
+<<<<<<< HEAD
     implementation 'org.projectlombok:lombok:1.18.22'
+=======
+>>>>>>> 7ce201a5da4d8d6da3861bb2c908934738fc257c
 	implementation 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
