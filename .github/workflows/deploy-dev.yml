@@ -1,16 +1,19 @@
 name: Deploy dev
 
+#on:
+#  workflow_run:
+#    workflows:
+#      - Build and Push Docker Image for DEV
+#    types:
+#      - completed
 on:
-  workflow_run:
-    workflows:
-      - Build and Push Docker Image for DEV
-    types:
-      - completed
-
+  push:
+    branches:
+      - dev
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Get latest Release tag
