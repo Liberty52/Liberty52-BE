@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - LIB-227
 
 jobs:
   build-and-push:
