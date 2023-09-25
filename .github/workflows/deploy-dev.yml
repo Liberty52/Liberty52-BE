@@ -6,7 +6,6 @@ on:
       - "Build and Push Docker Image for DEV"
     types:
       - completed
-      - LIB-227
 
 jobs:
   deploy:
