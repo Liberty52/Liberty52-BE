@@ -30,7 +30,7 @@ class ProductIntroductionCreateMockTest {
 	@Mock
 	S3UploaderApi s3Uploader;
 	@Test
-	void createProductIntroductionMockTest() throws S3UploaderException {
+	void createProductIntroductionMockTest() {
 		// Given
 		String productId = "testProductId";
 		MultipartFile multipartFile = mock(MultipartFile.class);

@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.ProductIntroductionCreateService;
@@ -25,15 +26,12 @@ public class ProductIntroductionCreateServiceImpl implements ProductIntroduction
 		Validator.isAdmin(role);
 		Product product = productRepository.findById(productId)
 			.orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
+		if(product.getProductIntroductionImageUrl() != null) {
+			throw new BadRequestException("이미 상품 소개 이미지가 등록되어 있습니다.");
+		}
 		if (productIntroductionImageFile != null) {
-			String imageUrl = uploadImage(productIntroductionImageFile);
+			String imageUrl = s3Uploader.upload(productIntroductionImageFile);
 			product.createProductIntroduction(imageUrl);
 		}
-	}
-
-	private String uploadImage(MultipartFile multipartFile) {
-		if (multipartFile == null)
-			return null;
-		return s3Uploader.upload(multipartFile);
 	}
 }
