@@ -1,0 +1,30 @@
+name: Deploy prod
+
+on:
+  workflow_run:
+    workflows:
+      - "Build and Push Docker Image for PROD"
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    env:
+      DOCKER_IMAGE: ghcr.io/liberty52/liberty52-product-server:prod-${{ github.sha }}
+
+    steps:
+      - name: Deploy AWS EC2 dev
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_IP_PROD }}
+          username: ${{ secrets.REMOTE_SSH_ID_PROD }}
+          key: ${{ secrets.REMOTE_SSH_KEY_PROD }}
+          port: ${{ secrets.REMOTE_SSH_PORT_PROD }}
+          script: |
+            echo ${{ secrets.GTOKEN }} | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            sudo docker pull $DOCKER_IMAGE
+            container_name=$(sudo docker ps | grep liberty52 | awk '{print $NF}')
+            sudo docker stop $container_name
+            sudo docker run -d -p 8080:8080 $DOCKER_IMAGE
