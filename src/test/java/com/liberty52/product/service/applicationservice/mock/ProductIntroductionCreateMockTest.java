@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.internal.S3UploaderException;
 import com.liberty52.product.service.applicationservice.impl.ProductIntroductionCreateServiceImpl;
 import com.liberty52.product.service.entity.Product;
@@ -29,22 +30,36 @@ class ProductIntroductionCreateMockTest {
 
 	@Mock
 	S3UploaderApi s3Uploader;
+
 	@Test
-	void createProductIntroductionMockTest() {
+	void createProductIntroductionWhenImageNotRegistered() {
 		// Given
 		String productId = "testProductId";
 		MultipartFile multipartFile = mock(MultipartFile.class);
 
 		Product mockProduct = mock(Product.class);
 		given(productRepository.findById(anyString())).willReturn(Optional.of(mockProduct));
+		given(mockProduct.getProductIntroductionImageUrl()).willReturn(null); // 처음에는 이미지 URL이 없다고 가정
 		given(s3Uploader.upload(multipartFile)).willReturn("mockImageUrl");
-		given(mockProduct.getProductIntroductionImageUrl()).willReturn("mockImageUrl");
 
 		// When
 		productService.createProductIntroduction(ADMIN, productId, multipartFile);
 
-		// Then: 검증 로직 추가 (예: 이미지 URL이 제대로 설정되었는지 확인)
-		assertEquals("mockImageUrl", mockProduct.getProductIntroductionImageUrl());
+		// Then: 검증 로직 추가 (예: createProductIntroduction 메소드 호출 확인)
+		verify(mockProduct).createProductIntroduction("mockImageUrl");
+	}
+
+	@Test
+	void createProductIntroductionWhenImageAlreadyRegistered() {
+		// Given
+		String productId = "testProductId";
+		MultipartFile multipartFile = mock(MultipartFile.class);
+		// When
+		Product mockProduct = mock(Product.class);
+		given(productRepository.findById(anyString())).willReturn(Optional.of(mockProduct));
+		given(mockProduct.getProductIntroductionImageUrl()).willReturn("mockImageUrl");
+		// Then: 검증 로직 추가 (예: 이미지가 등록되어 있을 때 예외가 발생하는지 확인)
+		assertThrows(BadRequestException.class, () -> productService.createProductIntroduction(ADMIN, productId, multipartFile));
 	}
 
 }
