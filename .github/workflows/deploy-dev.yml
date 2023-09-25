@@ -24,7 +24,6 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           DOCKER_IMAGE: ghcr.io/liberty52/liberty52-product-server:dev-${{ steps.latest-tag.outputs.tag_name }}
-
         with:
           host: ${{ secrets.REMOTE_IP_DEV }}
           username: ${{ secrets.REMOTE_SSH_ID_DEV }}
