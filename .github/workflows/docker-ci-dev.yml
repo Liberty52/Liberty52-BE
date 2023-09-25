@@ -1,4 +1,4 @@
-name: Build and Push Docker Dev Image
+name: Build and Push Docker Image for DEV
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
         run: |
           echo "::set-output name=release_name::v-$(date +'%Y.%m.%d-%H%M%S')"
 
-      - name: Build And Push Docker Dev Image
+      - name: Build and Push Docker Dev Image
         run: |
           RELEASE_NAME="${{ steps.release_name.outputs.release_name }}"
           docker build --build-arg SPRING_PROFILES_ACTIVE=dev -t my-product-server:latest -f multistage.Dockerfile .
