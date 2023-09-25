@@ -3,7 +3,6 @@ name: Build and Push Docker Image for DEV
 on:
   push:
     branches:
-      - dev
       - LIB-227
 
 jobs:
