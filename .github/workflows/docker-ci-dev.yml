@@ -45,5 +45,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GTOKEN }}
 
+      - name: Get latest Release tag
+        id: latest-tag
+        uses: robinraju/release-downloader@v1.8
+        with:
+          latest: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy AWS EC2 dev
+        uses: appleboy/ssh-action@master
+        env:
+          DOCKER_IMAGE: ghcr.io/liberty52/liberty52-product-server:dev-${{ steps.latest-tag.outputs.tag_name }}
+        with:
+          host: ${{ secrets.REMOTE_IP_DEV }}
+          username: ${{ secrets.REMOTE_SSH_ID_DEV }}
+          key: ${{ secrets.REMOTE_SSH_KEY_DEV }}
+          port: ${{ secrets.REMOTE_SSH_PORT_DEV }}
+          script: |
+            echo ${{ secrets.GTOKEN }} | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            sudo docker pull $DOCKER_IMAGE
+            container_name=$(sudo docker ps | grep liberty52 | awk '{print $NF}')
+            sudo docker stop $container_name
+            sudo docker run -d -p 8080:8080 $DOCKER_IMAGE
+
       - name: Clean up
         run: docker logout ghcr.io
