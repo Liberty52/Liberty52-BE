@@ -2,8 +2,10 @@ name: Deploy dev
 
 on:
   workflow_run:
-    workflows: ["Build and Push Docker Image for DEV"]
-    types: [completed]
+    workflows:
+      - Build and Push Docker Image for DEV
+    types:
+      - completed
 
 jobs:
   deploy:
