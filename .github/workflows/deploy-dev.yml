@@ -39,10 +39,9 @@ jobs:
           key: ${{ secrets.REMOTE_SSH_KEY_DEV }}
           port: ${{ secrets.REMOTE_SSH_PORT_DEV }}
           script: |
-            echo "DOCKER_IMAGE: $DOCKER_IMAGE" 
+            echo "DOCKER_IMAGE: $DOCKER_IMAGE"
             echo ${{ secrets.GTOKEN }} | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
             sudo docker pull $DOCKER_IMAGE
             container_name=$(sudo docker ps | grep liberty52 | awk '{print $NF}')
-            echo "container_name: $container_name" 
             sudo docker stop $container_name
             sudo docker run -d -p 8080:8080 $DOCKER_IMAGE
