@@ -8,6 +8,8 @@ name: Deploy dev
 #      - completed
 on:
   push:
+    branches:
+      - LIB-227
 
 jobs:
   deploy:
@@ -21,6 +23,11 @@ jobs:
         with:
           latest: true
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print Latest Tag
+        run: |
+          echo "Latest Tag: ${{ steps.latest-tag.outputs.tag_name }}"
+      
 
       - name: Deploy AWS EC2 dev
         uses: appleboy/ssh-action@master
