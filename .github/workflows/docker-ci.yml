@@ -1,0 +1,39 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create src/main/resources/bootstrap.yml
+        run: |
+          mkdir -p src/main/resources
+          echo "encrypt:" > src/main/resources/bootstrap.yml
+          echo "  key: '${{ secrets.ENCRYPTKEY }}'" >> src/main/resources/bootstrap.yml
+
+      - name: Login to GitHub Container Registry
+        run: echo ${{ secrets.GTOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and Push Docker Dev Image
+        run: |
+          docker build --build-arg SPRING_PROFILES_ACTIVE=dev -t my-product-server:latest -f multistage.Dockerfile .
+          docker tag my-product-server:latest ghcr.io/liberty52/liberty52-product-server:dev-v${{ github.sha }}
+          docker push ghcr.io/liberty52/liberty52-product-server:dev-v${{ github.sha }}
+
+      - name: Build and Push Docker Prod Image
+        run: |
+          docker build --build-arg SPRING_PROFILES_ACTIVE=prod -t my-product-server:latest -f multistage.Dockerfile .
+          docker tag my-product-server:latest ghcr.io/liberty52/liberty52-product-server:prod-v${{ github.sha }}
+          docker push ghcr.io/liberty52/liberty52-product-server:prod-v${{ github.sha }}
+
+      - name: Clean up
+        run: docker logout ghcr.io
