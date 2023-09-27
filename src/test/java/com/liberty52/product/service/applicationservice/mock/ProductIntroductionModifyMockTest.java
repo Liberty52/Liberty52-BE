@@ -33,6 +33,7 @@ public class ProductIntroductionModifyMockTest {
 
     @Test
     void 제품소개수정() throws S3UploaderException {
+        /*-----------<Test Case 1(prev image->new image)>-----------*/
         /**Given**/
         String productId = "testProductId";
         MultipartFile multipartFile = mock(MultipartFile.class);
@@ -49,6 +50,39 @@ public class ProductIntroductionModifyMockTest {
 
         /**Then**/
         assertEquals("newMockImageUrl", testProduct.getProductIntroductionImageUrl());
+
+        /*-----------<Test Case 2(image -> no image)>-----------*/
+        /**Given**/
+        String product2Id = "testProductId2";
+        Product testProduct2 = Product.builder().name("test2").productState(ProductState.ON_SALE).price(0L).build();
+        //assume that testProduct has previous image
+        testProduct2.createProductIntroduction("previousMockImageUrl");
+
+        when(productRepository.findById(product2Id)).thenReturn(Optional.of(testProduct2));
+
+        /**When**/
+        productIntroductionModifyService.modifyProductIntroduction(ADMIN, product2Id, null);
+
+        /**Then**/
+        assertEquals(null, testProduct2.getProductIntroductionImageUrl());
+
+        /*-----------<Test Case 3(no image -> new image)>-----------*/
+        /**Given**/
+        String product3Id = "testProductId2";
+        MultipartFile multipartFile3 = mock(MultipartFile.class);
+        Product testProduct3 = Product.builder().name("test3").productState(ProductState.ON_SALE).price(0L).build();
+        //assume that testProduct has no previous image
+        testProduct2.createProductIntroduction("null");
+
+        when(productRepository.findById(product3Id)).thenReturn(Optional.of(testProduct3));
+        when(s3Uploader.upload(multipartFile3)).thenReturn("newMockImageUrl");
+
+        /**When**/
+        productIntroductionModifyService.modifyProductIntroduction(ADMIN, product3Id, multipartFile3);
+
+        /**Then**/
+        assertEquals("newMockImageUrl", testProduct3.getProductIntroductionImageUrl());
+
     }
 
 }

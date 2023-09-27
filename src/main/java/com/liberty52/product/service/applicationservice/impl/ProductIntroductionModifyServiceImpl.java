@@ -24,14 +24,15 @@ public class ProductIntroductionModifyServiceImpl implements ProductIntroduction
         Validator.isAdmin(role);
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "ID", productId));
-        if (productIntroductionImageFile != null) {
-            //delete previous image
-            String previousImageUrl = product.getProductIntroductionImageUrl();
-            if(previousImageUrl!=null) s3Uploader.delete(previousImageUrl);
-            //upload new image
-            String imageUrl = s3Uploader.upload(productIntroductionImageFile);
-            product.createProductIntroduction(imageUrl);
-        }
+
+        //delete previous image
+        String previousImageUrl = product.getProductIntroductionImageUrl();
+        if(previousImageUrl!=null) s3Uploader.delete(previousImageUrl);
+        String imageUrl = null;
+        //upload new image
+        if (productIntroductionImageFile != null) imageUrl = s3Uploader.upload(productIntroductionImageFile);
+        product.createProductIntroduction(imageUrl);
+
         productRepository.save(product);
     }
 }
