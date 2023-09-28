@@ -20,9 +20,11 @@ public class OptionDetailModifyRequestDto {
     @NotNull
     Boolean onSale;
 
-    public static OptionDetailModifyRequestDto create(String name, int price, boolean onSale){
-        return new OptionDetailModifyRequestDto(name, price, onSale);
-    }
+    @NotNull
+    Integer stock;
 
+    public static OptionDetailModifyRequestDto create(String name, int price, boolean onSale, Integer stock){
+        return new OptionDetailModifyRequestDto(name, price, onSale, stock);
+    }
 
 }

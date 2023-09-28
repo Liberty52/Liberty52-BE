@@ -14,12 +14,14 @@ public class ProductOptionDetailResponseDto {
     String optionDetailName;
     int price;
     boolean onSale;
+    Integer stock;
 
     public ProductOptionDetailResponseDto(OptionDetail optionDetail) {
          optionDetailId = optionDetail.getId();
          optionDetailName = optionDetail.getName();
          price = optionDetail.getPrice();
          onSale = optionDetail.isOnSale();
+         stock = optionDetail.getStock();
     }
 
 }
