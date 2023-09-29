@@ -77,10 +77,10 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
         given(customProductRepository.save(any())).willReturn(null);
         given(customProductOptionRepository.save(any())).willReturn(null);
 
-        given(optionDetailRepository.findByName("이젤 거치형")).willReturn(Optional.ofNullable(OptionDetail.create("이젤 거치형", 100, true)));
-        given(optionDetailRepository.findByName("1mm 두께 승화전사 인쇄용 알루미늄시트")).willReturn(Optional.ofNullable(OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100, true)));
-        given(optionDetailRepository.findByName("무광실버")).willReturn(Optional.ofNullable(OptionDetail.create("무광실버", 100, true)));
-        given(optionDetailRepository.findByName("벽걸이형")).willReturn(Optional.ofNullable(OptionDetail.create("벽걸이형", 100, true)));
+        given(optionDetailRepository.findByName("이젤 거치형")).willReturn(Optional.ofNullable(OptionDetail.create("이젤 거치형", 100, true, 100)));
+        given(optionDetailRepository.findByName("1mm 두께 승화전사 인쇄용 알루미늄시트")).willReturn(Optional.ofNullable(OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100, true, 100)));
+        given(optionDetailRepository.findByName("무광실버")).willReturn(Optional.ofNullable(OptionDetail.create("무광실버", 100, true, 100)));
+        given(optionDetailRepository.findByName("벽걸이형")).willReturn(Optional.ofNullable(OptionDetail.create("벽걸이형", 100, true, 100)));
 
         //when
         cartItemCreateService.createAuthCartItem("testId", imageFile, dto1);

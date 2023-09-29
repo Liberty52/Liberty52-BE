@@ -21,13 +21,12 @@ public class OptionDetailModifyServiceImpl implements OptionDetailModifyService 
     public void modifyOptionDetailByAdmin(String role, String optionDetailId, OptionDetailModifyRequestDto dto) {
         Validator.isAdmin(role);
         OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId).orElseThrow(() -> new ResourceNotFoundException("OptionDetail", "ID", optionDetailId));
-        optionDetail.modify(dto.getName(), dto.getPrice(), dto.getOnSale());
+        optionDetail.modify(dto.getName(), dto.getPrice(), dto.getOnSale(), dto.getStock());
     }
 
     public void modifyOptionDetailOnSailStateByAdmin(String role, String optionDetailId) {
         Validator.isAdmin(role);
         OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId).orElseThrow(() -> new ResourceNotFoundException("OptionDetail", "ID", optionDetailId));
         optionDetail.updateOnSale();
-
     }
 }

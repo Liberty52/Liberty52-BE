@@ -53,25 +53,25 @@ public class CartItemRetrieveServiceMockTest extends MockS3Test {
 
         ProductOption option1 = ProductOption.create("거치 방식", true, true);
         option1.associate(product);
-        OptionDetail detailEasel = OptionDetail.create("이젤 거치형", 100,true);
+        OptionDetail detailEasel = OptionDetail.create("이젤 거치형", 100,true,100);
         detailEasel.associate(option1);
-        OptionDetail detailWall = OptionDetail.create("벽걸이형", 100,true);
+        OptionDetail detailWall = OptionDetail.create("벽걸이형", 100,true,100);
         detailWall.associate(option1);
 
         ProductOption option2 = ProductOption.create("기본소재", true, true);
         option2.associate(product);
-        OptionDetail material = OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100,true);
+        OptionDetail material = OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100,true,100);
         material.associate(option2);
 
         ProductOption option3 = ProductOption.create("기본소재 옵션", true, true);
         option3.associate(product);
-        OptionDetail materialOption1 = OptionDetail.create("유광실버", 100,true);
+        OptionDetail materialOption1 = OptionDetail.create("유광실버", 100,true, 100);
         materialOption1.associate(option3);
-        OptionDetail materialOption2 = OptionDetail.create("무광실버", 100,true);
+        OptionDetail materialOption2 = OptionDetail.create("무광실버", 100,true, 100);
         materialOption2.associate(option3);
-        OptionDetail materialOption3 = OptionDetail.create("유광백색", 100,true);
+        OptionDetail materialOption3 = OptionDetail.create("유광백색", 100,true, 100);
         materialOption3.associate(option3);
-        OptionDetail materialOption4 = OptionDetail.create("무광백색", 100,true);
+        OptionDetail materialOption4 = OptionDetail.create("무광백색", 100,true, 100);
         materialOption4.associate(option3);
 
         // Add Cart & CartItems
