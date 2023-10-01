@@ -28,7 +28,7 @@ public class CartItemRetrieveServiceImpl implements CartItemRetrieveService {
         if (cart==null || cart.getCustomProducts().size() == 0){
             return cartItemResponseList;
         }
-        return retriveCartItem(cartItemResponseList, cart);
+        return retrieveCartItem(cartItemResponseList, cart);
     }
 
     @Override
@@ -39,10 +39,10 @@ public class CartItemRetrieveServiceImpl implements CartItemRetrieveService {
         if (cart==null || cart.getCustomProducts().size() == 0){
             return cartItemResponseList;
         }
-        return retriveCartItem(cartItemResponseList, cart);
+        return retrieveCartItem(cartItemResponseList, cart);
     }
 
-    private List<CartItemResponse> retriveCartItem(List<CartItemResponse> cartItemResponseList, Cart cart) {
+    private List<CartItemResponse> retrieveCartItem(List<CartItemResponse> cartItemResponseList, Cart cart) {
         List<CustomProduct> cartItemList = cart.getCustomProducts();
 
         for(CustomProduct cartItem:cartItemList){

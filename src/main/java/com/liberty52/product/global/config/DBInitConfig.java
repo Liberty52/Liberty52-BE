@@ -73,14 +73,14 @@ public class DBInitConfig {
                 option1.associate(product);
                 productOptionRepository.save(option1);
 
-                OptionDetail detailEasel = OptionDetail.create("이젤 거치형", 100,true);
+                OptionDetail detailEasel = OptionDetail.create("이젤 거치형", 100,true, 100);
                 detailEasel.associate(option1);
                 Field detailEaselId = detailEasel.getClass().getDeclaredField("id");
                 detailEaselId.setAccessible(true);
                 detailEaselId.set(detailEasel, "OPT-001");
                 optionDetailRepository.save(detailEasel);
 
-                OptionDetail detailWall = OptionDetail.create("벽걸이형", 100,true);
+                OptionDetail detailWall = OptionDetail.create("벽걸이형", 100,true, 100);
                 detailWall.associate(option1);
                 Field detailWallId = detailWall.getClass().getDeclaredField("id");
                 detailWallId.setAccessible(true);
@@ -91,7 +91,7 @@ public class DBInitConfig {
                 option2.associate(product);
                 productOptionRepository.save(option2);
 
-                OptionDetail material = OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100,true);
+                OptionDetail material = OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100,true, 100);
                 material.associate(option2);
                 Field materialId = material.getClass().getDeclaredField("id");
                 materialId.setAccessible(true);
@@ -102,22 +102,22 @@ public class DBInitConfig {
                 option3.associate(product);
                 productOptionRepository.save(option3);
 
-                OptionDetail materialOption1 = OptionDetail.create("유광실버", 100,true);
+                OptionDetail materialOption1 = OptionDetail.create("유광실버", 100,true, 100);
                 materialOption1.associate(option3);
                 Field materialOption1Id = materialOption1.getClass().getDeclaredField("id");
                 materialOption1Id.setAccessible(true);
                 materialOption1Id.set(materialOption1, "OPT-004");
                 optionDetailRepository.save(materialOption1);
 
-                OptionDetail materialOption2 = OptionDetail.create("무광실버", 100,true);
+                OptionDetail materialOption2 = OptionDetail.create("무광실버", 100,true, 100);
                 materialOption2.associate(option3);
                 optionDetailRepository.save(materialOption2);
 
-                OptionDetail materialOption3 = OptionDetail.create("유광백색", 100,true);
+                OptionDetail materialOption3 = OptionDetail.create("유광백색", 100,true, 100);
                 materialOption3.associate(option3);
                 optionDetailRepository.save(materialOption3);
 
-                OptionDetail materialOption4 = OptionDetail.create("무광백색", 100,true);
+                OptionDetail materialOption4 = OptionDetail.create("무광백색", 100,true, 100);
                 materialOption4.associate(option3);
                 optionDetailRepository.save(materialOption4);
 
