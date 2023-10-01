@@ -1,6 +1,6 @@
 package com.liberty52.product.service.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -24,16 +24,16 @@ public class LicenseImage {
 	@Column(nullable = false)
 	private String workName;
 	@Column(nullable = false)
-	private LocalDateTime startDate;
+	private LocalDate startDate;
 	@Column(nullable = false)
-	private LocalDateTime endDate;
+	private LocalDate endDate;
 	@Column(nullable = false)
 	private String licenseImageUrl;
 	@Column(nullable = false)
 	private Integer stock;
 
 	@Builder
-	private LicenseImage(String artistName, String workName, LocalDateTime startDate, LocalDateTime endDate,
+	private LicenseImage(String artistName, String workName, LocalDate startDate, LocalDate endDate,
 		String licenseImageUrl, Integer stock) {
 		this.artistName = artistName;
 		this.workName = workName;
@@ -41,9 +41,5 @@ public class LicenseImage {
 		this.endDate = endDate;
 		this.licenseImageUrl = licenseImageUrl;
 		this.stock = stock;
-	}
-
-	public void addImage(String licenseImageUrl) {
-		this.licenseImageUrl = licenseImageUrl;
 	}
 }

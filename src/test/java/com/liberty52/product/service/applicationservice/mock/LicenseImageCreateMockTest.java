@@ -4,7 +4,7 @@ import static com.liberty52.product.global.constants.RoleConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,8 +35,8 @@ class LicenseImageCreateMockTest {
 	void createLicenseImageTest() {
 		// Given
 		MultipartFile multipartFile = mock(MultipartFile.class);
-		LocalDateTime startDate = LocalDateTime.of(2024, 1, 1, 0, 0);
-		LocalDateTime endDate = startDate.plusDays(10);
+		LocalDate startDate = LocalDate.of(2023,1,1);
+		LocalDate endDate = startDate.plusDays(10);
 		given(s3Uploader.upload(multipartFile)).willReturn("mockImageUrl");
 		LicenseImageCreateDto dto = LicenseImageCreateDto.createForTest("testArtistName", "testWorkName",
 			startDate, endDate, 10);
