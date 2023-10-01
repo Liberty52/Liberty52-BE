@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -58,5 +59,16 @@ public class OptionDetail {
         this.price = price;
         this.onSale = onSail;
         this.stock = stock;
+    }
+
+    public Optional<OptionDetail> sold() {
+        synchronized (this) {
+            stock = Math.max(stock - 1, 0);
+            if (stock > 0) {
+                return Optional.of(this);
+            } else {
+                return Optional.empty();
+            }
+        }
     }
 }

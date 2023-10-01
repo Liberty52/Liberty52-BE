@@ -4,6 +4,7 @@ import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.event.Events;
 import com.liberty52.product.global.event.events.CardOrderedCompletedEvent;
 import com.liberty52.product.global.event.events.OrderRequestDepositEvent;
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.badrequest.RequestForgeryPayException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourCustomProductException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourOrderException;
@@ -168,6 +169,8 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         return dto.getProductDto().getOptions().stream()
                 .map(optionName -> optionDetailRepository.findByName(optionName)
                         .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_OPTION_DETAIL, PARAM_NAME_OPTION_DETAIL_NAME, optionName)))
+                .peek(it -> it.sold()
+                        .orElseThrow(() -> new BadRequestException(it.getName() + " 옵션의 재고량이 부족하여 구매할 수 없습니다.")))
                 .toList();
     }
 
@@ -180,6 +183,10 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                         throw new NotYourCustomProductException(authId);
                     }
                 })
+                .peek(customProduct -> customProduct.getOptions().stream().map(CustomProductOption::getOptionDetail)
+                        .peek(it -> it.sold()
+                                .orElseThrow(() -> new BadRequestException(it.getName() + " 옵션의 재고량이 부족하여 구매할 수 없습니다.")))
+                        .close())
                 .toList();
     }
 
