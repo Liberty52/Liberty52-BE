@@ -47,11 +47,14 @@ public class ProductDetailResponseDto {
             private String name;
             private Integer price;
             private boolean isOnSale;
+            private Integer stock;
+
             public OptionDetailDto(OptionDetail detail) {
                 this.id = detail.getId();
                 this.name = detail.getName();
                 this.price = detail.getPrice();
                 this.isOnSale = detail.isOnSale();
+                this.stock = detail.getStock();
             }
         }
     }
