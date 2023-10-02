@@ -1,6 +1,5 @@
 package com.liberty52.product.service.entity.payment;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.liberty52.product.global.adapter.portone.dto.PortOnePaymentInfo;
@@ -40,6 +39,7 @@ public class CardPayment extends Payment<CardPayment.CardPaymentInfo> {
     }
 
     @Override
+    @SuppressWarnings({"JpaAttributeTypeInspection", "unchecked"})
     public CardPayment.CardPaymentInfo getInfoAsDto() {
         try {
             return objectMapper.readValue(this.info, CardPaymentInfo.class);

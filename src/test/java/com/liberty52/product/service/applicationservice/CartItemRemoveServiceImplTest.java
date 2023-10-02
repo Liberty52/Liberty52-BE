@@ -84,7 +84,7 @@ class CartItemRemoveServiceImplTest extends MockS3Test {
     }
     private CustomProduct createMockOrderAndGetItem() {
         CustomProduct customProduct = customProductRepository.findById(this.cartItemId).get();
-        Orders order = ordersRepository.save(MockFactory.createOrder(authId, List.of(customProduct)));
+        Orders order = ordersRepository.save(MockFactory.createOrder(authId));
         customProduct.associateWithOrder(order);
         return customProductRepository.save(customProduct);
     }

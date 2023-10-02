@@ -9,8 +9,9 @@ import com.liberty52.product.global.exception.external.badrequest.RequestForgery
 import com.liberty52.product.global.exception.external.forbidden.NotYourCustomProductException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourOrderException;
 import com.liberty52.product.global.exception.external.internalservererror.ConfirmPaymentException;
-import com.liberty52.product.global.exception.external.notfound.OrderNotFoundByIdException;
+import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
+import com.liberty52.product.global.util.ThreadManager;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
 import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
@@ -49,6 +50,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     private final CustomProductOptionRepository customProductOptionRepository;
     private final ConfirmPaymentMapRepository confirmPaymentMapRepository;
     private final VBankRepository vBankRepository;
+    private final ThreadManager threadManager;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* API method area */
@@ -66,7 +68,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         }
 
         Orders orders = ordersRepository.findById(checkOrder.getId())
-                .orElseThrow(() -> new OrderNotFoundByIdException(checkOrder.getId()));
+                .orElseThrow(() -> new InternalServerErrorException("주문 정보가 결제 승인 중 조회되지 않았습니다. 관리자에게 바로 문의해주세요."));
 
         return switch (orders.getPayment().getStatus()) {
             case PAID -> {
@@ -182,11 +184,11 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                     if (!Objects.equals(authId, customProduct.getAuthId())) {
                         throw new NotYourCustomProductException(authId);
                     }
+                    customProduct.getOptions().stream()
+                            .map(CustomProductOption::getOptionDetail)
+                            .forEach(it -> it.sold()
+                                    .orElseThrow(() -> new BadRequestException(it.getName() + " 옵션의 재고량이 부족하여 구매할 수 없습니다.")));
                 })
-                .peek(customProduct -> customProduct.getOptions().stream().map(CustomProductOption::getOptionDetail)
-                        .peek(it -> it.sold()
-                                .orElseThrow(() -> new BadRequestException(it.getName() + " 옵션의 재고량이 부족하여 구매할 수 없습니다.")))
-                        .close())
                 .toList();
     }
 
@@ -239,14 +241,13 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     private void sleepingConfirmPaymentThread(String orderId, AtomicInteger secTimeout) {
-        try {
-            log.info("DELAY WEBHOOK - OrderID: {}, Delay Time: {}", orderId, secTimeout.get());
-            Thread.sleep(1000);
+        log.info("DELAY WEBHOOK - OrderID: {}, Delay Time: {}", orderId, secTimeout.get());
+        if (threadManager.sleep(1000)) {
             if(secTimeout.incrementAndGet() > 60) {
                 log.error("카드 결제 정보를 확인하는 시간이 초과했습니다. 웹훅 서버를 확인해주세요. OrderId: {}", orderId);
                 throw new ConfirmPaymentException();
             }
-        } catch (InterruptedException e) {
+        } else {
             log.error("카드결제 검증요청 스레드에 문제가 발생하였습니다. OrderId: {}", orderId);
             throw new ConfirmPaymentException();
         }

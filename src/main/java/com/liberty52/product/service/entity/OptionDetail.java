@@ -63,12 +63,11 @@ public class OptionDetail {
 
     public Optional<OptionDetail> sold() {
         synchronized (this) {
-            stock = Math.max(stock - 1, 0);
-            if (stock > 0) {
-                return Optional.of(this);
-            } else {
+            if (!onSale || stock == 0) {
                 return Optional.empty();
             }
+            stock = Math.max(stock - 1, 0);
+            return Optional.of(this);
         }
     }
 }

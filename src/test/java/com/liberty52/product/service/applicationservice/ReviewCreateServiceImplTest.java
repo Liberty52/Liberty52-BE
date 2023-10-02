@@ -74,7 +74,7 @@ class ReviewCreateServiceImplTest extends MockS3Test {
         10_000_000L);
     productRepository.save(product);
 
-    order = MockFactory.createOrder(MOCK_AUTH_ID, null);
+    order = MockFactory.createOrder(MOCK_AUTH_ID);
     Field orderStatus = order.getClass().getDeclaredField("orderStatus");
     orderStatus.setAccessible(true);
     orderStatus.set(order, OrderStatus.COMPLETE);
