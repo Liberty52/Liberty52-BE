@@ -62,11 +62,11 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
     void 장바구니생성() throws IOException {
 
         //given
-        String[] option = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
-        CartItemRequest dto1 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(1).options(option).build();
-        CartItemRequest dto2 = new CartItemRequest().builder().productName("L").quantity(2).options(option).build();
-        String[] optionErr = {"벽걸이형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광레드"};
-        CartItemRequest dto3 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(4).options(optionErr).build();
+        String[] option = {"OPT-001", "OPT-003", "OPT-005"};
+        CartItemRequest dto1 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(1).optionIds(option).build();
+        CartItemRequest dto2 = new CartItemRequest().builder().productName("L").quantity(2).optionIds(option).build();
+        String[] optionErr = {"OPT-002", "OPT-003", "err"};
+        CartItemRequest dto3 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(4).optionIds(optionErr).build();
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
 
@@ -77,17 +77,17 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
         given(customProductRepository.save(any())).willReturn(null);
         given(customProductOptionRepository.save(any())).willReturn(null);
 
-        given(optionDetailRepository.findByName("이젤 거치형")).willReturn(Optional.ofNullable(OptionDetail.create("이젤 거치형", 100, true, 100)));
-        given(optionDetailRepository.findByName("1mm 두께 승화전사 인쇄용 알루미늄시트")).willReturn(Optional.ofNullable(OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100, true, 100)));
-        given(optionDetailRepository.findByName("무광실버")).willReturn(Optional.ofNullable(OptionDetail.create("무광실버", 100, true, 100)));
-        given(optionDetailRepository.findByName("벽걸이형")).willReturn(Optional.ofNullable(OptionDetail.create("벽걸이형", 100, true, 100)));
+        given(optionDetailRepository.findById("OPT-001")).willReturn(Optional.ofNullable(OptionDetail.create("이젤 거치형", 100, true, 100)));
+        given(optionDetailRepository.findById("OPT-003")).willReturn(Optional.ofNullable(OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100, true, 100)));
+        given(optionDetailRepository.findById("OPT-005")).willReturn(Optional.ofNullable(OptionDetail.create("무광실버", 100, true, 100)));
+        given(optionDetailRepository.findById("OPT-002")).willReturn(Optional.ofNullable(OptionDetail.create("벽걸이형", 100, true, 100)));
 
         //when
         cartItemCreateService.createAuthCartItem("testId", imageFile, dto1);
 
         //then
         Mockito.verify(cartRepository, atMostOnce()).findByAuthId(any());
-        Mockito.verify(optionDetailRepository, times(3)).findByName(any());
+        Mockito.verify(optionDetailRepository, times(3)).findById(any());
 
         //예외
         Assertions.assertThrows(ProductNotFoundByNameException.class, () -> cartItemCreateService.createAuthCartItem("testId", imageFile, dto2));
@@ -101,11 +101,11 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
     @Test
     void 게스트장바구니생성() throws IOException {
         //given
-        String[] option = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
-        CartItemRequest dto1 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(1).options(option).build();
-        CartItemRequest dto2 = new CartItemRequest().builder().productName("L").quantity(2).options(option).build();
-        String[] optionErr = {"벽걸이형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광레드"};
-        CartItemRequest dto3 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(4).options(optionErr).build();
+        String[] option = {"OPT-001", "OPT-003", "OPT-005"};
+        CartItemRequest dto1 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(1).optionIds(option).build();
+        CartItemRequest dto2 = new CartItemRequest().builder().productName("L").quantity(2).optionIds(option).build();
+        String[] optionErr = {"OPT-002", "OPT-003", "err"};
+        CartItemRequest dto3 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(4).optionIds(optionErr).build();
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
 
@@ -116,10 +116,11 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
 //        given(customProductRepository.save(any())).willReturn(null);
 //        given(customProductOptionRepository.save(any())).willReturn(null);
 //
-//        given(optionDetailRepository.findByName("이젤 거치형")).willReturn(Optional.ofNullable(OptionDetail.create("이젤 거치형", 100, true)));
-//        given(optionDetailRepository.findByName("1mm 두께 승화전사 인쇄용 알루미늄시트")).willReturn(Optional.ofNullable(OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100, true)));
-//        given(optionDetailRepository.findByName("무광실버")).willReturn(Optional.ofNullable(OptionDetail.create("무광실버", 100, true)));
-//        given(optionDetailRepository.findByName("벽걸이형")).willReturn(Optional.ofNullable(OptionDetail.create("벽걸이형", 100, true)));
+//        given(optionDetailRepository.findById("OPT-001")).willReturn(Optional.ofNullable(OptionDetail.create("이젤 거치형", 100, true, 100)));
+//        given(optionDetailRepository.findById("OPT-003")).willReturn(Optional.ofNullable(OptionDetail.create("1mm 두께 승화전사 인쇄용 알루미늄시트", 100, true, 100)));
+//        given(optionDetailRepository.findById("OPT-005")).willReturn(Optional.ofNullable(OptionDetail.create("무광실버", 100, true, 100)));
+//        given(optionDetailRepository.findById("OPT-002")).willReturn(Optional.ofNullable(OptionDetail.create("벽걸이형", 100, true, 100)));
+
 
         //when
         cartItemCreateService.createGuestCartItem("guest", imageFile, dto1);
@@ -127,7 +128,7 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
 
         //then
         Mockito.verify(cartRepository, atMostOnce()).findByAuthIdAndExpiryDateGreaterThanEqual(any(), any());
-        //Mockito.verify(optionDetailRepository, times(3)).findByName(any());
+        //Mockito.verify(optionDetailRepository, times(3)).findById(any());
 
         //exception
         Assertions.assertThrows(ProductNotFoundByNameException.class, () -> cartItemCreateService.createAuthCartItem("testId", imageFile, dto2));

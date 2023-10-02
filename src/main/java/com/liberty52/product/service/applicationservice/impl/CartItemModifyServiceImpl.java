@@ -61,12 +61,12 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
 
   private void modifyOptionsDetail(CartModifyRequestDto dto, CustomProduct customProduct,MultipartFile imageFile) {
     customProduct.modifyQuantity(dto.getQuantity());
-    if (!dto.getOptions().isEmpty()){
+    if (!dto.getOptionIds().isEmpty()){
       customProductOptionRepository.deleteAll(customProduct.getOptions());
-      for (String optionDetailName : dto.getOptions()){
+      for (String optionDetailId : dto.getOptionIds()){
         CustomProductOption customProductOption = CustomProductOption.create();
-        OptionDetail optionDetail = optionDetailRepository.findByName(optionDetailName)
-            .orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailName));
+        OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId)
+            .orElseThrow(() -> new CustomProductNotFoundByIdException(optionDetailId));
         customProductOption.associate(optionDetail);
         customProductOption.associate(customProduct);
         customProductOptionRepository.save(customProductOption);

@@ -18,24 +18,24 @@ public class CartItemRequest {
     Integer quantity;
 
     @NotNull
-    String[] options;
+    String[] optionIds;
 
     public CartItemRequest() {
 
     }
 
 
-    public void create(String productName, Integer quantity, String[] options) {
+    public void create(String productName, Integer quantity, String[] optionIds) {
         this.productName = productName;
         this.quantity = quantity;
-        this.options = options;
+        this.optionIds = optionIds;
     }
 
     @Builder
-    private CartItemRequest(String productName, Integer quantity, String[] options) {
+    private CartItemRequest(String productName, Integer quantity, String[] optionIds) {
         this.productName = productName;
         this.quantity = quantity;
-        this.options = options;
+        this.optionIds = optionIds;
     }
 
 }

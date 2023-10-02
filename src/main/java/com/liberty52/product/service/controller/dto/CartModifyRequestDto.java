@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class CartModifyRequestDto {
 
-  private List<String> options;
+  private List<String> optionIds;
 
   @Min(1)
   private int quantity;
