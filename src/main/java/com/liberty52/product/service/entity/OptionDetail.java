@@ -29,15 +29,19 @@ public class OptionDetail {
     @Column(nullable = false)
     private boolean onSale;
 
+    @Column(nullable = false)
+    private Integer stock;
+
     @Builder
-    private OptionDetail(String name, Integer price, boolean onSale) {
+    private OptionDetail(String name, Integer price, boolean onSale, Integer stock) {
         this.name = name;
         this.price = price;
         this.onSale = onSale;
+        this.stock = stock;
     }
 
-    public static OptionDetail create(String name, Integer price, boolean onSale) {
-        return builder().name(name).price(price).onSale(onSale).build();
+    public static OptionDetail create(String name, Integer price, boolean onSale, Integer stock) {
+        return builder().name(name).price(price).onSale(onSale).stock(stock).build();
     }
 
     public void associate(ProductOption productOption) {
@@ -49,9 +53,10 @@ public class OptionDetail {
         onSale = !onSale;
     }
 
-    public void modify(String name, Integer price, Boolean onSail) {
+    public void modify(String name, Integer price, Boolean onSail, Integer stock) {
         this.name = name;
         this.price = price;
         this.onSale = onSail;
+        this.stock = stock;
     }
 }

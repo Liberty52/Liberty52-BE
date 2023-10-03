@@ -24,7 +24,7 @@ public class OptionDetailCreateServiceImpl implements OptionDetailCreateService 
     public void createOptionDetailByAdmin(String role, CreateOptionDetailRequestDto dto, String optionId) {
         Validator.isAdmin(role);
         ProductOption productOption = productOptionRepository.findById(optionId).orElseThrow(() -> new ResourceNotFoundException("option", "id", optionId));
-        OptionDetail optionDetail = OptionDetail.create(dto.getName(), dto.getPrice(), dto.getOnSale());
+        OptionDetail optionDetail = OptionDetail.create(dto.getName(), dto.getPrice(), dto.getOnSale(), 0);
         optionDetail.associate(productOption);
         optionDetailRepository.save(optionDetail);
     }

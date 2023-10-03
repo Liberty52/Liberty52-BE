@@ -29,7 +29,7 @@ public class MockFactory {
     }
 
     public static OptionDetail createOptionDetail(String name, Integer price) {
-        return OptionDetail.create(name, price, true);
+        return OptionDetail.create(name, price, true,100);
     }
 
     public static CustomProductOption createProductCartOption() {

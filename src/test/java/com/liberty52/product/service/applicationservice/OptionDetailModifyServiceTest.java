@@ -13,7 +13,7 @@ import static com.liberty52.product.global.constants.RoleConstants.ADMIN;
 
 @SpringBootTest
 @Transactional
-public class OptionDetailModifyTest {
+public class OptionDetailModifyServiceTest {
 
     @Autowired
     OptionDetailModifyService optionDetailModifyService;
@@ -38,14 +38,16 @@ public class OptionDetailModifyTest {
         String detailId = "OPT-002";
         String name = "테스트";
         int price = 3;
+        int stock = 100;
         OptionDetail beforeOptionDetail = optionDetailRepository.findById(detailId).orElse(null);
         boolean onSail = beforeOptionDetail.isOnSale();
 
-        OptionDetailModifyRequestDto dto = OptionDetailModifyRequestDto.create(name,price,!onSail);
+        OptionDetailModifyRequestDto dto = OptionDetailModifyRequestDto.create(name,price,!onSail,stock);
         optionDetailModifyService.modifyOptionDetailByAdmin(ADMIN, detailId, dto);
         OptionDetail afterOptionDetail = optionDetailRepository.findById(detailId).orElse(null);
         Assertions.assertEquals(afterOptionDetail.isOnSale(), !onSail);
         Assertions.assertEquals(afterOptionDetail.getName(), name);
         Assertions.assertEquals(afterOptionDetail.getPrice(), price);
+        Assertions.assertEquals(afterOptionDetail.getStock(), stock);
     }
 }
