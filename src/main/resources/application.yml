@@ -28,3 +28,4 @@ logging:
   level:
     root: debug
     com.netflix.discovery.DiscoveryClient: error
+    org.apache.kafka.clients.NetworkClient: off
