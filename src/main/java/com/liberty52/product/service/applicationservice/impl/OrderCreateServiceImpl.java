@@ -171,7 +171,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         return dto.getProductDto().getOptions().stream()
                 .map(optionName -> optionDetailRepository.findByName(optionName)
                         .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_OPTION_DETAIL, PARAM_NAME_OPTION_DETAIL_NAME, optionName)))
-                .peek(it -> it.sold()
+                .peek(it -> it.sold(dto.getProductDto().getQuantity())
                         .orElseThrow(() -> new BadRequestException(it.getName() + " 옵션의 재고량이 부족하여 구매할 수 없습니다.")))
                 .toList();
     }
@@ -186,7 +186,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                     }
                     customProduct.getOptions().stream()
                             .map(CustomProductOption::getOptionDetail)
-                            .forEach(it -> it.sold()
+                            .forEach(it -> it.sold(customProduct.getQuantity())
                                     .orElseThrow(() -> new BadRequestException(it.getName() + " 옵션의 재고량이 부족하여 구매할 수 없습니다.")));
                 })
                 .toList();

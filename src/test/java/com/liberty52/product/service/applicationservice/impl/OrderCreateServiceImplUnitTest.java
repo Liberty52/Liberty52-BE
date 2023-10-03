@@ -49,10 +49,10 @@ public class OrderCreateServiceImplUnitTest {
     @Mock private VBankRepository vBankRepository;
     @Mock private ThreadManager threadManager;
 
-    private PaymentCardResponseDto executeCardPaymentOrders(String authId, List<String> options) {
+    private PaymentCardResponseDto executeCardPaymentOrders(String authId, List<String> options, int quantity) {
         return service.createCardPaymentOrders(
                 authId,
-                OrderCreateRequestDto.forTestCard("pn", options, 1, List.of(), "rn",
+                OrderCreateRequestDto.forTestCard("pn", options, quantity, List.of(), "rn",
                         "re", "rpn"," ad1", "ad2","zc"),
                 null
         );
@@ -92,7 +92,7 @@ public class OrderCreateServiceImplUnitTest {
 
         var options = optionDetails.stream().map(OptionDetail::getName).toList();
         // when
-        var result = executeCardPaymentOrders(authId, options);
+        var result = executeCardPaymentOrders(authId, options, 1);
 
         // then
         assertNotNull(result);
@@ -113,7 +113,7 @@ public class OrderCreateServiceImplUnitTest {
         // then
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> executeCardPaymentOrders(authId, options)
+                () -> executeCardPaymentOrders(authId, options, 1)
         );
     }
 
@@ -132,12 +132,12 @@ public class OrderCreateServiceImplUnitTest {
         // then
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> executeCardPaymentOrders(authId, options)
+                () -> executeCardPaymentOrders(authId, options, 1)
         );
     }
 
     @Test
-    @DisplayName("재고량이 0 이하인 상품 옵션을 주문할 경우 예외가 발생한다")
+    @DisplayName("재고량이 0 이하인 상품 옵션을 카드결제 주문할 경우 예외가 발생한다")
     void createCardPaymentOrder_when_noMoreStockOfOptionDetail() {
         // given
         var authId = "user_id";
@@ -157,14 +157,39 @@ public class OrderCreateServiceImplUnitTest {
         // then
         assertThrows(
                 BadRequestException.class,
-                () -> executeCardPaymentOrders(authId, options)
+                () -> executeCardPaymentOrders(authId, options, 1)
         );
     }
 
-    private PaymentVBankResponseDto executeVBankPaymentOrders(String authId, List<String> options) {
+    @Test
+    @DisplayName("재고량이 1인 상품 옵션을 카드결제로 2개 수량 주문할 경우 예외가 발생한다")
+    void createCardPaymentOrder_when_noMoreStockForTwoQuantity() {
+        // given
+        var authId = "user_id";
+        var product = MockFactory.createProduct("pd");
+        given(productRepository.findByName(anyString()))
+                .willReturn(Optional.of(product));
+        var productOption = MockFactory.createProductOption("po", true);
+        var optionDetails = List.of(
+                MockFactory.createOptionDetail("od_1", 10000, 10, productOption),
+                MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
+                MockFactory.createOptionDetail("od_3", 30000, 1, productOption)
+        );
+        optionDetails.forEach(it -> given(optionDetailRepository.findByName(it.getName()))
+                .willReturn(Optional.of(it)));
+        var options = optionDetails.stream().map(OptionDetail::getName).toList();
+        // when
+        // then
+        assertThrows(
+                BadRequestException.class,
+                () -> executeCardPaymentOrders(authId, options, 2)
+        );
+    }
+
+    private PaymentVBankResponseDto executeVBankPaymentOrders(String authId, List<String> options, int quantity) {
         return service.createVBankPaymentOrders(
                 authId,
-                OrderCreateRequestDto.forTestVBank("pn", options, 1, List.of(), "rn",
+                OrderCreateRequestDto.forTestVBank("pn", options, quantity, List.of(), "rn",
                         "re", "rpn"," ad1", "ad2","zc",
                         "하나은행 1234 holder", "dn"),
                 null
@@ -209,7 +234,7 @@ public class OrderCreateServiceImplUnitTest {
         var options = optionDetails.stream().map(OptionDetail::getName).toList();
 
         // when
-        var result = executeVBankPaymentOrders(authId, options);
+        var result = executeVBankPaymentOrders(authId, options, 1);
 
         // then
         assertNotNull(result);
@@ -228,7 +253,7 @@ public class OrderCreateServiceImplUnitTest {
         // then
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> executeVBankPaymentOrders(authId, List.of("not", "found", "product"))
+                () -> executeVBankPaymentOrders(authId, List.of("not", "found", "product"), 1)
         );
     }
 
@@ -246,7 +271,7 @@ public class OrderCreateServiceImplUnitTest {
         // then
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> executeVBankPaymentOrders(authId, List.of("not", "found", "od"))
+                () -> executeVBankPaymentOrders(authId, List.of("not", "found", "od"), 1)
         );
     }
 
@@ -273,7 +298,32 @@ public class OrderCreateServiceImplUnitTest {
         // then
         assertThrows(
                 BadRequestException.class,
-                () -> executeVBankPaymentOrders(authId, options)
+                () -> executeVBankPaymentOrders(authId, options, 1)
+        );
+    }
+
+    @Test
+    @DisplayName("재고량이 1인 상품 옵션을 가상계좌 결제로 2개 수량 주문할 경우 예외가 발생한다")
+    void createVBankPaymentOrder_when_noMoreStockForTwoQuantity() {
+        // given
+        var authId = "user_id";
+        var product = MockFactory.createProduct("pd");
+        given(productRepository.findByName(anyString()))
+                .willReturn(Optional.of(product));
+        var productOption = MockFactory.createProductOption("po", true);
+        var optionDetails = List.of(
+                MockFactory.createOptionDetail("od_1", 10000, 10, productOption),
+                MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
+                MockFactory.createOptionDetail("od_3", 30000, 1, productOption)
+        );
+        optionDetails.forEach(it -> given(optionDetailRepository.findByName(it.getName()))
+                .willReturn(Optional.of(it)));
+        var options = optionDetails.stream().map(OptionDetail::getName).toList();
+        // when
+        // then
+        assertThrows(
+                BadRequestException.class,
+                () -> executeVBankPaymentOrders(authId, options, 2)
         );
     }
 
@@ -427,6 +477,37 @@ public class OrderCreateServiceImplUnitTest {
         var customProducts = List.of(
                 MockFactory.createCustomProduct(imageUrl, 1, authId, product),
                 MockFactory.createCustomProduct(imageUrl, 1, authId, product)
+        );
+        customProducts.forEach(cp -> {
+            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            lenient().when(customProductRepository.findById(cp.getId()))
+                    .thenReturn(Optional.of(cp));
+        });
+        // when
+        // then
+        var cpIds = customProducts.stream().map(CustomProduct::getId).toList();
+        assertThrows(
+                BadRequestException.class,
+                () -> executeCardPaymentOrderByCarts(authId, cpIds)
+        );
+    }
+
+    @Test
+    @DisplayName("재고량이 1인 상품 옵션을 장바구니에서 카드결제로 2개 수량 주문할 경우 예외가 발생한다")
+    void createCardPaymentOrderByCarts_when_noMoreStockForTwoQuantity() {
+        // given
+        var authId = "user_id";
+        var product = MockFactory.createProduct("pd");
+        var productOption = MockFactory.createProductOption("po", true);
+        var optionDetails = List.of(
+                MockFactory.createOptionDetail("od_1", 10000, 10, productOption),
+                MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
+                MockFactory.createOptionDetail("od_3", 30000, 1, productOption)
+        );
+
+        var imageUrl = "image_url";
+        var customProducts = List.of(
+                MockFactory.createCustomProduct(imageUrl, 2, authId, product)
         );
         customProducts.forEach(cp -> {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
@@ -609,6 +690,37 @@ public class OrderCreateServiceImplUnitTest {
         );
     }
 
+    @Test
+    @DisplayName("재고량이 1인 상품 옵션을 장바구니에서 가상계좌 결제로 2개 수량 주문할 경우 예외가 발생한다")
+    void createVBankPaymentOrderByCarts_when_noMoreStockForTwoQuantity() {
+        // given
+        var authId = "user_id";
+        var product = MockFactory.createProduct("pd");
+        var productOption = MockFactory.createProductOption("po", true);
+        var optionDetails = List.of(
+                MockFactory.createOptionDetail("od_1", 10000, 10, productOption),
+                MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
+                MockFactory.createOptionDetail("od_3", 30000, 1, productOption)
+        );
+
+        var imageUrl = "image_url";
+        var customProducts = List.of(
+                MockFactory.createCustomProduct(imageUrl, 2, authId, product)
+        );
+        customProducts.forEach(cp -> {
+            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            lenient().when(customProductRepository.findById(cp.getId()))
+                    .thenReturn(Optional.of(cp));
+        });
+        // when
+        // then
+        var cpIds = customProducts.stream().map(CustomProduct::getId).toList();
+        assertThrows(
+                BadRequestException.class,
+                () -> executeVBankPaymentOrderByCarts(authId, cpIds)
+        );
+    }
+
     private PaymentCardResponseDto executeCardPaymentOrderByCartsForGuest(String authId, List<String> customProductIdList) {
         return service.createCardPaymentOrdersByCartsForGuest(
                 authId,
@@ -620,7 +732,7 @@ public class OrderCreateServiceImplUnitTest {
     }
 
     @Test
-    @DisplayName("비회원유저가 장바구니에서 카드 결제 주문을 요청하여 주문을 생성한다")
+    @DisplayName("비회원 유저가 장바구니에서 카드 결제 주문을 요청하여 주문을 생성한다")
     void createCardPaymentOrdersByCartsForGuest() {
         // given
         var authId = "anonymous_user";
@@ -759,6 +871,37 @@ public class OrderCreateServiceImplUnitTest {
         var customProducts = List.of(
                 MockFactory.createCustomProduct(imageUrl, 1, authId, product),
                 MockFactory.createCustomProduct(imageUrl, 1, authId, product)
+        );
+        customProducts.forEach(cp -> {
+            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            lenient().when(customProductRepository.findById(cp.getId()))
+                    .thenReturn(Optional.of(cp));
+        });
+        // when
+        // then
+        var cpIds = customProducts.stream().map(CustomProduct::getId).toList();
+        assertThrows(
+                BadRequestException.class,
+                () -> executeCardPaymentOrderByCartsForGuest(authId, cpIds)
+        );
+    }
+
+    @Test
+    @DisplayName("비회원 유저가 재고량이 1인 상품 옵션을 장바구니에서 카드 결제로 2개 수량 주문할 경우 예외가 발생한다")
+    void createCardPaymentOrdersByCartsForGuest_when_noMoreStockForTwoQuantity() {
+        // given
+        var authId = "user_id";
+        var product = MockFactory.createProduct("pd");
+        var productOption = MockFactory.createProductOption("po", true);
+        var optionDetails = List.of(
+                MockFactory.createOptionDetail("od_1", 10000, 10, productOption),
+                MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
+                MockFactory.createOptionDetail("od_3", 30000, 1, productOption)
+        );
+
+        var imageUrl = "image_url";
+        var customProducts = List.of(
+                MockFactory.createCustomProduct(imageUrl, 2, authId, product)
         );
         customProducts.forEach(cp -> {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
@@ -927,6 +1070,37 @@ public class OrderCreateServiceImplUnitTest {
         var customProducts = List.of(
                 MockFactory.createCustomProduct(imageUrl, 1, authId, product),
                 MockFactory.createCustomProduct(imageUrl, 1, authId, product)
+        );
+        customProducts.forEach(cp -> {
+            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            lenient().when(customProductRepository.findById(cp.getId()))
+                    .thenReturn(Optional.of(cp));
+        });
+        // when
+        // then
+        var cpIds = customProducts.stream().map(CustomProduct::getId).toList();
+        assertThrows(
+                BadRequestException.class,
+                () -> executeVBankPaymentOrdersByCartsForGuest(authId, cpIds)
+        );
+    }
+
+    @Test
+    @DisplayName("비회원 유저가 재고량이 1인 상품 옵션을 장바구니에서 가상계좌 결제로 2개 수량 주문할 경우 예외가 발생한다")
+    void createVBankPaymentOrdersByCartsForGuest_when_noMoreStockForTwoQuantity() {
+        // given
+        var authId = "user_id";
+        var product = MockFactory.createProduct("pd");
+        var productOption = MockFactory.createProductOption("po", true);
+        var optionDetails = List.of(
+                MockFactory.createOptionDetail("od_1", 10000, 10, productOption),
+                MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
+                MockFactory.createOptionDetail("od_3", 30000, 1, productOption)
+        );
+
+        var imageUrl = "image_url";
+        var customProducts = List.of(
+                MockFactory.createCustomProduct(imageUrl, 2, authId, product)
         );
         customProducts.forEach(cp -> {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
