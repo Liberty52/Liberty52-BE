@@ -20,16 +20,58 @@ public class MockFactory {
         return CustomProduct.create(imageUrl, quantity, authId);
     }
 
+    public static CustomProduct createCustomProduct(String imageUrl, int quantity, String authId, Product product) {
+        var cp = CustomProduct.create(imageUrl, quantity, authId);
+        cp.associateWithProduct(product);
+        return cp;
+    }
+
+    public static CustomProduct createCustomProduct(String imageUrl, int quantity, String authId, Product product, Orders order) {
+        var cp = CustomProduct.create(imageUrl, quantity, authId);
+        cp.associateWithProduct(product);
+        cp.associateWithOrder(order);
+        return cp;
+    }
+
+    public static CustomProductOption createCustomProductOption(CustomProduct cp, OptionDetail od) {
+        var cpo = CustomProductOption.create();
+        cpo.associate(cp);
+        cpo.associate(od);
+        return cpo;
+    }
+
     public static Product createProduct(String name, ProductState state, Long price) {
         return Product.create(name, state, price);
+    }
+
+    public static Product createProduct(String name) {
+        return createProduct(name, ProductState.ON_SALE, 10_000_000L);
+    }
+
+    public static Product createProduct(String name, Long price) {
+        return createProduct(name, ProductState.ON_SALE, price);
     }
 
     public static ProductOption createProductOption(String name, boolean require) {
         return ProductOption.create(name, require, true);
     }
 
+    public static OptionDetail createOptionDetail(String name, Integer price, Boolean onSale, Integer stock, ProductOption po) {
+        var od =  OptionDetail.create(name, price, onSale, stock);
+        od.associate(po);
+        return od;
+    }
+
     public static OptionDetail createOptionDetail(String name, Integer price) {
-        return OptionDetail.create(name, price, true,100);
+        return OptionDetail.create(name, price, true, 100);
+    }
+
+    public static OptionDetail createOptionDetail(String name, Integer price, Integer stock) {
+        return createOptionDetail(name, price, true, stock, null);
+    }
+
+    public static OptionDetail createOptionDetail(String name, Integer price, Integer stock, ProductOption po) {
+        return createOptionDetail(name, price, true, stock, po);
     }
 
     public static CustomProductOption createProductCartOption() {
@@ -40,9 +82,9 @@ public class MockFactory {
         return Cart.create(authId);
     }
 
-    public static Orders createOrder(String authId, List<CustomProduct> customProducts) {
+    public static Orders createOrder(String authId) {
         OrderDestination orderDestination = OrderDestination.create("", "", "", "", "", "");
-        return Orders.create(authId, 0,orderDestination);
+        return Orders.create(authId, orderDestination);
     }
 
     public static List<OrdersRetrieveResponse> createMockOrderRetrieveResponseList(){
