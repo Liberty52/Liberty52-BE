@@ -8,12 +8,12 @@ import lombok.Getter;
 @Getter
 public class CartModifyRequestDto {
 
-  private List<String> optionIds;
+  private List<String> optionDetailIds;
 
   @Min(1)
   private int quantity;
 
-  public static CartModifyRequestDto create(List<String> options,int quantity){
-    return new CartModifyRequestDto(options,quantity);
+  public static CartModifyRequestDto create(List<String> optionDetailIds,int quantity){
+    return new CartModifyRequestDto(optionDetailIds,quantity);
   }
 }

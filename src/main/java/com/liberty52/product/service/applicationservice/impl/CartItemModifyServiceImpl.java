@@ -4,7 +4,6 @@ import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.badrequest.CartItemRequiredButOrderItemFoundException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourCartItemException;
 import com.liberty52.product.global.exception.external.notfound.CustomProductNotFoundByIdException;
-import com.liberty52.product.global.exception.external.notfound.OptionDetailNotFoundByNameException;
 import com.liberty52.product.service.applicationservice.CartItemModifyService;
 import com.liberty52.product.service.controller.dto.CartModifyRequestDto;
 import com.liberty52.product.service.entity.CustomProduct;
@@ -61,9 +60,9 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
 
   private void modifyOptionsDetail(CartModifyRequestDto dto, CustomProduct customProduct,MultipartFile imageFile) {
     customProduct.modifyQuantity(dto.getQuantity());
-    if (!dto.getOptionIds().isEmpty()){
+    if (!dto.getOptionDetailIds().isEmpty()){
       customProductOptionRepository.deleteAll(customProduct.getOptions());
-      for (String optionDetailId : dto.getOptionIds()){
+      for (String optionDetailId : dto.getOptionDetailIds()){
         CustomProductOption customProductOption = CustomProductOption.create();
         OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId)
             .orElseThrow(() -> new CustomProductNotFoundByIdException(optionDetailId));

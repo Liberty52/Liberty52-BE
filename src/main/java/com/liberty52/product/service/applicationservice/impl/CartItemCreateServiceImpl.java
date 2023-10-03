@@ -48,7 +48,7 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
         customProduct.associateWithCart(cart);
         customProductRepository.save(customProduct);
 
-        for (String optionDetailId :dto.getOptionIds()){
+        for (String optionDetailId :dto.getOptionDetailIds()){
             CustomProductOption customProductOption = CustomProductOption.create();
             OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
 
