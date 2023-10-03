@@ -63,10 +63,10 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
 
         //given
         String[] option = {"OPT-001", "OPT-003", "OPT-005"};
-        CartItemRequest dto1 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(1).optionIds(option).build();
-        CartItemRequest dto2 = new CartItemRequest().builder().productName("L").quantity(2).optionIds(option).build();
+        CartItemRequest dto1 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(1).optionDetailIds(option).build();
+        CartItemRequest dto2 = new CartItemRequest().builder().productName("L").quantity(2).optionDetailIds(option).build();
         String[] optionErr = {"OPT-002", "OPT-003", "err"};
-        CartItemRequest dto3 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(4).optionIds(optionErr).build();
+        CartItemRequest dto3 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(4).optionDetailIds(optionErr).build();
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
 
@@ -86,8 +86,8 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
         cartItemCreateService.createAuthCartItem("testId", imageFile, dto1);
 
         //then
-        Mockito.verify(cartRepository, atMostOnce()).findByAuthId(any());
-        Mockito.verify(optionDetailRepository, times(3)).findById(any());
+        verify(cartRepository, atMostOnce()).findByAuthId(any());
+        verify(optionDetailRepository, times(3)).findById(any());
 
         //예외
         Assertions.assertThrows(ProductNotFoundByNameException.class, () -> cartItemCreateService.createAuthCartItem("testId", imageFile, dto2));
@@ -102,10 +102,10 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
     void 게스트장바구니생성() throws IOException {
         //given
         String[] option = {"OPT-001", "OPT-003", "OPT-005"};
-        CartItemRequest dto1 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(1).optionIds(option).build();
-        CartItemRequest dto2 = new CartItemRequest().builder().productName("L").quantity(2).optionIds(option).build();
+        CartItemRequest dto1 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(1).optionDetailIds(option).build();
+        CartItemRequest dto2 = new CartItemRequest().builder().productName("L").quantity(2).optionDetailIds(option).build();
         String[] optionErr = {"OPT-002", "OPT-003", "err"};
-        CartItemRequest dto3 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(4).optionIds(optionErr).build();
+        CartItemRequest dto3 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(4).optionDetailIds(optionErr).build();
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
 
@@ -127,7 +127,7 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
 
 
         //then
-        Mockito.verify(cartRepository, atMostOnce()).findByAuthIdAndExpiryDateGreaterThanEqual(any(), any());
+        verify(cartRepository, atMostOnce()).findByAuthIdAndExpiryDateGreaterThanEqual(any(), any());
         //Mockito.verify(optionDetailRepository, times(3)).findById(any());
 
         //exception
