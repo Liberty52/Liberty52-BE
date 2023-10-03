@@ -1,6 +1,5 @@
-package com.liberty52.product.global.adapter.imageupscaler;
+package com.liberty52.product.global.adapter;
 
-import com.liberty52.product.global.adapter.ImageUpscaler;
 import com.liberty52.product.global.util.Result;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

@@ -47,6 +47,10 @@ public abstract sealed class Result<T> {
         }
     }
 
+    public abstract T getOrElseThrow(Function<Throwable, RuntimeException> func) throws RuntimeException;
+
+    public abstract T getOrElseThrow(Supplier<RuntimeException> supplier) throws RuntimeException;
+
     public static final class Success<T> extends Result<T> {
         private final T value;
 
@@ -122,6 +126,16 @@ public abstract sealed class Result<T> {
         @Override
         public Result<T> recoverCatching(Function<Throwable, T> transform) {
             return this;
+        }
+
+        @Override
+        public T getOrElseThrow(Function<Throwable, RuntimeException> func) throws RuntimeException {
+            return value;
+        }
+
+        @Override
+        public T getOrElseThrow(Supplier<RuntimeException> supplier) throws RuntimeException {
+            return value;
         }
 
         @Override
@@ -211,6 +225,16 @@ public abstract sealed class Result<T> {
             } catch (Throwable t) {
                 return failure(t);
             }
+        }
+
+        @Override
+        public T getOrElseThrow(Function<Throwable, RuntimeException> func) throws RuntimeException {
+            throw func.apply(error);
+        }
+
+        @Override
+        public T getOrElseThrow(Supplier<RuntimeException> supplier) throws RuntimeException {
+            throw supplier.get();
         }
 
         @Override

@@ -8,30 +8,30 @@ public interface ImageUpscaler {
 
     sealed class Scale {
         @Getter
-        static final class Mul extends Scale {
+        public static final class Mul extends Scale {
             private final Double width;
             private final Double height;
 
-            Mul(Double width) {
+            public Mul(Double width) {
                 this.width = this.height = width;
             }
 
-            Mul(Double width, Double height) {
+            public Mul(Double width, Double height) {
                 this.width = width;
                 this.height = height;
             }
         }
 
         @Getter
-        static final class Fix extends Scale {
+        public static final class Fix extends Scale {
             private final Long width;
             private final Long height;
 
-            Fix(Long length) {
+            public Fix(Long length) {
                 this.width = this.height = length;
             }
 
-            Fix(Long width, Long height) {
+            public Fix(Long width, Long height) {
                 this.width = width;
                 this.height = height;
             }
