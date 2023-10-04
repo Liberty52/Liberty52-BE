@@ -28,7 +28,7 @@ public class LicenseImageCreateServiceImpl implements LicenseImageCreateService 
 		Validator.isAdmin(role);
 		LicenseImage licenseImage = LicenseImage.builder()
 			.artistName(dto.getArtistName())
-			.workName(dto.getWorkName())
+			.artName(dto.getArtName())
 			.startDate(dto.getStartDate())
 			.endDate(dto.getEndDate())
 			.licenseImageUrl(s3Uploader.upload(licenseImageFile))

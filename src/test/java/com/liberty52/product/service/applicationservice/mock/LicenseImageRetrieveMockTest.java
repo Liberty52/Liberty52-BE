@@ -36,7 +36,7 @@ class LicenseImageRetrieveMockTest {
 		LocalDate endDate = startDate.plusDays(10);
 		LicenseImage mockLicense = LicenseImage.builder()
 			.artistName("testArtistName")
-			.workName("testWorkName")
+			.artName("testArtName")
 			.startDate(startDate)
 			.endDate(endDate)
 			.licenseImageUrl("mockImageUrl")

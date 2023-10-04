@@ -14,7 +14,7 @@ public class LicenseImageCreateDto {
 	@NotBlank
 	private String artistName;
 	@NotBlank
-	private String workName;
+	private String artName;
 	@NotNull
 	private LocalDate startDate;
 	@NotNull
@@ -22,11 +22,11 @@ public class LicenseImageCreateDto {
 	@Min(0)
 	private Integer stock;
 
-	public static LicenseImageCreateDto createForTest(String artistName, String workName, LocalDate startDate,
+	public static LicenseImageCreateDto createForTest(String artistName, String artName, LocalDate startDate,
 		LocalDate endDate, Integer stock) {
 		LicenseImageCreateDto dto = new LicenseImageCreateDto();
 		dto.artistName = artistName;
-		dto.workName = workName;
+		dto.artName = artName;
 		dto.startDate = startDate;
 		dto.endDate = endDate;
 		dto.stock = stock;

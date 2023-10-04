@@ -38,7 +38,7 @@ class LicenseImageCreateMockTest {
 		LocalDate startDate = LocalDate.of(2023,1,1);
 		LocalDate endDate = startDate.plusDays(10);
 		given(s3Uploader.upload(multipartFile)).willReturn("mockImageUrl");
-		LicenseImageCreateDto dto = LicenseImageCreateDto.createForTest("testArtistName", "testWorkName",
+		LicenseImageCreateDto dto = LicenseImageCreateDto.createForTest("testArtistName", "testArtName",
 			startDate, endDate, 10);
 
 		// When
@@ -48,7 +48,7 @@ class LicenseImageCreateMockTest {
 		ArgumentCaptor<LicenseImage> captor = ArgumentCaptor.forClass(LicenseImage.class);
 		verify(licenseImageRepository, times(1)).save(captor.capture());
 		assertEquals("testArtistName", captor.getValue().getArtistName());
-		assertEquals("testWorkName", captor.getValue().getWorkName());
+		assertEquals("testArtName", captor.getValue().getArtName());
 		assertEquals(startDate, captor.getValue().getStartDate());
 		assertEquals(endDate, captor.getValue().getEndDate());
 		assertEquals("mockImageUrl", captor.getValue().getLicenseImageUrl());

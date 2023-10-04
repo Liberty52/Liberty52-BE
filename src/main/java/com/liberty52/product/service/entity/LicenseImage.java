@@ -22,7 +22,7 @@ public class LicenseImage {
 	@Column(nullable = false)
 	private String artistName;
 	@Column(nullable = false)
-	private String workName;
+	private String artName;
 	@Column(nullable = false)
 	private LocalDate startDate;
 	@Column(nullable = false)
@@ -33,10 +33,10 @@ public class LicenseImage {
 	private Integer stock;
 
 	@Builder
-	private LicenseImage(String artistName, String workName, LocalDate startDate, LocalDate endDate,
+	private LicenseImage(String artistName, String artName, LocalDate startDate, LocalDate endDate,
 		String licenseImageUrl, Integer stock) {
 		this.artistName = artistName;
-		this.workName = workName;
+		this.artName = artName;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.licenseImageUrl = licenseImageUrl;
