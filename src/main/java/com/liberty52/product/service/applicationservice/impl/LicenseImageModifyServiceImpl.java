@@ -23,13 +23,13 @@ public class LicenseImageModifyServiceImpl implements LicenseImageModifyService 
 	private final S3UploaderApi s3Uploader;
 
 	@Override
-	public void modifyLicenseImage(String role, LicenseImageModifyDto dto, MultipartFile productIntroductionImageFile,
+	public void modifyLicenseImage(String role, LicenseImageModifyDto dto, MultipartFile licenseImageFile,
 		String licenseImageId) {
 		Validator.isAdmin(role);
 		LicenseImage licenseImage = licenseImageRepository.findById(licenseImageId)
 			.orElseThrow(() -> new NotFoundException("해당 라이센스 이미지가 존재하지 않습니다."));
-		if (productIntroductionImageFile != null) {
-			String licenseImageUrl = s3Uploader.upload(productIntroductionImageFile);
+		if (licenseImageFile != null) {
+			String licenseImageUrl = s3Uploader.upload(licenseImageFile);
 			licenseImage.updateLicenseImageUrl(licenseImageUrl);
 		}
 		licenseImage.updateLicense(dto);
