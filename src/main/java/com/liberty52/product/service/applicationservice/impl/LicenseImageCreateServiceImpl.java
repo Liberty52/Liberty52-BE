@@ -1,7 +1,5 @@
 package com.liberty52.product.service.applicationservice.impl;
 
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

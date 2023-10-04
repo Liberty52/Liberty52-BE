@@ -3,6 +3,8 @@ package com.liberty52.product.service.entity;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.liberty52.product.service.controller.dto.LicenseImageModifyDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -41,5 +43,17 @@ public class LicenseImage {
 		this.endDate = endDate;
 		this.licenseImageUrl = licenseImageUrl;
 		this.stock = stock;
+	}
+
+	public void updateLicense(LicenseImageModifyDto dto) {
+		this.artistName = dto.getArtistName();
+		this.artName = dto.getArtName();
+		this.startDate = dto.getStartDate();
+		this.endDate = dto.getEndDate();
+		this.stock = dto.getStock();
+	}
+
+	public void updateLicenseImageUrl(String licenseImageUrl) {
+		this.licenseImageUrl = licenseImageUrl;
 	}
 }
