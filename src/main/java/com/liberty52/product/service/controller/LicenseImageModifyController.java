@@ -17,14 +17,14 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class LicenseImageModifyController {
-	private final LicenseImageModifyService licenseImageCreateService;
+	private final LicenseImageModifyService licenseImageModifyService;
 
 	@PutMapping("/admin/licenseImage/{licenseImageId}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void modifyLicenseImage(@RequestHeader("LB-Role") String role,
 		@RequestPart("dto") LicenseImageModifyDto dto,
 		@RequestPart(value = "image", required = false) MultipartFile licenseImageFile,
 		@PathVariable String licenseImageId) {
-		licenseImageCreateService.modifyLicenseImage(role, dto, licenseImageFile, licenseImageId);
+		licenseImageModifyService.modifyLicenseImage(role, dto, licenseImageFile, licenseImageId);
 	}
 }
