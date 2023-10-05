@@ -44,7 +44,7 @@ jobs:
         run: |
           git config --global user.email "liberty52.product@github.com"
           git config --global user.name "liberty52_Product"
-          git add infrastructure/kubernetes-deployment.yaml
+          git add liberty52/infrastructure/kubernetes-manifests/product-server/product-server-deployment.yaml
           git commit -m "Update image tag to $RELEASE_NAME"
           git push
 
