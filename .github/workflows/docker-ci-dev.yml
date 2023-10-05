@@ -35,22 +35,30 @@ jobs:
           docker tag my-product-server:latest ghcr.io/liberty52/liberty52-product-server:dev-$RELEASE_NAME
           docker push ghcr.io/liberty52/liberty52-product-server:dev-$RELEASE_NAME
 
-      - name: Download Kubernetes Manifest
-        run: |
-          git clone https://github.com/Liberty52/infrastructure.git infrastructure
-          mv infrastructure/kubernetes-manifests/product-server/product-server-deployment.yaml product-server-deployment.yaml
-        env:
-          GTOKEN: ${{ secrets.GTOKEN }}
-          GIT_USERNAME: ${{ github.actor }}
+      - name: Checkout Infrastructure Repository
+        uses: actions/checkout@v2
+        with:
+          repository: Liberty52/infrastructure
+          token: ${{ secrets.GTOKEN }}
+          path: infrastructure
 
-      - name: Update Kubernetes Manifest
+      - name: Update Docker Image Tag in Kubernetes Deployment
         run: |
-          RELEASE_TAG="${{ steps.get_release.outputs.release_tag }}"
-          sed -i "s|image: ghcr.io/Liberty52/liberty52-product-server:dev-.*|image: ghcr.io/Liberty52/liberty52-product-server:dev-$RELEASE_TAG|" product-server-deployment.yaml
-          git add product-server-deployment.yaml
-          git commit -m "Update product-server image tag to $RELEASE_TAG"
+          RELEASE_NAME="${{ steps.release_name.outputs.release_name }}"
+          IMAGE_TAG="ghcr.io/liberty52/liberty52-product-server:dev-$RELEASE_NAME"
+          MANIFEST_PATH="infrastructure/kubernetes-manifests/product-server/product-server-deployment.yaml"
+          
+          # Using sed to update the image
+          sed -i "s|ghcr.io/liberty52/liberty52-product-server:[a-zA-Z0-9\.\-]*|$IMAGE_TAG|" $MANIFEST_PATH
+
+      - name: Commit and Push to Infrastructure Repository
+        run: |
+          cd infrastructure
+          git config --global user.email "github-action-bot@example.com"
+          git config --global user.name "GitHub Action Bot"
+          git add kubernetes-manifests/product-server/product-server-deployment.yaml
+          git commit -m "Update product-server image tag to $RELEASE_NAME"
           git push
-
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
@@ -66,4 +74,3 @@ jobs:
       - name: Clean up
         run: |
           docker logout ghcr.io
-          rm -rf infrastructure
