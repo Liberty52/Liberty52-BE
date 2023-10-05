@@ -10,9 +10,9 @@ env:
   REGISTRY: ghcr.io
   REPO_NAME: liberty52/liberty52-product-server
   DOCKERFILE: multistage.Dockerfile
-  MANIFEST_PATH: kubernetes-manifests/product-server/product-server-deployment.yaml
+  MANIFEST_PATH: infrastructure/kubernetes-manifests/product-server/product-server-deployment.yaml
   GIT_EMAIL: github-action-bot@example.com
-  GIT_NAME: Product Server Bot
+  GIT_NAME: Product Server Action Bot
 
 jobs:
   build-push-and-deploy:
@@ -54,7 +54,7 @@ jobs:
       - name: 쿠버네티스 디플로이먼트에 도커 이미지 태그 업데이트
         run: |
           IMAGE_TAG="$REGISTRY/$REPO_NAME:dev-${{ steps.release_name.outputs.release_name }}"
-          sed -i "s|$REGISTRY/$REPO_NAME:[a-zA-Z0-9\.\-]*|$IMAGE_TAG|" infrastructure/$MANIFEST_PATH
+          sed -i "s|$REGISTRY/$REPO_NAME:[a-zA-Z0-9\.\-]*|$IMAGE_TAG|" $MANIFEST_PATH
 
       - name: 인프라스트럭처 레포지토리에 커밋 및 푸시
         run: |
@@ -62,7 +62,7 @@ jobs:
           git config --global user.email $GIT_EMAIL
           git config --global user.name $GIT_NAME
           git add $MANIFEST_PATH
-          git commit -m "Update product-server image tag to ${{ steps.release_name.outputs.release_name }}"
+          git commit -m "Update ${{REPO_NAME}} image tag to ${{ steps.release_name.outputs.release_name }}"
           git push
 
       - name: GitHub 릴리즈 생성
