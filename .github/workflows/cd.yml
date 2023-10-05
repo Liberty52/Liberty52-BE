@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - dev
-      - issue-266
 
 env:
   REGISTRY: ghcr.io
