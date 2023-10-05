@@ -41,7 +41,7 @@ jobs:
           mv infrastructure/kubernetes-manifests/product-server/product-server-deployment.yaml product-server-deployment.yaml
         env:
           GTOKEN: ${{ secrets.GTOKEN }}
-          GIT_USERNAME: ${{ secrets.actor }}
+          GIT_USERNAME: ${{ github.actor }}
 
       - name: Update Kubernetes Manifest
         run: |
