@@ -12,7 +12,7 @@ env:
   DOCKERFILE: multistage.Dockerfile
   MANIFEST_PATH: infrastructure/kubernetes-manifests/product-server/product-server-deployment.yaml
   GIT_EMAIL: github-action-bot@example.com
-  GIT_NAME: GitHub Action Bot - Product Server
+  GIT_NAME: Product Server Action Bot
 
 jobs:
   build-push-and-deploy:
