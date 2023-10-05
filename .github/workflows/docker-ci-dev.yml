@@ -35,10 +35,10 @@ jobs:
           docker tag my-product-server:latest ghcr.io/liberty52/liberty52-product-server:dev-$RELEASE_NAME
           docker push ghcr.io/liberty52/liberty52-product-server:dev-$RELEASE_NAME
 
-#      - name: Download Kubernetes Manifest
-#        run: |
-#          git clone https://github.com/Liberty52/infrastructure.git infrastructure
-#          mv infrastructure/kubernetes-manifests/product-server/product-server-deployment.yaml product-server-deployment.yaml
+      - name: Download Kubernetes Manifest
+        run: |
+          git clone https://github.com/Liberty52/infrastructure.git infrastructure
+          mv infrastructure/kubernetes-manifests/product-server/product-server-deployment.yaml product-server-deployment.yaml
 
       - name: Update Kubernetes Manifest
         run: |
