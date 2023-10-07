@@ -1,5 +1,7 @@
 package com.liberty52.product.service.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,11 +15,13 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "이미지", description = "이미지 관련 API를 제공합니다")
 public class LicenseImageDeleteController {
 	private final LicenseImageDeleteService licenseImageDeleteService;
 
 	@DeleteMapping("/admin/licenseImage/{licenseImageId}")
 	@ResponseStatus(HttpStatus.OK)
+	@Operation(summary = "라이선스 이미지 삭제", description = "라이선스 이미지를 삭제합니다.")
 	public void deleteLicenseImage(@RequestHeader("LB-Role") String role, @PathVariable String licenseImageId) {
 		licenseImageDeleteService.deleteLicenseImage(role, licenseImageId);
 	}
