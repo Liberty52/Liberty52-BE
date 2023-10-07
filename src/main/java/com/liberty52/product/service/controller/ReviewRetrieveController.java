@@ -5,6 +5,7 @@ import com.liberty52.product.service.applicationservice.ReviewRetrieveService;
 import com.liberty52.product.service.controller.dto.AdminReviewDetailResponse;
 import com.liberty52.product.service.controller.dto.AdminReviewRetrieveResponse;
 import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "상품", description = "상품 관련 API를 제공합니다")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
