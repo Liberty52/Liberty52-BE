@@ -1,5 +1,7 @@
 package com.liberty52.product.service.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,11 +18,13 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "이미지", description = "이미지 관련 API를 제공합니다")
 public class LicenseImageModifyController {
 	private final LicenseImageModifyService licenseImageModifyService;
 
 	@PutMapping("/admin/licenseImage/{licenseImageId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Operation(summary = "라이선스 이미지 수정", description = "라이선스 이미지를 수정합니다.")
 	public void modifyLicenseImage(@RequestHeader("LB-Role") String role,
 		@RequestPart("dto") LicenseImageModifyDto dto,
 		@RequestPart(value = "image", required = false) MultipartFile licenseImageFile,
