@@ -10,9 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "주문", description = "주문 관련 API를 제공합니다")
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "주문", description = "주문 관련 API를 제공합니다")
 public class OrderStatusModifyController {
 
   private final OrderStatusModifyService orderStatusModifyService;

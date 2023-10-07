@@ -11,9 +11,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@Tag(name = "주문", description = "주문 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "주문", description = "주문 관련 API를 제공합니다")
 public class OrderCreateController {
     private final OrderCreateService orderCreateService;
 

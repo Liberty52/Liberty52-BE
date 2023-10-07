@@ -10,15 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "이미지", description = "이미지 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "이미지", description = "이미지 관련 API를 제공합니다")
 public class ImageGenerationController {
     private final ImageGenerationService service;
 
+    @Operation(summary = "이미지 생성", description = "이미지를 생성합니다.")
     @PostMapping("/images/generations")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "이미지 생성", description = "이미지를 생성합니다.")
     public ImageGenerationDto.Response generateImage(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId, // 어뷰징 방지.
                                             @Validated @RequestBody ImageGenerationDto.Request dto) {
         return service.generateImage(authId, dto);

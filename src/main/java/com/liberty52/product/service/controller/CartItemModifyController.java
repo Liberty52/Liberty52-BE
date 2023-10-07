@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+@Tag(name = "장바구니", description = "장바구니 관련 API를 제공합니다.")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "장바구니", description = "장바구니 관련 API를 제공합니다.")
 public class CartItemModifyController {
 
   private final CartItemModifyService cartItemModifyService;
 
+  @Operation(summary = "비회원 장바구니 상품 수정", description = "주어진 인증 ID, 이미지 파일 및 장바구니 상품 수정 요청을 사용하여 비회원 장바구니 상품을 수정합니다.")
   @PatchMapping("/carts/custom-products/{customProductId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(summary = "비회원 장바구니 상품 수정", description = "주어진 인증 ID, 이미지 파일 및 장바구니 상품 수정 요청을 사용하여 비회원 장바구니 상품을 수정합니다.")
   public void modifyUserCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId, @RequestPart CartModifyRequestDto dto,
                                  @RequestPart(value = "file", required = false) MultipartFile imageFile, @PathVariable String customProductId) {
     cartItemModifyService.modifyUserCartItem(authId, dto, imageFile, customProductId);

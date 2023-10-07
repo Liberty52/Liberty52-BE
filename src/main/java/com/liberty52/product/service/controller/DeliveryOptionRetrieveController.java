@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "배송 정보", description = "배송 정보 관련 API를 제공합니다.")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "배송 정보", description = "배송 정보 관련 API를 제공합니다.")
 public class DeliveryOptionRetrieveController {
 
     private final DeliveryOptionRetrieveService deliveryOptionRetrieveService;
 
+    @Operation(summary = "기본 배송비 조회", description = "기본 배송비를 조회합니다.")
     @GetMapping("/options/delivery/fee")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "기본 배송비 조회", description = "기본 배송비를 조회합니다.")
     public DeliveryOptionFeeRetrieve.Response getDefaultDeliveryFee() {
         return DeliveryOptionFeeRetrieve.Response.fromDto(
                 deliveryOptionRetrieveService.getDefaultDeliveryFee()

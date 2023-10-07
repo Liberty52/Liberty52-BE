@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "장바구니", description = "장바구니 관련 API를 제공합니다.")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "장바구니", description = "장바구니 관련 API를 제공합니다.")
 public class CartItemRetrieveController {
 
     private final CartItemRetrieveService cartItemRetrieveService;
 
+    @Operation(summary = "비회원 장바구니 상품 목록 조회", description = "주어진 인증 ID를 사용하여 비회원 장바구니 상품 목록을 조회합니다.")
     @GetMapping("/carts")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "비회원 장바구니 상품 목록 조회", description = "주어진 인증 ID를 사용하여 비회원 장바구니 상품 목록을 조회합니다.")
     public List<CartItemResponse> retrieveAuthCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId) {
         return cartItemRetrieveService.retrieveAuthCartItem(authId);
     }

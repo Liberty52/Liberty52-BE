@@ -13,9 +13,9 @@ import com.liberty52.product.service.controller.dto.OrderRefundDto;
 
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "주문", description = "주문 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "주문", description = "주문 관련 API를 제공합니다")
 public class OrderCancelController {
 
     private final OrderCancelService orderCancelService;

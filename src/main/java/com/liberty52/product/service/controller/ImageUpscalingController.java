@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "이미지", description = "이미지 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "이미지", description = "이미지 관련 API를 제공합니다")
 public class ImageUpscalingController {
     private final ImageUpscalingService service;
 
+    @Operation(summary = "이미지 업스케일링", description = "이미지를 업스케일링합니다.")
     @PostMapping("/images/upscaling")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "이미지 업스케일링", description = "이미지를 업스케일링합니다.")
     public ImageUpscalingDto.Response generateImage(
         @Validated @RequestBody ImageUpscalingDto.Request requestBody
     ) {

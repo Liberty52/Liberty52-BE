@@ -13,15 +13,15 @@ import com.liberty52.product.service.applicationservice.LicenseImageDeleteServic
 
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "이미지", description = "이미지 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "이미지", description = "이미지 관련 API를 제공합니다")
 public class LicenseImageDeleteController {
 	private final LicenseImageDeleteService licenseImageDeleteService;
 
+	@Operation(summary = "라이선스 이미지 삭제", description = "라이선스 이미지를 삭제합니다.")
 	@DeleteMapping("/admin/licenseImage/{licenseImageId}")
 	@ResponseStatus(HttpStatus.OK)
-	@Operation(summary = "라이선스 이미지 삭제", description = "라이선스 이미지를 삭제합니다.")
 	public void deleteLicenseImage(@RequestHeader("LB-Role") String role, @PathVariable String licenseImageId) {
 		licenseImageDeleteService.deleteLicenseImage(role, licenseImageId);
 	}
