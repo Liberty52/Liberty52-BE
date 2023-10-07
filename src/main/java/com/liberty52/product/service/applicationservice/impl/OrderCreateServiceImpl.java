@@ -5,6 +5,7 @@ import com.liberty52.product.global.annotation.DistributedLock;
 import com.liberty52.product.global.event.Events;
 import com.liberty52.product.global.event.events.CardOrderedCompletedEvent;
 import com.liberty52.product.global.event.events.OrderRequestDepositEvent;
+import com.liberty52.product.global.event.events.OrderFailedPayRollbackEvent;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.badrequest.RequestForgeryPayException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourCustomProductException;
@@ -78,9 +79,13 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                 Events.raise(new CardOrderedCompletedEvent(orders));
                 yield PaymentConfirmResponseDto.of(orderId, orders.getOrderNum());
             }
-            case FORGERY -> throw new RequestForgeryPayException();
+            case FORGERY -> {
+                Events.raise(new OrderFailedPayRollbackEvent(orders.getId()));
+                throw new RequestForgeryPayException();
+            }
             default -> {
                 log.error("주문 결제 상태의 PAID or FORGERY 이외의 상태로 요청되었습니다. 요청주문의 상태: {}", orders.getPayment().getStatus());
+                Events.raise(new OrderFailedPayRollbackEvent(orders.getId()));
                 throw new ConfirmPaymentException();
             }
         };
