@@ -1,6 +1,7 @@
 package com.liberty52.product.service.applicationservice.impl;
 
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
+import com.liberty52.product.global.annotation.DistributedLock;
 import com.liberty52.product.global.event.Events;
 import com.liberty52.product.global.event.events.CardOrderedCompletedEvent;
 import com.liberty52.product.global.event.events.OrderRequestDepositEvent;
@@ -86,6 +87,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
+    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentCardResponseDto createCardPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile) {
         Orders order = this.saveOrder(authId, dto, imageFile);
         this.saveCardPayment(order);
@@ -93,6 +95,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
+    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentVBankResponseDto createVBankPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile) {
         Orders order = this.saveOrder(authId, dto, imageFile);
         this.saveVBankPayment(dto, order);
@@ -100,6 +103,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
+    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentCardResponseDto createCardPaymentOrdersByCarts(String authId, OrderCreateRequestDto dto) {
         List<CustomProduct> customProducts = this.getCustomProducts(authId, dto);
         Orders order = this.saveOrderByCarts(authId, dto, customProducts);
@@ -108,6 +112,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
+    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentVBankResponseDto createVBankPaymentOrdersByCarts(String authId, OrderCreateRequestDto dto) {
         List<CustomProduct> customProducts = this.getCustomProducts(authId, dto);
         Orders order = this.saveOrderByCarts(authId, dto, customProducts);
@@ -116,6 +121,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
+    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentCardResponseDto createCardPaymentOrdersByCartsForGuest(String authId, OrderCreateRequestDto dto) {
         List<CustomProduct> customProducts = this.getCustomProducts(authId, dto);
         Orders order = this.saveOrderByCarts(dto.getDestinationDto().getReceiverPhoneNumber(), dto, customProducts);
@@ -124,6 +130,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
+    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentVBankResponseDto createVBankPaymentOrdersByCartsForGuest(String authId, OrderCreateRequestDto dto) {
         List<CustomProduct> customProducts = this.getCustomProducts(authId, dto);
         Orders order = this.saveOrderByCarts(dto.getDestinationDto().getReceiverPhoneNumber(), dto, customProducts);

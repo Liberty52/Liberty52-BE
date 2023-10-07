@@ -1,6 +1,7 @@
 package com.liberty52.product.global.aspect;
 
 import com.liberty52.product.global.annotation.DistributedLock;
+import com.liberty52.product.global.exception.external.badrequest.DistributedLockException;
 import com.liberty52.product.global.util.CustomSpringELParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,22 +40,24 @@ public class DistributedLockAspect {
 
         RLock lock = redissonClient.getLock(key);
 
+        long start = System.currentTimeMillis();
         try {
             boolean available = lock.tryLock(dLock.waitTime(), dLock.leaseTime(), dLock.timeUnit());
-            log.debug("[LB-LOG] Distributed Lock - {} get lock", key);
+            log.info("[Distributed Lock] - {} get lock", key);
             if (!available) {
-                return false;
+                throw new DistributedLockException();
             }
             return transaction.proceed(joinPoint);
         } catch (InterruptedException e) {
-            log.error("Occurred InterruptedException during Redisson Lock\n", e);
+            log.error("[Distributed Lock] - Occurred InterruptedException during Redisson Lock\n", e);
             throw e;
         } finally {
             try {
                 lock.unlock();
-                log.debug("[LB-LOG] Distributed Lock - {} release lock", key);
+                long end = System.currentTimeMillis();
+                log.info("[Distributed Lock] Distributed Lock - {} release lock. Lock using on {}ms", key, end - start);
             } catch (IllegalMonitorStateException e) {
-                log.info("Redisson Lock Already UnLock. serviceName -> {}, key -> {}", method.getName(), key);
+                log.info("[Distributed Lock] - Already UnLock. serviceName -> {}, key -> {}", method.getName(), key);
             }
         }
     }
