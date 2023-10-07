@@ -16,9 +16,9 @@ public class OptionDetailCreateController {
 
     private final OptionDetailCreateService optionDetailCreateService;
 
+    @Operation(summary = "옵션 상세 생성", description = "관리자가 새로운 옵션 상세를 생성하는 엔드포인트입니다.")
     @PostMapping("/admin/optionDetail/{optionId}")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "옵션 상세 생성", description = "관리자 권한으로 옵션 상세를 생성합니다.")
     public void createOptionDetailByAdmin(@RequestHeader("LB-Role") String role,
                                    @Validated @RequestBody CreateOptionDetailRequestDto dto, @PathVariable String optionId) {
         optionDetailCreateService.createOptionDetailByAdmin(role, dto, optionId);
