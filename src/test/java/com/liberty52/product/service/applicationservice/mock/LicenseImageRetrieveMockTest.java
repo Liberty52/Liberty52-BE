@@ -28,7 +28,7 @@ class LicenseImageRetrieveMockTest {
 	LicenseImageRepository licenseImageRepository;
 
 	@Test
-	void retrieveLicenseImagesTest() {
+	void retrieveLicenseImagesByAdminTest() {
 		// Given
 		LocalDate startDate = LocalDate.of(2023, 1, 1);
 		LocalDate endDate = startDate.plusDays(10);
