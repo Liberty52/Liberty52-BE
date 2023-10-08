@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.liberty52.product.service.applicationservice.impl.LicenseImageRetrieveServiceImpl;
-import com.liberty52.product.service.controller.dto.LicenseImageRetrieveDto;
+import com.liberty52.product.service.controller.dto.LicenseImageRetrieveByAdminDto;
 import com.liberty52.product.service.entity.LicenseImage;
 import com.liberty52.product.service.repository.LicenseImageRepository;
 
@@ -45,7 +43,7 @@ class LicenseImageRetrieveMockTest {
 		given(licenseImageRepository.findAll()).willReturn(Collections.singletonList(mockLicense));
 
 		// When
-		List<LicenseImageRetrieveDto> result = licenseImageRetrieveService.retrieveLicenseImages(ADMIN);
+		List<LicenseImageRetrieveByAdminDto> result = licenseImageRetrieveService.retrieveLicenseImagesByAdmin(ADMIN);
 
 		// Then: 검증 로직 추가 (예: findAll 메소드 호출 확인 및 반환 값 확인)
 		verify(licenseImageRepository, times(1)).findAll();

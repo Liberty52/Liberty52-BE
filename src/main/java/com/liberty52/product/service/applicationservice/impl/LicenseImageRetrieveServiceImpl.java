@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.LicenseImageRetrieveService;
-import com.liberty52.product.service.controller.dto.LicenseImageRetrieveDto;
+import com.liberty52.product.service.controller.dto.LicenseImageRetrieveByAdminDto;
 import com.liberty52.product.service.entity.LicenseImage;
 import com.liberty52.product.service.repository.LicenseImageRepository;
 
@@ -20,11 +20,11 @@ public class LicenseImageRetrieveServiceImpl implements LicenseImageRetrieveServ
 	private final LicenseImageRepository licenseImageRepository;
 
 	@Override
-	public List<LicenseImageRetrieveDto> retrieveLicenseImages(String role) {
+	public List<LicenseImageRetrieveByAdminDto> retrieveLicenseImagesByAdmin(String role) {
 		Validator.isAdmin(role);
 		List<LicenseImage> licenseImageList = licenseImageRepository.findAll();
 		return licenseImageList.stream()
-			.map(LicenseImageRetrieveDto::new)
+			.map(LicenseImageRetrieveByAdminDto::new)
 			.toList();
 	}
 }

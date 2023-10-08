@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class LicenseImageRetrieveDto {
+public class LicenseImageRetrieveByAdminDto {
 	private String id;
 	private String artistName;
 	private String artName;
@@ -18,7 +18,7 @@ public class LicenseImageRetrieveDto {
 	private String licenseImageUrl;
 	private Integer stock;
 
-	public LicenseImageRetrieveDto(LicenseImage licenseImage) {
+	public LicenseImageRetrieveByAdminDto(LicenseImage licenseImage) {
 		this.id = licenseImage.getId();
 		this.artistName = licenseImage.getArtistName();
 		this.artName = licenseImage.getArtName();
