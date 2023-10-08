@@ -1,7 +1,9 @@
 package com.liberty52.product.service.applicationservice.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import com.liberty52.product.service.controller.dto.LicenseImageRetrieveDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,5 +28,14 @@ public class LicenseImageRetrieveServiceImpl implements LicenseImageRetrieveServ
 		return licenseImageList.stream()
 			.map(LicenseImageRetrieveByAdminDto::new)
 			.toList();
+	}
+
+	@Override
+	public List<LicenseImageRetrieveDto> retrieveLicenseImages() {
+		LocalDate today = LocalDate.now();
+		List<LicenseImage> licenseImageList = licenseImageRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(today, today);
+		return licenseImageList.stream()
+				.map(LicenseImageRetrieveDto::new)
+				.toList();
 	}
 }

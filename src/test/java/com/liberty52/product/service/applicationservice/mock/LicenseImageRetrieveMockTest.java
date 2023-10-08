@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
+import com.liberty52.product.service.controller.dto.LicenseImageRetrieveDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,33 @@ class LicenseImageRetrieveMockTest {
 
 	@Mock
 	LicenseImageRepository licenseImageRepository;
+
+	@Test
+	void retrieveLicenseImagesTest() {
+		// Given
+		LocalDate startDate = LocalDate.of(2023, 1, 1);
+		LocalDate endDate = startDate.plusDays(10);
+		LicenseImage mockLicense = LicenseImage.builder()
+				.artistName("testArtistName")
+				.artName("testArtName")
+				.startDate(startDate)
+				.endDate(endDate)
+				.licenseImageUrl("mockImageUrl")
+				.stock(10)
+				.build();
+		given(licenseImageRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDate.now(), LocalDate.now())).willReturn(Collections.singletonList(mockLicense));
+		// When
+		List<LicenseImageRetrieveDto> result = licenseImageRetrieveService.retrieveLicenseImages();
+
+		verify(licenseImageRepository, times(1)).findByStartDateLessThanEqualAndEndDateGreaterThanEqual(any(), any());
+		assertEquals(1, result.size());
+		assertEquals("testArtistName", result.get(0).getArtistName());
+		assertEquals("testArtName", result.get(0).getArtName());
+		assertEquals(startDate, result.get(0).getStartDate());
+		assertEquals(endDate, result.get(0).getEndDate());
+		assertEquals("mockImageUrl", result.get(0).getImageUrl());
+		assertEquals(10, result.get(0).getStock());
+	}
 
 	@Test
 	void retrieveLicenseImagesByAdminTest() {

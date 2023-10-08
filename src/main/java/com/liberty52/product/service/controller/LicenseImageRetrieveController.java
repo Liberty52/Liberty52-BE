@@ -2,6 +2,7 @@ package com.liberty52.product.service.controller;
 
 import java.util.List;
 
+import com.liberty52.product.service.controller.dto.LicenseImageRetrieveDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,5 +25,10 @@ public class LicenseImageRetrieveController {
 		return licenseImageRetrieveService.retrieveLicenseImagesByAdmin(role);
 	}
 
+	@GetMapping("/licenseImage")
+	@ResponseStatus(HttpStatus.OK)
+	public List<LicenseImageRetrieveDto> retrieveLicenseImages() {
+		return licenseImageRetrieveService.retrieveLicenseImages();
+	}
 
 }
