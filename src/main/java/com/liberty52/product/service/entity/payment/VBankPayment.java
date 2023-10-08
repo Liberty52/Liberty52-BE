@@ -36,6 +36,7 @@ public class VBankPayment extends Payment<VBankPayment.VBankPaymentInfo> {
     }
 
     @Override
+    @SuppressWarnings({"JpaAttributeTypeInspection", "unchecked"})
     public VBankPayment.VBankPaymentInfo getInfoAsDto() {
         try {
             return objectMapper.readValue(this.info, VBankPaymentInfo.class);

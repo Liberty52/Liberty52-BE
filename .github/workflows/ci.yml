@@ -1,17 +1,13 @@
-
-
 name: Java CI with Gradle
 
 on:
   pull_request:
-
 
 permissions:
   contents: read
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:

@@ -8,7 +8,7 @@ spring:
     active: local
   config:
     import:
-      - optional:configserver:http://a1a8630485e9e4831ad6b1e03d923edc-1731221295.us-west-2.elb.amazonaws.com:8888/
+      - optional:configserver:http://config-server.liberty52.com:8888/
   datasource:
       url: jdbc:h2:mem:testdb
   h2:
@@ -20,8 +20,13 @@ spring:
       label: main
   jpa:
     show-sql: true
+  output:
+    ansi:
+      enabled: always
 
 logging:
   level:
-    root: info
-
+    root: debug
+    com.netflix.discovery.DiscoveryClient: error
+    org.apache.kafka.clients.NetworkClient: off
+    aws.ConfigClusterResolver: off
