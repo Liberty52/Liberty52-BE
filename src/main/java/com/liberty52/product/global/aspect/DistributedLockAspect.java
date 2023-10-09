@@ -55,7 +55,7 @@ public class DistributedLockAspect {
             try {
                 lock.unlock();
                 long end = System.currentTimeMillis();
-                log.info("[Distributed Lock] Distributed Lock - {} release lock. Lock using on {}ms", key, end - start);
+                log.info("[Distributed Lock] - {} release lock. Lock using on {}ms", key, end - start);
             } catch (IllegalMonitorStateException e) {
                 log.info("[Distributed Lock] - Already UnLock. serviceName -> {}, key -> {}", method.getName(), key);
             }

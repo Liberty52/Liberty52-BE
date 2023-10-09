@@ -1,12 +1,10 @@
 package com.liberty52.product.service.applicationservice.impl;
 
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
-import com.liberty52.product.global.annotation.DistributedLock;
 import com.liberty52.product.global.event.Events;
 import com.liberty52.product.global.event.events.CardOrderedCompletedEvent;
-import com.liberty52.product.global.event.events.OrderRequestDepositEvent;
 import com.liberty52.product.global.event.events.OrderFailedPayRollbackEvent;
-import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.product.global.event.events.OrderRequestDepositEvent;
 import com.liberty52.product.global.exception.external.badrequest.RequestForgeryPayException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourCustomProductException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourOrderException;
@@ -14,6 +12,7 @@ import com.liberty52.product.global.exception.external.internalservererror.Confi
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.global.util.ThreadManager;
+import com.liberty52.product.service.applicationservice.OptionDetailStockManageService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
 import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
@@ -45,6 +44,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     private static final String RESOURCE_NAME_OPTION_DETAIL = "OptionDetail";
     private static final String PARAM_NAME_OPTION_DETAIL_NAME = "name";
     private final S3UploaderApi s3Uploader;
+    private final OptionDetailStockManageService optionDetailStockManageService;
     private final ProductRepository productRepository;
     private final CustomProductRepository customProductRepository;
     private final OrdersRepository ordersRepository;
@@ -92,7 +92,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
-    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentCardResponseDto createCardPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile) {
         Orders order = this.saveOrder(authId, dto, imageFile);
         this.saveCardPayment(order);
@@ -100,7 +99,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
-    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentVBankResponseDto createVBankPaymentOrders(String authId, OrderCreateRequestDto dto, MultipartFile imageFile) {
         Orders order = this.saveOrder(authId, dto, imageFile);
         this.saveVBankPayment(dto, order);
@@ -108,7 +106,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
-    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentCardResponseDto createCardPaymentOrdersByCarts(String authId, OrderCreateRequestDto dto) {
         List<CustomProduct> customProducts = this.getCustomProducts(authId, dto);
         Orders order = this.saveOrderByCarts(authId, dto, customProducts);
@@ -117,7 +114,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
-    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentVBankResponseDto createVBankPaymentOrdersByCarts(String authId, OrderCreateRequestDto dto) {
         List<CustomProduct> customProducts = this.getCustomProducts(authId, dto);
         Orders order = this.saveOrderByCarts(authId, dto, customProducts);
@@ -126,7 +122,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
-    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentCardResponseDto createCardPaymentOrdersByCartsForGuest(String authId, OrderCreateRequestDto dto) {
         List<CustomProduct> customProducts = this.getCustomProducts(authId, dto);
         Orders order = this.saveOrderByCarts(dto.getDestinationDto().getReceiverPhoneNumber(), dto, customProducts);
@@ -135,7 +130,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     @Override
-    @DistributedLock(key = "#dto.getProductDto().getProductName()", waitTime = 7L)
     public PaymentVBankResponseDto createVBankPaymentOrdersByCartsForGuest(String authId, OrderCreateRequestDto dto) {
         List<CustomProduct> customProducts = this.getCustomProducts(authId, dto);
         Orders order = this.saveOrderByCarts(dto.getDestinationDto().getReceiverPhoneNumber(), dto, customProducts);
@@ -181,10 +175,11 @@ public class OrderCreateServiceImpl implements OrderCreateService {
 
     private List<OptionDetail> getOptionDetails(OrderCreateRequestDto dto) {
         return dto.getProductDto().getOptions().stream()
+                //TODO option detail 조회를 id로 변경되면, 179 - 182를 합칠 수 있음.
                 .map(optionName -> optionDetailRepository.findByName(optionName)
                         .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_OPTION_DETAIL, PARAM_NAME_OPTION_DETAIL_NAME, optionName)))
-                .peek(it -> it.sold(dto.getProductDto().getQuantity())
-                        .orElseThrow(() -> new BadRequestException(it.getName() + " 옵션의 재고량이 부족하여 구매할 수 없습니다.")))
+                .peek(it -> optionDetailStockManageService.decrement(it.getId(), dto.getProductDto().getQuantity())
+                        .getOrThrows())
                 .toList();
     }
 
@@ -198,8 +193,8 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                     }
                     customProduct.getOptions().stream()
                             .map(CustomProductOption::getOptionDetail)
-                            .forEach(it -> it.sold(customProduct.getQuantity())
-                                    .orElseThrow(() -> new BadRequestException(it.getName() + " 옵션의 재고량이 부족하여 구매할 수 없습니다.")));
+                            .forEach(it -> optionDetailStockManageService.decrement(it.getId(), customProduct.getQuantity())
+                                    .getOrThrows());
                 })
                 .toList();
     }

@@ -67,7 +67,7 @@ public class MockFactory {
     }
 
     public static OptionDetail createOptionDetail(String name, Integer price, Integer stock) {
-        return createOptionDetail(name, price, true, stock, null);
+        return createOptionDetail(name, price, true, stock, MockFactory.createProductOption("po", false));
     }
 
     public static OptionDetail createOptionDetail(String name, Integer price, Integer stock, ProductOption po) {

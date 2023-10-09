@@ -7,6 +7,8 @@ import java.util.function.Supplier;
 public abstract sealed class Result<T> {
     public abstract T getOrThrow() throws Throwable;
 
+    public abstract T getOrThrows() throws RuntimeException;
+
     public abstract Result<T> onSuccess(Consumer<T> consumer);
 
     public abstract Result<T> onFailure(Consumer<Throwable> consumer);
@@ -61,6 +63,11 @@ public abstract sealed class Result<T> {
         @Override
         public T getOrThrow() {
             return value;
+        }
+
+        @Override
+        public T getOrThrows() {
+             return value;
         }
 
         @Override
@@ -148,14 +155,21 @@ public abstract sealed class Result<T> {
 
     public static final class Failure<T> extends Result<T> {
         private final Throwable error;
+        private final RuntimeException runtimeException;
 
         public Failure(Throwable throwable) {
             this.error = throwable;
+            this.runtimeException = (RuntimeException) throwable;
         }
 
         @Override
         public T getOrThrow() throws Throwable {
             throw error;
+        }
+
+        @Override
+        public T getOrThrows() throws RuntimeException {
+            throw runtimeException;
         }
 
         @Override

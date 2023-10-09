@@ -8,7 +8,9 @@ import com.liberty52.product.global.exception.external.forbidden.NotYourOrderExc
 import com.liberty52.product.global.exception.external.internalservererror.ConfirmPaymentException;
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
+import com.liberty52.product.global.util.Result;
 import com.liberty52.product.global.util.ThreadManager;
+import com.liberty52.product.service.applicationservice.OptionDetailStockManageService;
 import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
 import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
 import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
@@ -41,6 +43,7 @@ public class OrderCreateServiceImplUnitTest {
     @InjectMocks private OrderCreateServiceImpl service;
     @Mock private S3UploaderApi s3UploaderApi;
     @Mock private ProductRepository productRepository;
+    @Mock private OptionDetailStockManageService optionDetailStockManageService;
     @Mock private CustomProductRepository customProductRepository;
     @Mock private OrdersRepository ordersRepository;
     @Mock private OptionDetailRepository optionDetailRepository;
@@ -72,8 +75,12 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
                 MockFactory.createOptionDetail("od_3", 30000, 10, productOption)
         );
-        optionDetails.forEach(it -> given(optionDetailRepository.findByName(it.getName()))
-                .willReturn(Optional.of(it)));
+        optionDetails.forEach(it -> {
+            given(optionDetailRepository.findByName(it.getName()))
+                    .willReturn(Optional.of(it));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.success(it));
+        });
 
         var authId = "user_id";
         var order = MockFactory.createOrder(authId);
@@ -150,8 +157,12 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
                 MockFactory.createOptionDetail("od_3", 30000, 0, productOption)
         );
-        optionDetails.forEach(it -> given(optionDetailRepository.findByName(it.getName()))
-                .willReturn(Optional.of(it)));
+        optionDetails.forEach(it -> {
+            lenient().when(optionDetailRepository.findByName(it.getName()))
+                    .thenReturn(Optional.of(it));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
+        });
         var options = optionDetails.stream().map(OptionDetail::getName).toList();
         // when
         // then
@@ -175,8 +186,12 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
                 MockFactory.createOptionDetail("od_3", 30000, 1, productOption)
         );
-        optionDetails.forEach(it -> given(optionDetailRepository.findByName(it.getName()))
-                .willReturn(Optional.of(it)));
+        optionDetails.forEach(it -> {
+            lenient().when(optionDetailRepository.findByName(it.getName()))
+                    .thenReturn(Optional.of(it));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
+        });
         var options = optionDetails.stream().map(OptionDetail::getName).toList();
         // when
         // then
@@ -210,8 +225,12 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
                 MockFactory.createOptionDetail("od_3", 30000, 10, productOption)
         );
-        optionDetails.forEach(it -> given(optionDetailRepository.findByName(it.getName()))
-                .willReturn(Optional.of(it)));
+        optionDetails.forEach(it -> {
+            given(optionDetailRepository.findByName(it.getName()))
+                    .willReturn(Optional.of(it));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.success(it));
+        });
 
         var authId = "user_id";
         var order = MockFactory.createOrder(authId);
@@ -290,8 +309,12 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
                 MockFactory.createOptionDetail("od_3", 30000, 0, productOption)
         );
-        optionDetails.forEach(it -> given(optionDetailRepository.findByName(it.getName()))
-                .willReturn(Optional.of(it)));
+        optionDetails.forEach(it -> {
+            lenient().when(optionDetailRepository.findByName(it.getName()))
+                    .thenReturn(Optional.of(it));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
+        });
 
         var options = optionDetails.stream().map(OptionDetail::getName).toList();
         // when
@@ -316,8 +339,12 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
                 MockFactory.createOptionDetail("od_3", 30000, 1, productOption)
         );
-        optionDetails.forEach(it -> given(optionDetailRepository.findByName(it.getName()))
-                .willReturn(Optional.of(it)));
+        optionDetails.forEach(it -> {
+            lenient().when(optionDetailRepository.findByName(it.getName()))
+                    .thenReturn(Optional.of(it));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
+        });
         var options = optionDetails.stream().map(OptionDetail::getName).toList();
         // when
         // then
@@ -357,10 +384,15 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createCustomProduct(imageUrl, 1, authId, product)
         );
         customProducts.forEach(cp -> {
-            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            optionDetails.forEach(od -> {
+                MockFactory.createCustomProductOption(cp, od);
+                given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                        .willReturn(Result.success(od));
+            });
             given(customProductRepository.findById(cp.getId()))
                     .willReturn(Optional.of(cp));
         });
+
 
         var order = MockFactory.createOrder(authId);
         given(ordersRepository.save(any())).willReturn(order);
@@ -412,7 +444,11 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createCustomProduct(imageUrl, 1, "not_yours", product)
         );
         customProducts.forEach(cp -> {
-            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            optionDetails.forEach(od -> {
+                MockFactory.createCustomProductOption(cp, od);
+                given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                        .willReturn(Result.success(od));
+            });
             given(customProductRepository.findById(cp.getId()))
                     .willReturn(Optional.of(cp));
         });
@@ -449,6 +485,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -482,6 +520,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -513,6 +553,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -553,7 +595,11 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createCustomProduct(imageUrl, 1, authId, product)
         );
         customProducts.forEach(cp -> {
-            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            optionDetails.forEach(od -> {
+                MockFactory.createCustomProductOption(cp, od);
+                given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                        .willReturn(Result.success(od));
+            });
             given(customProductRepository.findById(cp.getId()))
                     .willReturn(Optional.of(cp));
         });
@@ -610,7 +656,11 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createCustomProduct(imageUrl, 1, "not_yours", product)
         );
         customProducts.forEach(cp -> {
-            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            optionDetails.forEach(od -> {
+                MockFactory.createCustomProductOption(cp, od);
+                given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                        .willReturn(Result.success(od));
+            });
             given(customProductRepository.findById(cp.getId()))
                     .willReturn(Optional.of(cp));
         });
@@ -647,6 +697,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -680,6 +732,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -711,6 +765,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -751,7 +807,11 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createCustomProduct(imageUrl, 1, authId, product)
         );
         customProducts.forEach(cp -> {
-            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            optionDetails.forEach(od -> {
+                MockFactory.createCustomProductOption(cp, od);
+                given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                        .willReturn(Result.success(od));
+            });
             given(customProductRepository.findById(cp.getId()))
                     .willReturn(Optional.of(cp));
         });
@@ -806,7 +866,11 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createCustomProduct(imageUrl, 1, "not_yours", product)
         );
         customProducts.forEach(cp -> {
-            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            optionDetails.forEach(od -> {
+                MockFactory.createCustomProductOption(cp, od);
+                given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                        .willReturn(Result.success(od));
+            });
             given(customProductRepository.findById(cp.getId()))
                     .willReturn(Optional.of(cp));
         });
@@ -843,6 +907,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -876,6 +942,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -907,6 +975,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -948,7 +1018,11 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createCustomProduct(imageUrl, 1, authId, product)
         );
         customProducts.forEach(cp -> {
-            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            optionDetails.forEach(od -> {
+                MockFactory.createCustomProductOption(cp, od);
+                given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                        .willReturn(Result.success(od));
+            });
             given(customProductRepository.findById(cp.getId()))
                     .willReturn(Optional.of(cp));
         });
@@ -1005,7 +1079,11 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createCustomProduct(imageUrl, 1, "not_yours", product)
         );
         customProducts.forEach(cp -> {
-            optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
+            optionDetails.forEach(od -> {
+                MockFactory.createCustomProductOption(cp, od);
+                given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                        .willReturn(Result.success(od));
+            });
             given(customProductRepository.findById(cp.getId()))
                     .willReturn(Optional.of(cp));
         });
@@ -1042,6 +1120,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -1075,6 +1155,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
@@ -1106,6 +1188,8 @@ public class OrderCreateServiceImplUnitTest {
             optionDetails.forEach(od -> MockFactory.createCustomProductOption(cp, od));
             lenient().when(customProductRepository.findById(cp.getId()))
                     .thenReturn(Optional.of(cp));
+            given(optionDetailStockManageService.decrement(anyString(), anyInt()))
+                    .willReturn(Result.failure(new BadRequestException("")));
         });
         // when
         // then
