@@ -17,6 +17,7 @@ public class BeanConfig {
      * PortOne API를 호출하는 WebClient.
      */
     @Bean
+    @SuppressWarnings("deprecation")
     public WebClient webClient() {
         HttpClient httpClient = HttpClient.create()
                 .tcpConfiguration(
