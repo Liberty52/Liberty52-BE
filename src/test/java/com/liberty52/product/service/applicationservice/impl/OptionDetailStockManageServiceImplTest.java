@@ -58,6 +58,36 @@ class OptionDetailStockManageServiceImplTest {
     }
 
     @Test
+    @DisplayName("재고량이 1개인 옵션의 재고량을 2개로 롤백시킨다")
+    void rollback_when_success() {
+        // given
+        final var optionDetail = initOptionDetail(1);
+        given(optionDetailRepository.findById(anyString()))
+                .willReturn(Optional.of(optionDetail));
+        // when
+        var result = service.rollback("id", 1).getOrNull();
+        // then
+        assertNotNull(result);
+        assertEquals(optionDetail, result);
+        assertEquals(2, result.getStock());
+    }
+
+    @Test
+    @DisplayName("재고량이 0개인 옵션의 재고량은 롤백되어 증가되지 않는다")
+    void rollback_when_success_zero_stock() {
+        // given
+        final var optionDetail = initOptionDetail(0);
+        given(optionDetailRepository.findById(anyString()))
+                .willReturn(Optional.of(optionDetail));
+        // when
+        var result = service.rollback("id", 1).getOrNull();
+        // then
+        assertNotNull(result);
+        assertEquals(optionDetail, result);
+        assertEquals(0, result.getStock());
+    }
+
+    @Test
     @DisplayName("존재하지 않는 옵션의 재고를 감소시킬 수 없다")
     void decrement_when_noResultOptionDetail() {
         // given
@@ -82,6 +112,20 @@ class OptionDetailStockManageServiceImplTest {
         assertThrows(
                 ResourceNotFoundException.class,
                 () -> service.increment("od", 2).getOrThrow()
+        );
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 옵션의 재고를 롤백할 수 없다")
+    void rollback_when_noResultOptionDetail() {
+        // given
+        given(optionDetailRepository.findById(anyString()))
+                .willReturn(Optional.empty());
+        // when
+        // then
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> service.rollback("od", 2).getOrThrow()
         );
     }
 

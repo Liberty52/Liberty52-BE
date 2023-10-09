@@ -12,7 +12,7 @@ import com.liberty52.product.global.exception.external.internalservererror.Confi
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.global.util.ThreadManager;
-import com.liberty52.product.service.applicationservice.OptionDetailStockManageService;
+import com.liberty52.product.service.applicationservice.OptionDetailMultipleStockManageService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
 import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
@@ -44,7 +44,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     private static final String RESOURCE_NAME_OPTION_DETAIL = "OptionDetail";
     private static final String PARAM_NAME_OPTION_DETAIL_NAME = "name";
     private final S3UploaderApi s3Uploader;
-    private final OptionDetailStockManageService optionDetailStockManageService;
+    private final OptionDetailMultipleStockManageService optionDetailMultipleStockManageService;
     private final ProductRepository productRepository;
     private final CustomProductRepository customProductRepository;
     private final OrdersRepository ordersRepository;
@@ -174,13 +174,13 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     private List<OptionDetail> getOptionDetails(OrderCreateRequestDto dto) {
-        return dto.getProductDto().getOptions().stream()
+        List<String> optionDetailIds = dto.getProductDto().getOptions().stream()
                 //TODO option detail 조회를 id로 변경되면, 179 - 182를 합칠 수 있음.
                 .map(optionName -> optionDetailRepository.findByName(optionName)
                         .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_OPTION_DETAIL, PARAM_NAME_OPTION_DETAIL_NAME, optionName)))
-                .peek(it -> optionDetailStockManageService.decrement(it.getId(), dto.getProductDto().getQuantity())
-                        .getOrThrows())
+                .map(OptionDetail::getId)
                 .toList();
+        return optionDetailMultipleStockManageService.decrement(optionDetailIds, dto.getProductDto().getQuantity()).getOrThrow();
     }
 
     private List<CustomProduct> getCustomProducts(String authId, OrderCreateRequestDto dto) {
@@ -191,10 +191,11 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                     if (!Objects.equals(authId, customProduct.getAuthId())) {
                         throw new NotYourCustomProductException(authId);
                     }
-                    customProduct.getOptions().stream()
+                    var optionIds = customProduct.getOptions().stream()
                             .map(CustomProductOption::getOptionDetail)
-                            .forEach(it -> optionDetailStockManageService.decrement(it.getId(), customProduct.getQuantity())
-                                    .getOrThrows());
+                            .map(OptionDetail::getId)
+                            .toList();
+                    optionDetailMultipleStockManageService.decrement(optionIds, customProduct.getQuantity()).getOrThrow();
                 })
                 .toList();
     }
