@@ -22,7 +22,7 @@ public class CartItemModifyController {
 
   private final CartItemModifyService cartItemModifyService;
 
-  @Operation(summary = "비회원 장바구니 상품 수정", description = "주어진 인증 ID, 이미지 파일 및 장바구니 상품 수정 요청을 사용하여 비회원 장바구니 상품을 수정합니다.")
+  @Operation(summary = "장바구니 상품 수정", description = "주어진 인증 ID, 이미지 파일 및 장바구니 상품 수정 요청을 사용하여 사용자 장바구니 상품을 수정합니다.")
   @PatchMapping("/carts/custom-products/{customProductId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void modifyUserCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId, @RequestPart CartModifyRequestDto dto,

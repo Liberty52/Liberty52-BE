@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class LicenseImageRetrieveController {
 	private final LicenseImageRetrieveService licenseImageRetrieveService;
 
-	@Operation(summary = "라이선스 이미지 조회", description = "라이선스 이미지를 조회합니다.")
+	@Operation(summary = "라이선스 이미지 조회", description = "관리자 권한을 사용하여 라이선스 이미지를 조회합니다.")
 	@GetMapping("/admin/licenseImage")
 	@ResponseStatus(HttpStatus.OK)
 	public List<LicenseImageRetrieveDto> retrieveLicenseImages(@RequestHeader("LB-Role") String role) {

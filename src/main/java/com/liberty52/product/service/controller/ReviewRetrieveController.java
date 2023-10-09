@@ -14,7 +14,7 @@ import com.liberty52.product.service.controller.dto.AdminReviewDetailResponse;
 import com.liberty52.product.service.controller.dto.AdminReviewRetrieveResponse;
 import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse;
 
-@Tag(name = "상품", description = "상품 관련 API를 제공합니다")
+@Tag(name = "리뷰", description = "리뷰 관련 API를 제공합니다")
 @Slf4j
 @RequiredArgsConstructor
 @RestController

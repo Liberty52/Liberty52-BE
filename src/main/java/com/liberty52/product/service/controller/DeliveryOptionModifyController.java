@@ -10,7 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "배송 정보", description = "배송 정보 관련 API를 제공합니다.")
+@Tag(name = "배송", description = "배송 관련 API를 제공합니다.")
 @RestController
 @RequiredArgsConstructor
 public class DeliveryOptionModifyController {

@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "옵션 상세", description = "옵션 상세 관련 API를 제공합니다")
+@Tag(name = "상품", description = "상품 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
 public class OptionDetailCreateController {

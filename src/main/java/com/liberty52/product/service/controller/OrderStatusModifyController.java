@@ -17,7 +17,7 @@ public class OrderStatusModifyController {
 
   private final OrderStatusModifyService orderStatusModifyService;
 
-  @Operation(summary = "주문 상태 수정 (관리자)", description = "관리자가 주문의 상태를 수정합니다.")
+  @Operation(summary = "주문 상태 변경", description = "관리자가 주문의 상태를 수정합니다.")
   @PutMapping("/admin/orders/{orderId}/status")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void modifyOrderStatusByAdmin(
@@ -27,7 +27,7 @@ public class OrderStatusModifyController {
     orderStatusModifyService.modifyOrderStatusByAdmin(role, orderId, orderStatus);
   }
 
-  @Operation(summary = "가상계좌 주문 상태 수정 (관리자)", description = "관리자가 가상계좌 주문의 상태를 수정합니다.")
+  @Operation(summary = "가상계좌 주문 상태 수정", description = "관리자가 가상계좌 주문의 상태를 수정합니다.")
   @PutMapping("/admin/orders/{orderId}/vbank")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void modifyOrderStatusOfVBankByAdmin(

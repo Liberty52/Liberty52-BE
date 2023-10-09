@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class LicenseImageModifyController {
 	private final LicenseImageModifyService licenseImageModifyService;
 
-	@Operation(summary = "라이선스 이미지 수정", description = "라이선스 이미지를 수정합니다.")
+	@Operation(summary = "라이선스 이미지 수정", description = "관리자 권한을 사용하여 라이선스 이미지를 수정합니다.")
 	@PutMapping("/admin/licenseImage/{licenseImageId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void modifyLicenseImage(@RequestHeader("LB-Role") String role,

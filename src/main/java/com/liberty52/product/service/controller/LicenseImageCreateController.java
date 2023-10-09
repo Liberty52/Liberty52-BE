@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class LicenseImageCreateController {
 	private final LicenseImageCreateService licenseImageCreateService;
 
-	@Operation(summary = "라이선스 이미지 생성", description = "라이선스 이미지를 생성합니다.")
+	@Operation(summary = "라이선스 이미지 생성", description = "관리자 권한을 사용하여 라이선스 이미지를 생성합니다.")
 	@PostMapping("/admin/licenseImage")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createLicenseImage(@RequestHeader("LB-Role") String role,

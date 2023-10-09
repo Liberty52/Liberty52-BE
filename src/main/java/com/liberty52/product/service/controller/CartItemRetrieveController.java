@@ -18,7 +18,7 @@ public class CartItemRetrieveController {
 
     private final CartItemRetrieveService cartItemRetrieveService;
 
-    @Operation(summary = "비회원 장바구니 상품 목록 조회", description = "주어진 인증 ID를 사용하여 비회원 장바구니 상품 목록을 조회합니다.")
+    @Operation(summary = "장바구니 상품 목록 조회", description = "주어진 인증 ID를 사용하여 사용자 장바구니 상품 목록을 조회합니다.")
     @GetMapping("/carts")
     @ResponseStatus(HttpStatus.OK)
     public List<CartItemResponse> retrieveAuthCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId) {

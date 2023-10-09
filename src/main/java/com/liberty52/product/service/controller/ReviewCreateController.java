@@ -12,7 +12,7 @@ import com.liberty52.product.service.applicationservice.ReviewCreateService;
 import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
 import java.util.List;
 
-@Tag(name = "상품", description = "상품 관련 API를 제공합니다")
+@Tag(name = "리뷰", description = "리뷰 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
 public class ReviewCreateController {

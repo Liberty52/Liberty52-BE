@@ -11,7 +11,7 @@ import com.liberty52.product.service.controller.dto.OptionDetailModifyRequestDto
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "옵션 상세", description = "옵션 상세 관련 API를 제공합니다")
+@Tag(name = "상품", description = "상품 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
 public class OptionDetailModifyController {

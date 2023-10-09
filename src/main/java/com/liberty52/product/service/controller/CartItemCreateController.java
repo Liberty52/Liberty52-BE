@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class CartItemCreateController {
     private final CartItemCreateService cartItemCreateService;
 
-    @Operation(summary = "비회원 장바구니 상품 생성", description = "주어진 인증 ID, 이미지 파일 및 장바구니 상품 요청을 사용하여 비회원 장바구니 상품을 생성합니다.")
+    @Operation(summary = "장바구니 상품 생성", description = "주어진 인증 ID, 이미지 파일 및 장바구니 상품 요청을 사용하여 사용자 장바구니 상품을 생성합니다.")
     @PostMapping("/carts/custom-products")
     @ResponseStatus(HttpStatus.CREATED)
     public void createAuthCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId, @RequestPart(value = "file") MultipartFile imageFile, @RequestPart CartItemRequest dto) {

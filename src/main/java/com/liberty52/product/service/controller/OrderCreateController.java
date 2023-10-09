@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class OrderCreateController {
     private final OrderCreateService orderCreateService;
 
-    @Operation(summary = "카드 결제 주문 생성", description = "카드 결제 주문을 생성하는 엔드포인트입니다.")
+    @Operation(summary = "카드 결제 주문 생성", description = "사용자가 카드 결제 주문을 생성하는 엔드포인트입니다.")
     @PostMapping("/orders/card")
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentCardResponseDto createCardPaymentOrders(
@@ -28,7 +28,7 @@ public class OrderCreateController {
         return orderCreateService.createCardPaymentOrders(authId, dto, imageFile);
     }
 
-    @Operation(summary = "카드 결제 주문 최종 승인 확인", description = "카드 결제 주문의 최종 승인을 확인하는 엔드포인트입니다.")
+    @Operation(summary = "카드 결제 주문 최종 승인 확인", description = "사용자가 카드 결제 주문의 최종 승인을 확인하는 엔드포인트입니다.")
     @GetMapping("/orders/card/{orderId}/confirm")
     @ResponseStatus(HttpStatus.OK)
     public PaymentConfirmResponseDto confirmFinalApprovalOfCardPayment(
@@ -49,7 +49,7 @@ public class OrderCreateController {
         return orderCreateService.createVBankPaymentOrders(authId, dto, imageFile);
     }
 
-    @Operation(summary = "카트를 이용한 카드 결제 주문 생성", description = "카트를 이용하여 카드 결제 주문을 생성하는 엔드포인트입니다.")
+    @Operation(summary = "카트를 이용한 카드 결제 주문 생성", description = "사용자가 카트를 이용하여 카드 결제 주문을 생성하는 엔드포인트입니다.")
     @PostMapping("/orders/card/carts")
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentCardResponseDto createCardPaymentOrdersByCarts(
@@ -59,7 +59,7 @@ public class OrderCreateController {
         return orderCreateService.createCardPaymentOrdersByCarts(authId, dto);
     }
 
-    @Operation(summary = "카트를 이용한 가상 계좌 결제 주문 생성", description = "카트를 이용하여 가상 계좌 결제 주문을 생성하는 엔드포인트입니다.")
+    @Operation(summary = "카트를 이용한 가상 계좌 결제 주문 생성", description = "사용자가 카트를 이용하여 가상 계좌 결제 주문을 생성하는 엔드포인트입니다.")
     @PostMapping("/orders/vbank/carts")
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentVBankResponseDto createVBankPaymentOrdersByCarts(

@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class LicenseImageDeleteController {
 	private final LicenseImageDeleteService licenseImageDeleteService;
 
-	@Operation(summary = "라이선스 이미지 삭제", description = "라이선스 이미지를 삭제합니다.")
+	@Operation(summary = "라이선스 이미지 삭제", description = "관리자 권한을 사용하여 라이선스 이미지를 삭제합니다.")
 	@DeleteMapping("/admin/licenseImage/{licenseImageId}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteLicenseImage(@RequestHeader("LB-Role") String role, @PathVariable String licenseImageId) {

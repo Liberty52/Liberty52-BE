@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "배송 정보", description = "배송 정보 관련 API를 제공합니다.")
+@Tag(name = "배송", description = "배송 관련 API를 제공합니다.")
 @RestController
 @RequiredArgsConstructor
 public class DeliveryOptionRetrieveController {
