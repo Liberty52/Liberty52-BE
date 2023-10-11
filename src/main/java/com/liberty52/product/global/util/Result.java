@@ -5,7 +5,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract sealed class Result<T> {
-    public abstract T getOrThrow() throws Throwable;
+    public abstract T getOrThrow() throws RuntimeException;
 
     public abstract Result<T> onSuccess(Consumer<T> consumer);
 
@@ -147,14 +147,18 @@ public abstract sealed class Result<T> {
     }
 
     public static final class Failure<T> extends Result<T> {
-        private final Throwable error;
+        private final RuntimeException error;
 
         public Failure(Throwable throwable) {
-            this.error = throwable;
+            if (throwable instanceof RuntimeException e) {
+                this.error = e;
+            } else {
+                this.error = new RuntimeException(throwable);
+            }
         }
 
         @Override
-        public T getOrThrow() throws Throwable {
+        public T getOrThrow() throws RuntimeException {
             throw error;
         }
 
