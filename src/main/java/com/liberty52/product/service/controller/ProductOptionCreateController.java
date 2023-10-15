@@ -14,13 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductOptionCreateController {
 
-    private final ProductOptionCreateService productOptionCreateService;
 
-    @Operation(summary = "상품 옵션 생성", description = "관리자가 특정 상품에 옵션을 생성합니다.")
-    @PostMapping("/admin/productOption/{productId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createProductOptionByAdmin(@RequestHeader("LB-Role") String role,
-                                          @Validated @RequestBody CreateProductOptionRequestDto dto, @PathVariable String productId) {
-        productOptionCreateService.createProductOptionByAdmin(role, dto, productId);
-    }
+
 }

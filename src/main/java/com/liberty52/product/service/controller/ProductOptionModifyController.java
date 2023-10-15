@@ -15,20 +15,6 @@ import com.liberty52.product.service.controller.dto.ProductOptionModifyRequestDt
 @RestController
 public class ProductOptionModifyController {
 
-    private final ProductOptionModifyService productOptionModifyService;
 
-    @Operation(summary = "상품 옵션 수정", description = "관리자가 특정 상품 옵션을 수정합니다.")
-    @PutMapping("/admin/productOption/{productOptionId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void modifyProductOptionByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productOptionId, @Validated @RequestBody ProductOptionModifyRequestDto dto) {
-        productOptionModifyService.modifyProductOptionByAdmin(role, productOptionId, dto);
-    }
-
-    @Operation(summary = "상품 옵션 판매 상태 수정", description = "관리자가 특정 상품 옵션의 판매 상태를 수정합니다.")
-    @PutMapping("/admin/productOptionOnSale/{productOptionId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void modifyProductOptionOnSailStateByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productOptionId) {
-        productOptionModifyService.modifyProductOptionOnSailStateByAdmin(role, productOptionId);
-    }
 
 }
