@@ -3,8 +3,8 @@ package com.liberty52.product.service.applicationservice.impl;
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.event.Events;
 import com.liberty52.product.global.event.events.CardOrderedCompletedEvent;
+import com.liberty52.product.global.event.events.OrderFailedPayRollbackEvent;
 import com.liberty52.product.global.event.events.OrderRequestDepositEvent;
-import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.badrequest.RequestForgeryPayException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourCustomProductException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourOrderException;
@@ -12,6 +12,7 @@ import com.liberty52.product.global.exception.external.internalservererror.Confi
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.global.util.ThreadManager;
+import com.liberty52.product.service.applicationservice.OptionDetailMultipleStockManageService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
 import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
@@ -43,6 +44,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     private static final String RESOURCE_NAME_OPTION_DETAIL = "OptionDetail";
     private static final String PARAM_NAME_OPTION_DETAIL_NAME = "name";
     private final S3UploaderApi s3Uploader;
+    private final OptionDetailMultipleStockManageService optionDetailMultipleStockManageService;
     private final ProductRepository productRepository;
     private final CustomProductRepository customProductRepository;
     private final OrdersRepository ordersRepository;
@@ -77,9 +79,13 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                 Events.raise(new CardOrderedCompletedEvent(orders));
                 yield PaymentConfirmResponseDto.of(orderId, orders.getOrderNum());
             }
-            case FORGERY -> throw new RequestForgeryPayException();
+            case FORGERY -> {
+                Events.raise(new OrderFailedPayRollbackEvent(orders.getId()));
+                throw new RequestForgeryPayException();
+            }
             default -> {
                 log.error("주문 결제 상태의 PAID or FORGERY 이외의 상태로 요청되었습니다. 요청주문의 상태: {}", orders.getPayment().getStatus());
+                Events.raise(new OrderFailedPayRollbackEvent(orders.getId()));
                 throw new ConfirmPaymentException();
             }
         };
@@ -168,12 +174,13 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     private List<OptionDetail> getOptionDetails(OrderCreateRequestDto dto) {
-        return dto.getProductDto().getOptions().stream()
+        List<String> optionDetailIds = dto.getProductDto().getOptions().stream()
+                //TODO option detail 조회를 id로 변경되면, 179 - 182를 합칠 수 있음.
                 .map(optionName -> optionDetailRepository.findByName(optionName)
                         .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_OPTION_DETAIL, PARAM_NAME_OPTION_DETAIL_NAME, optionName)))
-                .peek(it -> it.sold(dto.getProductDto().getQuantity())
-                        .orElseThrow(() -> new BadRequestException(it.getName() + " 옵션의 재고량이 부족하여 구매할 수 없습니다.")))
+                .map(OptionDetail::getId)
                 .toList();
+        return optionDetailMultipleStockManageService.decrement(optionDetailIds, dto.getProductDto().getQuantity()).getOrThrow();
     }
 
     private List<CustomProduct> getCustomProducts(String authId, OrderCreateRequestDto dto) {
@@ -184,10 +191,11 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                     if (!Objects.equals(authId, customProduct.getAuthId())) {
                         throw new NotYourCustomProductException(authId);
                     }
-                    customProduct.getOptions().stream()
+                    var optionIds = customProduct.getOptions().stream()
                             .map(CustomProductOption::getOptionDetail)
-                            .forEach(it -> it.sold(customProduct.getQuantity())
-                                    .orElseThrow(() -> new BadRequestException(it.getName() + " 옵션의 재고량이 부족하여 구매할 수 없습니다.")));
+                            .map(OptionDetail::getId)
+                            .toList();
+                    optionDetailMultipleStockManageService.decrement(optionIds, customProduct.getQuantity()).getOrThrow();
                 })
                 .toList();
     }

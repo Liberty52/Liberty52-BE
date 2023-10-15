@@ -12,4 +12,5 @@ COPY --from=builder ${JAR_FILE} app.jar
 EXPOSE 8080
 ARG SPRING_PROFILES_ACTIVE=dev
 ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
+ENV TZ=Asia/Seoul
 ENTRYPOINT ["java","-jar", "app.jar", "-Xmx2g", "-Xms256m", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}"]

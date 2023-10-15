@@ -71,4 +71,10 @@ public class OptionDetail {
             return Optional.of(this);
         }
     }
+
+    public void rollbackStock(int quantity) {
+        synchronized (this) {
+            this.stock += quantity;
+        }
+    }
 }
