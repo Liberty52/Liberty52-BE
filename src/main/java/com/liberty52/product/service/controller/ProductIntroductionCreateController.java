@@ -19,13 +19,5 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class ProductIntroductionCreateController {
-	private final ProductIntroductionCreateService productIntroductionCreateService;
 
-	@Operation(summary = "상품 소개 생성", description = "관리자가 특정 상품의 소개 이미지를 업로드하여 상품 소개를 생성합니다.")
-	@PostMapping("/admin/product/{productId}/introduction")
-	@ResponseStatus(HttpStatus.CREATED)
-	public void createProductIntroductionByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId,
-		@RequestPart(value = "images",required = false) MultipartFile productIntroductionImageFile) {
-		productIntroductionCreateService.createProductIntroduction(role, productId, productIntroductionImageFile);
-	}
 }

@@ -16,26 +16,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OptionDetailModifyController {
 
-    private final OptionDetailModifyService optionDetailModifyService;
 
-    @Operation(summary = "옵션 상세 수정", description = "관리자가 옵션 상세 정보를 수정하는 엔드포인트입니다.")
-    @PutMapping("/admin/optionDetail/{optionDetailId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void modifyOptionDetailByAdmin(
-            @RequestHeader("LB-Role") String role,
-            @PathVariable String optionDetailId,
-            @Validated @RequestBody OptionDetailModifyRequestDto dto
-    ) {
-        optionDetailModifyService.modifyOptionDetailByAdmin(role, optionDetailId, dto);
-    }
-
-    @Operation(summary = "옵션 상세 판매 상태 수정", description = "관리자가 옵션 상세의 판매 상태를 수정하는 엔드포인트입니다.")
-    @PutMapping("/admin/optionDetailOnSale/{optionDetailId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void modifyOptionDetailOnSailStateByAdmin(
-            @RequestHeader("LB-Role") String role,
-            @PathVariable String optionDetailId
-    ) {
-        optionDetailModifyService.modifyOptionDetailOnSailStateByAdmin(role, optionDetailId);
-    }
 }

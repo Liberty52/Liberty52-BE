@@ -13,14 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 public class ProductIntroductionModifyController {
-    private final ProductIntroductionModifyService productIntroductionModifyService;
 
-    @Operation(summary = "상품 소개 수정", description = "관리자가 특정 상품의 소개 이미지를 수정합니다.")
-    @PatchMapping("/admin/product/{productId}/introduction")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void modifyProductIntroductionByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId,
-                                                 @RequestPart(value = "images",required = false) MultipartFile productIntroductionImageFile){
-            productIntroductionModifyService.modifyProductIntroduction(role, productId, productIntroductionImageFile);
-    }
 
 }
