@@ -174,11 +174,10 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     private List<OptionDetail> getOptionDetails(OrderCreateRequestDto dto) {
-        List<String> optionDetailIds = dto.getProductDto().getOptions().stream()
-                //TODO option detail 조회를 id로 변경되면, 179 - 182를 합칠 수 있음.
-                .map(optionName -> optionDetailRepository.findByName(optionName)
-                        .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_OPTION_DETAIL, PARAM_NAME_OPTION_DETAIL_NAME, optionName)))
-                .map(OptionDetail::getId)
+        List<String> optionDetailIds = dto.getProductDto().getOptionDetailIds().stream()
+                .map(it -> optionDetailRepository.findById(it)
+                        .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_OPTION_DETAIL, PARAM_NAME_OPTION_DETAIL_NAME, it))
+                        .getId())
                 .toList();
         return optionDetailMultipleStockManageService.decrement(optionDetailIds, dto.getProductDto().getQuantity()).getOrThrow();
     }

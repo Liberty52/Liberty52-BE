@@ -111,14 +111,23 @@ public class DBInitConfig {
 
                 OptionDetail materialOption2 = OptionDetail.create("무광실버", 100,true, 100);
                 materialOption2.associate(option3);
+                Field materialOption2Id = materialOption2.getClass().getDeclaredField("id");
+                materialOption2Id.setAccessible(true);
+                materialOption2Id.set(materialOption2, "OPT-005");
                 optionDetailRepository.save(materialOption2);
 
                 OptionDetail materialOption3 = OptionDetail.create("유광백색", 100,true, 100);
                 materialOption3.associate(option3);
+                Field materialOption3Id = materialOption3.getClass().getDeclaredField("id");
+                materialOption3Id.setAccessible(true);
+                materialOption3Id.set(materialOption3, "OPT-006");
                 optionDetailRepository.save(materialOption3);
 
                 OptionDetail materialOption4 = OptionDetail.create("무광백색", 100,true, 100);
                 materialOption4.associate(option3);
+                Field materialOption4Id = materialOption4.getClass().getDeclaredField("id");
+                materialOption4Id.setAccessible(true);
+                materialOption4Id.set(materialOption4, "OPT-007");
                 optionDetailRepository.save(materialOption4);
 
                 // Add Cart & CartItems
