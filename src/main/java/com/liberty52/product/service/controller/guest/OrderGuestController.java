@@ -1,15 +1,14 @@
 package com.liberty52.product.service.controller.guest;
 
 import com.liberty52.product.service.applicationservice.OrderCreateService;
-import com.liberty52.product.service.controller.dto.PaymentConfirmResponseDto;
-import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
-import com.liberty52.product.service.controller.dto.OrderCreateRequestDto;
-import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
+import com.liberty52.product.service.applicationservice.OrderRetrieveService;
+import com.liberty52.product.service.controller.dto.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,10 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name = "주문", description = "주문 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-public class GuestOrderCreateController {
+public class OrderGuestController {
 
     private final OrderCreateService orderCreateService;
+    private final OrderRetrieveService orderRetrieveService;
 
+    /**CREATE**/
     @Operation(summary = "카드 결제 주문 생성", description = "비회원을 위한 카드 결제 주문을 생성합니다.")
     @PostMapping("/guest/orders/card")
     @ResponseStatus(HttpStatus.CREATED)
@@ -71,6 +72,15 @@ public class GuestOrderCreateController {
             @RequestBody @Validated OrderCreateRequestDto dto
     ) {
         return orderCreateService.createVBankPaymentOrdersByCartsForGuest(guestId, dto);
+    }
+
+    /**READ**/
+    @Operation(summary = "비회원을 주문 상세 조회", description = "비회원을 주문의 상세 정보를 조회합니다.")
+    @GetMapping("/guest/orders/{orderNumber}")
+    public ResponseEntity<OrderDetailRetrieveResponse> retrieveGuestOrderDetail(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
+            @PathVariable("orderNumber") String orderNumber){
+        return ResponseEntity.ok(orderRetrieveService.retrieveGuestOrderDetail(guestId,orderNumber));
     }
 
 }
