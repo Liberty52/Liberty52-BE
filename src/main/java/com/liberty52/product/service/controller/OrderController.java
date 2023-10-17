@@ -1,24 +1,60 @@
 package com.liberty52.product.service.controller;
 
+import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
+import com.liberty52.product.service.applicationservice.OrderRetrieveService;
 import com.liberty52.product.service.controller.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Tag(name = "주문", description = "주문 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-public class OrderCreateController {
+@RequestMapping("/orders")
+public class OrderController {
+
+    private final OrderRetrieveService orderRetrieveService;
+    private final OrderCancelService orderCancelService;
     private final OrderCreateService orderCreateService;
 
+    // 주문 조회 관련
+    @Operation(summary = "주문 목록 조회", description = "인증된 사용자의 주문 목록을 조회합니다.")
+    @GetMapping
+    public ResponseEntity<List<OrdersRetrieveResponse>> retrieveOrders(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+        return ResponseEntity.ok(orderRetrieveService.retrieveOrders(authorization));
+    }
+
+    @Operation(summary = "주문 상세 조회", description = "인증된 사용자의 주문 상세 정보를 조회합니다.")
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDetailRetrieveResponse> retrieveOrderDetail(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+            @PathVariable("orderId") String orderId) {
+        return ResponseEntity.ok(orderRetrieveService.retrieveOrderDetail(authorization, orderId));
+    }
+
+    // 주문 취소 관련
+    @Operation(summary = "주문 취소", description = "사용자가 주문을 취소하는 엔드포인트입니다.")
+    @PostMapping("/cancel")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderCancelDto.Response cancelOrder(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
+            @RequestBody @Validated OrderCancelDto.Request request
+    ) {
+        return orderCancelService.cancelOrder(authId, request);
+    }
+
+    // 카드 결제 주문 생성 관련
     @Operation(summary = "카드 결제 주문 생성", description = "사용자가 카드 결제 주문을 생성하는 엔드포인트입니다.")
-    @PostMapping("/orders/card")
+    @PostMapping("/card")
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentCardResponseDto createCardPaymentOrders(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
@@ -29,7 +65,7 @@ public class OrderCreateController {
     }
 
     @Operation(summary = "카드 결제 주문 최종 승인 확인", description = "사용자가 카드 결제 주문의 최종 승인을 확인하는 엔드포인트입니다.")
-    @GetMapping("/orders/card/{orderId}/confirm")
+    @GetMapping("/card/{orderId}/confirm")
     @ResponseStatus(HttpStatus.OK)
     public PaymentConfirmResponseDto confirmFinalApprovalOfCardPayment(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
@@ -38,8 +74,9 @@ public class OrderCreateController {
         return orderCreateService.confirmFinalApprovalOfCardPayment(authId, orderId);
     }
 
+    // 가상계좌 결제 주문 생성 관련
     @Operation(summary = "가상계좌 결제 주문 생성", description = "사용자가 가상계좌 결제 주문을 생성하는 엔드포인트입니다.")
-    @PostMapping("/orders/vbank")
+    @PostMapping("/vbank")
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentVBankResponseDto createVBankPaymentOrders(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
@@ -49,8 +86,9 @@ public class OrderCreateController {
         return orderCreateService.createVBankPaymentOrders(authId, dto, imageFile);
     }
 
+    // 카트를 이용한 주문 생성 관련
     @Operation(summary = "카트를 이용한 카드 결제 주문 생성", description = "사용자가 카트를 이용하여 카드 결제 주문을 생성하는 엔드포인트입니다.")
-    @PostMapping("/orders/card/carts")
+    @PostMapping("/card/carts")
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentCardResponseDto createCardPaymentOrdersByCarts(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
@@ -60,7 +98,7 @@ public class OrderCreateController {
     }
 
     @Operation(summary = "카트를 이용한 가상 계좌 결제 주문 생성", description = "사용자가 카트를 이용하여 가상 계좌 결제 주문을 생성하는 엔드포인트입니다.")
-    @PostMapping("/orders/vbank/carts")
+    @PostMapping("/vbank/carts")
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentVBankResponseDto createVBankPaymentOrdersByCarts(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
@@ -68,5 +106,4 @@ public class OrderCreateController {
     ) {
         return orderCreateService.createVBankPaymentOrdersByCarts(authId, dto);
     }
-
 }
