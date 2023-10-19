@@ -12,7 +12,7 @@ public class ProductRequestDto {
     @NotBlank
     private String name;
 
-    @NotNull
+    @NotBlank
     private ProductState productState;
 
     @Min(0)
