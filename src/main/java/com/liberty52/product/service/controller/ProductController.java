@@ -3,11 +3,15 @@ package com.liberty52.product.service.controller;
 
 import com.liberty52.product.service.applicationservice.ProductCreateService;
 import com.liberty52.product.service.controller.dto.ProductRequestDto;
+import com.liberty52.product.service.controller.dto.ProductResponseDto;
+import com.liberty52.product.service.entity.Product;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,16 +22,19 @@ import org.springframework.web.multipart.MultipartFile;
 상품의 세부 정보와 관련된 엔드포인트들은 ProductInfoController 에서 다룹니다.*/
 public class ProductController {
 
+    private final ModelMapper mapper;
     private final ProductCreateService productCreateService;
 
     /**CREATE**/
     @Operation(summary = "상품 생성", description = "관리자가 상품을 생성합니다.")
     @PostMapping("/admin/product")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProductIntroductionByAdmin(@RequestHeader("LB-Role") String role,
-                                                 @Valid @RequestPart(value = "data") ProductRequestDto productRequestDto,
-                                                 @RequestPart(value = "image", required = false) MultipartFile productImage) {
-        productCreateService.createProductByAdmin(role, productRequestDto, productImage);
+    public ResponseEntity<ProductResponseDto> createProductIntroductionByAdmin(@RequestHeader("LB-Role") String role,
+                                                                               @Valid @RequestPart(value = "data") ProductRequestDto productRequestDto,
+                                                                               @RequestPart(value = "image", required = false) MultipartFile productImage) {
+        Product savedProduct = productCreateService.createProductByAdmin(role, productRequestDto, productImage);
+        ProductResponseDto result = mapper.map(savedProduct,ProductResponseDto.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
     /**READ**/
     /**UPDATE**/

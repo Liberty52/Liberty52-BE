@@ -6,6 +6,7 @@ import com.liberty52.product.service.applicationservice.ProductCreateService;
 import com.liberty52.product.service.controller.dto.ProductRequestDto;
 import com.liberty52.product.service.entity.ProductState;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,6 +25,9 @@ public class ProductControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private ModelMapper modelMapper;
 
     @MockBean
     private ProductCreateService productCreateService;

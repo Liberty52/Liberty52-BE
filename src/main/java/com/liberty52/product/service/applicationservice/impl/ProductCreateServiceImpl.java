@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -18,7 +20,7 @@ public class ProductCreateServiceImpl implements ProductCreateService {
     private final ProductRepository productRepository;
     private final S3UploaderApi s3Uploader;
     @Override
-    public void createProductByAdmin(String role, ProductRequestDto productRequestDto, MultipartFile productImage) {
+    public Product createProductByAdmin(String role, ProductRequestDto productRequestDto, MultipartFile productImage) {
         Validator.isAdmin(role);
         String imageUrl = null;
         if(productImage!=null){
@@ -32,7 +34,7 @@ public class ProductCreateServiceImpl implements ProductCreateService {
                 .pictureUrl(imageUrl)
                 .build();
 
-        productRepository.save(newProduct);
+       return productRepository.save(newProduct);
     }
 
 }
