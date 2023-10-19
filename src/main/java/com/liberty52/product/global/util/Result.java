@@ -4,42 +4,42 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract sealed class Result<T> {
-    public abstract T getOrThrow() throws RuntimeException;
+public sealed interface Result<T> {
+    T getOrThrow() throws RuntimeException;
 
-    public abstract Result<T> onSuccess(Consumer<T> consumer);
+    Result<T> onSuccess(Consumer<T> consumer);
 
-    public abstract Result<T> onFailure(Consumer<Throwable> consumer);
+    Result<T> onFailure(Consumer<Throwable> consumer);
 
-    public abstract T getOrElse(Function<Throwable, T> func);
+    T getOrElse(Function<Throwable, T> func);
 
-    public abstract T getOrDefault(T defaultValue);
+    T getOrDefault(T defaultValue);
 
-    public abstract Boolean isSuccess();
+    Boolean isSuccess();
 
-    public abstract Boolean isFailure();
+    Boolean isFailure();
 
-    public abstract T getOrNull();
+    T getOrNull();
 
-    public abstract Throwable exceptionOrNull();
+    Throwable exceptionOrNull();
 
-    public abstract <K> Result<K> map(Function<T, K> transform);
+    <K> Result<K> map(Function<T, K> transform);
 
-    public abstract <K> Result<K> mapCatching(Function<T, K> transform);
+    <K> Result<K> mapCatching(Function<T, K> transform);
 
-    public abstract Result<T> recover(Function<Throwable, T> transform);
+    Result<T> recover(Function<Throwable, T> transform);
 
-    public abstract Result<T> recoverCatching(Function<Throwable, T> transform);
+    Result<T> recoverCatching(Function<Throwable, T> transform);
 
-    public static <T> Result<T> success(T value) {
+    static <T> Result<T> success(T value) {
         return new Success<>(value);
     }
 
-    public static <T> Result<T> failure(Throwable throwable) {
+    static <T> Result<T> failure(Throwable throwable) {
         return new Failure<>(throwable);
     }
 
-    public static <T> Result<T> runCatching(Supplier<T> supplier) {
+    static <T> Result<T> runCatching(Supplier<T> supplier) {
         try {
             return success(supplier.get());
         } catch (Throwable t) {
@@ -47,11 +47,11 @@ public abstract sealed class Result<T> {
         }
     }
 
-    public abstract T getOrElseThrow(Function<Throwable, RuntimeException> func) throws RuntimeException;
+    T getOrElseThrow(Function<Throwable, RuntimeException> func) throws RuntimeException;
 
-    public abstract T getOrElseThrow(Supplier<RuntimeException> supplier) throws RuntimeException;
+    T getOrElseThrow(Supplier<RuntimeException> supplier) throws RuntimeException;
 
-    public static final class Success<T> extends Result<T> {
+    final class Success<T> implements Result<T> {
         private final T value;
 
         public Success(T value) {
@@ -120,7 +120,12 @@ public abstract sealed class Result<T> {
 
         @Override
         public Result<T> recover(Function<Throwable, T> transform) {
-            return this;
+            var ex = exceptionOrNull();
+            if (ex == null) {
+                return this;
+            } else {
+                return Result.success(transform.apply(exceptionOrNull()));
+            }
         }
 
         @Override
@@ -146,7 +151,7 @@ public abstract sealed class Result<T> {
         }
     }
 
-    public static final class Failure<T> extends Result<T> {
+    final class Failure<T> implements Result<T> {
         private final RuntimeException error;
 
         public Failure(Throwable throwable) {

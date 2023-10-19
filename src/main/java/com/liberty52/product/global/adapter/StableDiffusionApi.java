@@ -4,6 +4,7 @@ import com.liberty52.product.global.util.Result;
 import jakarta.annotation.PostConstruct;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -38,7 +42,6 @@ public class StableDiffusionApi implements ImageUpscaler {
 
     @Override
     public Result<String> upscale(String srcUri, Scale scale) {
-        System.out.println(BASE_URL);
         return Result.runCatching(
                 () -> webClient.post()
                     .uri(SUPER_RESOLUTION)
