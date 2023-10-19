@@ -71,7 +71,7 @@ class ReviewCreateServiceImplTest extends MockS3Test {
         new FileInputStream(mockImageUrl));
 
     Product product = MockFactory.createProduct("Liberty 52_Frame", ProductState.ON_SALE,
-        10_000_000L);
+        10_000_000L,true);
     productRepository.save(product);
 
     order = MockFactory.createOrder(MOCK_AUTH_ID);

@@ -53,9 +53,9 @@ class OrderCreateServiceImplTest extends MockS3Test {
     MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
 
     private static final String LIBERTY = "Liberty 52_Frame";
-    private static final String OPTION_1 = "이젤 거치형";
-    private static final String OPTION_2 = "1mm 두께 승화전사 인쇄용 알루미늄시트";
-    private static final String OPTION_3 = "유광실버";
+    private static final String OPTION_1 = "OPT-001";
+    private static final String OPTION_2 = "OPT-003";
+    private static final String OPTION_3 = "OPT-004";
     private static final int QUANTITY = 2;
 
     @Test

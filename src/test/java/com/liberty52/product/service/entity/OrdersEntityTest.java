@@ -40,9 +40,9 @@ class OrdersEntityTest extends MockS3Test {
     private S3UploaderApi s3Uploader;
 
     private static final String LIBERTY = "Liberty 52_Frame";
-    private static final String OPTION_1 = "이젤 거치형";
-    private static final String OPTION_2 = "1mm 두께 승화전사 인쇄용 알루미늄시트";
-    private static final String OPTION_3 = "유광실버";
+    private static final String OPTION_1 = "OPT-001";
+    private static final String OPTION_2 = "OPT-003";
+    private static final String OPTION_3 = "OPT-004";
     private static final int QUANTITY = 2;
     private static final int DELIVERY_PRICE = PriceConstants.DEFAULT_DELIVERY_PRICE;
 
@@ -74,9 +74,9 @@ class OrdersEntityTest extends MockS3Test {
     private Long getExpectedPrice() {
         long expected = 0;
         expected += productRepository.findByName(LIBERTY).get().getPrice();
-        expected += optionDetailRepository.findByName(OPTION_1).get().getPrice();
-        expected += optionDetailRepository.findByName(OPTION_2).get().getPrice();
-        expected += optionDetailRepository.findByName(OPTION_3).get().getPrice();
+        expected += optionDetailRepository.findById(OPTION_1).get().getPrice();
+        expected += optionDetailRepository.findById(OPTION_2).get().getPrice();
+        expected += optionDetailRepository.findById(OPTION_3).get().getPrice();
         expected *= QUANTITY;
         expected += DELIVERY_PRICE;
         return expected;

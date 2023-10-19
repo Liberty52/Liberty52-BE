@@ -67,12 +67,12 @@ public class OrderCreateRequestDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class PaymentProductDto {
         private String productName;
-        private List<String> options;
+        private List<String> optionDetailIds;
         private int quantity;
         private List<String> orderOptions;
 
-        private static PaymentProductDto forTest(String pName, List<String> options, int quantity, List<String> orderOpts) {
-            return new PaymentProductDto(pName, options, quantity, orderOpts);
+        private static PaymentProductDto forTest(String pName, List<String> optionDetailIds, int quantity, List<String> orderOpts) {
+            return new PaymentProductDto(pName, optionDetailIds, quantity, orderOpts);
         }
 
     }

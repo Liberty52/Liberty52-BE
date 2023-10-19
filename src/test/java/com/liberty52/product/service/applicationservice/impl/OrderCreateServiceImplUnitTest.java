@@ -76,7 +76,7 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_3", 30000, 10, productOption)
         );
         optionDetails.forEach(it -> {
-            given(optionDetailRepository.findByName(it.getName()))
+            given(optionDetailRepository.findById(it.getId()))
                     .willReturn(Optional.of(it));
         });
         given(optionDetailMultipleStockManageService.decrement(anyList(), anyInt()))
@@ -97,7 +97,7 @@ public class OrderCreateServiceImplUnitTest {
             given(customProductOptionRepository.save(any())).willReturn(cpo);
         });
 
-        var options = optionDetails.stream().map(OptionDetail::getName).toList();
+        var options = optionDetails.stream().map(OptionDetail::getId).toList();
         // when
         var result = executeCardPaymentOrders(authId, options, 1);
 
@@ -132,7 +132,7 @@ public class OrderCreateServiceImplUnitTest {
         var product = MockFactory.createProduct("pd");
         given(productRepository.findByName(anyString()))
                 .willReturn(Optional.of(product));
-        given(optionDetailRepository.findByName(anyString()))
+        given(optionDetailRepository.findById(anyString()))
                 .willReturn(Optional.empty());
         var options = List.of("not", "found", "optionDetail");
         // when
@@ -158,12 +158,12 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_3", 30000, 0, productOption)
         );
         optionDetails.forEach(it -> {
-            lenient().when(optionDetailRepository.findByName(it.getName()))
+            lenient().when(optionDetailRepository.findById(it.getId()))
                     .thenReturn(Optional.of(it));
         });
         given(optionDetailMultipleStockManageService.decrement(anyList(), anyInt()))
                 .willReturn(Result.failure(new BadRequestException("")));
-        var options = optionDetails.stream().map(OptionDetail::getName).toList();
+        var options = optionDetails.stream().map(OptionDetail::getId).toList();
         // when
         // then
         assertThrows(
@@ -187,12 +187,12 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_3", 30000, 1, productOption)
         );
         optionDetails.forEach(it -> {
-            lenient().when(optionDetailRepository.findByName(it.getName()))
+            lenient().when(optionDetailRepository.findById(it.getId()))
                     .thenReturn(Optional.of(it));
         });
         given(optionDetailMultipleStockManageService.decrement(anyList(), anyInt()))
                 .willReturn(Result.failure(new BadRequestException("")));
-        var options = optionDetails.stream().map(OptionDetail::getName).toList();
+        var options = optionDetails.stream().map(OptionDetail::getId).toList();
         // when
         // then
         assertThrows(
@@ -226,7 +226,7 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_3", 30000, 10, productOption)
         );
         optionDetails.forEach(it -> {
-            given(optionDetailRepository.findByName(it.getName()))
+            given(optionDetailRepository.findById(it.getId()))
                     .willReturn(Optional.of(it));
         });
         given(optionDetailMultipleStockManageService.decrement(anyList(), anyInt()))
@@ -250,7 +250,7 @@ public class OrderCreateServiceImplUnitTest {
         given(vBankRepository.existsByBankAndAccountAndHolder(any(), anyString(), anyString()))
                 .willReturn(true);
 
-        var options = optionDetails.stream().map(OptionDetail::getName).toList();
+        var options = optionDetails.stream().map(OptionDetail::getId).toList();
 
         // when
         var result = executeVBankPaymentOrders(authId, options, 1);
@@ -284,7 +284,7 @@ public class OrderCreateServiceImplUnitTest {
         var product = MockFactory.createProduct("pd");
         given(productRepository.findByName(anyString()))
                 .willReturn(Optional.of(product));
-        given(optionDetailRepository.findByName(anyString()))
+        given(optionDetailRepository.findById(anyString()))
                 .willReturn(Optional.empty());
         // when
         // then
@@ -310,13 +310,13 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_3", 30000, 0, productOption)
         );
         optionDetails.forEach(it -> {
-            lenient().when(optionDetailRepository.findByName(it.getName()))
+            lenient().when(optionDetailRepository.findById(it.getId()))
                     .thenReturn(Optional.of(it));
         });
         given(optionDetailMultipleStockManageService.decrement(anyList(), anyInt()))
                 .willReturn(Result.failure(new BadRequestException("")));
 
-        var options = optionDetails.stream().map(OptionDetail::getName).toList();
+        var options = optionDetails.stream().map(OptionDetail::getId).toList();
         // when
         // then
         assertThrows(
@@ -340,12 +340,12 @@ public class OrderCreateServiceImplUnitTest {
                 MockFactory.createOptionDetail("od_3", 30000, 1, productOption)
         );
         optionDetails.forEach(it -> {
-            lenient().when(optionDetailRepository.findByName(it.getName()))
+            lenient().when(optionDetailRepository.findById(it.getId()))
                     .thenReturn(Optional.of(it));
         });
         given(optionDetailMultipleStockManageService.decrement(anyList(), anyInt()))
                 .willReturn(Result.failure(new BadRequestException("")));
-        var options = optionDetails.stream().map(OptionDetail::getName).toList();
+        var options = optionDetails.stream().map(OptionDetail::getId).toList();
         // when
         // then
         assertThrows(
