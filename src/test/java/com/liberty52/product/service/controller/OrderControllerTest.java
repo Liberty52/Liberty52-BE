@@ -228,4 +228,57 @@ class OrderControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorMessage").value("Order not found"));
     }
+
+    @Test
+    @DisplayName("가상계좌 결제 주문 생성 - 성공")
+    void createVBankPaymentOrderSuccess() throws Exception {
+        // given
+        OrderCreateRequestDto dto = OrderCreateRequestDto.forTestVBank(
+                "testOrderId",
+                List.of("testOptionId1", "testOptionId2"),
+                1,
+                List.of("testOrderOption1"),
+                "testReceiverName",
+                "testReceiverEmail",
+                "testReceiverPhoneNumber",
+                "testAddress1",
+                "testAddress2",
+                "testZipCode",
+                "testVBankInfo",
+                "testDepositorName"
+        );
+        MultipartFile imageFile = new MockMultipartFile("imageFile", "test.jpg", "image/jpeg", "test image content".getBytes());
+        PaymentVBankResponseDto expectedResponse = PaymentVBankResponseDto.of("orderId", "orderNum");
+
+        given(orderCreateService.createVBankPaymentOrders(anyString(), any(OrderCreateRequestDto.class), any(MultipartFile.class)))
+                .willReturn(expectedResponse);
+
+        // when && then
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/orders/vbank")
+                        .file(new MockMultipartFile("dto", "dto.json", "application/json", objectMapper.writeValueAsBytes(dto)))
+                        .file(new MockMultipartFile("imageFile", "test.jpg", "image/jpeg", imageFile.getBytes()))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer testAuthId")
+                )
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.orderId").value("orderId"))
+                .andExpect(jsonPath("$.orderNum").value("orderNum"));
+
+    }
+
+    @Test
+    @DisplayName("가상계좌 결제 주문 생성 - 실패 - 요청이 잘못된 경우")
+    void createVBankPaymentOrderFailureOnMissingParameters() throws Exception {
+        // when && then
+        mockMvc.perform(multipart("/orders/vbank")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer testAuthId")
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isBadRequest());
+    }
+
+
+
+
+
+
 }
