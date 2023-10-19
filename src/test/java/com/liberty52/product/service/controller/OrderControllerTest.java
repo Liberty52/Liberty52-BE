@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
-import com.liberty52.product.service.controller.dto.OrderCancelDto;
-import com.liberty52.product.service.controller.dto.OrderDetailRetrieveResponse;
-import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
+import com.liberty52.product.service.controller.dto.*;
 import com.liberty52.product.service.entity.OrderStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,16 +13,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Collections;
+import java.util.List;
 
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
@@ -36,7 +37,7 @@ class OrderControllerTest {
     @Autowired private ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("주문 목록 조회 API 검증")
+    @DisplayName("주문 목록 조회 - 성공")
     void retrieveOrdersTest() throws Exception {
         // given
         OrdersRetrieveResponse ordersRetrieveResponse = OrdersRetrieveResponse.builder()
@@ -75,7 +76,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("주문 상세 조회 API 검증")
+    @DisplayName("주문 상세 조회 - 성공")
     void retrieveOrderDetailTest() throws Exception {
         // given
         OrderDetailRetrieveResponse orderDetailRetrieveResponse = OrderDetailRetrieveResponse.builder()
@@ -123,7 +124,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("주문 취소 API 검증")
+    @DisplayName("주문 취소 - 성공")
     void cancelOrderTest() throws Exception {
         // given
         OrderCancelDto.Request request = OrderCancelDto.Request.builder()
@@ -149,6 +150,51 @@ class OrderControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("카드 결제 주문 생성 - 성공")
+    void createCardPaymentOrderSuccess() throws Exception {
+        // given
+        OrderCreateRequestDto dto = OrderCreateRequestDto.forTestCard(
+                "testOrderId",
+                List.of("testOptionId1", "testOptionId2"),
+                1,
+                List.of("testOrderOption1"),
+                "testReceiverName",
+                "testReceiverEmail",
+                "testReceiverPhoneNumber",
+                "testAddress",
+                "testProductRepresentUrl",
+                "testZipCode"
+        );
+        MultipartFile imageFile = new MockMultipartFile("imageFile", "test.jpg", "image/jpeg", "test image content".getBytes());
+        PaymentCardResponseDto expectedResponse = PaymentCardResponseDto.of("testNerchandId", "testOrderId", 1L);
+
+        given(orderCreateService.createCardPaymentOrders(anyString(), any(OrderCreateRequestDto.class), any(MultipartFile.class)))
+                .willReturn(expectedResponse);
+
+        // when && then
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/orders/card") // 멀티파트 요청을 만듭니다.
+                        .file(new MockMultipartFile("dto", "dto.json", "application/json", objectMapper.writeValueAsBytes(dto))) // dto 파트를 추가합니다.
+                        .file(new MockMultipartFile("imageFile", "test.jpg", "image/jpeg", imageFile.getBytes())) // imageFile 파트를 추가합니다.
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer testAuthId")
+                )
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.merchantId").value("testNerchandId"))
+                .andExpect(jsonPath("$.orderNum").value("testOrderId"))
+                .andExpect(jsonPath("$.amount").value(1L));
+
+    }
+
+    @Test
+    @DisplayName("카드 결제 주문 생성 - 실패 - 요청이 잘못된 경우")
+    void createCardPaymentOrderFailureOnMissingParameters() throws Exception {
+        // when && then
+        mockMvc.perform(multipart("/orders/card")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer testAuthId")
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isBadRequest());
+    }
 
 
 }
