@@ -1,8 +1,10 @@
 package com.liberty52.product.service.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
+import com.liberty52.product.service.controller.dto.OrderCancelDto;
 import com.liberty52.product.service.controller.dto.OrderDetailRetrieveResponse;
 import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
 import com.liberty52.product.service.entity.OrderStatus;
@@ -12,11 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +33,7 @@ class OrderControllerTest {
     @MockBean private OrderCancelService orderCancelService;
 
     @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
 
     @Test
     @DisplayName("주문 목록 조회 API 검증")
@@ -115,6 +120,33 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.paymentInfo").doesNotExist())
                 .andExpect(jsonPath("$.products").isArray())
                 .andExpect(jsonPath("$.customerName").value("John Doe"));
+    }
+
+    @Test
+    @DisplayName("주문 취소 API 검증")
+    void cancelOrderTest() throws Exception {
+        // given
+        OrderCancelDto.Request request = OrderCancelDto.Request.builder()
+                .orderId("testOrderId")
+                .reason("Test reason")
+                .refundBank("Test Bank")
+                .refundHolder("Test Holder")
+                .refundAccount("Test Account")
+                .refundPhoneNum("Test PhoneNum")
+                .build();
+
+        OrderCancelDto.Response expectedResponse = OrderCancelDto.Response.of("Order canceled successfully");
+
+        given(orderCancelService.cancelOrder(eq("testAuthId"), any(OrderCancelDto.Request.class)))
+                .willReturn(expectedResponse);
+
+        // when && then
+        mockMvc.perform(MockMvcRequestBuilders.post("/orders/cancel")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer testAuthId")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
 
