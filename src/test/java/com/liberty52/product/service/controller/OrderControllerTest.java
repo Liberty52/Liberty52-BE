@@ -279,6 +279,42 @@ class OrderControllerTest {
 
 
 
+    @Test
+    @DisplayName("카트를 이용한 카드 결제 주문 생성 - 성공")
+    void createCardPaymentOrdersByCarts() throws Exception {
+        // given
+        OrderCreateRequestDto dto = OrderCreateRequestDto.forTestCard(
+                "testOrderId",
+                List.of("testOptionId1", "testOptionId2"),
+                1,
+                List.of("testOrderOption1"),
+                "testReceiverName",
+                "testReceiverEmail",
+                "testReceiverPhoneNumber",
+                "testAddress",
+                "testProductRepresentUrl",
+                "testZipCode"
+        );
+        PaymentCardResponseDto expectedResponse = PaymentCardResponseDto.of("testNerchandId", "testOrderId", 1L);
+
+        given(orderCreateService.createCardPaymentOrdersByCarts(anyString(), any(OrderCreateRequestDto.class)))
+                .willReturn(expectedResponse);
+
+        // when && then
+        mockMvc.perform(MockMvcRequestBuilders.post("/orders/card/carts")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer testAuthId")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.merchantId").value("testNerchandId"))
+                .andExpect(jsonPath("$.orderNum").value("testOrderId"))
+                .andExpect(jsonPath("$.amount").value(1L));
+    }
+
+
+
+
 
 
 }
