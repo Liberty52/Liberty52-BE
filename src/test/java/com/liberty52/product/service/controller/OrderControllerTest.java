@@ -312,7 +312,39 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.amount").value(1L));
     }
 
+    @Test
+    @DisplayName("카트를 이용한 가상 계좌 결제 주문 생성 - 성공")
+    void createVBankPaymentOrdersByCarts() throws Exception {
+        // given
+        OrderCreateRequestDto dto = OrderCreateRequestDto.forTestVBank(
+                "testOrderId",
+                List.of("testOptionId1", "testOptionId2"),
+                1,
+                List.of("testOrderOption1"),
+                "testReceiverName",
+                "testReceiverEmail",
+                "testReceiverPhoneNumber",
+                "testAddress1",
+                "testAddress2",
+                "testZipCode",
+                "testVBankInfo",
+                "testDepositorName"
+        );
+        PaymentVBankResponseDto expectedResponse = PaymentVBankResponseDto.of("orderId", "orderNum");
 
+        given(orderCreateService.createVBankPaymentOrdersByCarts(anyString(), any(OrderCreateRequestDto.class)))
+                .willReturn(expectedResponse);
+
+        // when && then
+        mockMvc.perform(MockMvcRequestBuilders.post("/orders/vbank/carts")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer testAuthId")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.orderId").value("orderId"))
+                .andExpect(jsonPath("$.orderNum").value("orderNum"));
+    }
 
 
 
