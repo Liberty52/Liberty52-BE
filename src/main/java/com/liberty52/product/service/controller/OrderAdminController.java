@@ -1,7 +1,9 @@
 package com.liberty52.product.service.controller;
 
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
+import com.liberty52.product.service.applicationservice.OrderDeliveryService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
 import com.liberty52.product.service.applicationservice.OrderStatusModifyService;
 import com.liberty52.product.service.controller.dto.*;
@@ -24,6 +26,7 @@ public class OrderAdminController {
     private final OrderRetrieveService orderRetrieveService;
     private final OrderCancelService orderCancelService;
     private final OrderStatusModifyService orderStatusModifyService;
+    private final OrderDeliveryService orderDeliveryService;
 
     // 주문 생성 관련
     @Operation(summary = "고객 환불 주문 생성", description = "관리자가 고객에 대한 환불 주문을 생성하는 엔드포인트입니다.")
@@ -103,6 +106,17 @@ public class OrderAdminController {
             @Validated @RequestBody VBankStatusModifyDto dto
     ) {
         orderStatusModifyService.modifyOrderStatusOfVBankByAdmin(role, orderId, dto);
+    }
+
+    @Operation(summary = "택배사 리스트 조회", description = "관리자가 택배사 리스트를 조회합니다.")
+    @GetMapping("/courier-companies")
+    @ResponseStatus(HttpStatus.OK)
+    public AdminCourierListDto.Response getCourierCompanyList(
+            @RequestHeader("LB-Role") String role,
+            @RequestParam(value = "international", defaultValue = "false", required = false) Boolean isInternational
+    ) {
+        Validator.isAdmin(role);
+        return orderDeliveryService.getCourierCompanyList(isInternational);
     }
 }
 
