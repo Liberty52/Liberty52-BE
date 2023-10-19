@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Tag(name = "상품", description = "상품 관련 API를 제공합니다")
+@Tag(name = "상품 정보", description = "상품 정보 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
 public class ProductInfoController {
