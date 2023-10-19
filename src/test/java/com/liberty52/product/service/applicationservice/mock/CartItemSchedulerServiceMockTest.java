@@ -63,7 +63,7 @@ public class CartItemSchedulerServiceMockTest extends MockS3Test {
 
     @BeforeEach
     void  init(){
-        Product product = Product.create("Liberty 52_Frame", ProductState.ON_SALE, 100L);
+        Product product = Product.create("Liberty 52_Frame", ProductState.ON_SALE, 100L,true);
 
         ProductOption option1 = ProductOption.create("거치 방식", true, true);
         option1.associate(product);

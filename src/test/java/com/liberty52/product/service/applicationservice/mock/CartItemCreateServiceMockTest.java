@@ -72,7 +72,7 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
 
         given(cartRepository.save(any())).willReturn(Cart.create("testId"));
 
-        given(productRepository.findByName("Liberty 52_Frame")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame",ProductState.ON_SALE,100L)));
+        given(productRepository.findByName("Liberty 52_Frame")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame",ProductState.ON_SALE,100L,true)));
 
         given(customProductRepository.save(any())).willReturn(null);
         given(customProductOptionRepository.save(any())).willReturn(null);

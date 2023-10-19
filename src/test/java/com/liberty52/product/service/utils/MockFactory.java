@@ -40,16 +40,16 @@ public class MockFactory {
         return cpo;
     }
 
-    public static Product createProduct(String name, ProductState state, Long price) {
-        return Product.create(name, state, price);
+    public static Product createProduct(String name, ProductState state, Long price, boolean isPremium) {
+        return Product.create(name, state, price, isPremium);
     }
 
     public static Product createProduct(String name) {
-        return createProduct(name, ProductState.ON_SALE, 10_000_000L);
+        return createProduct(name, ProductState.ON_SALE, 10_000_000L, true);
     }
 
     public static Product createProduct(String name, Long price) {
-        return createProduct(name, ProductState.ON_SALE, price);
+        return createProduct(name, ProductState.ON_SALE, price,true);
     }
 
     public static ProductOption createProductOption(String name, boolean require) {
