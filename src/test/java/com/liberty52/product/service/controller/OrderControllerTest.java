@@ -1,6 +1,7 @@
 package com.liberty52.product.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.liberty52.product.global.exception.external.notfound.NotFoundException;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
@@ -197,4 +198,34 @@ class OrderControllerTest {
     }
 
 
+    @Test
+    @DisplayName("카드 결제 주문 최종 승인 확인 - 성공")
+    void testConfirmFinalApprovalOfCardPaymentWhenOrderExistsThenReturnSuccess() throws Exception {
+        // given
+        PaymentConfirmResponseDto expectedResponse = PaymentConfirmResponseDto.of("testOrderId", "testOrderNum");
+
+        given(orderCreateService.confirmFinalApprovalOfCardPayment(anyString(), anyString()))
+                .willReturn(expectedResponse);
+
+        // when && then
+        mockMvc.perform(MockMvcRequestBuilders.get("/orders/card/testOrderId/confirm")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer testAuthId"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orderId").value("testOrderId"))
+                .andExpect(jsonPath("$.orderNum").value("testOrderNum"));
+    }
+
+    @Test
+    @DisplayName("카드 결제 주문 최종 승인 확인 - 실패 - 주문이 존재하지 않는 경우")
+    void testConfirmFinalApprovalOfCardPaymentWhenOrderDoesNotExistThenReturnNotFound() throws Exception {
+        // given
+        given(orderCreateService.confirmFinalApprovalOfCardPayment(anyString(), anyString()))
+                .willThrow(new NotFoundException("Order not found"));
+
+        // when && then
+        mockMvc.perform(MockMvcRequestBuilders.get("/orders/card/nonExistentOrderId/confirm")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer testAuthId"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.errorMessage").value("Order not found"));
+    }
 }
