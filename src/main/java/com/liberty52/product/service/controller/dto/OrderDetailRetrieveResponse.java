@@ -5,12 +5,18 @@ import com.liberty52.product.service.entity.CustomProductOption;
 import com.liberty52.product.service.entity.OrderDestination;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.entity.payment.Payment;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 import static com.liberty52.product.global.constants.RepresentImageUrl.LIBERTY52_FRAME_REPRESENTATIVE_URL;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class OrderDetailRetrieveResponse {
 

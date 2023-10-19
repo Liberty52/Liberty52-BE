@@ -5,6 +5,8 @@ import com.liberty52.product.service.entity.CustomProductOption;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.entity.payment.Payment;
 import com.liberty52.product.service.entity.payment.Payment.PaymentInfo;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +14,8 @@ import java.util.List;
 
 import static com.liberty52.product.global.constants.RepresentImageUrl.LIBERTY52_FRAME_REPRESENTATIVE_URL;
 
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class OrdersRetrieveResponse {
@@ -28,6 +32,7 @@ public class OrdersRetrieveResponse {
     private String paymentType;
     private PaymentInfo paymentInfo;
     private List<OrderRetrieveProductResponse> products;
+
 
     public OrdersRetrieveResponse(Orders orders) {
         this.orderId = orders.getId();
