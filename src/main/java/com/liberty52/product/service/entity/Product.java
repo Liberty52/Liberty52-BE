@@ -27,6 +27,9 @@ public class Product {
     @Column(nullable = false)
     private Long price;
 
+    @Column(nullable=false)
+    private boolean isPremium;
+
     @OneToMany(mappedBy = "product")
     private List<ProductOption> productOptions = new ArrayList<>();
 
@@ -35,10 +38,11 @@ public class Product {
     private String productIntroductionImageUrl;
 
     @Builder
-    private Product(String name, ProductState productState, Long price) {
+    private Product(String name, ProductState productState, Long price, boolean isPremium) {
         this.name = name;
         this.productState = productState;
         this.price = price;
+        this.isPremium = isPremium;
     }
 
     public void createProductIntroduction(String productIntroductionImageUrl) {
@@ -48,10 +52,11 @@ public class Product {
         this.productOptions.add(productOption);
     }
 
-    public static Product create(String name, ProductState state, Long price) {
+    public static Product create(String name, ProductState state, Long price, boolean isPremium) {
         return builder().name(name)
                 .productState(state)
                 .price(price)
+                .isPremium(isPremium)
                 .build();
     }
 
