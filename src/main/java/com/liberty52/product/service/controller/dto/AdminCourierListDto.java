@@ -10,7 +10,8 @@ public class AdminCourierListDto {
     public record Response(
             MetaResponse meta,
             List<DocumentResponse> documents
-    ) {}
+    ) {
+    }
 
     @Builder
     public record MetaResponse(
