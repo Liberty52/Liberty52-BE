@@ -35,13 +35,13 @@ public class CartItemCreateServiceTest extends MockS3Test {
     void 장바구니생성() throws IOException {
 
         CartItemRequest dto1 = new CartItemRequest();
-        String[] option = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
+        String[] option = {"OPT-001", "OPT-003", "OPT-005"};
         dto1.create("Liberty 52_Frame", 1, option);
 
         CartItemRequest dto2 = new CartItemRequest();
         dto2.create("L", 2, option);
 
-        String[] optionErr = {"벽걸이형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광레드"};
+        String[] optionErr = {"OPT-002", "OPT-003", "err"};
         CartItemRequest dto3 = new CartItemRequest();
         dto3.create("Liberty 52_Frame", 4, optionErr);
 
@@ -76,11 +76,11 @@ public class CartItemCreateServiceTest extends MockS3Test {
     void 게스트장바구니생성() throws IOException {
 
         CartItemRequest dto1 = new CartItemRequest();
-        String[] option1 = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
+        String[] option1 = {"OPT-001", "OPT-003", "OPT-005"};
         dto1.create("Liberty 52_Frame", 1, option1);
 
         CartItemRequest dto2 = new CartItemRequest();
-        String[] option2 = {"벽걸이형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "유광백색"};
+        String[] option2 = {"OPT-002", "OPT-003", "OPT-006"};
         dto2.create("Liberty 52_Frame", 2, option2);
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
