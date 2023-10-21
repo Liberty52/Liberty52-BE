@@ -56,6 +56,9 @@ public class Orders {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "orders")
     private CanceledOrders canceledOrders;
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "order")
+    private OrderDelivery orderDelivery;
+
     @Deprecated
     private Orders(String authId, int deliveryPrice, OrderDestination orderDestination) {
         this.authId = authId;
@@ -159,4 +162,7 @@ public class Orders {
         });
     }
 
+    public void setOrderDelivery(OrderDelivery orderDelivery) {
+        this.orderDelivery = orderDelivery;
+    }
 }
