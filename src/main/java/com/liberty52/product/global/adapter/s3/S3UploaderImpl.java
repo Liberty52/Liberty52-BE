@@ -36,6 +36,9 @@ public class S3UploaderImpl implements S3Uploader {
     @Value("${my-storage.dir.product.custom}") // product/custom
     private String customProductPath;
 
+    @Value("${my-storage.dir.product.temp}") // product/temp
+    private String tempPath;
+
     @Override
     public String upload(MultipartFile multipartFile) throws S3UploaderException {
         try {
@@ -53,9 +56,9 @@ public class S3UploaderImpl implements S3Uploader {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(b.length);
         metadata.setContentType("image/png");
-        String fileName = customProductPath + "/" + UUID.randomUUID() + ".png";
+        String fileName = tempPath + "/" + UUID.randomUUID() + ".png";
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, new ByteArrayInputStream(b), metadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
+            .withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
@@ -88,8 +91,8 @@ public class S3UploaderImpl implements S3Uploader {
     // S3로 업로드
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(
-                new PutObjectRequest(bucket, fileName, uploadFile)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            new PutObjectRequest(bucket, fileName, uploadFile)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
 
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
@@ -97,7 +100,7 @@ public class S3UploaderImpl implements S3Uploader {
     // 로컬에 저장된 이미지 지우기
     private void removeLocalTempFile(File file) {
         boolean isDeleted = file.delete();
-        if ( !isDeleted ) {
+        if (!isDeleted) {
             log.error("S3Uploader ERROR: Can not Remove Local File");
         }
     }
