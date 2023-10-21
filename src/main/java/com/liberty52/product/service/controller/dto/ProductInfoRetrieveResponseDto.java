@@ -18,10 +18,11 @@ public class ProductInfoRetrieveResponseDto {
     float meanRating;
     int ratingCount;
     private ProductState state;
+    boolean isCustom;
     String introductionImageUrl;
 
-    public static ProductInfoRetrieveResponseDto of(String id, String pictureUrl, String name, long price, float meanRating, int ratingCount, ProductState state, String introductionImageUrl){
-        return new ProductInfoRetrieveResponseDto(id, pictureUrl, name, price, meanRating, ratingCount, state, introductionImageUrl);
+    public static ProductInfoRetrieveResponseDto of(String id, String pictureUrl, String name, long price, float meanRating, int ratingCount, ProductState state, boolean isCustom, String introductionImageUrl){
+        return new ProductInfoRetrieveResponseDto(id, pictureUrl, name, price, meanRating, ratingCount, state, isCustom, introductionImageUrl);
     }
 
 }
