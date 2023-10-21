@@ -45,8 +45,10 @@ public class OrdersRetrieveResponse {
         this.productRepresentUrl = LIBERTY52_FRAME_REPRESENTATIVE_URL;
         this.orderNum = orders.getOrderNum();
         Payment payment = orders.getPayment();
-        this.paymentType = payment.getType().getKorName();
-        this.paymentInfo = payment.getInfoAsDto();
+        if (payment != null) {
+            this.paymentType = payment.getType().getKorName();
+            this.paymentInfo = payment.getInfoAsDto();
+        }
         this.products = orders.getCustomProducts().stream().map(c ->
                 new OrderRetrieveProductResponse(c.getId(),c.getProduct().getName(), c.getQuantity(),
                         c.getProduct().getPrice() + c.getOptions()

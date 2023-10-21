@@ -65,8 +65,10 @@ public class OrderDetailRetrieveResponse {
         this.totalPrice = orders.getAmount();
         this.totalProductPrice = totalPrice - deliveryFee;
         Payment payment = orders.getPayment();
-        this.paymentType = payment.getType().getKorName();
-        this.paymentInfo = payment.getInfoAsDto();
+        if (payment != null) {
+            this.paymentType = payment.getType().getKorName();
+            this.paymentInfo = payment.getInfoAsDto();
+        }
         this.orderDelivery = OrderDeliveryDto.of(orders.getOrderDelivery());
     }
 
