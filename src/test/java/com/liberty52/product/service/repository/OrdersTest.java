@@ -2,8 +2,6 @@ package com.liberty52.product.service.repository;
 
 import com.liberty52.product.service.entity.OrderDestination;
 import com.liberty52.product.service.entity.Orders;
-import com.liberty52.product.service.repository.OrdersRepository;
-import com.netflix.discovery.converters.Auto;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
