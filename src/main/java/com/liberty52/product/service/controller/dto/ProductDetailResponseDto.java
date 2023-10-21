@@ -11,16 +11,20 @@ import java.util.List;
 public class ProductDetailResponseDto {
     private String id;
     private String name;
+    private  String pictureUrl;
     private String state;
     private Long price;
+    private boolean isCustom;
     private String introductionImageUrl;
     private List<ProductOptionDto> options;
 
     public ProductDetailResponseDto(Product product) {
         this.id = product.getId();
         this.name = product.getName();
+        this.pictureUrl = product.getPictureUrl();
         this.state = product.getProductState().name();
         this.price = product.getPrice();
+        this.isCustom = product.isCustom();
         this.introductionImageUrl = product.getProductIntroductionImageUrl();
         this.options = product.getProductOptions().stream().filter(ProductOption::isOnSale)
                 .map(ProductOptionDto::new).toList();
