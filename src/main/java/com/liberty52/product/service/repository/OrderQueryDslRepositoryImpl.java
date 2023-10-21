@@ -23,6 +23,7 @@ import static com.liberty52.product.service.entity.QCanceledOrders.canceledOrder
 import static com.liberty52.product.service.entity.QCustomProduct.customProduct;
 import static com.liberty52.product.service.entity.QCustomProductOption.customProductOption;
 import static com.liberty52.product.service.entity.QOptionDetail.optionDetail;
+import static com.liberty52.product.service.entity.QOrderDelivery.orderDelivery;
 import static com.liberty52.product.service.entity.QOrderDestination.orderDestination;
 import static com.liberty52.product.service.entity.QOrders.orders;
 import static com.liberty52.product.service.entity.QProduct.product;
@@ -122,7 +123,8 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
                 .leftJoin(product).on(customProduct.product.eq(product)).fetchJoin()
                 .leftJoin(customProductOption).on(customProductOption.customProduct.eq(customProduct)).fetchJoin()
                 .leftJoin(optionDetail).on(customProductOption.optionDetail.eq(optionDetail)).fetchJoin()
-                .leftJoin(payment).on(payment.orders.eq(orders)).fetchJoin();
+                .leftJoin(payment).on(payment.orders.eq(orders)).fetchJoin()
+                .leftJoin(orderDelivery).on(orderDelivery.order.eq(orders)).fetchJoin();
     }
 
     private JPAQuery<Orders> fetchOrdersByAdmin(Pageable pageable) {

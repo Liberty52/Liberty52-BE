@@ -36,6 +36,7 @@ public class OrderDetailRetrieveResponse {
     private Payment.PaymentInfo paymentInfo;
     private List<OrderRetrieveProductResponse> products;
     private String customerName;
+    private OrderDeliveryDto orderDelivery;
 
     public OrderDetailRetrieveResponse(Orders orders) {
         this.orderId = orders.getId();
@@ -66,6 +67,7 @@ public class OrderDetailRetrieveResponse {
         Payment payment = orders.getPayment();
         this.paymentType = payment.getType().getKorName();
         this.paymentInfo = payment.getInfoAsDto();
+        this.orderDelivery = OrderDeliveryDto.of(orders.getOrderDelivery());
     }
 
     public OrderDetailRetrieveResponse(String orderId, String orderDate, String orderStatus,
@@ -91,6 +93,7 @@ public class OrderDetailRetrieveResponse {
     public static OrderDetailRetrieveResponse of(Orders entity, String customerName) {
         OrderDetailRetrieveResponse response = new OrderDetailRetrieveResponse(entity);
         response.customerName = customerName;
+        response.orderDelivery = OrderDeliveryDto.of(entity.getOrderDelivery());
         return response;
     }
 
