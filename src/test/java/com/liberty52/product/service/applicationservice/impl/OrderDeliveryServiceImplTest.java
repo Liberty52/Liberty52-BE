@@ -6,8 +6,8 @@ import com.liberty52.product.global.exception.external.notfound.ResourceNotFound
 import com.liberty52.product.service.controller.dto.AdminAddOrderDeliveryDto;
 import com.liberty52.product.service.repository.OrdersRepository;
 import com.liberty52.product.service.utils.MockFactory;
-import com.liberty52.smartcourier.api.CourierCompanyClient;
-import com.liberty52.smartcourier.api.dto.CourierCompanyListDto;
+import com.liberty52.product.global.adapter.courier.api.smartcourier.SmartCourierCompanyClient;
+import com.liberty52.product.global.adapter.courier.api.smartcourier.dto.SmartCourierCompanyListDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ class OrderDeliveryServiceImplTest {
     private OrderDeliveryServiceImpl service;
 
     @Mock
-    private CourierCompanyClient client;
+    private SmartCourierCompanyClient client;
 
     @Mock
     private OrdersRepository ordersRepository;
@@ -40,21 +40,21 @@ class OrderDeliveryServiceImplTest {
     void getKoreanCourierCompanyList() {
         // given
         var size = 100;
-        var companyList = new ArrayList<CourierCompanyListDto.CompanyResponse>();
+        var companyList = new ArrayList<SmartCourierCompanyListDto.CompanyResponse>();
         for (int i = 0; i < size; i++) {
-            companyList.add(new CourierCompanyListDto.CompanyResponse(
+            companyList.add(new SmartCourierCompanyListDto.CompanyResponse(
                     false, "code_k_"+i, "name_k_"+i
             ));
         }
         for (int i = 0; i < 200; i++) {
-            companyList.add(new CourierCompanyListDto.CompanyResponse(
+            companyList.add(new SmartCourierCompanyListDto.CompanyResponse(
                     true, "code_g_"+i, "name_g_"+i
             ));
         }
         Collections.shuffle(companyList);
-        var clientResponse = new CourierCompanyListDto(companyList);
+        var clientResponse = new SmartCourierCompanyListDto(companyList);
         given(client.getCourierCompanyList())
-                .willReturn(clientResponse);
+                .willReturn(clientResponse.asMap());
         // when
         var result = service.getCourierCompanyList(false);
         // then
@@ -72,21 +72,21 @@ class OrderDeliveryServiceImplTest {
     void getInternationalCourierCompanyList() {
         // given
         var size = 150;
-        var companyList = new ArrayList<CourierCompanyListDto.CompanyResponse>();
+        var companyList = new ArrayList<SmartCourierCompanyListDto.CompanyResponse>();
         for (int i = 0; i < size; i++) {
-            companyList.add(new CourierCompanyListDto.CompanyResponse(
+            companyList.add(new SmartCourierCompanyListDto.CompanyResponse(
                     true, "code_g_"+i, "name_g_"+i
             ));
         }
         for (int i = 0; i < 200; i++) {
-            companyList.add(new CourierCompanyListDto.CompanyResponse(
+            companyList.add(new SmartCourierCompanyListDto.CompanyResponse(
                     false, "code_k_"+i, "name_k_"+i
             ));
         }
         Collections.shuffle(companyList);
-        var clientResponse = new CourierCompanyListDto(companyList);
+        var clientResponse = new SmartCourierCompanyListDto(companyList);
         given(client.getCourierCompanyList())
-                .willReturn(clientResponse);
+                .willReturn(clientResponse.asMap());
         // when
         var result = service.getCourierCompanyList(true);
         // then
@@ -120,9 +120,9 @@ class OrderDeliveryServiceImplTest {
     @DisplayName("관리자가 국제 택배사 리스트를 조회할 때 외부API의 응답 중 택배사 리스트가 null일 경우 조회할 수 없다")
     void getKoreanCourierCompanyList_when_companiesOfClientResultIsNull() {
         // given
-        var clientResponse = new CourierCompanyListDto(null);
+        var clientResponse = new SmartCourierCompanyListDto(null);
         given(client.getCourierCompanyList())
-                .willReturn(clientResponse);
+                .willReturn(clientResponse.asMap());
         // when
         // then
         assertEquals(
@@ -138,9 +138,9 @@ class OrderDeliveryServiceImplTest {
     @DisplayName("관리자가 국내 택배사 리스트를 조회할 때 외부API의 응답 중 택배사 리스트가 비어있을 경우 조회할 수 없다")
     void getKoreanCourierCompanyList_when_companiesOfClientResultIsEmpty() {
         // given
-        var clientResponse = new CourierCompanyListDto(new ArrayList<>());
+        var clientResponse = new SmartCourierCompanyListDto(new ArrayList<>());
         given(client.getCourierCompanyList())
-                .willReturn(clientResponse);
+                .willReturn(clientResponse.asMap());
         // when
         // then
         assertEquals(
@@ -161,13 +161,13 @@ class OrderDeliveryServiceImplTest {
                 .trackingNumber("1234567890")
                 .build();
 
-        var companyList = new ArrayList<CourierCompanyListDto.CompanyResponse>();
-        companyList.add(new CourierCompanyListDto.CompanyResponse(
+        var companyList = new ArrayList<SmartCourierCompanyListDto.CompanyResponse>();
+        companyList.add(new SmartCourierCompanyListDto.CompanyResponse(
                 false, "01", "courier"
         ));
-        var courierCompanyList = new CourierCompanyListDto(companyList);
+        var courierCompanyList = new SmartCourierCompanyListDto(companyList);
         given(client.getCourierCompanyList())
-                .willReturn(courierCompanyList);
+                .willReturn(courierCompanyList.asMap());
 
         var order = MockFactory.createOrder("1");
         given(ordersRepository.findById(anyString()))
@@ -268,7 +268,7 @@ class OrderDeliveryServiceImplTest {
                 .trackingNumber("1234567890")
                 .build();
         given(client.getCourierCompanyList())
-                .willReturn(CourierCompanyListDto.builder().build());
+                .willReturn(SmartCourierCompanyListDto.builder().build().asMap());
         // when
         // then
         assertEquals(
@@ -289,9 +289,9 @@ class OrderDeliveryServiceImplTest {
                 .trackingNumber("1234567890")
                 .build();
         given(client.getCourierCompanyList())
-                .willReturn(CourierCompanyListDto.builder()
+                .willReturn(SmartCourierCompanyListDto.builder()
                         .companies(new ArrayList<>())
-                        .build());
+                        .build().asMap());
         // when
         // then
         assertEquals(
@@ -312,13 +312,13 @@ class OrderDeliveryServiceImplTest {
                 .trackingNumber("1234567890")
                 .build();
 
-        var companyList = new ArrayList<CourierCompanyListDto.CompanyResponse>();
-        companyList.add(new CourierCompanyListDto.CompanyResponse(
+        var companyList = new ArrayList<SmartCourierCompanyListDto.CompanyResponse>();
+        companyList.add(new SmartCourierCompanyListDto.CompanyResponse(
                 false, "01", "courier"
         ));
-        var courierCompanyList = new CourierCompanyListDto(companyList);
+        var courierCompanyList = new SmartCourierCompanyListDto(companyList);
         given(client.getCourierCompanyList())
-                .willReturn(courierCompanyList);
+                .willReturn(courierCompanyList.asMap());
         // when
         // then
         assertEquals(
@@ -339,13 +339,13 @@ class OrderDeliveryServiceImplTest {
                 .trackingNumber("1234567890")
                 .build();
 
-        var companyList = new ArrayList<CourierCompanyListDto.CompanyResponse>();
-        companyList.add(new CourierCompanyListDto.CompanyResponse(
+        var companyList = new ArrayList<SmartCourierCompanyListDto.CompanyResponse>();
+        companyList.add(new SmartCourierCompanyListDto.CompanyResponse(
                 false, "01", "courier"
         ));
-        var courierCompanyList = new CourierCompanyListDto(companyList);
+        var courierCompanyList = new SmartCourierCompanyListDto(companyList);
         given(client.getCourierCompanyList())
-                .willReturn(courierCompanyList);
+                .willReturn(courierCompanyList.asMap());
         // when
         // then
         assertEquals(
@@ -366,13 +366,13 @@ class OrderDeliveryServiceImplTest {
                 .trackingNumber("1234567890")
                 .build();
 
-        var companyList = new ArrayList<CourierCompanyListDto.CompanyResponse>();
-        companyList.add(new CourierCompanyListDto.CompanyResponse(
+        var companyList = new ArrayList<SmartCourierCompanyListDto.CompanyResponse>();
+        companyList.add(new SmartCourierCompanyListDto.CompanyResponse(
                 false, "01", "courier"
         ));
-        var courierCompanyList = new CourierCompanyListDto(companyList);
+        var courierCompanyList = new SmartCourierCompanyListDto(companyList);
         given(client.getCourierCompanyList())
-                .willReturn(courierCompanyList);
+                .willReturn(courierCompanyList.asMap());
 
         given(ordersRepository.findById(anyString()))
                 .willReturn(Optional.empty());

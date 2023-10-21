@@ -1,5 +1,7 @@
 package com.liberty52.product.service.applicationservice.impl;
 
+import com.liberty52.product.global.adapter.courier.CourierCompanyClient;
+import com.liberty52.product.global.adapter.courier.api.smartcourier.dto.SmartCourierCompanyListDto;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
@@ -9,7 +11,6 @@ import com.liberty52.product.service.controller.dto.AdminAddOrderDeliveryDto;
 import com.liberty52.product.service.controller.dto.AdminCourierListDto;
 import com.liberty52.product.service.entity.OrderDelivery;
 import com.liberty52.product.service.repository.OrdersRepository;
-import com.liberty52.smartcourier.api.CourierCompanyClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderDeliveryServiceImpl implements OrderDeliveryService {
 
+    @SuppressWarnings("rawtypes")
     private final CourierCompanyClient client;
     private final OrdersRepository ordersRepository;
 
+    @SuppressWarnings("unchecked")
     @Override
     @Transactional(readOnly = true)
     public AdminCourierListDto.Response getCourierCompanyList(Boolean isInternational) {
-        var courierCompanyList = client.getCourierCompanyList();
+        var courierCompanyList = SmartCourierCompanyListDto.asDto(client.getCourierCompanyList());
 
         if (courierCompanyList == null
                 || courierCompanyList.getCompanies() == null
@@ -81,7 +84,7 @@ public class OrderDeliveryServiceImpl implements OrderDeliveryService {
     }
 
     private void validateCourierInfo(String code, String name) {
-        var courierCompanyList = client.getCourierCompanyList();
+        var courierCompanyList = SmartCourierCompanyListDto.asDto(client.getCourierCompanyList());
 
         if (courierCompanyList == null
                 || courierCompanyList.getCompanies() == null

@@ -1,4 +1,4 @@
-package com.liberty52.smartcourier.api.dto;
+package com.liberty52.product.global.adapter.courier.api.smartcourier.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
