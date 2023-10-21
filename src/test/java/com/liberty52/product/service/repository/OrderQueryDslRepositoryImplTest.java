@@ -1,13 +1,11 @@
 package com.liberty52.product.service.repository;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.liberty52.product.service.entity.OrderDestination;
 import com.liberty52.product.service.entity.Orders;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
