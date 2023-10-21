@@ -55,7 +55,7 @@ class CartItemModifyServiceTest extends MockS3Test {
   }
 
   String productName = "Liberty 52_Frame";
-  String detailName = "이젤 거치형";
+  String detailId = "OPT-001";
   String authId = UUID.randomUUID().toString();
 
   String customProductId;
@@ -74,8 +74,8 @@ class CartItemModifyServiceTest extends MockS3Test {
     customProductRepository.save(customProduct);
 
     CustomProductOption customProductOption = CustomProductOption.create();
-    customProductOption.associate(optionDetailRepository.findByName(detailName).get());
-    customProductOption.associate(optionDetailRepository.findByName("무광백색").get());
+    customProductOption.associate(optionDetailRepository.findById(detailId).get());
+    customProductOption.associate(optionDetailRepository.findById("OPT-007").get());
     customProductOption.associate(customProduct);
     customProductOptionRepository.save(customProductOption);
 
@@ -85,7 +85,7 @@ class CartItemModifyServiceTest extends MockS3Test {
 
   @Test
   void modify() {
-    List<String> options = new ArrayList<>(List.of("유광백색","벽걸이형")); //불변 객체를 ArrayList로 감싸 변할 수 있게
+    List<String> options = new ArrayList<>(List.of("OPT-006","OPT-002")); //불변 객체를 ArrayList로 감싸 변할 수 있게
     int quantity = 5;
     CartModifyRequestDto cartModifyRequestDto = CartModifyRequestDto.create(options, quantity);
 
@@ -98,7 +98,7 @@ class CartItemModifyServiceTest extends MockS3Test {
 
     Collections.sort(options);
     List<String> actualList = customProduct.getOptions().stream()
-        .map(cpo -> cpo.getOptionDetail().getName())
+        .map(cpo -> cpo.getOptionDetail().getId())
         .sorted()
         .toList();
     for (int i = 0; i < options.size(); i++) {

@@ -5,9 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 public class CartItemRequest {
 
@@ -18,24 +15,24 @@ public class CartItemRequest {
     Integer quantity;
 
     @NotNull
-    String[] options;
+    String[] optionDetailIds;
 
     public CartItemRequest() {
 
     }
 
 
-    public void create(String productName, Integer quantity, String[] options) {
+    public void create(String productName, Integer quantity, String[] optionDetailIds) {
         this.productName = productName;
         this.quantity = quantity;
-        this.options = options;
+        this.optionDetailIds = optionDetailIds;
     }
 
     @Builder
-    private CartItemRequest(String productName, Integer quantity, String[] options) {
+    private CartItemRequest(String productName, Integer quantity, String[] optionDetailIds) {
         this.productName = productName;
         this.quantity = quantity;
-        this.options = options;
+        this.optionDetailIds = optionDetailIds;
     }
 
 }

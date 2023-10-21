@@ -56,11 +56,11 @@ public class CartItemSchedulerServiceTest extends MockS3Test {
     @BeforeEach
     void init() throws IOException {
         CartItemRequest dto1 = new CartItemRequest();
-        String[] option1 = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
+        String[] option1 = {"OPT-001", "OPT-003", "OPT-005"};
         dto1.create("Liberty 52_Frame", 1, option1);
 
         CartItemRequest dto2 = new CartItemRequest();
-        String[] option2 = {"벽걸이형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "유광백색"};
+        String[] option2 = {"OPT-002", "OPT-003", "OPT-006"};
         dto2.create("Liberty 52_Frame", 2, option2);
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));

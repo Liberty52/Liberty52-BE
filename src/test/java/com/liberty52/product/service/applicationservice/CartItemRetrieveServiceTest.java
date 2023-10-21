@@ -39,13 +39,13 @@ public class CartItemRetrieveServiceTest extends MockS3Test {
         cartRepository.save(cart);
 
         CartItemRequest dto1 = new CartItemRequest();
-        String[] option = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
+        String[] option = {"OPT-001", "OPT-003", "OPT-005"};
         dto1.create("Liberty 52_Frame", 1, option);
         cartItemCreateService.createAuthCartItem("aaa", imageFile, dto1);
 
 
         CartItemRequest dto2 = new CartItemRequest();
-        String[] option2 = {"벽걸이형", "무광백색"};
+        String[] option2 = {"OPT-002", "OPT-007"};
 
         dto2.create("Liberty 52_Frame", 2, option2);
         cartItemCreateService.createAuthCartItem("aaa", imageFile, dto2);
@@ -116,13 +116,13 @@ public class CartItemRetrieveServiceTest extends MockS3Test {
         cartRepository.save(cart);
 
         CartItemRequest dto1 = new CartItemRequest();
-        String[] option = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
+        String[] option = {"OPT-001", "OPT-003", "OPT-005"};
         dto1.create("Liberty 52_Frame", 1, option);
         cartItemCreateService.createGuestCartItem("aaa", imageFile, dto1);
 
 
         CartItemRequest dto2 = new CartItemRequest();
-        String[] option2 = {"벽걸이형", "무광백색"};
+        String[] option2 = {"OPT-002", "OPT-007"};
 
         dto2.create("Liberty 52_Frame", 2, option2);
         cartItemCreateService.createGuestCartItem("aaa", imageFile, dto2);

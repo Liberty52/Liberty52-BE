@@ -205,17 +205,17 @@ public class OrderCreateServiceByCartsTest extends MockS3Test {
     @BeforeEach
     void initCarts() {
         CartItemRequest dto1 = new CartItemRequest();
-        String[] option1 = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
+        String[] option1 = {"OPT-001", "OPT-003", "OPT-005"};
         dto1.create("Liberty 52_Frame", 1, option1);
         cartItemCreateService.createAuthCartItem(aid, imageFile, dto1);
 
         CartItemRequest dto2 = new CartItemRequest();
-        String[] option2 = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
+        String[] option2 = {"OPT-001", "OPT-003", "OPT-005"};
         dto2.create("Liberty 52_Frame", 2, option2);
         cartItemCreateService.createAuthCartItem(aid, imageFile, dto2);
 
         CartItemRequest dto3 = new CartItemRequest();
-        String[] option3 = {"이젤 거치형", "1mm 두께 승화전사 인쇄용 알루미늄시트", "무광실버"};
+        String[] option3 = {"OPT-001", "OPT-003", "OPT-005"};
         dto3.create("Liberty 52_Frame", 3, option3);
         cartItemCreateService.createAuthCartItem(aid, imageFile, dto3);
     }

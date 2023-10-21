@@ -27,7 +27,7 @@ public class Product {
     @Column(nullable = false)
     private Long price;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private boolean isCustom;
 
     @OneToMany(mappedBy = "product")
@@ -38,11 +38,12 @@ public class Product {
     private String productIntroductionImageUrl;
 
     @Builder
-    private Product(String name, ProductState productState, Long price, boolean isCustom) {
+    private Product(String name, ProductState productState, Long price, boolean isCustom, String pictureUrl) {
         this.name = name;
         this.productState = productState;
         this.price = price;
         this.isCustom = isCustom;
+        this.pictureUrl = pictureUrl;
     }
 
     public void createProductIntroduction(String productIntroductionImageUrl) {

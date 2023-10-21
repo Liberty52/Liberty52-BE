@@ -1,43 +1,45 @@
 package com.liberty52.product.service.controller;
 
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.product.service.applicationservice.OrderCancelService;
+import com.liberty52.product.service.applicationservice.OrderRetrieveService;
+import com.liberty52.product.service.applicationservice.OrderStatusModifyService;
+import com.liberty52.product.service.controller.dto.*;
+import com.liberty52.product.service.entity.OrderStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
-import com.liberty52.product.service.applicationservice.OrderRetrieveService;
-import com.liberty52.product.service.controller.dto.*;
-
-import java.util.List;
-
 @Tag(name = "주문", description = "주문 관련 API를 제공합니다")
-@RequiredArgsConstructor
 @RestController
-public class OrderRetrieveController {
+@RequiredArgsConstructor
+@RequestMapping("/admin/orders")
+public class OrderAdminController {
 
     private final OrderRetrieveService orderRetrieveService;
+    private final OrderCancelService orderCancelService;
+    private final OrderStatusModifyService orderStatusModifyService;
 
-    @Operation(summary = "주문 목록 조회", description = "인증된 사용자의 주문 목록을 조회합니다.")
-    @GetMapping("/orders")
-    public ResponseEntity<List<OrdersRetrieveResponse>> retrieveOrders(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
-        return ResponseEntity.ok(orderRetrieveService.retrieveOrders(authorization));
+    // 주문 생성 관련
+    @Operation(summary = "고객 환불 주문 생성", description = "관리자가 고객에 대한 환불 주문을 생성하는 엔드포인트입니다.")
+    @PostMapping("/refund")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void refundCustomerOrderByAdmin(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
+            @RequestHeader("LB-Role") String role,
+            @RequestBody @Validated OrderRefundDto.Request request
+    ) {
+        orderCancelService.refundCustomerOrderByAdmin(adminId, role, request);
     }
 
-    @Operation(summary = "주문 상세 조회", description = "인증된 사용자의 주문 상세 정보를 조회합니다.")
-    @GetMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDetailRetrieveResponse> retrieveOrderDetail(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
-            @PathVariable("orderId") String orderId) {
-        return ResponseEntity.ok(orderRetrieveService.retrieveOrderDetail(authorization, orderId));
-    }
-
+    // 주문 조회 관련
     @Operation(summary = "관리자 주문 목록 조회", description = "관리자의 주문 목록을 조회합니다.")
-    @GetMapping("/admin/orders")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public AdminOrderListResponse retrieveOrdersByAdmin(
             @RequestHeader("LB-Role") String role,
@@ -46,7 +48,7 @@ public class OrderRetrieveController {
     }
 
     @Operation(summary = "관리자 주문 상세 조회", description = "관리자의 주문 상세 정보를 조회합니다.")
-    @GetMapping("/admin/orders/{orderId}")
+    @GetMapping("/{orderId}")
     @ResponseStatus(HttpStatus.OK)
     public OrderDetailRetrieveResponse retrieveOrderDetailByAdmin(
             @RequestHeader("LB-Role") String role,
@@ -54,8 +56,9 @@ public class OrderRetrieveController {
         return orderRetrieveService.retrieveOrderDetailByAdmin(role, orderId);
     }
 
+    // 주문 취소 관련
     @Operation(summary = "관리자 취소된 주문 목록 조회", description = "관리자의 취소된 주문 목록을 조회합니다.")
-    @GetMapping("/admin/orders/cancel")
+    @GetMapping("/cancel")
     @ResponseStatus(HttpStatus.OK)
     public AdminCanceledOrderListResponse retrieveCanceledOrdersByAdmin(
             @RequestHeader("LB-Role") String role,
@@ -73,11 +76,33 @@ public class OrderRetrieveController {
     }
 
     @Operation(summary = "관리자 취소된 주문 상세 조회", description = "관리자의 취소된 주문 상세 정보를 조회합니다.")
-    @GetMapping("/admin/orders/cancel/{orderId}")
+    @GetMapping("/cancel/{orderId}")
     @ResponseStatus(HttpStatus.OK)
     public AdminCanceledOrderDetailResponse retrieveCanceledOrderDetailByAdmin(
             @RequestHeader("LB-Role") String role,
             @PathVariable String orderId) {
         return orderRetrieveService.retrieveCanceledOrderDetailByAdmin(role, orderId);
     }
+
+    // 주문 상태 변경 관련
+    @Operation(summary = "주문 상태 변경", description = "관리자가 주문의 상태를 수정합니다.")
+    @PutMapping("/{orderId}/status")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void modifyOrderStatusByAdmin(
+            @RequestHeader("LB-Role") String role,
+            @PathVariable String orderId, @RequestParam OrderStatus orderStatus
+    ) {
+        orderStatusModifyService.modifyOrderStatusByAdmin(role, orderId, orderStatus);
+    }
+
+    @Operation(summary = "가상계좌 주문 상태 수정", description = "관리자가 가상계좌 주문의 상태를 수정합니다.")
+    @PutMapping("/{orderId}/vbank")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void modifyOrderStatusOfVBankByAdmin(
+            @RequestHeader("LB-Role") String role, @PathVariable String orderId,
+            @Validated @RequestBody VBankStatusModifyDto dto
+    ) {
+        orderStatusModifyService.modifyOrderStatusOfVBankByAdmin(role, orderId, dto);
+    }
 }
+
