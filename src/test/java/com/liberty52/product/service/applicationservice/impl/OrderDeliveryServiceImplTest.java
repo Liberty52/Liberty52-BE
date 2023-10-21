@@ -1,6 +1,11 @@
 package com.liberty52.product.service.applicationservice.impl;
 
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
+import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
+import com.liberty52.product.service.controller.dto.AdminAddOrderDeliveryDto;
+import com.liberty52.product.service.repository.OrdersRepository;
+import com.liberty52.product.service.utils.MockFactory;
 import com.liberty52.smartcourier.api.CourierCompanyClient;
 import com.liberty52.smartcourier.api.dto.CourierCompanyListDto;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,6 +31,9 @@ class OrderDeliveryServiceImplTest {
 
     @Mock
     private CourierCompanyClient client;
+
+    @Mock
+    private OrdersRepository ordersRepository;
 
     @Test
     @DisplayName("관리자가 국내 택배사 100건을 조회한다")
@@ -139,6 +149,239 @@ class OrderDeliveryServiceImplTest {
                         InternalServerErrorException.class,
                         () -> service.getCourierCompanyList(false)
                 ).getErrorMessage()
+        );
+    }
+
+    @Test
+    void 주문의_주문배송정보를_추가한다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyCode("01")
+                .courierCompanyName("courier")
+                .trackingNumber("1234567890")
+                .build();
+
+        var companyList = new ArrayList<CourierCompanyListDto.CompanyResponse>();
+        companyList.add(new CourierCompanyListDto.CompanyResponse(
+                false, "01", "courier"
+        ));
+        var courierCompanyList = new CourierCompanyListDto(companyList);
+        given(client.getCourierCompanyList())
+                .willReturn(courierCompanyList);
+
+        var order = MockFactory.createOrder("1");
+        given(ordersRepository.findById(anyString()))
+                .willReturn(Optional.of(order));
+
+        // when
+        var result = service.add(order.getId(), request);
+
+        // then
+        assertNotNull(result);
+        assertEquals(order.getId(), result.orderId());
+        assertEquals(request.courierCompanyCode(), result.courierCompanyCode());
+        assertEquals(request.courierCompanyName(), result.courierCompanyName());
+        assertEquals(request.trackingNumber(), result.trackingNumber());
+    }
+
+    @Test
+    void 택배사코드_없이_주문배송정보를_추가할_수_없다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyName("courier")
+                .trackingNumber("1234567890")
+                .build();
+        // when
+        // then
+        assertEquals(
+                "모든 파라미터를 입력해주세요",
+                assertThrows(
+                        BadRequestException.class,
+                        () -> service.add("1", request)
+                ).getErrorMessage()
+        );
+    }
+
+    @Test
+    void 택배사이름_없이_주문배송정보를_추가할_수_없다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyCode("01")
+                .trackingNumber("1234567890")
+                .build();
+        // when
+        // then
+        assertEquals(
+                "모든 파라미터를 입력해주세요",
+                assertThrows(
+                        BadRequestException.class,
+                        () -> service.add("1", request)
+                ).getErrorMessage()
+        );
+    }
+
+    @Test
+    void 운송장번호_없이_주문배송정보를_추가할_수_없다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyCode("01")
+                .courierCompanyName("courier")
+                .build();
+        // when
+        // then
+        assertEquals(
+                "모든 파라미터를 입력해주세요",
+                assertThrows(
+                        BadRequestException.class,
+                        () -> service.add("1", request)
+                ).getErrorMessage()
+        );
+    }
+
+    @Test
+    void 택배사검증에서_반환값이_없는_경우_주문배송정보를_추가할_수_없다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyCode("01")
+                .courierCompanyName("courier")
+                .trackingNumber("1234567890")
+                .build();
+        given(client.getCourierCompanyList())
+                .willReturn(null);
+        // when
+        // then
+        assertEquals(
+                "택배사 검증에 실패하였습니다. 관리자에게 문의해주세요",
+                assertThrows(
+                        InternalServerErrorException.class,
+                        () -> service.add("1", request)
+                ).getErrorMessage()
+        );
+    }
+
+    @Test
+    void 택배사검증에서_택배사_리스트가_없는_경우_주문배송정보를_추가할_수_없다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyCode("01")
+                .courierCompanyName("courier")
+                .trackingNumber("1234567890")
+                .build();
+        given(client.getCourierCompanyList())
+                .willReturn(CourierCompanyListDto.builder().build());
+        // when
+        // then
+        assertEquals(
+                "택배사 검증에 실패하였습니다. 관리자에게 문의해주세요",
+                assertThrows(
+                        InternalServerErrorException.class,
+                        () -> service.add("1", request)
+                ).getErrorMessage()
+        );
+    }
+
+    @Test
+    void 택배사검증에서_택배사_리스트가_비어있는_경우_주문배송정보를_추가할_수_없다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyCode("01")
+                .courierCompanyName("courier")
+                .trackingNumber("1234567890")
+                .build();
+        given(client.getCourierCompanyList())
+                .willReturn(CourierCompanyListDto.builder()
+                        .companies(new ArrayList<>())
+                        .build());
+        // when
+        // then
+        assertEquals(
+                "택배사 검증에 실패하였습니다. 관리자에게 문의해주세요",
+                assertThrows(
+                        InternalServerErrorException.class,
+                        () -> service.add("1", request)
+                ).getErrorMessage()
+        );
+    }
+
+    @Test
+    void 택배사검증에서_일치하는_택배사코드가_없는_경우_주문배송정보를_추가할_수_없다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyCode("1000")
+                .courierCompanyName("courier")
+                .trackingNumber("1234567890")
+                .build();
+
+        var companyList = new ArrayList<CourierCompanyListDto.CompanyResponse>();
+        companyList.add(new CourierCompanyListDto.CompanyResponse(
+                false, "01", "courier"
+        ));
+        var courierCompanyList = new CourierCompanyListDto(companyList);
+        given(client.getCourierCompanyList())
+                .willReturn(courierCompanyList);
+        // when
+        // then
+        assertEquals(
+                "유효하지 않는 택배사입니다",
+                assertThrows(
+                        BadRequestException.class,
+                        () -> service.add("1", request)
+                ).getErrorMessage()
+        );
+    }
+
+    @Test
+    void 택배사검증에서_일치하는_택배사이름이_없는_경우_주문배송정보를_추가할_수_없다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyCode("01")
+                .courierCompanyName("wrong")
+                .trackingNumber("1234567890")
+                .build();
+
+        var companyList = new ArrayList<CourierCompanyListDto.CompanyResponse>();
+        companyList.add(new CourierCompanyListDto.CompanyResponse(
+                false, "01", "courier"
+        ));
+        var courierCompanyList = new CourierCompanyListDto(companyList);
+        given(client.getCourierCompanyList())
+                .willReturn(courierCompanyList);
+        // when
+        // then
+        assertEquals(
+                "유효하지 않는 택배사입니다",
+                assertThrows(
+                        BadRequestException.class,
+                        () -> service.add("1", request)
+                ).getErrorMessage()
+        );
+    }
+
+    @Test
+    void 존재하지_않는_주문에_대해서_주문배송정보를_추가할_수_없다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyCode("01")
+                .courierCompanyName("courier")
+                .trackingNumber("1234567890")
+                .build();
+
+        var companyList = new ArrayList<CourierCompanyListDto.CompanyResponse>();
+        companyList.add(new CourierCompanyListDto.CompanyResponse(
+                false, "01", "courier"
+        ));
+        var courierCompanyList = new CourierCompanyListDto(companyList);
+        given(client.getCourierCompanyList())
+                .willReturn(courierCompanyList);
+
+        given(ordersRepository.findById(anyString()))
+                .willReturn(Optional.empty());
+
+        // when
+        // then
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> service.add("1", request)
         );
     }
 }

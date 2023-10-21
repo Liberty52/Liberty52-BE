@@ -118,5 +118,17 @@ public class OrderAdminController {
         Validator.isAdmin(role);
         return orderDeliveryService.getCourierCompanyList(isInternational);
     }
+
+    @Operation(summary = "주문 택배 운송장번호 등록", description = "관리자가 배송시작되는 주문에 대하여 택배사 및 운송장번호를 등록합니다.")
+    @PostMapping("/{orderId}/delivery")
+    @ResponseStatus(HttpStatus.OK)
+    public AdminAddOrderDeliveryDto.Response addOrderDeliveryByAdmin(
+            @RequestHeader("LB-Role") String role,
+            @PathVariable(value = "orderId", required = true) String orderId,
+            @Validated @RequestBody AdminAddOrderDeliveryDto.Request dto
+    ) {
+        Validator.isAdmin(role);
+        return orderDeliveryService.add(orderId, dto);
+    }
 }
 
