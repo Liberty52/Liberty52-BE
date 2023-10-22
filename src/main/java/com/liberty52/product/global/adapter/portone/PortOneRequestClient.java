@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liberty52.product.global.adapter.portone.dto.*;
 import com.liberty52.product.global.adapter.portone.exception.PortOne4xxResponseException;
 import com.liberty52.product.global.adapter.portone.exception.PortOneErrorException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -19,14 +19,24 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class PortOneRequestClient {
 
-    @Value("${portone.api-key}")
-    private String PORT_ONE_API_KEY;
-    @Value("${portone.secret-key}")
-    private String PORT_ONE_SECRET_KEY;
+    private final String PORT_ONE_API_KEY;
+    private final String PORT_ONE_SECRET_KEY;
     private final WebClient webClient;
+
+    public PortOneRequestClient(
+            @Value("${portone.api-key}")
+            String apiKey,
+            @Value("${portone.secret-key}")
+            String secretKey,
+            @Qualifier(value = "portOneWebClient")
+            WebClient webClient
+    ) {
+        this.PORT_ONE_API_KEY = apiKey;
+        this.PORT_ONE_SECRET_KEY = secretKey;
+        this.webClient = webClient;
+    }
 
     public PortOneToken getAccessToken() {
         try {
