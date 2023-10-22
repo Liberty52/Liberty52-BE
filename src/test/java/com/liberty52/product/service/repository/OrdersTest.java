@@ -20,7 +20,7 @@ public class OrdersTest {
     void ordersAssociationWithOrderDestination () throws Exception{
         //given
         OrderDestination destination = OrderDestination.create("김", "kghdasd@naver.com", "", "", "", "");
-        Orders orders = Orders.create("", 1000, destination);
+        Orders orders = Orders.create("", destination);
         String id = orders.getId();
         ordersRepository.save(orders);
         em.flush();

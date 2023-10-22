@@ -2,6 +2,7 @@ package com.liberty52.product.service.applicationservice.impl;
 
 import com.liberty52.product.global.adapter.cloud.AuthServiceClient;
 import com.liberty52.product.global.exception.external.badrequest.CannotAccessOrderException;
+import com.liberty52.product.global.util.Result;
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
 import com.liberty52.product.service.controller.dto.*;
@@ -80,8 +81,8 @@ public class OrderRetrieveServiceImpl implements OrderRetrieveService {
                 .orElseThrow(CannotAccessOrderException::new);
 
         String customerId = order.getAuthId();
-        String customerName = authServiceClient.retrieveAuthData(Set.of(customerId))
-                .get(customerId).getAuthorName();
+        String customerName = Result.runCatching(() -> authServiceClient.retrieveAuthData(Set.of(customerId))
+                .get(customerId).getAuthorName()).getOrDefault("Unknown");
 
         return OrderDetailRetrieveResponse.of(order, customerName);
     }

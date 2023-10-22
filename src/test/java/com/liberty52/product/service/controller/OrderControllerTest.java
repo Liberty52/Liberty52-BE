@@ -19,14 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.Collections;
-import java.util.List;
 
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
@@ -97,6 +98,14 @@ class OrderControllerTest {
                 .paymentInfo(null)
                 .products(Collections.emptyList())
                 .customerName("John Doe")
+                .orderDelivery(OrderDeliveryDto.builder()
+                        .id("od-id")
+                        .code("01")
+                        .name("택배사")
+                        .trackingNumber("1234567890")
+                        .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
+                        .build())
                 .build();
 
         given(orderRetrieveService.retrieveOrderDetail(anyString(), anyString()))
@@ -121,7 +130,13 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.paymentType").value("Card"))
                 .andExpect(jsonPath("$.paymentInfo").doesNotExist())
                 .andExpect(jsonPath("$.products").isArray())
-                .andExpect(jsonPath("$.customerName").value("John Doe"));
+                .andExpect(jsonPath("$.customerName").value("John Doe"))
+                .andExpect(jsonPath("$.orderDelivery.id").value("od-id"))
+                .andExpect(jsonPath("$.orderDelivery.code").value("01"))
+                .andExpect(jsonPath("$.orderDelivery.name").value("택배사"))
+                .andExpect(jsonPath("$.orderDelivery.trackingNumber").value("1234567890"))
+                .andExpect(jsonPath("$.orderDelivery.createdAt").isNotEmpty())
+                .andExpect(jsonPath("$.orderDelivery.updatedAt").isNotEmpty());
     }
 
     @Test
