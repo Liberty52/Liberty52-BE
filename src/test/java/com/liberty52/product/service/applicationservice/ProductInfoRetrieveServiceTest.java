@@ -89,6 +89,7 @@ public class ProductInfoRetrieveServiceTest {
         Assertions.assertEquals(dto.getMeanRating(), sum/reviewList.size());
         Assertions.assertEquals(dto.getRatingCount(), reviewList.size());
         Assertions.assertEquals(dto.getState(), ProductState.ON_SALE);
+        Assertions.assertEquals(dto.isCustom(), true);
     }
 
     @Test
@@ -108,6 +109,7 @@ public class ProductInfoRetrieveServiceTest {
         Assertions.assertEquals(dto.getMeanRating(), sum/reviewList.size());
         Assertions.assertEquals(dto.getRatingCount(), reviewList.size());
         Assertions.assertEquals(dto.getState(), ProductState.ON_SALE);
+        Assertions.assertEquals(dto.isCustom(), true);
         Assertions.assertThrows(ResourceNotFoundException.class, () -> productInfoRetrieveService.retrieveProductByAdmin(ADMIN, "null"));
 
     }
