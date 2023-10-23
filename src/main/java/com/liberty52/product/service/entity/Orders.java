@@ -4,10 +4,7 @@ import com.liberty52.product.global.constants.PriceConstants;
 import com.liberty52.product.global.util.Utils;
 import com.liberty52.product.service.entity.payment.Payment;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -17,10 +14,10 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Slf4j
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Orders {
 
     @Id
@@ -36,9 +33,9 @@ public class Orders {
 
     private int deliveryPrice = PriceConstants.DEFAULT_DELIVERY_PRICE;
 
-    private Long amount;
+    private Long amount = 0L;
 
-    private Integer totalQuantity;
+    private Integer totalQuantity = 0;
 
     private String orderNum;
 
@@ -55,6 +52,9 @@ public class Orders {
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "orders")
     private CanceledOrders canceledOrders;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "order")
+    private OrderDelivery orderDelivery;
 
     @Deprecated
     private Orders(String authId, int deliveryPrice, OrderDestination orderDestination) {
@@ -159,4 +159,7 @@ public class Orders {
         });
     }
 
+    public void setOrderDelivery(OrderDelivery orderDelivery) {
+        this.orderDelivery = orderDelivery;
+    }
 }

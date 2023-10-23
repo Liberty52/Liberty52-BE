@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.Map;
 import java.util.Set;
 
-@FeignClient(value = "auth", primary = false)
+@FeignClient(value = "auth", primary = false, url = "${auth.svc.path}")
 public interface AuthServiceClient {
 
     @GetMapping(value = "/my")

@@ -80,6 +80,8 @@ public class AdminCanceledOrderListResponse {
 
         private static String getProductName(Orders entity) {
             StringBuilder sb = new StringBuilder();
+            if (entity.getCustomProducts().isEmpty())
+                return "";
             sb.append(entity.getCustomProducts().get(0).getProduct().getName());
             if (entity.getCustomProducts().size() > 1) {
                 sb.append(" 외 ").append(entity.getTotalQuantity()).append("건");

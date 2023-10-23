@@ -2,10 +2,9 @@ package com.liberty52.product;
 
 import com.liberty52.product.global.config.CRLFLogConverter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -18,7 +17,6 @@ import java.util.Optional;
 @EnableAsync
 @EnableScheduling
 @SpringBootApplication
-@EnableDiscoveryClient
 @EnableFeignClients
 @Slf4j
 public class ProductApplication {
