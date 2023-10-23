@@ -1,31 +1,25 @@
 package com.liberty52.product.service.controller.dto;
 
+import com.liberty52.product.global.annotation.validation.NullableNotBlank;
+import com.liberty52.product.global.annotation.validation.NullableNotNegative;
 import com.liberty52.product.service.entity.ProductState;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductRequestDto {
-    @NotBlank
+public class ProductModifyRequestDto{
+    @NullableNotBlank(fieldname="name")
     private String name;
 
-    @NotNull
     private ProductState productState;
 
-    @Min(0)
+    @NullableNotNegative(fieldname="price")
     private Long price;
 
-    @NotNull
     private Boolean isCustom;
-
-
 }

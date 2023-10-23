@@ -46,13 +46,15 @@ public class Product {
         this.pictureUrl = pictureUrl;
     }
 
+    public void setProductPictureUrl(String pictureUrl){
+        this.pictureUrl = pictureUrl;
+    }
     public void createProductIntroduction(String productIntroductionImageUrl) {
         this.productIntroductionImageUrl = productIntroductionImageUrl;
     }
     public void addOption(ProductOption productOption) {
         this.productOptions.add(productOption);
     }
-
     public static Product create(String name, ProductState state, Long price, boolean isCustom) {
         return builder().name(name)
                 .productState(state)

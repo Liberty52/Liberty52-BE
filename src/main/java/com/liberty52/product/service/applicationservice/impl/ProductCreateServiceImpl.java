@@ -3,15 +3,13 @@ package com.liberty52.product.service.applicationservice.impl;
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.ProductCreateService;
-import com.liberty52.product.service.controller.dto.ProductRequestDto;
+import com.liberty52.product.service.controller.dto.ProductCreateRequestDto;
 import com.liberty52.product.service.entity.Product;
 import com.liberty52.product.service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +18,7 @@ public class ProductCreateServiceImpl implements ProductCreateService {
     private final ProductRepository productRepository;
     private final S3UploaderApi s3Uploader;
     @Override
-    public Product createProductByAdmin(String role, ProductRequestDto productRequestDto, MultipartFile productImage) {
+    public Product createProductByAdmin(String role, ProductCreateRequestDto productRequestDto, MultipartFile productImage) {
         Validator.isAdmin(role);
         String imageUrl = null;
         if(productImage!=null){
