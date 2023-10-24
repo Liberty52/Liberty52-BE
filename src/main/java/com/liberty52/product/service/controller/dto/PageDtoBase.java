@@ -28,4 +28,5 @@ public abstract class PageDtoBase<C> {
         this.first = page.isFirst();
         this.last = page.isLast();
     }
+
 }
