@@ -34,8 +34,7 @@ public class Product {
     private List<ProductOption> productOptions = new ArrayList<>();
 
     private String pictureUrl;
-
-    private String productIntroductionImageUrl;
+    private String content;
 
     @Builder
     private Product(String name, ProductState productState, Long price, boolean isCustom, String pictureUrl) {
@@ -46,9 +45,14 @@ public class Product {
         this.pictureUrl = pictureUrl;
     }
 
-    public void createProductIntroduction(String productIntroductionImageUrl) {
-        this.productIntroductionImageUrl = productIntroductionImageUrl;
+    public void createContent(String content) {
+        this.content = content;
     }
+
+    public void deleteContent() {
+        this.content = "";
+    }
+
     public void addOption(ProductOption productOption) {
         this.productOptions.add(productOption);
     }

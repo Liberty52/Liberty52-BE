@@ -15,7 +15,7 @@ public class ProductDetailResponseDto {
     private String state;
     private Long price;
     private boolean isCustom;
-    private String introductionImageUrl;
+    private String content;
     private List<ProductOptionDto> options;
 
     public ProductDetailResponseDto(Product product) {
@@ -25,7 +25,7 @@ public class ProductDetailResponseDto {
         this.state = product.getProductState().name();
         this.price = product.getPrice();
         this.isCustom = product.isCustom();
-        this.introductionImageUrl = product.getProductIntroductionImageUrl();
+        this.content = product.getContent();
         this.options = product.getProductOptions().stream().filter(ProductOption::isOnSale)
                 .map(ProductOptionDto::new).toList();
     }
