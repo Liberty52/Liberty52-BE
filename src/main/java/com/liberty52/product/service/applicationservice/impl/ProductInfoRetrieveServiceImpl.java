@@ -68,7 +68,7 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
         for (Product product : productList){
             List<Review> productReviewList = reviewList.stream().filter(r -> r.getCustomProduct().getProduct().equals(product)).collect(Collectors.toList());
             float meanRate = product.getRate(productReviewList);
-            dto.add(ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getProductState(), product.isCustom(), product.getProductIntroductionImageUrl()));
+            dto.add(ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getProductState(), product.isCustom(),product.getContent()));
         }
         return dto;
     }
@@ -79,7 +79,7 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
         List<Review> productReviewList = reviewRepository.findByCustomProduct_Product(product);
         float meanRate = product.getRate(productReviewList);
-        return ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getProductState(), product.isCustom(), product.getProductIntroductionImageUrl());
+        return ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getProductState(), product.isCustom(), product.getContent());
     }
 
     @Override

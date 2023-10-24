@@ -1,8 +1,9 @@
 package com.liberty52.product.service.controller;
 
 import com.liberty52.product.service.applicationservice.ProductInfoRetrieveService;
-import com.liberty52.product.service.applicationservice.ProductIntroductionCreateService;
-import com.liberty52.product.service.applicationservice.ProductIntroductionModifyService;
+import com.liberty52.product.service.applicationservice.ProductIntroductionDeleteService;
+import com.liberty52.product.service.applicationservice.ProductIntroductionImgSaveService;
+import com.liberty52.product.service.applicationservice.ProductIntroductionUpsertService;
 import com.liberty52.product.service.controller.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductInfoController {
     private final ProductInfoRetrieveService productInfoRetrieveService;
-    private final ProductIntroductionCreateService productIntroductionCreateService;
-    private final ProductIntroductionModifyService productIntroductionModifyService;
+    private final ProductIntroductionUpsertService productIntroductionUpsertService;
+    private final ProductIntroductionDeleteService productIntroductionDeleteService;
+    private final ProductIntroductionImgSaveService productIntroductionImgSaveService;
 
     @Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
     @GetMapping("/products")
@@ -65,19 +68,26 @@ public class ProductInfoController {
         return productInfoRetrieveService.retrieveProductOptionListByCart(authId);
     }
 
-    @Operation(summary = "상품 소개 생성", description = "관리자가 특정 상품의 소개 이미지를 업로드하여 상품 소개를 생성합니다.")
+    @Operation(summary = "상품 소개 생성 및 수정", description = "관리자가 특정 상품의 소개(html)를 생성 또는 수정합니다.")
     @PostMapping("/admin/product/{productId}/introduction")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createProductIntroductionByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId,
-                                                 @RequestPart(value = "images",required = false) MultipartFile productIntroductionImageFile) {
-        productIntroductionCreateService.createProductIntroduction(role, productId, productIntroductionImageFile);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void upsertProductIntroductionByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId,
+        @Validated ProductIntroductionCreateDto dto) {
+        productIntroductionUpsertService.upsertProductIntroductionByAdmin(role, productId, dto.getContent());
     }
 
-    @Operation(summary = "상품 소개 수정", description = "관리자가 특정 상품의 소개 이미지를 수정합니다.")
-    @PatchMapping("/admin/product/{productId}/introduction")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void modifyProductIntroductionByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId,
-                                                 @RequestPart(value = "images",required = false) MultipartFile productIntroductionImageFile){
-        productIntroductionModifyService.modifyProductIntroduction(role, productId, productIntroductionImageFile);
+    @Operation(summary = "상품 소개 삭제", description = "관리자가 특정 상품의 소개를 삭제합니다.")
+    @DeleteMapping("/admin/product/{productId}/introduction")
+    @ResponseStatus(HttpStatus.OK)
+    public void modifyProductIntroductionByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId) {
+        productIntroductionDeleteService.deleteProductIntroduction(role, productId);
+    }
+
+    @Operation(summary = "상품 소개 이미지 url 반환", description = "관리자가 상품 소개 이미지 url를 반환합니다.")
+    @PostMapping("/admin/productIntroduction/img")
+    @ResponseStatus(HttpStatus.OK)
+    public String saveProductIntroductionImageByAdmin(@RequestHeader("LB-Role") String role,
+		@RequestPart(value = "file") MultipartFile imageFile) {
+		return productIntroductionImgSaveService.saveProductIntroductionImageByAdmin(role,imageFile);
     }
 }
