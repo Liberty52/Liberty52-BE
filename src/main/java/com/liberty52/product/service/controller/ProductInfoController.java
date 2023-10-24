@@ -72,7 +72,7 @@ public class ProductInfoController {
     @PatchMapping("/admin/product/{productId}/introduction")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void upsertProductIntroductionByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId,
-        @Validated ProductIntroductionCreateDto dto) {
+        @Validated @RequestBody ProductIntroductionCreateDto dto) {
         productIntroductionUpsertService.upsertProductIntroductionByAdmin(role, productId, dto.getContent());
     }
 
