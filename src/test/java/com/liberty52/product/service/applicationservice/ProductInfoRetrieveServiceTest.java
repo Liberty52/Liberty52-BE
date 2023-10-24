@@ -83,7 +83,7 @@ public class ProductInfoRetrieveServiceTest {
         ProductInfoRetrieveResponseDto dto = dtoList.get(0);
         Assertions.assertEquals(dto.getId(), "LIB-001");
         Assertions.assertEquals(dto.getPictureUrl(), null);
-        Assertions.assertEquals(dto.getIntroductionImageUrl(), null);
+        Assertions.assertEquals(dto.getContent(), null);
         Assertions.assertEquals(dto.getName(), "Liberty 52_Frame");
         Assertions.assertEquals(dto.getPrice(), 100);
         Assertions.assertEquals(dto.getMeanRating(), sum/reviewList.size());
@@ -103,7 +103,7 @@ public class ProductInfoRetrieveServiceTest {
         ProductInfoRetrieveResponseDto dto = productInfoRetrieveService.retrieveProductByAdmin(ADMIN, product.getId());
         Assertions.assertEquals(dto.getId(), "LIB-001");
         Assertions.assertEquals(dto.getPictureUrl(), null);
-        Assertions.assertEquals(dto.getIntroductionImageUrl(), null);
+        Assertions.assertEquals(dto.getContent(), null);
         Assertions.assertEquals(dto.getName(), "Liberty 52_Frame");
         Assertions.assertEquals(dto.getPrice(), 100);
         Assertions.assertEquals(dto.getMeanRating(), sum/reviewList.size());

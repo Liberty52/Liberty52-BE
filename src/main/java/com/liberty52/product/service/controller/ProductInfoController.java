@@ -69,7 +69,7 @@ public class ProductInfoController {
     }
 
     @Operation(summary = "상품 소개 생성 및 수정", description = "관리자가 특정 상품의 소개(html)를 생성 또는 수정합니다.")
-    @PostMapping("/admin/product/{productId}/introduction")
+    @PatchMapping("/admin/product/{productId}/introduction")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void upsertProductIntroductionByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId,
         @Validated ProductIntroductionCreateDto dto) {
