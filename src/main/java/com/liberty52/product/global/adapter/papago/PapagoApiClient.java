@@ -1,4 +1,4 @@
-package com.liberty52.product.global.adapter;
+package com.liberty52.product.global.adapter.papago;
 
 import com.liberty52.product.global.constants.TranslationConstants;
 import jakarta.annotation.PostConstruct;

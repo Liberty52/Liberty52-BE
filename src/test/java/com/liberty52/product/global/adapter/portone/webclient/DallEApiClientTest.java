@@ -1,8 +1,5 @@
 package com.liberty52.product.global.adapter.portone.webclient;
 
-import com.liberty52.product.global.adapter.DallEApiClient;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
