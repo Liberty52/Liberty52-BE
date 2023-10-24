@@ -1,7 +1,5 @@
 package com.liberty52.product.service.controller.dto;
 
-import com.liberty52.product.service.entity.Product;
-import com.liberty52.product.service.entity.Review;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -29,9 +29,7 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
   @Override
   public ProductListResponseDto retrieveProductList(Pageable pageable) {
       List<Review> reviewList = reviewRepository.findAll();
-
-
-    return new ProductListResponseDto(productRepository.findByProductStateNot(ProductState.NOT_SALE, pageable), reviewList);
+      return new ProductListResponseDto(productRepository.findByProductStateNot(ProductState.NOT_SALE, pageable), reviewList);
   }
 
   @Override

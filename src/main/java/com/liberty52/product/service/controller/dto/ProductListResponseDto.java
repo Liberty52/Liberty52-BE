@@ -14,8 +14,6 @@ public class ProductListResponseDto extends PageDtoBase<ProductListResponseDto.P
 
     public ProductListResponseDto(Page<Product> page, List<Review> reviewList) {
         super(page, page.getContent().stream().map(p -> new ProductInfo(p, reviewList)).toList());
-
-        System.out.println("1245465");
     }
 
     @Data
@@ -30,7 +28,6 @@ public class ProductListResponseDto extends PageDtoBase<ProductListResponseDto.P
 
         public ProductInfo(Product p, List<Review> reviewList) {
             List<Review> productReviewList = reviewList.stream().filter(r -> r.getCustomProduct().getProduct().equals(p)).collect(Collectors.toList());
-            System.out.println("98765432");
             this.id = p.getId();
             this.name = p.getName();
             this.state = p.getProductState().name();
