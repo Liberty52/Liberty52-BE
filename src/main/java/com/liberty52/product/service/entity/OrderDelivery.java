@@ -43,4 +43,16 @@ public class OrderDelivery {
     @JoinColumn(name = "order_id")
     private Orders order;
 
+    public void associate(Orders order) {
+        this.order = order;
+        order.setOrderDelivery(this);
+    }
+
+    public Boolean isMatch(String courierCompanyCode, String trackingNumber) {
+        return this.courierCompanyCode.equals(courierCompanyCode) && this.trackingNumber.equals(trackingNumber);
+    }
+
+    public Boolean isNotMatch(String courierCompanyCode, String trackingNumber) {
+        return !isMatch(courierCompanyCode, trackingNumber);
+    }
 }

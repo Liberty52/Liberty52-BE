@@ -3,6 +3,7 @@ package com.liberty52.product.service.applicationservice.impl;
 import com.liberty52.product.global.adapter.courier.CourierCompanyClient;
 import com.liberty52.product.global.adapter.courier.api.smartcourier.dto.SmartCourierCompanyListDto;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.product.global.exception.external.forbidden.ForbiddenException;
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.global.util.Validator;
@@ -10,6 +11,7 @@ import com.liberty52.product.service.applicationservice.OrderDeliveryService;
 import com.liberty52.product.service.controller.dto.AdminAddOrderDeliveryDto;
 import com.liberty52.product.service.controller.dto.AdminCourierListDto;
 import com.liberty52.product.service.entity.OrderDelivery;
+import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.repository.OrdersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderDeliveryServiceImpl implements OrderDeliveryService {
 
-    @SuppressWarnings("rawtypes")
     private final CourierCompanyClient client;
     private final OrdersRepository ordersRepository;
 
-    @SuppressWarnings("unchecked")
     @Override
     @Transactional(readOnly = true)
     public AdminCourierListDto.Response getCourierCompanyList(Boolean isInternational) {
@@ -77,6 +77,32 @@ public class OrderDeliveryServiceImpl implements OrderDeliveryService {
                 .build();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public String getRealTimeDeliveryInfoRedirectUrl(String authId, String orderId, String courierCode, String trackingNumber) {
+        var order = ordersRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("order", "id", orderId));
+
+        validateOrderOwner(order, authId);
+
+        var orderDelivery = validateOrderDeliveryAndGet(order, courierCode, trackingNumber);
+
+        return client.getDeliveryInfoRedirectUrl(orderDelivery.getCourierCompanyCode(), orderDelivery.getTrackingNumber());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String getGuestRealTimeDeliveryInfoRedirectUrl(String guestId, String orderNumber, String courierCode, String trackingNumber) {
+        var order = ordersRepository.findByOrderNum(orderNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("order", "orderNumber", orderNumber));
+
+        validateOrderOwner(order, guestId);
+
+        var orderDelivery = validateOrderDeliveryAndGet(order, courierCode, trackingNumber);
+
+        return client.getDeliveryInfoRedirectUrl(orderDelivery.getCourierCompanyCode(), orderDelivery.getTrackingNumber());
+    }
+
     private void validateInputs(String... inputs) {
         if (Validator.areNullOrBlank(inputs)) {
             throw new BadRequestException("모든 파라미터를 입력해주세요");
@@ -97,5 +123,22 @@ public class OrderDeliveryServiceImpl implements OrderDeliveryService {
         if (!exist) {
             throw new BadRequestException("유효하지 않는 택배사입니다");
         }
+    }
+
+    private void validateOrderOwner(Orders order, String authId) {
+        if (!authId.equals(order.getAuthId())) {
+            throw new ForbiddenException("접근할 수 없는 주문입니다");
+        }
+    }
+
+    private OrderDelivery validateOrderDeliveryAndGet(Orders order, String courierCode, String trackingNumber) {
+        var orderDelivery = order.getOrderDelivery();
+        if (orderDelivery == null) {
+            throw new ResourceNotFoundException("orderDelivery");
+        }
+        if (orderDelivery.isNotMatch(courierCode, trackingNumber)) {
+            throw new BadRequestException("배송정보가 일치하지 않습니다");
+        }
+        return orderDelivery;
     }
 }

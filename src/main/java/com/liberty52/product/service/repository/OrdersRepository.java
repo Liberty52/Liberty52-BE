@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrdersRepository extends JpaRepository<Orders, String> {
 
     List<Orders> findAllByOrderStatusAndOrderedAtLessThan(OrderStatus status, LocalDateTime orderedAt);
+
+    Optional<Orders> findByOrderNum(String orderNumber);
 
 }
