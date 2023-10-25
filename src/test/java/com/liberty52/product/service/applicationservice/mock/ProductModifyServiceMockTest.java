@@ -52,7 +52,7 @@ public class ProductModifyServiceMockTest {
                 .isCustom(false)
                 .build();
         //assume that testProduct has previous image
-        testProduct.createProductIntroduction("previousMockImageUrl");
+        testProduct.createContent("previousMockImageUrl");
 
         //new image & data
         MultipartFile newMockImage = mock(MultipartFile.class);

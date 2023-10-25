@@ -45,6 +45,10 @@ public class Product {
         this.pictureUrl = pictureUrl;
     }
 
+    public void setProductPictureUrl(String pictureUrl){
+        this.pictureUrl = pictureUrl;
+    }
+
     public void createContent(String content) {
         this.content = content;
     }
