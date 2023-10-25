@@ -57,11 +57,11 @@ public class CartItemSchedulerServiceTest extends MockS3Test {
     void init() throws IOException {
         CartItemRequest dto1 = new CartItemRequest();
         String[] option1 = {"OPT-001", "OPT-003", "OPT-005"};
-        dto1.create("Liberty 52_Frame", 1, option1);
+        dto1.create("LIB-001", 1, option1);
 
         CartItemRequest dto2 = new CartItemRequest();
         String[] option2 = {"OPT-002", "OPT-003", "OPT-006"};
-        dto2.create("Liberty 52_Frame", 2, option2);
+        dto2.create("LIB-001", 2, option2);
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
 
