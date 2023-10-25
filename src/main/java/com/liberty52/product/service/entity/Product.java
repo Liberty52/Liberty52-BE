@@ -56,7 +56,6 @@ public class Product {
     public void addOption(ProductOption productOption) {
         this.productOptions.add(productOption);
     }
-
     public static Product create(String name, ProductState state, Long price, boolean isCustom) {
         return builder().name(name)
                 .productState(state)

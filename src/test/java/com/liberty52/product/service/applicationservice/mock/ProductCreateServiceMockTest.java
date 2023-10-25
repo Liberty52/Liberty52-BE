@@ -2,7 +2,7 @@ package com.liberty52.product.service.applicationservice.mock;
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.forbidden.InvalidRoleException;
 import com.liberty52.product.service.applicationservice.impl.ProductCreateServiceImpl;
-import com.liberty52.product.service.controller.dto.ProductRequestDto;
+import com.liberty52.product.service.controller.dto.ProductCreateRequestDto;
 import com.liberty52.product.service.entity.Product;
 import com.liberty52.product.service.entity.ProductState;
 import com.liberty52.product.service.repository.ProductRepository;
@@ -14,8 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -38,7 +36,7 @@ public class ProductCreateServiceMockTest {
     void 제품추가_성공(){
         //given
         MultipartFile productTestImage = mock(MultipartFile.class);
-        ProductRequestDto testDto = ProductRequestDto.builder()
+        ProductCreateRequestDto testDto = ProductCreateRequestDto.builder()
                 .name("testName")
                 .price(100L)
                 .productState(ProductState.ON_SALE)
@@ -64,7 +62,7 @@ public class ProductCreateServiceMockTest {
     void 제품추가_잘못된권한() {
         //given
         MultipartFile productTestImage = mock(MultipartFile.class);
-        ProductRequestDto testDto = ProductRequestDto.builder()
+        ProductCreateRequestDto testDto = ProductCreateRequestDto.builder()
                 .name("testName")
                 .price(100L)
                 .productState(ProductState.ON_SALE)
