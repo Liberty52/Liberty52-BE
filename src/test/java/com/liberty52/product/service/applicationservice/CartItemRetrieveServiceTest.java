@@ -117,14 +117,14 @@ public class CartItemRetrieveServiceTest extends MockS3Test {
 
         CartItemRequest dto1 = new CartItemRequest();
         String[] option = {"OPT-001", "OPT-003", "OPT-005"};
-        dto1.create("Liberty 52_Frame", 1, option);
+        dto1.create("LIB-001", 1, option);
         cartItemCreateService.createGuestCartItem("aaa", imageFile, dto1);
 
 
         CartItemRequest dto2 = new CartItemRequest();
         String[] option2 = {"OPT-002", "OPT-007"};
 
-        dto2.create("Liberty 52_Frame", 2, option2);
+        dto2.create("LIB-001", 2, option2);
         cartItemCreateService.createGuestCartItem("aaa", imageFile, dto2);
 
 

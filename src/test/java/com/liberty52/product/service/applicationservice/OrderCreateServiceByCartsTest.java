@@ -206,17 +206,17 @@ public class OrderCreateServiceByCartsTest extends MockS3Test {
     void initCarts() {
         CartItemRequest dto1 = new CartItemRequest();
         String[] option1 = {"OPT-001", "OPT-003", "OPT-005"};
-        dto1.create("Liberty 52_Frame", 1, option1);
+        dto1.create("LIB-001", 1, option1);
         cartItemCreateService.createAuthCartItem(aid, imageFile, dto1);
 
         CartItemRequest dto2 = new CartItemRequest();
         String[] option2 = {"OPT-001", "OPT-003", "OPT-005"};
-        dto2.create("Liberty 52_Frame", 2, option2);
+        dto2.create("LIB-001", 2, option2);
         cartItemCreateService.createAuthCartItem(aid, imageFile, dto2);
 
         CartItemRequest dto3 = new CartItemRequest();
         String[] option3 = {"OPT-001", "OPT-003", "OPT-005"};
-        dto3.create("Liberty 52_Frame", 3, option3);
+        dto3.create("LIB-001", 3, option3);
         cartItemCreateService.createAuthCartItem(aid, imageFile, dto3);
     }
 
