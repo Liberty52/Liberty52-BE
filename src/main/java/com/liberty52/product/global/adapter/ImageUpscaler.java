@@ -1,14 +1,14 @@
 package com.liberty52.product.global.adapter;
 
-import com.liberty52.product.global.util.Result;
 import lombok.Getter;
+import reactor.core.publisher.Mono;
 
 public interface ImageUpscaler {
-    Result<String> upscale(String srcUri, Scale scale);
+    Mono<String> upscale(String srcUri, Scale scale);
 
-    sealed class Scale {
+    sealed interface Scale {
         @Getter
-        public static final class Mul extends Scale {
+        final class Mul implements Scale {
             private final Double width;
             private final Double height;
 
@@ -23,7 +23,7 @@ public interface ImageUpscaler {
         }
 
         @Getter
-        public static final class Fix extends Scale {
+        final class Fix implements Scale {
             private final Long width;
             private final Long height;
 

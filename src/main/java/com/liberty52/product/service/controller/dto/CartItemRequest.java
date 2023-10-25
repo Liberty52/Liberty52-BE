@@ -9,7 +9,7 @@ import lombok.Getter;
 public class CartItemRequest {
 
     @NotBlank
-    String productName;
+    String productId;
 
     @NotNull
     Integer quantity;
@@ -22,15 +22,15 @@ public class CartItemRequest {
     }
 
 
-    public void create(String productName, Integer quantity, String[] optionDetailIds) {
-        this.productName = productName;
+    public void create(String productId, Integer quantity, String[] optionDetailIds) {
+        this.productId = productId;
         this.quantity = quantity;
         this.optionDetailIds = optionDetailIds;
     }
 
     @Builder
-    private CartItemRequest(String productName, Integer quantity, String[] optionDetailIds) {
-        this.productName = productName;
+    private CartItemRequest(String productId, Integer quantity, String[] optionDetailIds) {
+        this.productId = productId;
         this.quantity = quantity;
         this.optionDetailIds = optionDetailIds;
     }

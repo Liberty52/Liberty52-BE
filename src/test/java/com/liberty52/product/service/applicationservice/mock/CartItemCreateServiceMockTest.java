@@ -63,16 +63,16 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
 
         //given
         String[] option = {"OPT-001", "OPT-003", "OPT-005"};
-        CartItemRequest dto1 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(1).optionDetailIds(option).build();
-        CartItemRequest dto2 = new CartItemRequest().builder().productName("L").quantity(2).optionDetailIds(option).build();
+        CartItemRequest dto1 = new CartItemRequest().builder().productId("LIB-001").quantity(1).optionDetailIds(option).build();
+        CartItemRequest dto2 = new CartItemRequest().builder().productId("L").quantity(2).optionDetailIds(option).build();
         String[] optionErr = {"OPT-002", "OPT-003", "err"};
-        CartItemRequest dto3 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(4).optionDetailIds(optionErr).build();
+        CartItemRequest dto3 = new CartItemRequest().builder().productId("LIB-001").quantity(4).optionDetailIds(optionErr).build();
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
 
         given(cartRepository.save(any())).willReturn(Cart.create("testId"));
 
-        given(productRepository.findByName("Liberty 52_Frame")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame",ProductState.ON_SALE,100L,true)));
+        given(productRepository.findById("LIB-001")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame",ProductState.ON_SALE,100L,true)));
 
         given(customProductRepository.save(any())).willReturn(null);
         given(customProductOptionRepository.save(any())).willReturn(null);
@@ -102,16 +102,16 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
     void 게스트장바구니생성() throws IOException {
         //given
         String[] option = {"OPT-001", "OPT-003", "OPT-005"};
-        CartItemRequest dto1 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(1).optionDetailIds(option).build();
-        CartItemRequest dto2 = new CartItemRequest().builder().productName("L").quantity(2).optionDetailIds(option).build();
+        CartItemRequest dto1 = new CartItemRequest().builder().productId("LIB-001").quantity(1).optionDetailIds(option).build();
+        CartItemRequest dto2 = new CartItemRequest().builder().productId("L").quantity(2).optionDetailIds(option).build();
         String[] optionErr = {"OPT-002", "OPT-003", "err"};
-        CartItemRequest dto3 = new CartItemRequest().builder().productName("Liberty 52_Frame").quantity(4).optionDetailIds(optionErr).build();
+        CartItemRequest dto3 = new CartItemRequest().builder().productId("LIB-001").quantity(4).optionDetailIds(optionErr).build();
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
 
 //        given(cartRepository.save(any())).willReturn(Cart.create("testId"));
 //
-//        given(productRepository.findByName("Liberty 52_Frame")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame",ProductState.ON_SALE,100L)));
+//        given(productRepository.findById("LIB-001")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame",ProductState.ON_SALE,100L)));
 //
 //        given(customProductRepository.save(any())).willReturn(null);
 //        given(customProductOptionRepository.save(any())).willReturn(null);

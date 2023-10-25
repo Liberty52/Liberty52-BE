@@ -1,6 +1,6 @@
 package com.liberty52.product.service.applicationservice.impl;
 
-import com.liberty52.product.global.adapter.PapagoApiClient;
+import com.liberty52.product.global.adapter.papago.PapagoApiClient;
 import com.liberty52.product.global.constants.TranslationConstants;
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.global.exception.internal.PapagoApiException;
