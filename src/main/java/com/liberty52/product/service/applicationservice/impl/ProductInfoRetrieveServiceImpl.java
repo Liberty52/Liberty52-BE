@@ -9,6 +9,7 @@ import com.liberty52.product.service.repository.CartRepository;
 import com.liberty52.product.service.repository.ProductRepository;
 import com.liberty52.product.service.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,8 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
 
   @Override
   public ProductListResponseDto retrieveProductList(Pageable pageable) {
-    return new ProductListResponseDto(productRepository.findAll(pageable));
+      List<Review> reviewList = reviewRepository.findAll();
+      return new ProductListResponseDto(productRepository.findByProductStateNot(ProductState.NOT_SALE, pageable), reviewList);
   }
 
   @Override
@@ -68,7 +70,7 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
         for (Product product : productList){
             List<Review> productReviewList = reviewList.stream().filter(r -> r.getCustomProduct().getProduct().equals(product)).collect(Collectors.toList());
             float meanRate = product.getRate(productReviewList);
-            dto.add(ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getProductState(), product.isCustom(), product.getProductIntroductionImageUrl()));
+            dto.add(ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getProductState(), product.isCustom(),product.getContent()));
         }
         return dto;
     }
@@ -79,7 +81,7 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
         List<Review> productReviewList = reviewRepository.findByCustomProduct_Product(product);
         float meanRate = product.getRate(productReviewList);
-        return ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getProductState(), product.isCustom(), product.getProductIntroductionImageUrl());
+        return ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(),product.getProductState(), product.isCustom(), product.getContent());
     }
 
     @Override

@@ -11,18 +11,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductInfoRetrieveResponseDto {
 
-    String id;
-    String pictureUrl;
-    String name;
-    long price;
-    float meanRating;
-    int ratingCount;
-    private ProductState state;
-    boolean isCustom;
-    String introductionImageUrl;
+	String id;
+	String pictureUrl;
+	String name;
+	long price;
+	float meanRating;
+	int ratingCount;
+	private ProductState state;
+	boolean isCustom;
+	String content;
 
-    public static ProductInfoRetrieveResponseDto of(String id, String pictureUrl, String name, long price, float meanRating, int ratingCount, ProductState state, boolean isCustom, String introductionImageUrl){
-        return new ProductInfoRetrieveResponseDto(id, pictureUrl, name, price, meanRating, ratingCount, state, isCustom, introductionImageUrl);
-    }
+	public static ProductInfoRetrieveResponseDto of(String id, String pictureUrl, String name, long price,
+		float meanRating, int ratingCount, ProductState state, boolean isCustom,String content) {
+		return new ProductInfoRetrieveResponseDto(id, pictureUrl, name, price, meanRating, ratingCount, state, isCustom,content);
+	}
 
 }
