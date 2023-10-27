@@ -1,10 +1,13 @@
 package com.liberty52.product.service.controller.guest;
 
+import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
+import com.liberty52.product.service.applicationservice.OrderDeliveryService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
 import com.liberty52.product.service.controller.dto.*;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,13 +16,17 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Tag(name = "주문", description = "주문 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(value = {"*"})
 public class OrderGuestController {
 
     private final OrderCreateService orderCreateService;
     private final OrderRetrieveService orderRetrieveService;
+    private final OrderDeliveryService orderDeliveryService;
 
     /**CREATE**/
     @Operation(summary = "카드 결제 주문 생성", description = "비회원을 위한 카드 결제 주문을 생성합니다.")
@@ -83,4 +90,20 @@ public class OrderGuestController {
         return ResponseEntity.ok(orderRetrieveService.retrieveGuestOrderDetail(guestId,orderNumber));
     }
 
+    @Operation(summary = "비회원 유저 주문의 실시간배송정보 조회", description = "비회원 유저가 배송시작된 주문에 대한 실시간 배송정보를 조회할 수 있는 리다이렉션 URL을 반환합니다.")
+    @GetMapping("/guest/orders/{orderNumber}/delivery")
+    @ResponseStatus(HttpStatus.OK)
+    public void getGuestRealTimeDeliveryInfo(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
+            @PathVariable(value = "orderNumber") String orderNumber,
+            @RequestParam(value = "courierCode", required = true) String courierCode,
+            @RequestParam(value = "trackingNumber", required = true) String trackingNumber,
+            HttpServletResponse response
+    ) {
+        try {
+            response.sendRedirect(orderDeliveryService.getGuestRealTimeDeliveryInfoRedirectUrl(guestId, orderNumber, courierCode, trackingNumber));
+        } catch (IOException e) {
+            throw new InternalServerErrorException("리다이렉션 I/O에 오류가 발생하였습니다");
+        }
+    }
 }

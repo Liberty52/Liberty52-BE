@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liberty52.product.global.exception.external.notfound.NotFoundException;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
+import com.liberty52.product.service.applicationservice.OrderDeliveryService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
 import com.liberty52.product.service.controller.dto.*;
 import com.liberty52.product.service.entity.OrderStatus;
@@ -25,6 +26,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -34,6 +36,7 @@ class OrderControllerTest {
     @MockBean private OrderCreateService orderCreateService;
     @MockBean private OrderRetrieveService orderRetrieveService;
     @MockBean private OrderCancelService orderCancelService;
+    @MockBean private OrderDeliveryService orderDeliveryService;
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
@@ -361,7 +364,19 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.orderNum").value("orderNum"));
     }
 
-
-
-
+    @Test
+    void 유저가_자신의_주문에_대한_실시간배송정보를_조회한다() throws Exception {
+        // given
+        given(orderDeliveryService.getRealTimeDeliveryInfoRedirectUrl(anyString(), anyString(), anyString(), anyString()))
+                .willReturn("This is HTML response from Smart Courier API");
+        // when
+        // then
+        mockMvc.perform(get("/orders/{orderId}/delivery", "order-id")
+                .param("courierCode", "04")
+                .param("trackingNumber", "1234567890")
+                .header(HttpHeaders.AUTHORIZATION, "1")
+        ).andExpectAll(
+                status().is3xxRedirection()
+        );
+    }
 }

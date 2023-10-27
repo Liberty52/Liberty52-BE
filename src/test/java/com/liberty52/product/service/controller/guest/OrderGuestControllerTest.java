@@ -4,6 +4,7 @@ import com.liberty52.product.global.exception.external.ErrorResponse;
 import com.liberty52.product.global.exception.external.RestExceptionHandler;
 import com.liberty52.product.global.exception.external.badrequest.CannotAccessOrderException;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
+import com.liberty52.product.service.applicationservice.OrderDeliveryService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -19,23 +21,26 @@ import java.time.LocalDate;
 import static com.liberty52.product.service.utils.MockConstants.*;
 import static com.liberty52.product.service.utils.MockFactory.createMockOrderDetailRetrieveResponse;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(value = {OrderGuestController.class,RestExceptionHandler.class})
 public class OrderGuestControllerTest {
 
     @MockBean
-    OrderCreateService orderCreateService;
+    private OrderCreateService orderCreateService;
 
     @MockBean
-    OrderRetrieveService orderRetrieveService;
+    private OrderRetrieveService orderRetrieveService;
+
+    @MockBean
+    private OrderDeliveryService orderDeliveryService;
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     final String ORDER_URL = "/orders";
     final String GUEST_PREFIX = "/guest";
@@ -88,4 +93,20 @@ public class OrderGuestControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    void 비회원_유저가_자신의_주문에_대한_실시간배송정보를_조회한다() throws Exception {
+        // given
+        given(orderDeliveryService.getGuestRealTimeDeliveryInfoRedirectUrl(anyString(), anyString(), anyString(), anyString()))
+                .willReturn("This is HTML response from Smart Courier API");
+        // when
+        // then
+        mockMvc.perform(get("/guest/orders/{orderNum}/delivery", "orderNumber")
+                .param("courierCode", "04")
+                .param("trackingNumber", "1234567890")
+                .contentType(MediaType.TEXT_HTML)
+                .header(HttpHeaders.AUTHORIZATION, "GUEST-1")
+        ).andExpectAll(
+                status().is3xxRedirection()
+        );
+    }
 }

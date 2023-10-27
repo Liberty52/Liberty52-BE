@@ -11,7 +11,7 @@ public class WebClientFactory {
     @Bean(value = "smartCourierClient")
     public WebClient webClient() {
         return WebClient.builder()
-                .baseUrl("http://info.sweettracker.co.kr")
+                .baseUrl(CourierUrl.BASE_URL)
                 .defaultHeaders(it -> {
                     it.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
                     it.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_UTF8_VALUE);

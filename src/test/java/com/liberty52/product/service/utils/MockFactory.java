@@ -10,6 +10,7 @@ import com.liberty52.product.service.entity.payment.VBank;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +86,57 @@ public class MockFactory {
     public static Orders createOrder(String authId) {
         OrderDestination orderDestination = OrderDestination.create("", "", "", "", "", "");
         return Orders.create(authId, orderDestination);
+    }
+
+    public static OrderDelivery orderDelivery(
+            String id,
+            String code,
+            String name,
+            String trackingNumber,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            Orders order
+    ) {
+        var od = OrderDelivery.builder()
+                .courierCompanyCode(code)
+                .courierCompanyName(name)
+                .trackingNumber(trackingNumber)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
+        od.associate(order);
+        try {
+            var oId = od.getClass().getDeclaredField("id");
+            oId.setAccessible(true);
+            oId.set(od, id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return od;
+    }
+
+    public static OrderDelivery orderDelivery(
+            String id,
+            String code,
+            String name,
+            String trackingNumber,
+            Orders order
+    ) {
+        var now = LocalDateTime.now();
+        return orderDelivery(id, code, name, trackingNumber, now, now, order);
+    }
+
+    public static OrderDelivery orderDelivery(
+            String code,
+            String name,
+            String trackingNumber,
+            Orders order
+    ) {
+        return orderDelivery("orderDeliveryId", code, name, trackingNumber, order);
+    }
+
+    public static OrderDelivery orderDelivery(Orders order) {
+        return orderDelivery("orderDeliveryId", "code", "name", "1234567890", order);
     }
 
     public static List<OrdersRetrieveResponse> createMockOrderRetrieveResponseList(){

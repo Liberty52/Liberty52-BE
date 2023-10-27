@@ -1,11 +1,14 @@
 package com.liberty52.product.service.controller;
 
+import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
+import com.liberty52.product.service.applicationservice.OrderDeliveryService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
 import com.liberty52.product.service.controller.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "주문", description = "주문 관련 API를 제공합니다")
@@ -25,6 +29,7 @@ public class OrderController {
     private final OrderRetrieveService orderRetrieveService;
     private final OrderCancelService orderCancelService;
     private final OrderCreateService orderCreateService;
+    private final OrderDeliveryService orderDeliveryService;
 
     // 주문 조회 관련
     @Operation(summary = "주문 목록 조회", description = "인증된 사용자의 주문 목록을 조회합니다.")
@@ -105,5 +110,22 @@ public class OrderController {
             @RequestBody @Validated OrderCreateRequestDto dto
     ) {
         return orderCreateService.createVBankPaymentOrdersByCarts(authId, dto);
+    }
+
+    @Operation(summary = "주문의 실시간배송정보 조회", description = "유저가 배송시작된 주문에 대한 실시간 배송정보를 조회할 수 있는 리다이렉션 URL을 반환합니다.")
+    @GetMapping("/{orderId}/delivery")
+    @ResponseStatus(HttpStatus.OK)
+    public void getRealTimeDeliveryInfo(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
+            @PathVariable(value = "orderId") String orderId,
+            @RequestParam(value = "courierCode", required = true) String courierCode,
+            @RequestParam(value = "trackingNumber", required = true) String trackingNumber,
+            HttpServletResponse response
+    ) {
+        try {
+            response.sendRedirect(orderDeliveryService.getRealTimeDeliveryInfoRedirectUrl(authId, orderId, courierCode, trackingNumber));
+        } catch (IOException e) {
+            throw new InternalServerErrorException("리다이렉션 I/O에 오류가 발생하였습니다");
+        }
     }
 }

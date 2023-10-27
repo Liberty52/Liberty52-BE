@@ -1,13 +1,14 @@
 package com.liberty52.product.service.applicationservice.impl;
 
+import com.liberty52.product.global.adapter.courier.api.smartcourier.SmartCourierCompanyClient;
+import com.liberty52.product.global.adapter.courier.api.smartcourier.dto.SmartCourierCompanyListDto;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.product.global.exception.external.forbidden.ForbiddenException;
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.controller.dto.AdminAddOrderDeliveryDto;
 import com.liberty52.product.service.repository.OrdersRepository;
 import com.liberty52.product.service.utils.MockFactory;
-import com.liberty52.product.global.adapter.courier.api.smartcourier.SmartCourierCompanyClient;
-import com.liberty52.product.global.adapter.courier.api.smartcourier.dto.SmartCourierCompanyListDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -383,5 +384,155 @@ class OrderDeliveryServiceImplTest {
                 ResourceNotFoundException.class,
                 () -> service.add("1", request)
         );
+    }
+
+    @Test
+    void 유저가_자신의_주문에_대한_실시간배송정보를_조회한다() {
+        // given
+        var order = MockFactory.createOrder("user");
+        given(ordersRepository.findById(anyString()))
+                .willReturn(Optional.of(order));
+
+        MockFactory.orderDelivery("code", "name", "1234567890", order);
+
+        given(client.getDeliveryInfoRedirectUrl(anyString(), anyString()))
+                .willReturn("Response from Courier Client");
+        // when
+        var result = service.getRealTimeDeliveryInfoRedirectUrl("user", order.getId(), "code", "1234567890");
+        // then
+        assertEquals("Response from Courier Client", result);
+    }
+
+    @Test
+    void 유저가_존재하지_않는_주문의_실시간배송정보를_조회할_수_없다() {
+        // given
+        given(ordersRepository.findById(anyString()))
+                .willReturn(Optional.empty());
+        // when
+        // then
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> service.getRealTimeDeliveryInfoRedirectUrl("user", "order", "code", "number")
+        );
+    }
+
+    @Test
+    void 유저가_자신의_주문이_아닌_주문에_대한_실시간배송정보를_조회할_수_없다() {
+        // given
+        var order = MockFactory.createOrder("not_yours");
+        given(ordersRepository.findById(anyString()))
+                .willReturn(Optional.of(order));
+        // when
+        // then
+        assertThrows(
+                ForbiddenException.class,
+                () -> service.getRealTimeDeliveryInfoRedirectUrl("user", "order", "code", "number")
+        );
+    }
+
+    @Test
+    void 유저가_주문배송정보가_존재하지_않는_주문에_대한_실시간배송정보를_조회할_수_없다() {
+        // given
+        var order = MockFactory.createOrder("user");
+        given(ordersRepository.findById(anyString()))
+                .willReturn(Optional.of(order));
+        // when
+        // then
+        var ex = assertThrows(
+                ResourceNotFoundException.class,
+                () -> service.getRealTimeDeliveryInfoRedirectUrl("user", "order", "code", "number")
+        );
+        assertEquals("orderDelivery is not exist.", ex.getErrorMessage());
+    }
+
+    @Test
+    void 유저가_자신의_주문에_대한_실시간배송정보를_잘못된_택배사코드로_조회할_수_없다() {
+        // given
+        var order = MockFactory.createOrder("user");
+        given(ordersRepository.findById(anyString()))
+                .willReturn(Optional.of(order));
+        MockFactory.orderDelivery("code", "name", "number", order);
+        // when
+        // then
+        var ex = assertThrows(
+                BadRequestException.class,
+                () -> service.getRealTimeDeliveryInfoRedirectUrl("user", "order", "wrong", "number")
+        );
+        assertEquals("배송정보가 일치하지 않습니다", ex.getErrorMessage());
+    }
+
+    @Test
+    void 비회원_유저가_자신의_주문에_대한_실시간배송정보를_조회한다() {
+        // given
+        var order = MockFactory.createOrder("guest");
+        given(ordersRepository.findByOrderNum(anyString()))
+                .willReturn(Optional.of(order));
+
+        MockFactory.orderDelivery("code", "name", "1234567890", order);
+
+        given(client.getDeliveryInfoRedirectUrl(anyString(), anyString()))
+                .willReturn("Response from Courier Client");
+        // when
+        var result = service.getGuestRealTimeDeliveryInfoRedirectUrl("guest", order.getOrderNum(), "code", "1234567890");
+        // then
+        assertEquals("Response from Courier Client", result);
+    }
+
+    @Test
+    void 비회원_유저가_존재하지_않는_주문의_실시간배송정보를_조회할_수_없다() {
+        // given
+        given(ordersRepository.findByOrderNum(anyString()))
+                .willReturn(Optional.empty());
+        // when
+        // then
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> service.getGuestRealTimeDeliveryInfoRedirectUrl("guest", "order", "code", "number")
+        );
+    }
+
+    @Test
+    void 비회원_유저가_자신의_주문이_아닌_주문에_대한_실시간배송정보를_조회할_수_없다() {
+        // given
+        var order = MockFactory.createOrder("not_yours");
+        given(ordersRepository.findByOrderNum(anyString()))
+                .willReturn(Optional.of(order));
+        // when
+        // then
+        assertThrows(
+                ForbiddenException.class,
+                () -> service.getGuestRealTimeDeliveryInfoRedirectUrl("guest", "order", "code", "number")
+        );
+    }
+
+    @Test
+    void 비회원_유저가_주문배송정보가_존재하지_않는_주문에_대한_실시간배송정보를_조회할_수_없다() {
+        // given
+        var order = MockFactory.createOrder("guest");
+        given(ordersRepository.findByOrderNum(anyString()))
+                .willReturn(Optional.of(order));
+        // when
+        // then
+        var ex = assertThrows(
+                ResourceNotFoundException.class,
+                () -> service.getGuestRealTimeDeliveryInfoRedirectUrl("guest", "order", "code", "number")
+        );
+        assertEquals("orderDelivery is not exist.", ex.getErrorMessage());
+    }
+
+    @Test
+    void 비회원_유저가_자신의_주문에_대한_실시간배송정보를_잘못된_택배사코드로_조회할_수_없다() {
+        // given
+        var order = MockFactory.createOrder("guest");
+        given(ordersRepository.findByOrderNum(anyString()))
+                .willReturn(Optional.of(order));
+        MockFactory.orderDelivery("code", "name", "number", order);
+        // when
+        // then
+        var ex = assertThrows(
+                BadRequestException.class,
+                () -> service.getGuestRealTimeDeliveryInfoRedirectUrl("guest", "order", "wrong", "number")
+        );
+        assertEquals("배송정보가 일치하지 않습니다", ex.getErrorMessage());
     }
 }
