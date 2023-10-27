@@ -34,7 +34,8 @@ public class Product {
     private List<ProductOption> productOptions = new ArrayList<>();
 
     private String pictureUrl;
-    private String content;
+    @Column(length = 10000)
+    private String content = "";
 
     @Builder
     private Product(String name, ProductState productState, Long price, boolean isCustom, String pictureUrl) {
