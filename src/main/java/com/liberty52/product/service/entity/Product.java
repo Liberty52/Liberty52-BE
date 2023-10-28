@@ -37,6 +37,9 @@ public class Product {
     @Column(length = 10000)
     private String content = "";
 
+    @OneToOne(mappedBy = "product")
+    private ProductDeliveryOption deliveryOption;
+
     @Builder
     private Product(String name, ProductState productState, Long price, boolean isCustom, String pictureUrl) {
         this.name = name;
@@ -61,6 +64,11 @@ public class Product {
     public void addOption(ProductOption productOption) {
         this.productOptions.add(productOption);
     }
+
+    public void setDeliveryOption(ProductDeliveryOption deliveryOption) {
+        this.deliveryOption = deliveryOption;
+    }
+
     public static Product create(String name, ProductState state, Long price, boolean isCustom) {
         return builder().name(name)
                 .productState(state)
