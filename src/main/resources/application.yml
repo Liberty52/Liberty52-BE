@@ -18,14 +18,11 @@ spring:
   cloud:
     config:
       label: main
-  jpa:
-    show-sql: true
   output:
     ansi:
       enabled: always
 
 logging:
   level:
-    root: debug
     org.apache.kafka.clients.NetworkClient: off
     aws.ConfigClusterResolver: off
