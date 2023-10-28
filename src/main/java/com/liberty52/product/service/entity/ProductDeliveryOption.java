@@ -38,6 +38,19 @@ public class ProductDeliveryOption {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    public static ProductDeliveryOption of(
+            String courierName,
+            Integer fee,
+            Product product
+    ) {
+        var instance = ProductDeliveryOption.builder()
+                .courierName(courierName)
+                .fee(fee)
+                .build();
+        instance.associate(product);
+        return instance;
+    }
+
     public void associate(Product product) {
         this.product = product;
         this.product.setDeliveryOption(this);

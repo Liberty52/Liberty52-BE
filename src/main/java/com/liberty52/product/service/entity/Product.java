@@ -37,7 +37,7 @@ public class Product {
     @Column(length = 10000)
     private String content = "";
 
-    @OneToOne(mappedBy = "product")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
     private ProductDeliveryOption deliveryOption;
 
     @Builder

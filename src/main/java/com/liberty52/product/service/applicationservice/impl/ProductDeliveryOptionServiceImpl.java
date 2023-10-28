@@ -1,0 +1,67 @@
+package com.liberty52.product.service.applicationservice.impl;
+
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
+import com.liberty52.product.global.util.Validator;
+import com.liberty52.product.service.applicationservice.ProductDeliveryOptionService;
+import com.liberty52.product.service.controller.dto.AdminProductDeliveryOptionsDto;
+import com.liberty52.product.service.entity.ProductDeliveryOption;
+import com.liberty52.product.service.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class ProductDeliveryOptionServiceImpl implements ProductDeliveryOptionService {
+
+    private final ProductRepository productRepository;
+
+    @Override
+    @Transactional
+    public AdminProductDeliveryOptionsDto.Response create(
+            String role,
+            String productId,
+            AdminProductDeliveryOptionsDto.Request dto
+    ) {
+        Validator.isAdmin(role);
+
+        validateDto(dto);
+
+        var product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
+        if (product.getDeliveryOption() != null) {
+            throw new BadRequestException("이미 등록되어 있는 배송옵션이 존재합니다");
+        }
+
+        var deliveryOption = ProductDeliveryOption.of(dto.courierName(), dto.fee(), product);
+
+        return AdminProductDeliveryOptionsDto.Response.from(deliveryOption);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public AdminProductDeliveryOptionsDto.Response getByProductId(
+            String role,
+            String productId
+    ) {
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public AdminProductDeliveryOptionsDto.Response update(
+            String role,
+            String productId,
+            AdminProductDeliveryOptionsDto.Request dto
+    ) {
+        return null;
+    }
+
+    private void validateDto(AdminProductDeliveryOptionsDto.Request dto) {
+        if (Validator.areNullOrBlank(dto.courierName())
+                || dto.fee() == null || dto.fee() < 0) {
+            throw new BadRequestException("모든 파라미터를 올바르게 요청해주세요");
+        }
+    }
+}
