@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -111,10 +110,10 @@ class ProductInfoControllerTest {
 
         @Nested
         @DisplayName("배송옵션 조회")
-        class Retrieve {
+        class Get {
             @Test
             @DisplayName("관리자가 존재하는 상품의 존재하는 배송옵션을 조회한다")
-            void getProductDeliveryOptionByProductId() throws Exception {
+            void getByProductIdForAdmin() throws Exception {
                 // given
                 var productId = "product-id";
                 var courierName = "courier_name";
@@ -141,7 +140,7 @@ class ProductInfoControllerTest {
 
             @Test
             @DisplayName("관리자가 존재하는 상품의 존재하지 않은 배송옵션을 조회한다")
-            void getProductDeliveryOptionByProductId_noProductDeliveryOption() throws Exception {
+            void getByProductIdForAdmin_noProductDeliveryOption() throws Exception {
                 // given
                 var productId = "product-id";
                 given(productDeliveryOptionService.getByProductIdForAdmin(anyString(), anyString()))
@@ -166,7 +165,7 @@ class ProductInfoControllerTest {
             
             @Test
             @DisplayName("일반 유저는 관리자 전용의 상품의 배송옵션을 조회할 수 없다")
-            void getProductDeliveryOptionByProductId_notAdmin() throws Exception {
+            void getByProductIdForAdmin_notAdmin() throws Exception {
                 // given
                 var productId = "product-id";
                 // when
@@ -176,6 +175,69 @@ class ProductInfoControllerTest {
                                 .header(HttpHeaders.AUTHORIZATION, "user-id")
                                 .header("LB-Role", "USER")
                 ).andExpectAll(status().isForbidden());
+            }
+        }
+
+        @Nested
+        @DisplayName("상품 배송옵션 수정")
+        class Update {
+            @Test
+            @DisplayName("관리자가 상품 배송옵션을 수정한다")
+            void update() throws Exception {
+                // given
+                var productId = "product-id";
+                var courierName = "courier_name";
+                var fee = 100_000;
+                var request = AdminProductDeliveryOptionsDto.Request.builder()
+                        .courierName(courierName)
+                        .fee(fee)
+                        .build();
+
+                given(productDeliveryOptionService.update(anyString(), anyString(), any()))
+                        .willReturn(AdminProductDeliveryOptionsDto.Response.builder()
+                                .productId(productId)
+                                .courierName("new_courier_name")
+                                .fee(10_000)
+                                .build());
+                // when
+                // then
+                mockMvc.perform(
+                        put("/admin/products/{productId}/deliveryOptions", productId)
+                                .header(HttpHeaders.AUTHORIZATION, "admin-id")
+                                .header("LB-Role", "ADMIN")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                ).andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.productId").value(productId),
+                        jsonPath("$.courierName").value("new_courier_name"),
+                        jsonPath("$.fee").value(10_000)
+                );
+            }
+
+            @Test
+            @DisplayName("일반 유저가 상품 배송옵션을 수정할 수 없다")
+            void update_notAdmin() throws Exception {
+                // given
+                var role = "USER";
+                var productId = "product-id";
+                var courierName = "courier_name";
+                var fee = 100_000;
+                var request = AdminProductDeliveryOptionsDto.Request.builder()
+                        .courierName(courierName)
+                        .fee(fee)
+                        .build();
+                // when
+                // then
+                mockMvc.perform(
+                        put("/admin/products/{productId}/deliveryOptions", productId)
+                                .header(HttpHeaders.AUTHORIZATION, "admin-id")
+                                .header("LB-Role", role)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                ).andExpectAll(
+                        status().isForbidden()
+                );
             }
         }
     }

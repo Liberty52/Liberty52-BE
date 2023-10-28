@@ -105,7 +105,7 @@ class ProductDeliveryOptionServiceImplTest {
 
         @Test
         @DisplayName("관리자가 0 미만 배송비의 배송옵션을 추가할 수 없다")
-        void create_fee_is_under_zero() {
+        void create_feeIsLessThanZero() {
             // given
             var role = "ADMIN";
             var productId = "id";
@@ -234,6 +234,162 @@ class ProductDeliveryOptionServiceImplTest {
             assertThrows(
                     ResourceNotFoundException.class,
                     () -> service.getByProductIdForAdmin(role, productId)
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("상품 배송옵션 수정")
+    class Update {
+
+        @Test
+        @DisplayName("관리자가 상품의 배송옵션을 수정한다")
+        void update() {
+            // given
+            var product = MockFactory.createProduct("");
+            MockFactory.createProductDeliveryOption(product);
+            given(productRepository.findById(anyString()))
+                    .willReturn(Optional.of(product));
+            var role = "ADMIN";
+            var productId = product.getId();
+            var dto = AdminProductDeliveryOptionsDto.Request.builder()
+                    .courierName("new_courier_name")
+                    .fee(10_000)
+                    .build();
+            // when
+            var result = service.update(role, productId, dto);
+            // then
+            assertNotNull(result);
+            assertEquals(product.getId(), result.productId());
+            assertEquals(dto.courierName(), result.courierName());
+            assertEquals(dto.fee(), result.fee());
+        }
+
+        @Test
+        @DisplayName("일반 유저가 상품의 배송옵션을 수정할 수 없다")
+        void update_notAdmin() {
+            // given
+            var role = "USER";
+            var productId = "product-id";
+            var dto = AdminProductDeliveryOptionsDto.Request.builder()
+                    .courierName("new_courier_name")
+                    .fee(10_000)
+                    .build();
+            // when
+            // then
+            assertThrows(
+                    InvalidRoleException.class,
+                    () -> service.update(role, productId, dto)
+            );
+        }
+
+        @Test
+        @DisplayName("관리자가 택배사 이름 없이 상품의 배송옵션을 수정할 수 없다")
+        void update_noCourierName() {
+            // given
+            var product = MockFactory.createProduct("");
+            var role = "ADMIN";
+            var productId = product.getId();
+            var dto = AdminProductDeliveryOptionsDto.Request.builder()
+                    .fee(10_000)
+                    .build();
+            // when
+            // then
+            var ex = assertThrows(
+                    BadRequestException.class,
+                    () -> service.update(role, productId, dto)
+            );
+            assertEquals(
+                    "모든 파라미터를 올바르게 요청해주세요",
+                    ex.getErrorMessage()
+            );
+        }
+
+        @Test
+        @DisplayName("관리자가 배송비 없이 상품의 배송옵션을 수정할 수 없다")
+        void update_noFee() {
+            // given
+            var product = MockFactory.createProduct("");
+            var role = "ADMIN";
+            var productId = product.getId();
+            var dto = AdminProductDeliveryOptionsDto.Request.builder()
+                    .courierName("new_courier_name")
+                    .build();
+            // when
+            // then
+            var ex = assertThrows(
+                    BadRequestException.class,
+                    () -> service.update(role, productId, dto)
+            );
+            assertEquals(
+                    "모든 파라미터를 올바르게 요청해주세요",
+                    ex.getErrorMessage()
+            );
+        }
+
+        @Test
+        @DisplayName("관리자가 0 미만의 배송비로 상품의 배송옵션을 수정할 수 없다")
+        void update_feeIsLessThanZero() {
+            // given
+            var product = MockFactory.createProduct("");
+            var role = "ADMIN";
+            var productId = product.getId();
+            var dto = AdminProductDeliveryOptionsDto.Request.builder()
+                    .courierName("new_courier_name")
+                    .fee(-1)
+                    .build();
+            // when
+            // then
+            var ex = assertThrows(
+                    BadRequestException.class,
+                    () -> service.update(role, productId, dto)
+            );
+            assertEquals(
+                    "모든 파라미터를 올바르게 요청해주세요",
+                    ex.getErrorMessage()
+            );
+        }
+
+        @Test
+        @DisplayName("관리자가 존재하지 않는 상품의 배송옵션을 수정할 수 없다")
+        void update_noProduct() {
+            // given
+            var product = MockFactory.createProduct("");
+            MockFactory.createProductDeliveryOption(product);
+            given(productRepository.findById(anyString()))
+                    .willReturn(Optional.empty());
+            var role = "ADMIN";
+            var productId = product.getId();
+            var dto = AdminProductDeliveryOptionsDto.Request.builder()
+                    .courierName("new_courier_name")
+                    .fee(10_000)
+                    .build();
+            // when
+            // then
+            assertThrows(
+                    ResourceNotFoundException.class,
+                    () -> service.update(role, productId, dto)
+            );
+        }
+
+        @Test
+        @DisplayName("관리자가 존재하는 상품의 존재하지 않는 배송옵션을 수정할 수 없다")
+        void update_noProductDeliveryOption() {
+            // given
+            var product = MockFactory.createProduct("");
+            given(productRepository.findById(anyString()))
+                    .willReturn(Optional.of(product));
+            var role = "ADMIN";
+            var productId = product.getId();
+            var dto = AdminProductDeliveryOptionsDto.Request.builder()
+                    .courierName("new_courier_name")
+                    .fee(10_000)
+                    .build();
+            // when
+            // then
+            assertThrows(
+                    ResourceNotFoundException.class,
+                    () -> service.update(role, productId, dto)
             );
         }
     }

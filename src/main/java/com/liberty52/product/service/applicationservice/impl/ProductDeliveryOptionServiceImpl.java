@@ -62,7 +62,21 @@ public class ProductDeliveryOptionServiceImpl implements ProductDeliveryOptionSe
             String productId,
             AdminProductDeliveryOptionsDto.Request dto
     ) {
-        return null;
+        Validator.isAdmin(role);
+
+        validateDto(dto);
+
+        var product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
+
+        var deliveryOption = product.getDeliveryOption();
+        if (deliveryOption == null) {
+            throw new ResourceNotFoundException("deliveryOption");
+        }
+
+        deliveryOption.update(dto.courierName(), dto.fee());
+
+        return AdminProductDeliveryOptionsDto.Response.from(deliveryOption);
     }
 
     private void validateDto(AdminProductDeliveryOptionsDto.Request dto) {

@@ -55,4 +55,9 @@ public class ProductDeliveryOption {
         this.product = product;
         this.product.setDeliveryOption(this);
     }
+
+    public void update(String courierName, Integer fee) {
+        this.courierName = courierName;
+        this.fee = fee;
+    }
 }

@@ -112,4 +112,16 @@ public class ProductInfoController {
         Validator.isAdmin(role);
         return productDeliveryOptionService.getByProductIdForAdmin(role, productId);
     }
+
+    @Operation(summary = "상품의 배송옵션 수정", description = "관리자가 상품의 배송옵션을 수정합니다.")
+    @PutMapping("/admin/products/{productId}/deliveryOptions")
+    @ResponseStatus(HttpStatus.OK)
+    public AdminProductDeliveryOptionsDto.Response updateProductDeliveryOptions(
+            @RequestHeader("LB-Role") String role,
+            @PathVariable("productId") String productId,
+            @Validated @RequestBody AdminProductDeliveryOptionsDto.Request dto
+    ) {
+        Validator.isAdmin(role);
+        return productDeliveryOptionService.update(role, productId, dto);
+    }
 }
