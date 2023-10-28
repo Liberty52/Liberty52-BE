@@ -2,6 +2,8 @@ package com.liberty52.product.service.entity.license;
 
 import java.util.UUID;
 
+import com.liberty52.product.service.controller.dto.LicenseOptionDetailModifyDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -40,9 +42,26 @@ public class LicenseOptionDetail {
 		this.onSale = onSale;
 		this.artUrl = artUrl;
 	}
+
+	public static LicenseOptionDetail create(String artName, String artistName, Integer stock, Boolean onSale,
+		String artUrl) {
+		return builder().artName(artName).artistName(artistName).stock(stock).onSale(onSale).artUrl(artUrl).build();
+	}
+
 	public void associate(LicenseOption licenseOption) {
 		this.licenseOption = licenseOption;
 		this.licenseOption.addDetail(this);
+	}
+
+	public void modifyLicenseOptionDetail(LicenseOptionDetailModifyDto dto) {
+		this.artName = dto.getArtName();
+		this.artistName = dto.getArtistName();
+		this.stock = dto.getStock();
+		this.onSale = dto.getOnSale();
+		this.artUrl = dto.getArtUrl();
+	}
+	public void updateOnSale() {
+		onSale = !onSale;
 	}
 
 }
