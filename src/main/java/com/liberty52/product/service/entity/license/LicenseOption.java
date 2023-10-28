@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,10 +38,20 @@ public class LicenseOption {
 		this.product.addLicenseOptions(this);
 	}
 
-	public LicenseOption(String name) {
+	@Builder
+	private LicenseOption(String name) {
 		this.name = name;
 	}
+
+	public static LicenseOption create(String name) {
+		return builder().name(name).build();
+	}
+
 	public void addDetail(LicenseOptionDetail licenseOptionDetail) {
 		this.licenseOptionDetails.add(licenseOptionDetail);
+	}
+
+	public void modifyLicenseOption(String name) {
+		this.name = name;
 	}
 }
