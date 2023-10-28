@@ -9,7 +9,7 @@ public interface ProductDeliveryOptionService {
             AdminProductDeliveryOptionsDto.Request dto
     );
 
-    AdminProductDeliveryOptionsDto.Response getByProductId(
+    AdminProductDeliveryOptionsDto.Response getByProductIdForAdmin(
             String role,
             String productId
     );

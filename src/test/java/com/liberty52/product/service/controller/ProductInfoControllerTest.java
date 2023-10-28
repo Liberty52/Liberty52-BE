@@ -3,6 +3,7 @@ package com.liberty52.product.service.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liberty52.product.service.applicationservice.*;
 import com.liberty52.product.service.controller.dto.AdminProductDeliveryOptionsDto;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -103,6 +106,76 @@ class ProductInfoControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 ).andExpect(status().isForbidden());
+            }
+        }
+
+        @Nested
+        @DisplayName("배송옵션 조회")
+        class Retrieve {
+            @Test
+            @DisplayName("관리자가 존재하는 상품의 존재하는 배송옵션을 조회한다")
+            void getProductDeliveryOptionByProductId() throws Exception {
+                // given
+                var productId = "product-id";
+                var courierName = "courier_name";
+                var fee = 100_000;
+                given(productDeliveryOptionService.getByProductIdForAdmin(anyString(), anyString()))
+                        .willReturn(AdminProductDeliveryOptionsDto.Response.builder()
+                                .productId(productId)
+                                .courierName(courierName)
+                                .fee(fee)
+                                .build());
+                // when
+                // then
+                mockMvc.perform(
+                        get("/admin/products/{productId}/deliveryOptions", productId)
+                                .header(HttpHeaders.AUTHORIZATION, "admin-id")
+                                .header("LB-Role", "ADMIN")
+                ).andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.productId").value(productId),
+                        jsonPath("$.courierName").value(courierName),
+                        jsonPath("$.fee").value(fee)
+                );
+            }
+
+            @Test
+            @DisplayName("관리자가 존재하는 상품의 존재하지 않은 배송옵션을 조회한다")
+            void getProductDeliveryOptionByProductId_noProductDeliveryOption() throws Exception {
+                // given
+                var productId = "product-id";
+                given(productDeliveryOptionService.getByProductIdForAdmin(anyString(), anyString()))
+                        .willReturn(AdminProductDeliveryOptionsDto.Response.builder()
+                                .productId(productId)
+                                .courierName(null)
+                                .fee(null)
+                                .build());
+                // when
+                // then
+                mockMvc.perform(
+                        get("/admin/products/{productId}/deliveryOptions", productId)
+                                .header(HttpHeaders.AUTHORIZATION, "admin-id")
+                                .header("LB-Role", "ADMIN")
+                ).andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.productId").value(productId),
+                        jsonPath("$.courierName").value(IsNull.nullValue()),
+                        jsonPath("$.fee").value(IsNull.nullValue())
+                );
+            }
+            
+            @Test
+            @DisplayName("일반 유저는 관리자 전용의 상품의 배송옵션을 조회할 수 없다")
+            void getProductDeliveryOptionByProductId_notAdmin() throws Exception {
+                // given
+                var productId = "product-id";
+                // when
+                // then
+                mockMvc.perform(
+                        get("/admin/products/{productId}/deliveryOptions", productId)
+                                .header(HttpHeaders.AUTHORIZATION, "user-id")
+                                .header("LB-Role", "USER")
+                ).andExpectAll(status().isForbidden());
             }
         }
     }

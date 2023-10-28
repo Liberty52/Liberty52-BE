@@ -41,11 +41,18 @@ public class ProductDeliveryOptionServiceImpl implements ProductDeliveryOptionSe
 
     @Override
     @Transactional(readOnly = true)
-    public AdminProductDeliveryOptionsDto.Response getByProductId(
+    public AdminProductDeliveryOptionsDto.Response getByProductIdForAdmin(
             String role,
             String productId
     ) {
-        return null;
+        Validator.isAdmin(role);
+
+        var product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
+
+        return product.getDeliveryOption() != null ?
+                AdminProductDeliveryOptionsDto.Response.from(product.getDeliveryOption()) :
+                AdminProductDeliveryOptionsDto.Response.empty(productId);
     }
 
     @Override

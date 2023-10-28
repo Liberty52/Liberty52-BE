@@ -170,6 +170,71 @@ class ProductDeliveryOptionServiceImplTest {
     @Nested
     @DisplayName("상품 배송옵션 조회")
     class Retrieve {
+        @Test
+        @DisplayName("관리자가 상품의 존재하는 배송옵션을 조회한다")
+        void getByProductId() {
+            // given
+            var product = MockFactory.createProduct("");
+            var deliveryOption = MockFactory.createProductDeliveryOption(product);
+            given(productRepository.findById(anyString()))
+                    .willReturn(Optional.of(product));
+            var role = "ADMIN";
+            var productId = product.getId();
+            // when
+            var result = service.getByProductIdForAdmin(role, productId);
+            // then
+            assertNotNull(result);
+            assertEquals(product.getId(), result.productId());
+            assertEquals(deliveryOption.getCourierName(), result.courierName());
+            assertEquals(deliveryOption.getFee(), result.fee());
+        }
 
+        @Test
+        @DisplayName("관리자가 상품의 존재하지 않는 배송옵션을 조회한다")
+        void getByProductId_noProductDeliveryOption() {
+            // given
+            var product = MockFactory.createProduct("");
+            given(productRepository.findById(anyString()))
+                    .willReturn(Optional.of(product));
+            var role = "ADMIN";
+            var productId = product.getId();
+            // when
+            var result = service.getByProductIdForAdmin(role, productId);
+            // then
+            assertNotNull(result);
+            assertEquals(product.getId(), result.productId());
+            assertNull(result.courierName());
+            assertNull(result.fee());
+        }
+
+        @Test
+        @DisplayName("일반 유저가 관리자 전용 상품 배송옵션을 조회할 수 없다")
+        void getByProductIdForAdmin_not_admin() {
+            // given
+            var role = "USER";
+            var productId = "product-id";
+            // when
+            // then
+            assertThrows(
+                    InvalidRoleException.class,
+                    () -> service.getByProductIdForAdmin(role, productId)
+            );
+        }
+
+        @Test
+        @DisplayName("관리자가 존재하지 않는 상품의 배송옵션을 조회할 수 없다")
+        void getByProductIdForAdmin_not_product() {
+            // given
+            given(productRepository.findById(anyString()))
+                    .willReturn(Optional.empty());
+            var role = "ADMIN";
+            var productId = "product-id";
+            // when
+            // then
+            assertThrows(
+                    ResourceNotFoundException.class,
+                    () -> service.getByProductIdForAdmin(role, productId)
+            );
+        }
     }
 }

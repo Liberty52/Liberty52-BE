@@ -30,5 +30,13 @@ public class AdminProductDeliveryOptionsDto {
                     .fee(entity.getFee())
                     .build();
         }
+
+        public static Response empty(String productId) {
+            return Response.builder()
+                    .productId(productId)
+                    .courierName(null)
+                    .fee(null)
+                    .build();
+        }
     }
 }

@@ -101,4 +101,15 @@ public class ProductInfoController {
         Validator.isAdmin(role);
         return productDeliveryOptionService.create(role, productId, dto);
     }
+
+    @Operation(summary = "상품의 배송옵션 조회", description = "관리자가 상품의 배송옵션을 조회합니다.")
+    @GetMapping("/admin/products/{productId}/deliveryOptions")
+    @ResponseStatus(HttpStatus.OK)
+    public AdminProductDeliveryOptionsDto.Response getProductDeliveryOptionByProduct(
+            @RequestHeader("LB-Role") String role,
+            @PathVariable("productId") String productId
+    ) {
+        Validator.isAdmin(role);
+        return productDeliveryOptionService.getByProductIdForAdmin(role, productId);
+    }
 }
