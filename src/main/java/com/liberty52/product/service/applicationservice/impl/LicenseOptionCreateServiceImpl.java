@@ -27,7 +27,7 @@ public class LicenseOptionCreateServiceImpl implements LicenseOptionCreateServic
 		Validator.isAdmin(role);
 		Product product = productRepository.findById(productId)
 			.orElseThrow(() -> new ResourceNotFoundException("productId", "id", productId));
-		LicenseOption licenseOption = LicenseOption.create(dto.getName());
+		LicenseOption licenseOption = LicenseOption.create(dto.getName(), dto.getRequire(), dto.getOnSale());
 		licenseOption.associate(product);
 		licenseOptionRepository.save(licenseOption);
 	}

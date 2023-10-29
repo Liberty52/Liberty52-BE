@@ -24,6 +24,6 @@ public class LicenseOptionModifyServiceImpl implements LicenseOptionModifyServic
 		Validator.isAdmin(role);
 		LicenseOption licenseOption = licenseOptionRepository.findById(licenseOptionId)
 			.orElseThrow(() -> new ResourceNotFoundException("ProductOption", "ID", licenseOptionId));
-		licenseOption.modifyLicenseOption(dto.getName());
+		licenseOption.modifyLicenseOption(dto.getName(), dto.getRequire(), dto.getOnSale());
 	}
 }

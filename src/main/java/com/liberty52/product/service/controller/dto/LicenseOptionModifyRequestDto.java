@@ -11,10 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LicenseOptionModifyRequestDto {
 
-    @NotBlank
-    String name;
+	@NotBlank
+	String name;
+	@NotNull
+	Boolean require;
+	@NotNull
+	Boolean onSale;
 
-    public static LicenseOptionModifyRequestDto create(String name){
-        return new LicenseOptionModifyRequestDto(name);
-    }
+	public static LicenseOptionModifyRequestDto create(String name, Boolean require, Boolean onSale) {
+		return new LicenseOptionModifyRequestDto(name, require, onSale);
+	}
 }

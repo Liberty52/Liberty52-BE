@@ -33,25 +33,38 @@ public class LicenseOption {
 	@Column(nullable = false)
 	private String name;
 
+	@Column(nullable = false)
+	private Boolean require;
+
+	@Column(nullable = false)
+	private Boolean onSale;
+
 	public void associate(Product product) {
 		this.product = product;
 		this.product.addLicenseOptions(this);
 	}
 
 	@Builder
-	private LicenseOption(String name) {
+	private LicenseOption(String name, Boolean require, Boolean onSale) {
 		this.name = name;
+		this.require = require;
+		this.onSale = onSale;
 	}
 
-	public static LicenseOption create(String name) {
-		return builder().name(name).build();
+	public static LicenseOption create(String name, Boolean require, Boolean onSale) {
+		return builder().name(name)
+			.require(require)
+			.onSale(onSale)
+			.build();
 	}
 
 	public void addDetail(LicenseOptionDetail licenseOptionDetail) {
 		this.licenseOptionDetails.add(licenseOptionDetail);
 	}
 
-	public void modifyLicenseOption(String name) {
+	public void modifyLicenseOption(String name, Boolean require, Boolean onSale) {
 		this.name = name;
+		this.require = require;
+		this.onSale = onSale;
 	}
 }
