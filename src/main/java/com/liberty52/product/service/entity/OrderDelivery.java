@@ -43,6 +43,23 @@ public class OrderDelivery {
     @JoinColumn(name = "order_id")
     private Orders order;
 
+    public static OrderDelivery of(String courierCompanyCode, String courierCompanyName, String trackingNumber, Orders order) {
+        var instance = OrderDelivery.builder()
+                .courierCompanyCode(courierCompanyCode)
+                .courierCompanyName(courierCompanyName)
+                .trackingNumber(trackingNumber)
+                .build();
+        instance.associate(order);
+        return instance;
+    }
+
+    public OrderDelivery update(String courierCompanyCode, String courierCompanyName, String trackingNumber) {
+        this.courierCompanyCode = courierCompanyCode;
+        this.courierCompanyName = courierCompanyName;
+        this.trackingNumber = trackingNumber;
+        return this;
+    }
+
     public void associate(Orders order) {
         this.order = order;
         order.setOrderDelivery(this);

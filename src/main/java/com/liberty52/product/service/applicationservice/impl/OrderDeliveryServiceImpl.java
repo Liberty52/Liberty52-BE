@@ -61,13 +61,9 @@ public class OrderDeliveryServiceImpl implements OrderDeliveryService {
         var order = ordersRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("order", "id", orderId));
 
-        var orderDelivery = OrderDelivery.builder()
-                .courierCompanyCode(dto.courierCompanyCode())
-                .courierCompanyName(dto.courierCompanyName())
-                .trackingNumber(dto.trackingNumber())
-                .order(order)
-                .build();
-        order.setOrderDelivery(orderDelivery);
+        var orderDelivery = (order.getOrderDelivery() == null) ?
+                OrderDelivery.of(dto.courierCompanyCode(), dto.courierCompanyName(), dto.trackingNumber(), order) :
+                order.getOrderDelivery().update(dto.courierCompanyCode(), dto.courierCompanyName(), dto.trackingNumber());
 
         return AdminAddOrderDeliveryDto.Response.builder()
                 .orderId(order.getId())
