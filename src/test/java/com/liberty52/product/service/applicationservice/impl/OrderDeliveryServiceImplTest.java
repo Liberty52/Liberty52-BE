@@ -186,6 +186,37 @@ class OrderDeliveryServiceImplTest {
     }
 
     @Test
+    void 주문의_주문배송정보가_이미_존재할_경우_주문배송정보를_수정한다() {
+        // given
+        var request = AdminAddOrderDeliveryDto.Request.builder()
+                .courierCompanyCode("01")
+                .courierCompanyName("courier")
+                .trackingNumber("1234567890")
+                .build();
+
+        var companyList = new ArrayList<SmartCourierCompanyListDto.CompanyResponse>();
+        companyList.add(new SmartCourierCompanyListDto.CompanyResponse(
+                false, "01", "courier"
+        ));
+        var courierCompanyList = new SmartCourierCompanyListDto(companyList);
+        given(client.getCourierCompanyList())
+                .willReturn(courierCompanyList.asMap());
+
+        var order = MockFactory.createOrder("1");
+        MockFactory.orderDelivery("04", "o_name", "o_tn", order);
+        given(ordersRepository.findById(anyString()))
+                .willReturn(Optional.of(order));
+        // when
+        var result = service.add(order.getId(), request);
+        // then
+        assertNotNull(result);
+        assertEquals(order.getId(), result.orderId());
+        assertEquals(request.courierCompanyCode(), result.courierCompanyCode());
+        assertEquals(request.courierCompanyName(), result.courierCompanyName());
+        assertEquals(request.trackingNumber(), result.trackingNumber());
+    }
+
+    @Test
     void 택배사코드_없이_주문배송정보를_추가할_수_없다() {
         // given
         var request = AdminAddOrderDeliveryDto.Request.builder()
