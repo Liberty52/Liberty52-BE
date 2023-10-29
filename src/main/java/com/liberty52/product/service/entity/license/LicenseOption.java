@@ -52,7 +52,8 @@ public class LicenseOption {
 	}
 
 	public static LicenseOption create(String name, Boolean require, Boolean onSale) {
-		return builder().name(name)
+		return builder()
+			.name(name)
 			.require(require)
 			.onSale(onSale)
 			.build();
