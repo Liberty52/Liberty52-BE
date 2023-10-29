@@ -53,12 +53,12 @@ public class LicenseOptionDetail {
 		this.licenseOption.addDetail(this);
 	}
 
-	public void modifyLicenseOptionDetail(LicenseOptionDetailModifyDto dto) {
+	public void modifyLicenseOptionDetail(LicenseOptionDetailModifyDto dto, String artUrl) {
 		this.artName = dto.getArtName();
 		this.artistName = dto.getArtistName();
 		this.stock = dto.getStock();
 		this.onSale = dto.getOnSale();
-		this.artUrl = dto.getArtUrl();
+		this.artUrl = artUrl;
 	}
 	public void updateOnSale() {
 		onSale = !onSale;

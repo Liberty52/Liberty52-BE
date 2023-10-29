@@ -17,17 +17,13 @@ public class LicenseOptionDetailCreateDto {
 	Integer stock;
 	@NotNull
 	Boolean onSale;
-	@NotBlank
-	String artUrl;
 
-	public static LicenseOptionDetailCreateDto create(String artName, String artistName, Integer stock, Boolean onSale,
-		String artUrl) {
+	public static LicenseOptionDetailCreateDto create(String artName, String artistName, Integer stock, Boolean onSale) {
 		LicenseOptionDetailCreateDto dto = new LicenseOptionDetailCreateDto();
 		dto.artName = artName;
 		dto.artistName = artistName;
 		dto.stock = stock;
 		dto.onSale = onSale;
-		dto.artUrl = artUrl;
 		return dto;
 	}
 

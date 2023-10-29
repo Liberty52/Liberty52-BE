@@ -2,7 +2,9 @@ package com.liberty52.product.service.applicationservice.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.LicenseOptionDetailModifyService;
@@ -17,14 +19,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LicenseOptionDetailModifyServiceImpl implements LicenseOptionDetailModifyService {
 	private final LicenseOptionDetailRepository licenseOptionDetailRepository;
+	private final S3UploaderApi s3Uploader;
 
 	@Override
 	public void modifyLicenseOptionDetailByAdmin(String role, String licenseOptionDetailId,
-		LicenseOptionDetailModifyDto dto) {
+		LicenseOptionDetailModifyDto dto, MultipartFile artImageFile) {
 		Validator.isAdmin(role);
 		LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(licenseOptionDetailId)
 			.orElseThrow(() -> new ResourceNotFoundException("OptionDetail", "ID", licenseOptionDetailId));
-		licenseOptionDetail.modifyLicenseOptionDetail(dto);
+		licenseOptionDetail.modifyLicenseOptionDetail(dto, s3Uploader.upload(artImageFile));
 	}
 
 	@Override
