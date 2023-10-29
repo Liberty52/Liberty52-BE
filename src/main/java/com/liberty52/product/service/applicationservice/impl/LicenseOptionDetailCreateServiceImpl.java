@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.LicenseOptionDetailCreateService;
@@ -30,6 +31,9 @@ public class LicenseOptionDetailCreateServiceImpl implements LicenseOptionDetail
 		Validator.isAdmin(role);
 		LicenseOption licenseOption = licenseOptionRepository.findById(licenseOptionId)
 			.orElseThrow(() -> new ResourceNotFoundException("option", "id", licenseOptionId));
+		if (artImageFile == null) {
+			throw new BadRequestException("ArtImageFile must be not null");
+		}
 		LicenseOptionDetail licenseOptionDetail = LicenseOptionDetail.create(dto.getArtName(), dto.getArtistName(),
 			dto.getStock(), dto.getOnSale(), s3Uploader.upload(artImageFile));
 		licenseOptionDetail.associate(licenseOption);
