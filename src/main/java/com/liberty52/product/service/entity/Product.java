@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.liberty52.product.service.entity.license.LicenseOption;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,6 +34,8 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<ProductOption> productOptions = new ArrayList<>();
+    @OneToMany(mappedBy = "product")
+    private List<LicenseOption> licenseOptions = new ArrayList<>();
 
     private String pictureUrl;
     @Column(length = 10000)
@@ -63,6 +67,10 @@ public class Product {
 
     public void addOption(ProductOption productOption) {
         this.productOptions.add(productOption);
+    }
+
+    public void addLicenseOptions(LicenseOption licenseOption) {
+        this.licenseOptions.add(licenseOption);
     }
 
     public void setDeliveryOption(ProductDeliveryOption deliveryOption) {
