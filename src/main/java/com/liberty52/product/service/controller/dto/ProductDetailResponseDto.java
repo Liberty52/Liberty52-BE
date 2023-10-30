@@ -17,6 +17,8 @@ public class ProductDetailResponseDto {
     private boolean isCustom;
     private String content;
     private List<ProductOptionDto> options;
+    private String courierName;
+    private int deliveryFee;
 
     public ProductDetailResponseDto(Product product) {
         this.id = product.getId();
@@ -28,6 +30,10 @@ public class ProductDetailResponseDto {
         this.content = product.getContent();
         this.options = product.getProductOptions().stream().filter(ProductOption::isOnSale)
                 .map(ProductOptionDto::new).toList();
+        if(product.getDeliveryOption() != null) {
+            this.courierName = product.getDeliveryOption().getCourierName();
+            this.deliveryFee = product.getDeliveryOption().getFee();
+        }
     }
 
     @Data

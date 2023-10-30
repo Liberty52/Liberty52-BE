@@ -73,6 +73,9 @@ public class ProductInfoRetrieveServiceTest {
         ProductOptionResponseDto optionDto = productOptionResponseDtoList.get(0);
         ProductOption productOption = product.getProductOptions().get(0);
 
+        Assertions.assertNotNull(product.getDeliveryOption().getCourierName());
+        Assertions.assertNotNull(product.getDeliveryOption().getFee());
+
         Assertions.assertEquals(optionDto.getOptionName(), productOption.getName());
         Assertions.assertEquals(optionDto.isOnSale(), productOption.isOnSale());
         Assertions.assertEquals(optionDto.isRequire(), productOption.isRequire());
