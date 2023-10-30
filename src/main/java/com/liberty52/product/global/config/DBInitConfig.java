@@ -5,6 +5,7 @@ import com.liberty52.product.global.constants.PriceConstants;
 import com.liberty52.product.global.constants.ProductConstants;
 import com.liberty52.product.global.constants.VBankConstants;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
+import com.liberty52.product.service.applicationservice.ProductDeliveryOptionService;
 import com.liberty52.product.service.controller.dto.OrderCancelDto;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.entity.payment.*;
@@ -66,8 +67,11 @@ public class DBInitConfig {
                 id.setAccessible(true);
                 id.set(product, "LIB-001");
 
+                ProductDeliveryOption productDeliveryOption = ProductDeliveryOption.of("경진택배", 100, product);
                 productRepository.save(product);
                 DBInitService.product = product;
+
+
 
                 ProductOption option1 = ProductOption.create(ProductConstants.PROD_OPT_1, true, true);
                 option1.associate(product);
