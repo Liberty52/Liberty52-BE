@@ -1,4 +1,4 @@
-package com.liberty.authentication.filter;
+package com.liberty.authentication.web.filter;
 
 import com.liberty.authentication.core.Authentication;
 import com.liberty.authentication.core.UserPrincipal;
