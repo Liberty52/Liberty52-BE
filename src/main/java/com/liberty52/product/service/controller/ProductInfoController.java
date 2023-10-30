@@ -1,9 +1,7 @@
 package com.liberty52.product.service.controller;
 
-import com.liberty52.product.service.applicationservice.ProductInfoRetrieveService;
-import com.liberty52.product.service.applicationservice.ProductIntroductionDeleteService;
-import com.liberty52.product.service.applicationservice.ProductIntroductionImgSaveService;
-import com.liberty52.product.service.applicationservice.ProductIntroductionUpsertService;
+import com.liberty52.product.global.util.Validator;
+import com.liberty52.product.service.applicationservice.*;
 import com.liberty52.product.service.controller.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +23,7 @@ public class ProductInfoController {
     private final ProductIntroductionUpsertService productIntroductionUpsertService;
     private final ProductIntroductionDeleteService productIntroductionDeleteService;
     private final ProductIntroductionImgSaveService productIntroductionImgSaveService;
+    private final ProductDeliveryOptionService productDeliveryOptionService;
 
     @Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
     @GetMapping("/products")
@@ -89,5 +88,40 @@ public class ProductInfoController {
     public String saveProductIntroductionImageByAdmin(@RequestHeader("LB-Role") String role,
 		@RequestPart(value = "file") MultipartFile imageFile) {
 		return productIntroductionImgSaveService.saveProductIntroductionImageByAdmin(role,imageFile);
+    }
+
+    @Operation(summary = "상품의 배송옵션 추가", description = "관리자가 상품의 배송옵션을 추가합니다.")
+    @PostMapping("/admin/products/{productId}/deliveryOptions")
+    @ResponseStatus(HttpStatus.OK)
+    public AdminProductDeliveryOptionsDto.Response createProductDeliveryOptions(
+            @RequestHeader("LB-Role") String role,
+            @PathVariable("productId") String productId,
+            @Validated @RequestBody AdminProductDeliveryOptionsDto.Request dto
+    ) {
+        Validator.isAdmin(role);
+        return productDeliveryOptionService.create(role, productId, dto);
+    }
+
+    @Operation(summary = "상품의 배송옵션 조회", description = "관리자가 상품의 배송옵션을 조회합니다.")
+    @GetMapping("/admin/products/{productId}/deliveryOptions")
+    @ResponseStatus(HttpStatus.OK)
+    public AdminProductDeliveryOptionsDto.Response getProductDeliveryOptionByProduct(
+            @RequestHeader("LB-Role") String role,
+            @PathVariable("productId") String productId
+    ) {
+        Validator.isAdmin(role);
+        return productDeliveryOptionService.getByProductIdForAdmin(role, productId);
+    }
+
+    @Operation(summary = "상품의 배송옵션 수정", description = "관리자가 상품의 배송옵션을 수정합니다.")
+    @PutMapping("/admin/products/{productId}/deliveryOptions")
+    @ResponseStatus(HttpStatus.OK)
+    public AdminProductDeliveryOptionsDto.Response updateProductDeliveryOptions(
+            @RequestHeader("LB-Role") String role,
+            @PathVariable("productId") String productId,
+            @Validated @RequestBody AdminProductDeliveryOptionsDto.Request dto
+    ) {
+        Validator.isAdmin(role);
+        return productDeliveryOptionService.update(role, productId, dto);
     }
 }

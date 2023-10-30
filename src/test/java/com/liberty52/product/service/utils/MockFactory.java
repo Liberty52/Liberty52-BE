@@ -75,6 +75,21 @@ public class MockFactory {
         return createOptionDetail(name, price, true, stock, po);
     }
 
+    public static ProductDeliveryOption createProductDeliveryOption(Product product) {
+        return createProductDeliveryOption("courier_name", 100_000, product);
+    }
+
+    public static ProductDeliveryOption createProductDeliveryOption(String courierName, Integer fee, Product product) {
+        var pdo = ProductDeliveryOption.builder()
+                .courierName(courierName)
+                .fee(fee)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+        pdo.associate(product);
+        return pdo;
+    }
+
     public static CustomProductOption createProductCartOption() {
         return CustomProductOption.create();
     }
