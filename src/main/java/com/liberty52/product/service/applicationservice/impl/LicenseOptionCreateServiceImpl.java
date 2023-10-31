@@ -3,6 +3,7 @@ package com.liberty52.product.service.applicationservice.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.LicenseOptionCreateService;
@@ -27,6 +28,10 @@ public class LicenseOptionCreateServiceImpl implements LicenseOptionCreateServic
 		Validator.isAdmin(role);
 		Product product = productRepository.findById(productId)
 			.orElseThrow(() -> new ResourceNotFoundException("productId", "id", productId));
+		if (licenseOptionRepository.findByName(dto.getName()).isPresent()) {
+			throw new BadRequestException("이미 존재하는 라이선스 옵션 입니다");
+		}
+
 		LicenseOption licenseOption = LicenseOption.create(dto.getName());
 		licenseOption.associate(product);
 		licenseOptionRepository.save(licenseOption);

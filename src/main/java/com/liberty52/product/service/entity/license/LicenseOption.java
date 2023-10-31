@@ -1,10 +1,12 @@
 package com.liberty52.product.service.entity.license;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import com.liberty52.product.service.entity.Product;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,12 +27,12 @@ import lombok.NoArgsConstructor;
 public class LicenseOption {
 	@Id
 	private String id = UUID.randomUUID().toString();
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Product product;
 
 	@OneToMany(mappedBy = "licenseOption")
-	private List<LicenseOptionDetail> licenseOptionDetails;
+	private List<LicenseOptionDetail> licenseOptionDetails = new ArrayList<>();
 	@Column(nullable = false)
 	private String name;
 
