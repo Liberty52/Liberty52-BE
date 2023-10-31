@@ -1,7 +1,5 @@
 package com.liberty52.product.service.controller.license;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,10 +20,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LicenseProductInfoController {
 	private final LicenseProductInfoRetrieveService licenseProductInfoRetrieveService;
+
 	@Operation(summary = "관리자용 라이선스 상품 옵션 정보 조회", description = "관리자가 특정 라이선스 상품의 옵션 정보를 조회합니다.")
 	@GetMapping("/admin/licenseProductOptionInfo/{productId}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<LicenseOptionInfoResponseDto> retrieveLicenseProductOptionInfoListByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId, @RequestParam boolean onSale) {
+	public LicenseOptionInfoResponseDto retrieveLicenseProductOptionInfoListByAdmin(
+		@RequestHeader("LB-Role") String role, @PathVariable String productId, @RequestParam boolean onSale) {
 		return licenseProductInfoRetrieveService.retrieveLicenseProductOptionInfoListByAdmin(role, productId, onSale);
 	}
 }

@@ -18,15 +18,11 @@ public class LicenseOptionInfoResponseDto {
 
 	String licenseOptionId;
 	String optionName;
-	Boolean onSale;
-	Boolean require;
 	List<LicenseOptionDetailInfoResponseDto> licenseOptionDetailList;
 
 	public LicenseOptionInfoResponseDto(LicenseOption licenseOption, boolean onSale) {
 		this.licenseOptionId = licenseOption.getId();
 		this.optionName = licenseOption.getName();
-		this.require = licenseOption.getRequire();
-		this.onSale = licenseOption.getOnSale();
 
 		if (licenseOption.getLicenseOptionDetails().isEmpty()) {
 			licenseOptionDetailList = Collections.emptyList();

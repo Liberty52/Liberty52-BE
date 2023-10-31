@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,7 +31,7 @@ class LicenseOptionModifyMockTest {
 	void modifyLicenseOptionByAdminTest() {
 		// Given
 		String licenseOptionId = "testLicenseOptionId";
-		LicenseOptionModifyRequestDto dto = new LicenseOptionModifyRequestDto("modifiedName", false, true);
+		LicenseOptionModifyRequestDto dto = new LicenseOptionModifyRequestDto("modifiedName");
 
 		LicenseOption mockLicenseOption = mock(LicenseOption.class);
 		when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.of(mockLicenseOption));
@@ -41,14 +40,14 @@ class LicenseOptionModifyMockTest {
 		licenseOptionModifyService.modifyLicenseOptionByAdmin(ADMIN, licenseOptionId, dto);
 
 		// Then
-		verify(mockLicenseOption, times(1)).modifyLicenseOption(dto.getName(), dto.getRequire(), dto.getOnSale());
+		verify(mockLicenseOption, times(1)).modifyLicenseOption(dto.getName());
 	}
 
 	@Test
 	void modifyLicenseOptionByAdminTest_LicenseOptionNotFound() {
 		// Given
 		String licenseOptionId = "testLicenseOptionId";
-		LicenseOptionModifyRequestDto dto = new LicenseOptionModifyRequestDto("modifiedName", false, true);
+		LicenseOptionModifyRequestDto dto = new LicenseOptionModifyRequestDto("modifiedName");
 
 		when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.empty());
 

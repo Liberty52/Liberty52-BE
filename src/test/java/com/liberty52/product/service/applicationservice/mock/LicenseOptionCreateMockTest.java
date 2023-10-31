@@ -12,7 +12,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.applicationservice.impl.LicenseOptionCreateServiceImpl;
@@ -37,7 +36,7 @@ class LicenseOptionCreateMockTest {
 	@Test
 	void createLicenseOptionByAdminTest() {
 		// Given
-		LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName", true, true);
+		LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
 		String productId = "testProductId";
 
 		Product mockProduct = mock(Product.class);
@@ -50,15 +49,13 @@ class LicenseOptionCreateMockTest {
 		ArgumentCaptor<LicenseOption> captor = ArgumentCaptor.forClass(LicenseOption.class);
 		verify(licenseOptionRepository, times(1)).save(captor.capture());
 
-		assertEquals("testName", captor.getValue().getName());
-		assertEquals(true, captor.getValue().getRequire());
-		assertEquals(true, captor.getValue().getOnSale());
+		assertEquals("testName", captor.getValue().getName ());
 	}
 
 	@Test
 	void createLicenseOptionByAdminTest_ProductNotFound() {
 		// Given
-		LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName", true, true);
+		LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
 		String productId = "testProductId";
 		// When
 		when(productRepository.findById(productId)).thenReturn(Optional.empty());
