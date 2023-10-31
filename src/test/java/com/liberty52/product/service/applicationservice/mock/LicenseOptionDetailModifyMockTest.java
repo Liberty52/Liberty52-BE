@@ -38,7 +38,7 @@ class LicenseOptionDetailModifyMockTest {
 	void modifyLicenseOptionDetailByAdminTest() {
 		// Given
 		String licenseOptionDetailId = "testLicenseOptionDetailId";
-		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, true);
+		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, 1000, true);
 		MultipartFile artImageFile = mock(MultipartFile.class);
 
 		LicenseOptionDetail mockLicenseOptionDetail = mock(LicenseOptionDetail.class);
@@ -58,7 +58,7 @@ class LicenseOptionDetailModifyMockTest {
 	void modifyLicenseOptionDetailByAdmin_When_LicenseOptionDetailNotFoundTest() {
 		// Given
 		String licenseOptionDetailId = "testLicenseOptionDetailId";
-		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, true);
+		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, 1000, true);
 		MultipartFile artImageFile = mock(MultipartFile.class);
 
 		when(licenseOptionDetailRepository.findById(licenseOptionDetailId)).thenReturn(Optional.empty());
@@ -73,7 +73,7 @@ class LicenseOptionDetailModifyMockTest {
 	void modifyLicenseOptionDetailByAdmin_When_ArtImageFileIsNullTest() {
 		// Given
 		String licenseOptionDetailId = "testLicenseOptionDetailId";
-		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, true);
+		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, 1000, true);
 		MultipartFile artImageFile = null;
 
 		LicenseOptionDetail mockLicenseOptionDetail = mock(LicenseOptionDetail.class);

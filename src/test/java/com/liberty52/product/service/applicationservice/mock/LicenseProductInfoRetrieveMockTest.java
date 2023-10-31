@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,9 +38,9 @@ class LicenseProductInfoRetrieveMockTest {
 		boolean onSale = true;
 
 		LicenseOptionDetail licenseOptionDetail1 = LicenseOptionDetail.create("testArtName1", "testArtistName1", 100,
-			true, "testArtUrl1");
+			true, "testArtUrl1",1000);
 		LicenseOptionDetail licenseOptionDetail2 = LicenseOptionDetail.create("testArtName2", "testArtistName2", 100,
-			true, "testArtUrl2");
+			true, "testArtUrl2",1000);
 
 		Product mockProduct = mock(Product.class);
 		when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
@@ -51,21 +50,17 @@ class LicenseProductInfoRetrieveMockTest {
 		LicenseOption licenseOption1 = mock(LicenseOption.class);
 		when(licenseOption1.getLicenseOptionDetails()).thenReturn(licenseOptionDetails);
 		when(licenseOption1.getId()).thenReturn("testOption1");
-		when(licenseOption1.getRequire()).thenReturn(true);
-		when(licenseOption1.getOnSale()).thenReturn(true);
-		List<LicenseOption> licenseOptions = List.of(licenseOption1);
 
-		when(mockProduct.getLicenseOptions()).thenReturn(licenseOptions);
+		when(mockProduct.getLicenseOption()).thenReturn(licenseOption1);
 
 		// When
-		List<LicenseOptionInfoResponseDto> result = licenseProductInfoRetrieveService.retrieveLicenseProductOptionInfoListByAdmin(
+		LicenseOptionInfoResponseDto result = licenseProductInfoRetrieveService.retrieveLicenseProductOptionInfoListByAdmin(
 			ADMIN, productId, onSale);
 
 		// Then
-		assertEquals(1, result.size());
-		assertEquals("testOption1", result.get(0).getLicenseOptionId());
-		assertEquals("testArtName1", result.get(0).getLicenseOptionDetailList().get(0).getArtName());
-		assertEquals("testArtName2", result.get(0).getLicenseOptionDetailList().get(1).getArtName());
+		assertEquals("testOption1", result.getLicenseOptionId());
+		assertEquals("testArtName1", result.getLicenseOptionDetailList().get(0).getArtName());
+		assertEquals("testArtName2", result.getLicenseOptionDetailList().get(1).getArtName());
 	}
 
 	@Test
