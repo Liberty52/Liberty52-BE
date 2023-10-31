@@ -38,9 +38,9 @@ class LicenseProductInfoRetrieveMockTest {
 		boolean onSale = true;
 
 		LicenseOptionDetail licenseOptionDetail1 = LicenseOptionDetail.create("testArtName1", "testArtistName1", 100,
-			true, "testArtUrl1");
+			true, "testArtUrl1",1000);
 		LicenseOptionDetail licenseOptionDetail2 = LicenseOptionDetail.create("testArtName2", "testArtistName2", 100,
-			true, "testArtUrl2");
+			true, "testArtUrl2",1000);
 
 		Product mockProduct = mock(Product.class);
 		when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));

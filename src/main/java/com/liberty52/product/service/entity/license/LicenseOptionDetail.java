@@ -34,18 +34,24 @@ public class LicenseOptionDetail {
 	@Column(nullable = false)
 	String artUrl;
 
+	@Column(nullable = false)
+	private Integer price;
+
 	@Builder
-	private LicenseOptionDetail(String artName, String artistName, Integer stock, Boolean onSale, String artUrl) {
+	private LicenseOptionDetail(String artName, String artistName, Integer stock, Boolean onSale, String artUrl,
+		Integer price) {
 		this.artName = artName;
 		this.artistName = artistName;
 		this.stock = stock;
 		this.onSale = onSale;
 		this.artUrl = artUrl;
+		this.price = price;
 	}
 
 	public static LicenseOptionDetail create(String artName, String artistName, Integer stock, Boolean onSale,
-		String artUrl) {
-		return builder().artName(artName).artistName(artistName).stock(stock).onSale(onSale).artUrl(artUrl).build();
+		String artUrl, Integer price) {
+		return builder().artName(artName).artistName(artistName).stock(stock).onSale(onSale).artUrl(artUrl)
+			.price(price).build();
 	}
 
 	public void associate(LicenseOption licenseOption) {
@@ -58,8 +64,10 @@ public class LicenseOptionDetail {
 		this.artistName = dto.getArtistName();
 		this.stock = dto.getStock();
 		this.onSale = dto.getOnSale();
+		this.price = dto.getPrice();
 		this.artUrl = artUrl;
 	}
+
 	public void updateOnSale() {
 		onSale = !onSale;
 	}

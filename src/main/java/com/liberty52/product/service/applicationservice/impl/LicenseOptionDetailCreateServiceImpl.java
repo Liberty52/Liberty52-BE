@@ -35,7 +35,7 @@ public class LicenseOptionDetailCreateServiceImpl implements LicenseOptionDetail
 			throw new BadRequestException("ArtImageFile must be not null");
 		}
 		LicenseOptionDetail licenseOptionDetail = LicenseOptionDetail.create(dto.getArtName(), dto.getArtistName(),
-			dto.getStock(), dto.getOnSale(), s3Uploader.upload(artImageFile));
+			dto.getStock(), dto.getOnSale(), s3Uploader.upload(artImageFile), dto.getPrice());
 		licenseOptionDetail.associate(licenseOption);
 		licenseOptionDetailRepository.save(licenseOptionDetail);
 	}
