@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.liberty52.product.service.controller.dto.LicenseOptionResponseDto;
 import org.springframework.stereotype.Service;
 
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
@@ -44,5 +45,17 @@ public class LicenseProductInfoRetrieveServiceImpl implements LicenseProductInfo
 				.map(licenseOption -> new LicenseOptionInfoResponseDto(licenseOption, false))
 				.toList();
 		}
+	}
+
+	@Override
+	public LicenseOptionResponseDto retrieveLicenseProductOptionInfo(String productId) {
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
+		if(true/*product.getLicenceOption != null*/){
+			//return new LicenseOptionResponseDto(product.getLicenseOptions());
+		} else {
+
+		}
+		return null;
 	}
 }
