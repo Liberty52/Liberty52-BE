@@ -34,8 +34,8 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<ProductOption> productOptions = new ArrayList<>();
-    @OneToMany(mappedBy = "product")
-    private List<LicenseOption> licenseOptions = new ArrayList<>();
+    @OneToOne(mappedBy = "product")
+    private LicenseOption licenseOption;
 
     private String pictureUrl;
     @Column(length = 10000)
@@ -69,8 +69,8 @@ public class Product {
         this.productOptions.add(productOption);
     }
 
-    public void addLicenseOptions(LicenseOption licenseOption) {
-        this.licenseOptions.add(licenseOption);
+    public void addLicenseOption(LicenseOption licenseOption) {
+        this.licenseOption = licenseOption;
     }
 
     public void setDeliveryOption(ProductDeliveryOption deliveryOption) {

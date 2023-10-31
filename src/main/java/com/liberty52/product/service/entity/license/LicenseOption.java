@@ -7,10 +7,11 @@ import com.liberty52.product.service.entity.Product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class LicenseOption {
 	@Id
 	private String id = UUID.randomUUID().toString();
-	@ManyToOne
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "product_id")
 	private Product product;
 
@@ -33,29 +34,19 @@ public class LicenseOption {
 	@Column(nullable = false)
 	private String name;
 
-	@Column(nullable = false)
-	private Boolean require;
-
-	@Column(nullable = false)
-	private Boolean onSale;
-
 	public void associate(Product product) {
 		this.product = product;
-		this.product.addLicenseOptions(this);
+		this.product.addLicenseOption(this);
 	}
 
 	@Builder
-	private LicenseOption(String name, Boolean require, Boolean onSale) {
+	private LicenseOption(String name) {
 		this.name = name;
-		this.require = require;
-		this.onSale = onSale;
 	}
 
-	public static LicenseOption create(String name, Boolean require, Boolean onSale) {
+	public static LicenseOption create(String name) {
 		return builder()
 			.name(name)
-			.require(require)
-			.onSale(onSale)
 			.build();
 	}
 
@@ -63,9 +54,7 @@ public class LicenseOption {
 		this.licenseOptionDetails.add(licenseOptionDetail);
 	}
 
-	public void modifyLicenseOption(String name, Boolean require, Boolean onSale) {
+	public void modifyLicenseOption(String name) {
 		this.name = name;
-		this.require = require;
-		this.onSale = onSale;
 	}
 }

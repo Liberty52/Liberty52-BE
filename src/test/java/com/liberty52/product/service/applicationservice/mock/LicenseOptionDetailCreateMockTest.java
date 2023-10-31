@@ -43,7 +43,7 @@ class LicenseOptionDetailCreateMockTest {
 		// Given
 		String licenseOptionId = "testLicenseOptionId";
 		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-			("testArtName", "testArtistName", 100, true);
+			("testArtName", "testArtistName", 100, true,1000);
 		MultipartFile artImageFile = mock(MultipartFile.class);
 		LicenseOption mockLicenseOption = mock(LicenseOption.class);
 
@@ -61,6 +61,7 @@ class LicenseOptionDetailCreateMockTest {
 		assertEquals(dto.getArtistName(), savedLicenseOptionDetail.getArtistName());
 		assertEquals(dto.getStock(), savedLicenseOptionDetail.getStock());
 		assertEquals(dto.getOnSale(), savedLicenseOptionDetail.getOnSale());
+		assertEquals(dto.getPrice(), savedLicenseOptionDetail.getPrice());
 		assertEquals("testArtUrl", savedLicenseOptionDetail.getArtUrl());
 	}
 
@@ -69,7 +70,7 @@ class LicenseOptionDetailCreateMockTest {
 		// Given
 		String licenseOptionId = "testLicenseOptionId";
 		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-			("testArtName", "testArtistName", 100, true);
+			("testArtName", "testArtistName", 100, true,1000);
 		MultipartFile artImageFile = mock(MultipartFile.class);
 
 		when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.empty());
@@ -87,7 +88,7 @@ class LicenseOptionDetailCreateMockTest {
 		// Given
 		String licenseOptionId = "testLicenseOptionId";
 		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-			("testArtName", "testArtistName", 100, true);
+			("testArtName", "testArtistName", 100, true,1000);
 		MultipartFile artImageFile = mock(MultipartFile.class);
 
 		// When
@@ -103,7 +104,7 @@ class LicenseOptionDetailCreateMockTest {
 		// Given
 		String licenseOptionId = "testLicenseOptionId";
 		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-			("testArtName", "testArtistName", 100, true);
+			("testArtName", "testArtistName", 100, true,1000);
 		MultipartFile artImageFile = null;
 		LicenseOption mockLicenseOption = mock(LicenseOption.class);
 

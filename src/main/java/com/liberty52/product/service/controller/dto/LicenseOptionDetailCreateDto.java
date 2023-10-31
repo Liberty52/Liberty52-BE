@@ -17,13 +17,18 @@ public class LicenseOptionDetailCreateDto {
 	Integer stock;
 	@NotNull
 	Boolean onSale;
+	@Min(0)
+	@NotNull
+	Integer price;
 
-	public static LicenseOptionDetailCreateDto create(String artName, String artistName, Integer stock, Boolean onSale) {
+	public static LicenseOptionDetailCreateDto create(String artName, String artistName, Integer stock, Boolean onSale,
+		Integer price) {
 		LicenseOptionDetailCreateDto dto = new LicenseOptionDetailCreateDto();
 		dto.artName = artName;
 		dto.artistName = artistName;
 		dto.stock = stock;
 		dto.onSale = onSale;
+		dto.price = price;
 		return dto;
 	}
 
