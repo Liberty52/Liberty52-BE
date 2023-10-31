@@ -1,13 +1,10 @@
 package com.liberty52.product.service.applicationservice.impl;
 
-<<<<<<< HEAD
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import com.liberty52.product.service.controller.dto.LicenseOptionResponseDto;
-=======
->>>>>>> 6ddce74f302bc4626c1eabe6c561677dcf2cd02a
 import org.springframework.stereotype.Service;
 
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
@@ -41,11 +38,11 @@ public class LicenseProductInfoRetrieveServiceImpl implements LicenseProductInfo
 	public LicenseOptionResponseDto retrieveLicenseProductOptionInfo(String productId) {
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
-		if(true/*product.getLicenceOption != null*/){
-			//return new LicenseOptionResponseDto(product.getLicenseOptions());
+		if(product.getLicenseOption() != null){
+			return new LicenseOptionResponseDto(product.getLicenseOption());
 		} else {
-
+			return null;
 		}
-		return null;
+
 	}
 }

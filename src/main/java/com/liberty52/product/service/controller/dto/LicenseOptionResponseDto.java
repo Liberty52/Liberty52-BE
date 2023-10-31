@@ -4,9 +4,11 @@ import com.liberty52.product.service.entity.OptionDetail;
 import com.liberty52.product.service.entity.license.LicenseOption;
 import com.liberty52.product.service.entity.license.LicenseOptionDetail;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class LicenseOptionResponseDto {
 
     private String id;
@@ -23,8 +25,8 @@ public class LicenseOptionResponseDto {
 
     }
 
-    @Data
-    private class LicenseOptionDetailDto {
+    @Getter
+    public class LicenseOptionDetailDto {
         private String id;
         private String artName;
         private String artistName;
@@ -38,7 +40,7 @@ public class LicenseOptionResponseDto {
             this.artistName = detail.getArtistName();
             this.stock = detail.getStock();
             this.artUrl = detail.getArtUrl();
-            //this.price = detail.//getPrice();
+            this.price = detail.getPrice();
         }
     }
 }

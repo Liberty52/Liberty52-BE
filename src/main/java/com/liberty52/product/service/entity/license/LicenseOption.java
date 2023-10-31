@@ -1,5 +1,6 @@
 package com.liberty52.product.service.entity.license;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class LicenseOption {
 	private Product product;
 
 	@OneToMany(mappedBy = "licenseOption")
-	private List<LicenseOptionDetail> licenseOptionDetails;
+	private List<LicenseOptionDetail> licenseOptionDetails = new ArrayList<>();
 	@Column(nullable = false)
 	private String name;
 

@@ -1,11 +1,8 @@
 package com.liberty52.product.service.controller.license;
 
-<<<<<<< HEAD
 import java.util.List;
 
 import com.liberty52.product.service.controller.dto.LicenseOptionResponseDto;
-=======
->>>>>>> 6ddce74f302bc4626c1eabe6c561677dcf2cd02a
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
