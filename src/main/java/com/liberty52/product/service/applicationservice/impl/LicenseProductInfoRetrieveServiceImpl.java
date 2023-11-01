@@ -1,5 +1,10 @@
 package com.liberty52.product.service.applicationservice.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import com.liberty52.product.service.controller.dto.LicenseOptionResponseDto;
 import org.springframework.stereotype.Service;
 
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
@@ -27,5 +32,17 @@ public class LicenseProductInfoRetrieveServiceImpl implements LicenseProductInfo
 			throw new BadRequestException("라이선스 상품에 옵션이 존재하지 않습니다.");
 		}
 		return new LicenseOptionInfoResponseDto(product.getLicenseOption(), onSale);
+	}
+
+	@Override
+	public LicenseOptionResponseDto retrieveLicenseProductOptionInfo(String productId) {
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
+		if(product.getLicenseOption() != null){
+			return new LicenseOptionResponseDto(product.getLicenseOption());
+		} else {
+			return null;
+		}
+
 	}
 }
