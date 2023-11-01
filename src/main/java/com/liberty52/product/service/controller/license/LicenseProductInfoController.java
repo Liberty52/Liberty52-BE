@@ -32,7 +32,7 @@ public class LicenseProductInfoController {
 		return licenseProductInfoRetrieveService.retrieveLicenseProductOptionInfoListByAdmin(role, productId, onSale);
 	}
 
-	@Operation(summary = "관리자용 라이선스 상품 옵션 정보 조회", description = "관리자가 특정 라이선스 상품의 옵션 정보를 조회합니다.")
+	@Operation(summary = "라이선스 상품 옵션 정보 조회", description = "사용자가 특정 라이선스 상품의 옵션 정보를 조회합니다.")
 	@GetMapping("/licenseProductOptionInfo/{productId}")
 	@ResponseStatus(HttpStatus.OK)
 	public LicenseOptionResponseDto retrieveLicenseProductOptionInfoList(@PathVariable String productId) {
