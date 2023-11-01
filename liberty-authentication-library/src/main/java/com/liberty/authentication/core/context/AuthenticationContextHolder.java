@@ -1,5 +1,7 @@
 package com.liberty.authentication.core.context;
 
+import org.springframework.lang.NonNull;
+
 import java.util.function.Supplier;
 
 public class AuthenticationContextHolder {
@@ -32,6 +34,14 @@ public class AuthenticationContextHolder {
 
     public static void setDeferredContext(Supplier<AuthenticationContext> deferredContext) {
         strategy.setDeferredContext(deferredContext);
+    }
+
+    public static AuthenticationContextHolderStrategy getContextHolderStrategy() {
+        return strategy;
+    }
+
+    public static void setContextHolderStrategy(@NonNull AuthenticationContextHolderStrategy s) {
+        strategy = s;
     }
 
     public static void createEmptyContext() {

@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     @SuppressWarnings("rawtypes")
-    public FilterRegistrationBean loginCheckFilter() {
+    public FilterRegistrationBean addAuthenticationFilter() {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new AuthenticationFilter());
         filterRegistrationBean.setOrder(1);
