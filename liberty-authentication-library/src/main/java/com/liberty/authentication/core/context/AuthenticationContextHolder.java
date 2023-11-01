@@ -44,7 +44,7 @@ public class AuthenticationContextHolder {
         strategy = s;
     }
 
-    public static void createEmptyContext() {
-        strategy.createEmptyContext();
+    public static AuthenticationContext createEmptyContext() {
+        return strategy.createEmptyContext();
     }
 }
