@@ -37,7 +37,7 @@ public class AnonymousUser extends AbstractUserPrincipal {
 
     @Override
     public String toString() {
-        return "AnonymousUser{" +
+        return "AnonymousUser {" +
                 "userId='" + this.getUserId() + '\'' +
                 ", role=" + this.getRole() +
                 '}';

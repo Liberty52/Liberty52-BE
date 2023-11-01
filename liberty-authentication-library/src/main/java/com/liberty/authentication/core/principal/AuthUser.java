@@ -38,7 +38,7 @@ public class AuthUser extends AbstractUserPrincipal {
 
     @Override
     public String toString() {
-        return "UserPrincipal{" +
+        return "AuthUser {" +
                 "userId='" + this.getUserId() + '\'' +
                 ", role=" + this.getRole() +
                 '}';

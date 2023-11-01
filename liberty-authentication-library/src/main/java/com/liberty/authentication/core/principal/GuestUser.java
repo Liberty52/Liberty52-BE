@@ -38,7 +38,7 @@ public class GuestUser extends AbstractUserPrincipal {
 
     @Override
     public String toString() {
-        return "GuestUser{" +
+        return "GuestUser {" +
                 "userId='" + this.getUserId() + '\'' +
                 ", role=" + this.getRole() +
                 '}';
