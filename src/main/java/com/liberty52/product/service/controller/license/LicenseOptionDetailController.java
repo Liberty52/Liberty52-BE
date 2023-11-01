@@ -35,7 +35,7 @@ public class LicenseOptionDetailController {
 	@PostMapping("/admin/licenseOptionDetail/{licenseOptionId}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createLicenseOptionDetailByAdmin(@RequestHeader("LB-Role") String role,
-		@Validated @RequestBody LicenseOptionDetailCreateDto dto, @PathVariable String licenseOptionId,
+		@Validated @RequestPart(value = "dto") LicenseOptionDetailCreateDto dto, @PathVariable String licenseOptionId,
 		@RequestPart(value = "file") MultipartFile imageFile) {
 		licenseOptionDetailCreateService.createLicenseOptionDetailByAdmin(role, dto, licenseOptionId, imageFile);
 	}
@@ -46,7 +46,7 @@ public class LicenseOptionDetailController {
 	public void modifyLicenseOptionDetailByAdmin(
 		@RequestHeader("LB-Role") String role,
 		@PathVariable String licenseOptionDetailId,
-		@Validated @RequestBody LicenseOptionDetailModifyDto dto,
+		@Validated @RequestPart(value = "dto") LicenseOptionDetailModifyDto dto,
 		@RequestPart(value = "file") MultipartFile imageFile
 	) {
 		licenseOptionDetailModifyService.modifyLicenseOptionDetailByAdmin(role, licenseOptionDetailId, dto, imageFile);
