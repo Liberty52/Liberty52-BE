@@ -1,7 +1,7 @@
 package com.liberty52.product.global.config;
 
 import com.liberty.authentication.web.filter.AuthenticationFilter;
-import com.liberty.authentication.web.resolver.UserAuthenticationArgumentResolver;
+import com.liberty.authentication.web.resolver.UserPrincipalArgumentResolver;
 import com.liberty52.product.global.constants.TranslationConstants;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -30,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new UserAuthenticationArgumentResolver());
+        resolvers.add(new UserPrincipalArgumentResolver());
     }
 
     @Bean

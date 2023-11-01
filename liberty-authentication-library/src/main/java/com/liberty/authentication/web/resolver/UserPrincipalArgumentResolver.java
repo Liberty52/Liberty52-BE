@@ -1,6 +1,6 @@
 package com.liberty.authentication.web.resolver;
 
-import com.liberty.authentication.annotation.UserAuthentication;
+import com.liberty.authentication.annotation.UserContext;
 import com.liberty.authentication.core.Authentication;
 import com.liberty.authentication.core.context.AuthenticationContextHolder;
 import com.liberty.authentication.core.context.AuthenticationContextHolderStrategy;
@@ -17,13 +17,13 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.lang.annotation.Annotation;
 
-public class UserAuthenticationArgumentResolver implements HandlerMethodArgumentResolver {
+public class UserPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final AuthenticationContextHolderStrategy strategy = AuthenticationContextHolder.getContextHolderStrategy();
 
     @Override
     public boolean supportsParameter(@NonNull MethodParameter parameter) {
-        return findMethodAnnotation(UserAuthentication.class, parameter) != null;
+        return findMethodAnnotation(UserContext.class, parameter) != null;
     }
 
     @Override
