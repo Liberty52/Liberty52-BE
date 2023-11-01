@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-//TODO: 조회 시 리스트가 아닌 단일로 조회 리팩토링
 @Tag(name = "라이선스 상품 정보", description = "라이선스 상품 정보 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class LicenseProductInfoController {
 		return licenseProductInfoRetrieveService.retrieveLicenseProductOptionInfoListByAdmin(role, productId, onSale);
 	}
 
-	@Operation(summary = "관리자용 라이선스 상품 옵션 정보 조회", description = "관리자가 특정 라이선스 상품의 옵션 정보를 조회합니다.")
+	@Operation(summary = "라이선스 상품 옵션 정보 조회", description = "사용자가 특정 라이선스 상품의 옵션 정보를 조회합니다.")
 	@GetMapping("/licenseProductOptionInfo/{productId}")
 	@ResponseStatus(HttpStatus.OK)
 	public LicenseOptionResponseDto retrieveLicenseProductOptionInfoList(@PathVariable String productId) {

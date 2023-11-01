@@ -28,6 +28,9 @@ public class LicenseOptionCreateServiceImpl implements LicenseOptionCreateServic
 		Validator.isAdmin(role);
 		Product product = productRepository.findById(productId)
 			.orElseThrow(() -> new ResourceNotFoundException("productId", "id", productId));
+		if (product.isCustom()) {
+			throw new BadRequestException("커스텀 상품에는 라이선스 옵션을 생성할 수 없습니다");
+		}
 		if (licenseOptionRepository.findByName(dto.getName()).isPresent()) {
 			throw new BadRequestException("이미 존재하는 라이선스 옵션 입니다");
 		}
