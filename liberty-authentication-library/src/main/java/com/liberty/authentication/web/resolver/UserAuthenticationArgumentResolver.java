@@ -34,7 +34,12 @@ public class UserAuthenticationArgumentResolver implements HandlerMethodArgument
             throw new AuthenticationException(AuthenticationError.UNAUTHORIZED);
         }
 
-        return null;
+        UserPrincipal principal = authentication.getPrincipal();
+        if (principal == null) {
+            throw new AuthenticationException(AuthenticationError.UNAUTHORIZED);
+        }
+
+        return principal;
     }
 
     private <T extends Annotation> T findMethodAnnotation(
