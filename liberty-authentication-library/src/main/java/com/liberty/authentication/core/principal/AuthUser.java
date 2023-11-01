@@ -4,7 +4,7 @@ import com.liberty.authentication.core.UserRole;
 
 import java.util.Objects;
 
-public class AuthUser extends AbstractUserPrincipal {
+public class AuthUser extends AbstractUser {
 
     private AuthUser() {
         super("", UserRole.USER);

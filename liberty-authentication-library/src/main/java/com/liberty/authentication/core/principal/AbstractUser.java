@@ -2,12 +2,12 @@ package com.liberty.authentication.core.principal;
 
 import com.liberty.authentication.core.UserRole;
 
-abstract class AbstractUserPrincipal implements UserPrincipal {
+abstract class AbstractUser implements User {
 
     private final String userId;
     private final UserRole role;
 
-    protected AbstractUserPrincipal(String userId, UserRole role) {
+    protected AbstractUser(String userId, UserRole role) {
         this.userId = userId;
         this.role = role;
     }

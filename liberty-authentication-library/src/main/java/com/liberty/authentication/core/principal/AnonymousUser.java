@@ -4,7 +4,7 @@ import com.liberty.authentication.core.UserRole;
 
 import java.util.Objects;
 
-public class AnonymousUser extends AbstractUserPrincipal {
+public class AnonymousUser extends AbstractUser {
     private AnonymousUser() {
         super("", UserRole.ANONYMOUS);
     }

@@ -1,16 +1,16 @@
 package com.liberty.authentication.core.token;
 
 import com.liberty.authentication.core.UserRole;
-import com.liberty.authentication.core.principal.UserPrincipal;
+import com.liberty.authentication.core.principal.User;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
 
 public class AnonymousAuthenticationToken extends AbstractAuthenticationToken {
 
-    private final UserPrincipal principal;
+    private final User principal;
 
-    public AnonymousAuthenticationToken(UserPrincipal principal, Collection<UserRole> authorities) {
+    public AnonymousAuthenticationToken(User principal, Collection<UserRole> authorities) {
         super(authorities);
         Assert.isTrue(principal != null, "principal cannot be null or empty");
         this.principal = principal;
@@ -18,7 +18,7 @@ public class AnonymousAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     @Override
-    public UserPrincipal getPrincipal() {
+    public User getPrincipal() {
         return this.principal;
     }
 

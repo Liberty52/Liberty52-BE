@@ -4,7 +4,7 @@ import com.liberty.authentication.core.UserRole;
 
 import java.util.Objects;
 
-public class GuestUser extends AbstractUserPrincipal {
+public class GuestUser extends AbstractUser {
 
     private GuestUser() {
         super("", UserRole.GUEST);

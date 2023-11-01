@@ -6,7 +6,7 @@ import com.liberty.authentication.core.context.AuthenticationContextHolder;
 import com.liberty.authentication.core.context.AuthenticationContextHolderStrategy;
 import com.liberty.authentication.core.exception.AuthenticationError;
 import com.liberty.authentication.core.exception.AuthenticationException;
-import com.liberty.authentication.core.principal.UserPrincipal;
+import com.liberty.authentication.core.principal.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.NonNull;
@@ -27,14 +27,14 @@ public class UserAuthenticationArgumentResolver implements HandlerMethodArgument
     }
 
     @Override
-    public UserPrincipal resolveArgument(@NonNull MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                         @NonNull NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public User resolveArgument(@NonNull MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                @NonNull NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = strategy.getContext().getAuthentication();
         if (authentication == null) {
             throw new AuthenticationException(AuthenticationError.UNAUTHORIZED);
         }
 
-        UserPrincipal principal = authentication.getPrincipal();
+        User principal = authentication.getPrincipal();
         if (principal == null) {
             throw new AuthenticationException(AuthenticationError.UNAUTHORIZED);
         }
