@@ -1,16 +1,15 @@
-package com.liberty52.product.global.aspect;
+package com.liberty.authentication.web.aspect;
 
-import com.liberty.authentication.annotation.LibertyPreAuthorize;
+import com.liberty.authentication.annotation.LBPreAuthorize;
 import com.liberty.authentication.core.Authentication;
 import com.liberty.authentication.core.UserRole;
 import com.liberty.authentication.core.context.AuthenticationContextHolder;
-import com.liberty52.product.global.exception.external.forbidden.ForbiddenException;
-import com.liberty52.product.global.exception.external.unauthorized.UnauthorizedException;
+import com.liberty.authentication.core.exception.AuthenticationError;
+import com.liberty.authentication.core.exception.AuthenticationException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -19,33 +18,32 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Aspect
-@Component
-public class LibertyPreAuthorizeAspect {
+public class LBPreAuthorizeAspect {
 
-    @Before("@annotation(com.liberty.authentication.annotation.LibertyPreAuthorize)")
+    @Before("@annotation(com.liberty.authentication.annotation.LBPreAuthorize)")
     public void invoke(final JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
-        LibertyPreAuthorize preAuthorize = method.getAnnotation(LibertyPreAuthorize.class);
+        LBPreAuthorize preAuthorize = method.getAnnotation(LBPreAuthorize.class);
 
         Authentication authentication = AuthenticationContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal() == null || !authentication.isAuthenticated()) {
-            throw new UnauthorizedException("You are an unauthorized user.");
+            throw new AuthenticationException(AuthenticationError.UNAUTHORIZED, "You are an unauthorized user.");
         }
 
         if (!hasAnyRoles(preAuthorize, authentication.getAuthorities())) {
-            throw new ForbiddenException("You cannot access this API.");
+            throw new AuthenticationException(AuthenticationError.FORBIDDEN, "You cannot access this API.");
         }
     }
 
-    private Set<UserRole> getPreAuthoritySet(LibertyPreAuthorize preAuthorize) {
+    private Set<UserRole> getPreAuthoritySet(LBPreAuthorize preAuthorize) {
         Set<UserRole> roleSet = new HashSet<>(Arrays.asList(preAuthorize.roles()));
         roleSet.add(preAuthorize.role());
         roleSet.add(UserRole.ADMIN);
         return roleSet;
     }
 
-    private boolean hasAnyRoles(LibertyPreAuthorize preAuthorize, Collection<UserRole> authorities) {
+    private boolean hasAnyRoles(LBPreAuthorize preAuthorize, Collection<UserRole> authorities) {
         Set<UserRole> roleSet = getPreAuthoritySet(preAuthorize);
         for (UserRole role : authorities) {
             if (roleSet.contains(role)) {

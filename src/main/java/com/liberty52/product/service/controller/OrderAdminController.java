@@ -1,6 +1,6 @@
 package com.liberty52.product.service.controller;
 
-import com.liberty.authentication.annotation.LibertyPreAuthorize;
+import com.liberty.authentication.annotation.LBPreAuthorize;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderDeliveryService;
@@ -111,7 +111,7 @@ public class OrderAdminController {
     @Operation(summary = "택배사 리스트 조회", description = "관리자가 택배사 리스트를 조회합니다.")
     @GetMapping("/courier-companies")
     @ResponseStatus(HttpStatus.OK)
-    @LibertyPreAuthorize
+    @LBPreAuthorize
     public AdminCourierListDto.Response getCourierCompanyList(
             @RequestParam(value = "international", defaultValue = "false", required = false) Boolean isInternational
     ) {
@@ -121,7 +121,7 @@ public class OrderAdminController {
     @Operation(summary = "주문 택배 운송장번호 등록", description = "관리자가 배송시작되는 주문에 대하여 택배사 및 운송장번호를 등록합니다.")
     @PostMapping("/{orderId}/delivery")
     @ResponseStatus(HttpStatus.OK)
-    @LibertyPreAuthorize
+    @LBPreAuthorize
     public AdminAddOrderDeliveryDto.Response addOrderDeliveryByAdmin(
             @PathVariable(value = "orderId", required = true) String orderId,
             @Validated @RequestBody AdminAddOrderDeliveryDto.Request dto
