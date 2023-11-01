@@ -1,5 +1,8 @@
 package com.liberty52.product.service.controller;
 
+import com.liberty.authentication.core.UserRole;
+import com.liberty.authentication.test.context.support.WithLBMockUser;
+import com.liberty52.product.ApplyLBMockUser;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderDeliveryService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
@@ -8,6 +11,7 @@ import com.liberty52.product.service.controller.dto.AdminCourierListDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,6 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OrderAdminController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@ApplyLBMockUser
 class OrderAdminControllerTest {
 
     @Autowired
@@ -39,6 +45,7 @@ class OrderAdminControllerTest {
     
     @Test
     @DisplayName("관리자가 국내 택배사 리스트 100건을 조회한다")
+    @WithLBMockUser(role = UserRole.ADMIN)
     void getKoreanCourierList() throws Exception {
         // given
         var meta = AdminCourierListDto.MetaResponse.builder()
@@ -64,7 +71,6 @@ class OrderAdminControllerTest {
         mockMvc.perform(
                 get("/admin/orders/courier-companies")
                         .param("international", "false")
-                        .header("LB-Role", "ADMIN")
         ).andExpectAll(
                 status().isOk(),
                 jsonPath("$.meta.international").value(false),
@@ -74,6 +80,7 @@ class OrderAdminControllerTest {
     }
 
     @Test
+    @WithLBMockUser(role = UserRole.USER)
     @DisplayName("일반유저가 국내 택배사 리스트 100건을 조회할 수 없다")
     void getKoreanCourierList_notAdmin() throws Exception {
         // given
@@ -82,7 +89,6 @@ class OrderAdminControllerTest {
         mockMvc.perform(
                 get("/admin/orders/courier-companies")
                         .param("international", "false")
-                        .header("LB-Role", "USER")
         ).andExpectAll(status().isForbidden());
     }
 }
