@@ -1,21 +1,22 @@
 package com.liberty.authentication.core.token;
 
 import com.liberty.authentication.core.UserRole;
+import com.liberty.authentication.core.principal.UserPrincipal;
 
 import java.util.Collection;
 
 public class UserAuthenticationToken extends AbstractAuthenticationToken {
 
-    private final Object principal;
+    private final UserPrincipal principal;
 
-    public UserAuthenticationToken(Object principal, Collection<UserRole> authorities) {
+    public UserAuthenticationToken(UserPrincipal principal, Collection<UserRole> authorities) {
         super(authorities);
         this.principal = principal;
         setAuthentication(true);
     }
 
     @Override
-    public Object getPrincipal() {
+    public UserPrincipal getPrincipal() {
         return this.principal;
     }
 

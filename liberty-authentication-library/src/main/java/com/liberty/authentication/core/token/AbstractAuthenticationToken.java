@@ -1,7 +1,7 @@
 package com.liberty.authentication.core.token;
 
 import com.liberty.authentication.core.Authentication;
-import com.liberty.authentication.core.UserPrincipal;
+import com.liberty.authentication.core.principal.AuthUser;
 import com.liberty.authentication.core.UserRole;
 
 import java.util.Collection;
@@ -26,8 +26,8 @@ public abstract class AbstractAuthenticationToken implements Authentication {
     @Override
     public String getName() {
         if (this.getPrincipal() != null &&
-                this.getPrincipal() instanceof UserPrincipal userPrincipal) {
-            return userPrincipal.userId();
+                this.getPrincipal() instanceof AuthUser authenticatedUser) {
+            return authenticatedUser.getUserId();
         }
         return "";
     }

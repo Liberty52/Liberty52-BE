@@ -52,7 +52,7 @@ public class RestExceptionHandler {
     ) {
         var errorResponse = ErrorResponse.createErrorResponse(
                 ex.getStatus(),
-                "Code Authentication",
+                "Authentication Error",
                 "Authentication Error",
                 ex.getMessage(),
                 request.getRequestURI()

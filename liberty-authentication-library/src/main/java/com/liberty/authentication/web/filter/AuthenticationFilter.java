@@ -1,9 +1,11 @@
 package com.liberty.authentication.web.filter;
 
 import com.liberty.authentication.core.Authentication;
-import com.liberty.authentication.core.UserPrincipal;
+import com.liberty.authentication.core.principal.AnonymousUser;
+import com.liberty.authentication.core.principal.AuthUser;
 import com.liberty.authentication.core.UserRole;
 import com.liberty.authentication.core.context.AuthenticationContextHolder;
+import com.liberty.authentication.core.principal.GuestUser;
 import com.liberty.authentication.core.token.AnonymousAuthenticationToken;
 import com.liberty.authentication.core.token.UserAuthenticationToken;
 import jakarta.servlet.*;
@@ -24,12 +26,7 @@ public class AuthenticationFilter implements Filter {
             String userId = getUserId((HttpServletRequest) request);
             UserRole role = getRole((HttpServletRequest) request);
 
-            Authentication authentication;
-            if (userId == null || userId.isBlank() || UserRole.ANONYMOUS.equals(role)) {
-                authentication = new AnonymousAuthenticationToken("anonymous", List.of(UserRole.ANONYMOUS));
-            } else {
-                authentication = new UserAuthenticationToken(new UserPrincipal(userId, role), List.of(role));
-            }
+            Authentication authentication = getAuthentication(userId, role);
             AuthenticationContextHolder.getContext().setAuthentication(authentication);
 
             chain.doFilter(request, response);
@@ -44,5 +41,17 @@ public class AuthenticationFilter implements Filter {
 
     private UserRole getRole(HttpServletRequest request) {
         return UserRole.from(request.getHeader("LB-Role"));
+    }
+
+    private Authentication getAuthentication(String userId, UserRole role) {
+        Authentication authentication;
+        if (userId == null || userId.isBlank() || UserRole.ANONYMOUS.equals(role)) {
+            authentication = new AnonymousAuthenticationToken(new AnonymousUser("anonymous"), List.of(UserRole.ANONYMOUS));
+        } else if (UserRole.GUEST.equals(role)) {
+            authentication = new UserAuthenticationToken(new GuestUser(userId), List.of(role));
+        } else {
+            authentication = new UserAuthenticationToken(new AuthUser(userId, role), List.of(role));
+        }
+        return authentication;
     }
 }

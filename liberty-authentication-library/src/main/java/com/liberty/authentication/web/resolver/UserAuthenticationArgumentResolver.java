@@ -2,11 +2,11 @@ package com.liberty.authentication.web.resolver;
 
 import com.liberty.authentication.annotation.UserAuthentication;
 import com.liberty.authentication.core.Authentication;
-import com.liberty.authentication.core.UserPrincipal;
 import com.liberty.authentication.core.context.AuthenticationContextHolder;
 import com.liberty.authentication.core.context.AuthenticationContextHolderStrategy;
 import com.liberty.authentication.core.exception.AuthenticationError;
 import com.liberty.authentication.core.exception.AuthenticationException;
+import com.liberty.authentication.core.principal.UserPrincipal;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.NonNull;
@@ -33,8 +33,6 @@ public class UserAuthenticationArgumentResolver implements HandlerMethodArgument
         if (authentication == null) {
             throw new AuthenticationException(AuthenticationError.UNAUTHORIZED);
         }
-
-
 
         return null;
     }
