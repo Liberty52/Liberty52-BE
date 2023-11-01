@@ -37,6 +37,5 @@ public class LicenseOptionCreateServiceImpl implements LicenseOptionCreateServic
 
 		LicenseOption licenseOption = LicenseOption.create(dto.getName());
 		licenseOption.associate(product);
-		licenseOptionRepository.save(licenseOption);
 	}
 }

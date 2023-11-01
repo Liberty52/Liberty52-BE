@@ -34,7 +34,8 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<ProductOption> productOptions = new ArrayList<>();
-    @OneToOne(mappedBy = "product")
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private LicenseOption licenseOption;
 
     private String pictureUrl;
