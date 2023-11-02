@@ -4,6 +4,7 @@ import static com.liberty52.product.global.constants.RoleConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -41,9 +42,11 @@ class LicenseOptionDetailCreateMockTest {
 	@Test
 	void createLicenseOptionDetailByAdminTest() {
 		// Given
+		LocalDate startDate = LocalDate.of(2023, 1, 1);
+		LocalDate endDate = startDate.plusDays(10);
 		String licenseOptionId = "testLicenseOptionId";
 		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-			("testArtName", "testArtistName", 100, true,1000);
+			("testArtName", "testArtistName", 100, true,1000,startDate,endDate);
 		MultipartFile artImageFile = mock(MultipartFile.class);
 		LicenseOption mockLicenseOption = mock(LicenseOption.class);
 
@@ -68,9 +71,11 @@ class LicenseOptionDetailCreateMockTest {
 	@Test
 	void createLicenseOptionDetailByAdmin_WhenLicenseOptionNotFound_ThrowException() {
 		// Given
+		LocalDate startDate = LocalDate.of(2023, 1, 1);
+		LocalDate endDate = startDate.plusDays(10);
 		String licenseOptionId = "testLicenseOptionId";
 		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-			("testArtName", "testArtistName", 100, true,1000);
+			("testArtName", "testArtistName", 100, true,1000,startDate,endDate);
 		MultipartFile artImageFile = mock(MultipartFile.class);
 
 		when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.empty());
@@ -87,8 +92,10 @@ class LicenseOptionDetailCreateMockTest {
 	void createLicenseOptionDetailByAdmin_WhenRoleIsNotAdmin() {
 		// Given
 		String licenseOptionId = "testLicenseOptionId";
+		LocalDate startDate = LocalDate.of(2023, 1, 1);
+		LocalDate endDate = startDate.plusDays(10);
 		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-			("testArtName", "testArtistName", 100, true,1000);
+			("testArtName", "testArtistName", 100, true,1000,startDate,endDate);
 		MultipartFile artImageFile = mock(MultipartFile.class);
 
 		// When
@@ -103,8 +110,10 @@ class LicenseOptionDetailCreateMockTest {
 	void createLicenseOptionDetailByAdmin_WhenArtImageFileIsNull() {
 		// Given
 		String licenseOptionId = "testLicenseOptionId";
+		LocalDate startDate = LocalDate.of(2023, 1, 1);
+		LocalDate endDate = startDate.plusDays(10);
 		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-			("testArtName", "testArtistName", 100, true,1000);
+			("testArtName", "testArtistName", 100, true,1000,startDate,endDate);
 		MultipartFile artImageFile = null;
 		LicenseOption mockLicenseOption = mock(LicenseOption.class);
 

@@ -1,5 +1,7 @@
 package com.liberty52.product.service.controller.dto;
 
+import java.time.LocalDate;
+
 import com.liberty52.product.service.entity.license.LicenseOptionDetail;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +19,8 @@ public class LicenseOptionDetailInfoResponseDto {
 	Integer stock;
 	Boolean onSale;
 	String artUrl;
+	LocalDate startDate;
+	LocalDate endDate;
 
 	public LicenseOptionDetailInfoResponseDto(LicenseOptionDetail licenseOptionDetail) {
 		licenseOptionDetailId = licenseOptionDetail.getId();
@@ -25,6 +29,8 @@ public class LicenseOptionDetailInfoResponseDto {
 		stock = licenseOptionDetail.getStock();
 		onSale = licenseOptionDetail.getOnSale();
 		artUrl = licenseOptionDetail.getArtUrl();
+		startDate = licenseOptionDetail.getStartDate();
+		endDate = licenseOptionDetail.getEndDate();
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.liberty52.product.service.entity.license;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import com.liberty52.product.service.controller.dto.LicenseOptionDetailModifyDto;
@@ -33,25 +34,30 @@ public class LicenseOptionDetail {
 	Boolean onSale;
 	@Column(nullable = false)
 	String artUrl;
-
 	@Column(nullable = false)
 	private Integer price;
+	@Column(nullable = false)
+	private LocalDate startDate;
+	@Column(nullable = false)
+	private LocalDate endDate;
 
 	@Builder
 	private LicenseOptionDetail(String artName, String artistName, Integer stock, Boolean onSale, String artUrl,
-		Integer price) {
+		Integer price, LocalDate startDate, LocalDate endDate) {
 		this.artName = artName;
 		this.artistName = artistName;
 		this.stock = stock;
 		this.onSale = onSale;
 		this.artUrl = artUrl;
 		this.price = price;
+		this.startDate = startDate;
+		this.endDate = endDate;
 	}
 
 	public static LicenseOptionDetail create(String artName, String artistName, Integer stock, Boolean onSale,
-		String artUrl, Integer price) {
+		String artUrl, Integer price, LocalDate startDate, LocalDate endDate) {
 		return builder().artName(artName).artistName(artistName).stock(stock).onSale(onSale).artUrl(artUrl)
-			.price(price).build();
+			.price(price).startDate(startDate).endDate(endDate).build();
 	}
 
 	public void associate(LicenseOption licenseOption) {
@@ -66,6 +72,8 @@ public class LicenseOptionDetail {
 		this.onSale = dto.getOnSale();
 		this.price = dto.getPrice();
 		this.artUrl = artUrl;
+		this.startDate = dto.getStartDate();
+		this.endDate = dto.getEndDate();
 	}
 
 	public void updateOnSale() {
