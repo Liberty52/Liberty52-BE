@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class AuthenticationFilter implements Filter {
     @Override
@@ -19,7 +20,7 @@ public class AuthenticationFilter implements Filter {
     ) throws IOException, ServletException {
         try {
             String userId = getUserId((HttpServletRequest) request);
-            UserRole role = getRole((HttpServletRequest) request);
+            Optional<UserRole> role = getRoleOrNull((HttpServletRequest) request);
 
             Authentication authentication = AuthenticationTokenUtils.getAuthentication(userId, role);
             AuthenticationContextHolder.getContext().setAuthentication(authentication);
@@ -34,7 +35,7 @@ public class AuthenticationFilter implements Filter {
         return request.getHeader(HttpHeaders.AUTHORIZATION);
     }
 
-    private UserRole getRole(HttpServletRequest request) {
+    private Optional<UserRole> getRoleOrNull(HttpServletRequest request) {
         return UserRole.from(request.getHeader("LB-Role"));
     }
 
