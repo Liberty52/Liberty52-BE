@@ -2,7 +2,7 @@ package com.liberty52.product.service.controller;
 
 import com.liberty.authentication.core.UserRole;
 import com.liberty.authentication.test.context.support.WithLBMockUser;
-import com.liberty52.product.ApplyLBMockUser;
+import com.liberty.authentication.test.configurer.web.LBWebMvcTest;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderDeliveryService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
@@ -11,8 +11,6 @@ import com.liberty52.product.service.controller.dto.AdminCourierListDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,9 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(OrderAdminController.class)
-@AutoConfigureMockMvc(addFilters = false)
-@ApplyLBMockUser
+@LBWebMvcTest(OrderAdminController.class)
 class OrderAdminControllerTest {
 
     @Autowired
