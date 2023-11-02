@@ -1,6 +1,6 @@
 package com.liberty52.product.service.controller;
 
-import com.liberty.authentication.annotation.LBPreAuthorize;
+import com.liberty52.authentication.annotation.LBPreAuthorize;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderDeliveryService;

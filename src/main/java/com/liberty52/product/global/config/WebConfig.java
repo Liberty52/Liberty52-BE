@@ -1,7 +1,7 @@
 package com.liberty52.product.global.config;
 
-import com.liberty.authentication.web.filter.AuthenticationFilter;
-import com.liberty.authentication.web.resolver.UserPrincipalArgumentResolver;
+import com.liberty52.authentication.web.filter.AuthenticationFilter;
+import com.liberty52.authentication.web.resolver.UserPrincipalArgumentResolver;
 import com.liberty52.product.global.constants.TranslationConstants;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

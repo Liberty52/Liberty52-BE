@@ -1,8 +1,8 @@
 package com.liberty52.product.service.controller;
 
-import com.liberty.authentication.core.UserRole;
-import com.liberty.authentication.test.context.support.WithLBMockUser;
-import com.liberty.authentication.test.configurer.web.LBWebMvcTest;
+import com.liberty52.authentication.core.UserRole;
+import com.liberty52.authentication.test.context.support.WithLBMockUser;
+import com.liberty52.authentication.test.configurer.web.LBWebMvcTest;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderDeliveryService;
 import com.liberty52.product.service.applicationservice.OrderRetrieveService;
