@@ -8,7 +8,7 @@ public enum UserRole {
 
     public static UserRole from(String source) {
         if (source == null || source.isBlank()) {
-            return ANONYMOUS;
+            return null;
         }
         if (ADMIN.name().equals(source) || ADMIN.name().toLowerCase().equals(source)
                 || source.toUpperCase().contains(ADMIN.name())) {
