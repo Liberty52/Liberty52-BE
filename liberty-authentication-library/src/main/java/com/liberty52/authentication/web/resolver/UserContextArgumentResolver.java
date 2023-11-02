@@ -17,7 +17,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.lang.annotation.Annotation;
 
-public class UserPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+public class UserContextArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final AuthenticationContextHolderStrategy strategy = AuthenticationContextHolder.getContextHolderStrategy();
 
