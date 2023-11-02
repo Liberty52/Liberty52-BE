@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 import java.util.Optional;
 
 @Slf4j
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.liberty52")
 public class ProductApplication {
 
 	public static void main(String[] args) {
