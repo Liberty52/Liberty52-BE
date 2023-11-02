@@ -1,4 +1,4 @@
-package com.liberty52.authentication.configurer;
+package com.liberty52.authentication.web.configurer;
 
 import com.liberty52.authentication.web.aspect.LBPreAuthorizeAspect;
 import org.springframework.context.annotation.Bean;

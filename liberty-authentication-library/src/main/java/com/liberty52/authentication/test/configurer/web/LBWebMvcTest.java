@@ -1,6 +1,6 @@
 package com.liberty52.authentication.test.configurer.web;
 
-import com.liberty52.authentication.configurer.AuthenticationAspectConfiguration;
+import com.liberty52.authentication.web.configurer.AuthenticationAspectConfiguration;
 import com.liberty52.authentication.test.context.support.AuthenticationTestExecutionListeners;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
