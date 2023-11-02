@@ -32,10 +32,10 @@ public class LicenseOptionDetailCreateServiceImpl implements LicenseOptionDetail
 		LicenseOption licenseOption = licenseOptionRepository.findById(licenseOptionId)
 			.orElseThrow(() -> new ResourceNotFoundException("option", "id", licenseOptionId));
 		if (artImageFile == null) {
-			throw new BadRequestException("ArtImageFile must be not null");
+			throw new BadRequestException("라이선스 이미지가 없습니다.");
 		}
 		LicenseOptionDetail licenseOptionDetail = LicenseOptionDetail.create(dto.getArtName(), dto.getArtistName(),
-			dto.getStock(), dto.getOnSale(), s3Uploader.upload(artImageFile), dto.getPrice());
+			dto.getStock(), dto.getOnSale(), s3Uploader.upload(artImageFile), dto.getPrice(), dto.getStartDate(),dto.getEndDate());
 		licenseOptionDetail.associate(licenseOption);
 		licenseOptionDetailRepository.save(licenseOptionDetail);
 	}

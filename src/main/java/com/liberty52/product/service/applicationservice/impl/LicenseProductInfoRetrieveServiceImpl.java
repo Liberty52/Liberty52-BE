@@ -1,10 +1,5 @@
 package com.liberty52.product.service.applicationservice.impl;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import com.liberty52.product.service.controller.dto.LicenseOptionResponseDto;
 import org.springframework.stereotype.Service;
 
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
@@ -12,6 +7,7 @@ import com.liberty52.product.global.exception.external.notfound.ResourceNotFound
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.LicenseProductInfoRetrieveService;
 import com.liberty52.product.service.controller.dto.LicenseOptionInfoResponseDto;
+import com.liberty52.product.service.controller.dto.LicenseOptionResponseDto;
 import com.liberty52.product.service.entity.Product;
 import com.liberty52.product.service.repository.ProductRepository;
 

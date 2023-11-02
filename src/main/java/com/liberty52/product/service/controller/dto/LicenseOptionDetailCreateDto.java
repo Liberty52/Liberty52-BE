@@ -1,5 +1,7 @@
 package com.liberty52.product.service.controller.dto;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,15 +22,21 @@ public class LicenseOptionDetailCreateDto {
 	@Min(0)
 	@NotNull
 	Integer price;
+	@NotNull
+	LocalDate startDate;
+	@NotNull
+	LocalDate endDate;
 
 	public static LicenseOptionDetailCreateDto create(String artName, String artistName, Integer stock, Boolean onSale,
-		Integer price) {
+		Integer price, LocalDate startDate, LocalDate endDate) {
 		LicenseOptionDetailCreateDto dto = new LicenseOptionDetailCreateDto();
 		dto.artName = artName;
 		dto.artistName = artistName;
 		dto.stock = stock;
 		dto.onSale = onSale;
 		dto.price = price;
+		dto.startDate = startDate;
+		dto.endDate = endDate;
 		return dto;
 	}
 
