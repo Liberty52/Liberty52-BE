@@ -3,6 +3,10 @@ WORKDIR /app
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
+
+COPY liberty-authentication-library liberty-authentication-library
+RUN gradle :liberty-authentication-library:assemble
+
 RUN gradle assemble
 
 FROM openjdk:17-alpine
