@@ -44,6 +44,7 @@ class LicenseOptionCreateMockTest {
 
 		// When
 		licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId);
+		licenseOptionRepository.save(LicenseOption.create(dto.getName()));
 
 		// Then
 		ArgumentCaptor<LicenseOption> captor = ArgumentCaptor.forClass(LicenseOption.class);

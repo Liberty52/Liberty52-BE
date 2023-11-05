@@ -1,6 +1,9 @@
 package com.liberty52.product.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.liberty52.authentication.core.UserRole;
+import com.liberty52.authentication.test.configurer.web.LBWebMvcTest;
+import com.liberty52.authentication.test.context.support.WithLBMockUser;
 import com.liberty52.product.global.exception.external.notfound.NotFoundException;
 import com.liberty52.product.service.applicationservice.OrderCancelService;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
@@ -11,7 +14,6 @@ import com.liberty52.product.service.entity.OrderStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,7 +33,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(OrderController.class)
+@LBWebMvcTest(OrderController.class)
 class OrderControllerTest {
     @MockBean private OrderCreateService orderCreateService;
     @MockBean private OrderRetrieveService orderRetrieveService;
@@ -365,16 +367,32 @@ class OrderControllerTest {
     }
 
     @Test
+    @WithLBMockUser(role = UserRole.USER)
     void 유저가_자신의_주문에_대한_실시간배송정보를_조회한다() throws Exception {
         // given
-        given(orderDeliveryService.getRealTimeDeliveryInfoRedirectUrl(anyString(), anyString(), anyString(), anyString()))
-                .willReturn("This is HTML response from Smart Courier API");
+        given(orderDeliveryService.getRealTimeDeliveryInfoRedirectUrl(any(), anyString(), anyString(), anyString()))
+                .willReturn("This is Redirect URL from Smart Courier API");
         // when
         // then
         mockMvc.perform(get("/orders/{orderId}/delivery", "order-id")
                 .param("courierCode", "04")
                 .param("trackingNumber", "1234567890")
-                .header(HttpHeaders.AUTHORIZATION, "1")
+        ).andExpectAll(
+                status().is3xxRedirection()
+        );
+    }
+
+    @Test
+    @WithLBMockUser(role = UserRole.ADMIN)
+    void 관리자가_실시간배송정보를_조회한다() throws Exception {
+        // given
+        given(orderDeliveryService.getRealTimeDeliveryInfoRedirectUrl(any(), anyString(), anyString(), anyString()))
+                .willReturn("This is Redirect URL from Smart Courier API");
+        // when
+        // then
+        mockMvc.perform(get("/orders/{orderId}/delivery", "order-id")
+                .param("courierCode", "04")
+                .param("trackingNumber", "1234567890")
         ).andExpectAll(
                 status().is3xxRedirection()
         );

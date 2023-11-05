@@ -29,7 +29,7 @@ public class LicenseOptionDetailModifyServiceImpl implements LicenseOptionDetail
 		LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(licenseOptionDetailId)
 			.orElseThrow(() -> new ResourceNotFoundException("OptionDetail", "ID", licenseOptionDetailId));
 		if (artImageFile == null) {
-			throw new BadRequestException("ArtImageFile must be not null");
+			throw new BadRequestException("라이선스 이미지가 없습니다.");
 		}
 		licenseOptionDetail.modifyLicenseOptionDetail(dto, s3Uploader.upload(artImageFile));
 	}

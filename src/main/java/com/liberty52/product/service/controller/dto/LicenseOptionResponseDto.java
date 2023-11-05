@@ -1,12 +1,12 @@
 package com.liberty52.product.service.controller.dto;
 
-import com.liberty52.product.service.entity.OptionDetail;
+import java.time.LocalDate;
+import java.util.List;
+
 import com.liberty52.product.service.entity.license.LicenseOption;
 import com.liberty52.product.service.entity.license.LicenseOptionDetail;
-import lombok.Data;
-import lombok.Getter;
 
-import java.util.List;
+import lombok.Getter;
 
 @Getter
 public class LicenseOptionResponseDto {
@@ -33,6 +33,8 @@ public class LicenseOptionResponseDto {
         private Integer stock;
         private String artUrl;
         private Integer price;
+        private LocalDate startDate;
+        private LocalDate endDate;
 
         public LicenseOptionDetailDto(LicenseOptionDetail detail) {
             this.id = detail.getId();
@@ -41,6 +43,8 @@ public class LicenseOptionResponseDto {
             this.stock = detail.getStock();
             this.artUrl = detail.getArtUrl();
             this.price = detail.getPrice();
+            this.startDate = detail.getStartDate();
+            this.endDate = detail.getEndDate();
         }
     }
 }

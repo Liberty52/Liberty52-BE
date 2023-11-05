@@ -1,5 +1,9 @@
 package com.liberty52.product.service.controller.guest;
 
+import com.liberty52.authentication.annotation.LBPreAuthorize;
+import com.liberty52.authentication.annotation.UserContext;
+import com.liberty52.authentication.core.UserRole;
+import com.liberty52.authentication.core.principal.User;
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
 import com.liberty52.product.service.applicationservice.OrderCreateService;
 import com.liberty52.product.service.applicationservice.OrderDeliveryService;
@@ -93,15 +97,16 @@ public class OrderGuestController {
     @Operation(summary = "비회원 유저 주문의 실시간배송정보 조회", description = "비회원 유저가 배송시작된 주문에 대한 실시간 배송정보를 조회할 수 있는 리다이렉션 URL을 반환합니다.")
     @GetMapping("/guest/orders/{orderNumber}/delivery")
     @ResponseStatus(HttpStatus.OK)
+    @LBPreAuthorize(role = UserRole.GUEST)
     public void getGuestRealTimeDeliveryInfo(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
+            @UserContext User guest,
             @PathVariable(value = "orderNumber") String orderNumber,
             @RequestParam(value = "courierCode", required = true) String courierCode,
             @RequestParam(value = "trackingNumber", required = true) String trackingNumber,
             HttpServletResponse response
     ) {
         try {
-            response.sendRedirect(orderDeliveryService.getGuestRealTimeDeliveryInfoRedirectUrl(guestId, orderNumber, courierCode, trackingNumber));
+            response.sendRedirect(orderDeliveryService.getGuestRealTimeDeliveryInfoRedirectUrl(guest, orderNumber, courierCode, trackingNumber));
         } catch (IOException e) {
             throw new InternalServerErrorException("리다이렉션 I/O에 오류가 발생하였습니다");
         }

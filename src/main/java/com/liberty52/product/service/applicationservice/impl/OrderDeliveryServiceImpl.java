@@ -1,5 +1,7 @@
 package com.liberty52.product.service.applicationservice.impl;
 
+import com.liberty52.authentication.core.UserRole;
+import com.liberty52.authentication.core.principal.User;
 import com.liberty52.product.global.adapter.courier.CourierCompanyClient;
 import com.liberty52.product.global.adapter.courier.api.smartcourier.dto.SmartCourierCompanyListDto;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
@@ -75,11 +77,11 @@ public class OrderDeliveryServiceImpl implements OrderDeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public String getRealTimeDeliveryInfoRedirectUrl(String authId, String orderId, String courierCode, String trackingNumber) {
+    public String getRealTimeDeliveryInfoRedirectUrl(User user, String orderId, String courierCode, String trackingNumber) {
         var order = ordersRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("order", "id", orderId));
 
-        validateOrderOwner(order, authId);
+        validateOrderOwner(order, user);
 
         var orderDelivery = validateOrderDeliveryAndGet(order, courierCode, trackingNumber);
 
@@ -88,11 +90,11 @@ public class OrderDeliveryServiceImpl implements OrderDeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public String getGuestRealTimeDeliveryInfoRedirectUrl(String guestId, String orderNumber, String courierCode, String trackingNumber) {
+    public String getGuestRealTimeDeliveryInfoRedirectUrl(User guest, String orderNumber, String courierCode, String trackingNumber) {
         var order = ordersRepository.findByOrderNum(orderNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("order", "orderNumber", orderNumber));
 
-        validateOrderOwner(order, guestId);
+        validateOrderOwner(order, guest);
 
         var orderDelivery = validateOrderDeliveryAndGet(order, courierCode, trackingNumber);
 
@@ -121,8 +123,11 @@ public class OrderDeliveryServiceImpl implements OrderDeliveryService {
         }
     }
 
-    private void validateOrderOwner(Orders order, String authId) {
-        if (!authId.equals(order.getAuthId())) {
+    private void validateOrderOwner(Orders order, User user) {
+        if (user.getRole() == UserRole.ADMIN) {
+            return;
+        }
+        if (!user.getUserId().equals(order.getAuthId())) {
             throw new ForbiddenException("접근할 수 없는 주문입니다");
         }
     }

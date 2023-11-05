@@ -27,7 +27,11 @@ import lombok.NoArgsConstructor;
 public class LicenseOption {
 	@Id
 	private String id = UUID.randomUUID().toString();
+<<<<<<< HEAD
 		@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+=======
+	@OneToOne(fetch = FetchType.LAZY)
+>>>>>>> bd3b39f97b777dc832c1eedd1f178c9308180292
 	@JoinColumn(name = "product_id")
 	private Product product;
 

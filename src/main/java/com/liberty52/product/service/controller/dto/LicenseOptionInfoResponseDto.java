@@ -34,14 +34,12 @@ public class LicenseOptionInfoResponseDto {
 				.filter(LicenseOptionDetail::getOnSale)
 				.map(LicenseOptionDetailInfoResponseDto::new)
 				.toList();
-
-		} else {
-			licenseOptionDetailList = licenseOption.getLicenseOptionDetails()
-				.stream()
-				.sorted(Comparator.comparing(LicenseOptionDetail::getOnSale).reversed())
-				.map(LicenseOptionDetailInfoResponseDto::new)
-				.toList();
 		}
+		licenseOptionDetailList = licenseOption.getLicenseOptionDetails()
+			.stream()
+			.sorted(Comparator.comparing(LicenseOptionDetail::getOnSale).reversed())
+			.map(LicenseOptionDetailInfoResponseDto::new)
+			.toList();
 	}
 
 }

@@ -3,6 +3,7 @@ package com.liberty52.product.service.applicationservice.mock;
 import static com.liberty52.product.global.constants.RoleConstants.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,10 @@ class LicenseOptionDetailModifyMockTest {
 	void modifyLicenseOptionDetailByAdminTest() {
 		// Given
 		String licenseOptionDetailId = "testLicenseOptionDetailId";
-		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, 1000, true);
+		LocalDate startDate = LocalDate.of(2023, 1, 1);
+		LocalDate endDate = startDate.plusDays(10);
+		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, 1000, true,
+			startDate, endDate);
 		MultipartFile artImageFile = mock(MultipartFile.class);
 
 		LicenseOptionDetail mockLicenseOptionDetail = mock(LicenseOptionDetail.class);
@@ -58,7 +62,10 @@ class LicenseOptionDetailModifyMockTest {
 	void modifyLicenseOptionDetailByAdmin_When_LicenseOptionDetailNotFoundTest() {
 		// Given
 		String licenseOptionDetailId = "testLicenseOptionDetailId";
-		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, 1000, true);
+		LocalDate startDate = LocalDate.of(2023, 1, 1);
+		LocalDate endDate = startDate.plusDays(10);
+		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, 1000, true,
+			startDate, endDate);
 		MultipartFile artImageFile = mock(MultipartFile.class);
 
 		when(licenseOptionDetailRepository.findById(licenseOptionDetailId)).thenReturn(Optional.empty());
@@ -73,7 +80,10 @@ class LicenseOptionDetailModifyMockTest {
 	void modifyLicenseOptionDetailByAdmin_When_ArtImageFileIsNullTest() {
 		// Given
 		String licenseOptionDetailId = "testLicenseOptionDetailId";
-		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, 1000, true);
+		LocalDate startDate = LocalDate.of(2023, 1, 1);
+		LocalDate endDate = startDate.plusDays(10);
+		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, 1000, true,
+			startDate, endDate);
 		MultipartFile artImageFile = null;
 
 		LicenseOptionDetail mockLicenseOptionDetail = mock(LicenseOptionDetail.class);

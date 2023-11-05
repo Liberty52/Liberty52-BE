@@ -4,6 +4,7 @@ import static com.liberty52.product.global.constants.RoleConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -40,11 +41,12 @@ class LicenseProductInfoRetrieveMockTest {
 		// Given
 		String productId = "testProductId";
 		boolean onSale = true;
-
+		LocalDate startDate = LocalDate.of(2023,1,1);
+		LocalDate endDate = startDate.plusDays(10);
 		LicenseOptionDetail licenseOptionDetail1 = LicenseOptionDetail.create("testArtName1", "testArtistName1", 100,
-			true, "testArtUrl1",1000);
+			true, "testArtUrl1",1000,startDate,endDate);
 		LicenseOptionDetail licenseOptionDetail2 = LicenseOptionDetail.create("testArtName2", "testArtistName2", 100,
-			true, "testArtUrl2",1000);
+			true, "testArtUrl2",1000,startDate,endDate);
 
 		Product mockProduct = mock(Product.class);
 		when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
@@ -64,6 +66,8 @@ class LicenseProductInfoRetrieveMockTest {
 		// Then
 		assertEquals("testOption1", result.getLicenseOptionId());
 		assertEquals("testArtName1", result.getLicenseOptionDetailList().get(0).getArtName());
+		assertEquals(startDate, result.getLicenseOptionDetailList().get(0).getStartDate());
+		assertEquals(endDate, result.getLicenseOptionDetailList().get(0).getEndDate());
 		assertEquals("testArtName2", result.getLicenseOptionDetailList().get(1).getArtName());
 	}
 
@@ -87,6 +91,8 @@ class LicenseProductInfoRetrieveMockTest {
 		// Given
 		String productId = "testProductId";
 		boolean onSale = true;
+		LocalDate startDate = LocalDate.of(2023,1,1);
+		LocalDate endDate = startDate.plusDays(10);
 
 		Product product = Product.create("Liberty 52_Frame", ProductState.ON_SALE, 100L,true);
 
@@ -100,10 +106,10 @@ class LicenseProductInfoRetrieveMockTest {
 		LicenseOption licenseOption = LicenseOption.create("라이센스");
 		licenseOption.associate(product);
 		LicenseOptionDetail licenseOptionDetail1 = LicenseOptionDetail.create("testArtName1", "testArtistName1", 100,
-				true, "testArtUrl1",1000);
+				true, "testArtUrl1",1000,startDate,endDate);
 		licenseOptionDetail1.associate(licenseOption);
 		LicenseOptionDetail licenseOptionDetail2 = LicenseOptionDetail.create("testArtName2", "testArtistName2", 100,
-				true, "testArtUrl2",1000);
+				true, "testArtUrl2",1000,startDate,endDate);
 		licenseOptionDetail2.associate(licenseOption);
 
 		when(productRepository.findById(productId)).thenReturn(Optional.of(product));

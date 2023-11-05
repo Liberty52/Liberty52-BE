@@ -96,7 +96,7 @@ public class OrderGuestControllerTest {
     @Test
     void 비회원_유저가_자신의_주문에_대한_실시간배송정보를_조회한다() throws Exception {
         // given
-        given(orderDeliveryService.getGuestRealTimeDeliveryInfoRedirectUrl(anyString(), anyString(), anyString(), anyString()))
+        given(orderDeliveryService.getGuestRealTimeDeliveryInfoRedirectUrl(any(), anyString(), anyString(), anyString()))
                 .willReturn("This is HTML response from Smart Courier API");
         // when
         // then

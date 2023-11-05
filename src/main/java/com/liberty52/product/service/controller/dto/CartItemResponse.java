@@ -1,6 +1,5 @@
 package com.liberty52.product.service.controller.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +24,12 @@ public class CartItemResponse {
 
     List<CartOptionResponse> options;
 
-    public static CartItemResponse of(String id, String name, String imageUrl, long price, int quantity,  List<CartOptionResponse> options){
-        return new CartItemResponse(id, name, imageUrl, price, quantity, options);
+    String courierName;
+
+    int deliveryFee;
+
+    public static CartItemResponse of(String id, String name, String imageUrl, long price, int quantity,  List<CartOptionResponse> options, String courierName, int deliveryFee){
+        return new CartItemResponse(id, name, imageUrl, price, quantity, options, courierName, deliveryFee);
     }
+
 }

@@ -22,7 +22,7 @@ public class CartItemRetrieveServiceImpl implements CartItemRetrieveService {
 
     @Override
     public List<CartItemResponse> retrieveAuthCartItem(String authId) {
-        List<CartItemResponse> cartItemResponseList = new ArrayList<CartItemResponse>();
+        List<CartItemResponse> cartItemResponseList = new ArrayList<>();
         Cart cart = cartRepository.findByAuthId(authId).orElse(null);
 
         if (cart==null || cart.getCustomProducts().size() == 0){
@@ -33,7 +33,7 @@ public class CartItemRetrieveServiceImpl implements CartItemRetrieveService {
 
     @Override
     public List<CartItemResponse> retrieveGuestCartItem(String guestId) {
-        List<CartItemResponse> cartItemResponseList = new ArrayList<CartItemResponse>();
+        List<CartItemResponse> cartItemResponseList = new ArrayList<>();
         Cart cart = cartRepository.findByAuthIdAndExpiryDateGreaterThanEqual(guestId, LocalDate.now()).orElse(null);
 
         if (cart==null || cart.getCustomProducts().size() == 0){
@@ -47,7 +47,7 @@ public class CartItemRetrieveServiceImpl implements CartItemRetrieveService {
 
         for(CustomProduct cartItem:cartItemList){
             Product product = cartItem.getProduct();
-            CartItemResponse cartItemResponse = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getUserCustomPictureUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()));
+            CartItemResponse cartItemResponse = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getUserCustomPictureUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), product.getDeliveryOption().getCourierName(),product.getDeliveryOption().getFee());
             cartItemResponseList.add(cartItemResponse);
         }
         return cartItemResponseList;
