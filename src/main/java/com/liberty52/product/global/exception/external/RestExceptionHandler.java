@@ -1,5 +1,6 @@
 package com.liberty52.product.global.exception.external;
 
+import com.liberty52.authentication.core.exception.AuthenticationException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,22 @@ public class RestExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(
+            AuthenticationException ex,
+            HttpServletRequest request
+    ) {
+        var errorResponse = ErrorResponse.createErrorResponse(
+                ex.getStatus(),
+                "Authentication Error",
+                "Authentication Error",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(ex.getStatus())
                 .body(errorResponse);
     }
 }

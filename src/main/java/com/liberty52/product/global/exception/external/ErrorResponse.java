@@ -19,8 +19,31 @@ public class ErrorResponse {
     private String path;
 
     public static ErrorResponse createErrorResponse(ErrorCode errorCode, String path) {
-        return new ErrorResponse(LocalDateTime.now().toString(),errorCode.getHttpStatus(),errorCode.getErrorCode()
-                , errorCode.getErrorName(), errorCode.getErrorMessage(),path);
+        return new ErrorResponse(
+                LocalDateTime.now().toString(),
+                errorCode.getHttpStatus(),
+                errorCode.getErrorCode(),
+                errorCode.getErrorName(),
+                errorCode.getErrorMessage(),
+                path
+        );
+    }
+
+    public static ErrorResponse createErrorResponse(
+            HttpStatus status,
+            String errorCode,
+            String errorName,
+            String errorMessage,
+            String path
+    ) {
+        return ErrorResponse.builder()
+                .timeStamp(LocalDateTime.now().toString())
+                .httpStatus(status)
+                .errorCode(errorCode)
+                .errorName(errorName)
+                .errorMessage(errorMessage)
+                .path(path)
+                .build();
     }
 
     @Override

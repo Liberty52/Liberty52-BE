@@ -14,7 +14,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new TranslationConstants.LangCodeConverter());
     }
 
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new RequestLoggingInterceptor());
