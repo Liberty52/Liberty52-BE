@@ -74,6 +74,8 @@ public class CartItemRetrieveServiceMockTest extends MockS3Test {
         OptionDetail materialOption4 = OptionDetail.create("무광백색", 100,true, 100);
         materialOption4.associate(option3);
 
+        ProductDeliveryOption deliveryOption = ProductDeliveryOption.of("test",100,product);
+
         // Add Cart & CartItems
         Cart cart = Cart.create("authId");
 
@@ -126,6 +128,9 @@ public class CartItemRetrieveServiceMockTest extends MockS3Test {
         Assertions.assertEquals(cartItemResponse1.getName(), "Liberty 52_Frame");
 //        Assertions.assertEquals(cartItemResponse1.getPrice(), 10000000);
         Assertions.assertEquals(cartItemResponse1.getQuantity(), 1);
+
+        Assertions.assertEquals(cartItemResponse1.getCourierName(), "test");
+        Assertions.assertEquals(cartItemResponse1.getDeliveryFee(), 100);
 
         List<CartOptionResponse> optionRequestList1 = cartItemResponse1.getOptions();
         Assertions.assertEquals(optionRequestList1.size(), 3);
@@ -191,6 +196,9 @@ public class CartItemRetrieveServiceMockTest extends MockS3Test {
 ////        Assertions.assertEquals(cartItemResponse1.getPrice(), 10000000);
 //        Assertions.assertEquals(cartItemResponse1.getQuantity(), 1);
 //
+//        Assertions.assertEquals(cartItemResponse1.getCourierName(), "test");
+//        Assertions.assertEquals(cartItemResponse1.getDeliveryFee(), 100);
+
 //        List<CartOptionResponse> optionRequestList1 = cartItemResponse1.getOptions();
 //        Assertions.assertEquals(optionRequestList1.size(), 3);
 //        CartOptionResponse cartOptionResponse11 = optionRequestList1.get(0);
