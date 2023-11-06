@@ -1,8 +1,5 @@
 package com.liberty52.product.service.controller.license;
 
-import java.util.List;
-
-import com.liberty52.product.service.controller.dto.LicenseOptionResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liberty52.product.service.applicationservice.LicenseProductInfoRetrieveService;
 import com.liberty52.product.service.controller.dto.LicenseOptionInfoResponseDto;
+import com.liberty52.product.service.controller.dto.LicenseOptionResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
