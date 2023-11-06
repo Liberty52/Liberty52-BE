@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.applicationservice.impl.LicenseOptionCreateServiceImpl;
 import com.liberty52.product.service.controller.dto.LicenseOptionCreateRequestDto;
@@ -62,6 +63,34 @@ class LicenseOptionCreateMockTest {
 		when(productRepository.findById(productId)).thenReturn(Optional.empty());
 		// Then
 		assertThrows(ResourceNotFoundException.class,
+			() -> licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId));
+	}
+
+	@Test
+	void createLicenseOptionByAdminTest_ProductIsCustom() {
+		// Given
+		LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
+		String productId = "testProductId";
+		Product mockProduct = mock(Product.class);
+		when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
+		when(mockProduct.isCustom()).thenReturn(true);
+		// When
+		// Then
+		assertThrows(BadRequestException.class,
+			() -> licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId));
+	}
+
+	@Test
+	void createLicenseOptionByAdminTest_Already_License_Option_is_Existed(){
+		// Given
+		LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
+		String productId = "testProductId";
+		Product mockProduct = mock(Product.class);
+		when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
+		when(licenseOptionRepository.findByProductId(productId)).thenReturn(Optional.of(mock(LicenseOption.class)));
+		// When
+		// Then
+		assertThrows(BadRequestException.class,
 			() -> licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId));
 	}
 }

@@ -8,4 +8,5 @@ import com.liberty52.product.service.entity.license.LicenseOption;
 
 public interface LicenseOptionRepository extends JpaRepository<LicenseOption, String> {
 	Optional<LicenseOption> findByName(String name);
+	Optional<LicenseOption> findByProductId(String productId);
 }
