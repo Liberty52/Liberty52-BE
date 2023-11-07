@@ -8,7 +8,9 @@ import com.liberty52.product.service.controller.dto.LicenseOptionDetailModifyDto
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,7 +25,11 @@ public class LicenseOptionDetail {
 	@Id
 	private String id = UUID.randomUUID().toString();
 	@ManyToOne
+	@JoinColumn(name = "license_option_id")
 	private LicenseOption licenseOption;
+
+	@OneToOne(mappedBy = "licenseOptionDetail")
+	private CustomLicenseOption customLicenseOption;
 	@Column(nullable = false)
 	String artName;
 	@Column(nullable = false)
@@ -63,6 +69,10 @@ public class LicenseOptionDetail {
 	public void associate(LicenseOption licenseOption) {
 		this.licenseOption = licenseOption;
 		this.licenseOption.addDetail(this);
+	}
+
+	public void associate(CustomLicenseOption customLicenseOption) {
+		this.customLicenseOption = customLicenseOption;
 	}
 
 	public void modifyLicenseOptionDetail(LicenseOptionDetailModifyDto dto, String artUrl) {
