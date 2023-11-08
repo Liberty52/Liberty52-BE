@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
-import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.LicenseOptionDetailModifyService;
@@ -28,10 +27,10 @@ public class LicenseOptionDetailModifyServiceImpl implements LicenseOptionDetail
 		Validator.isAdmin(role);
 		LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(licenseOptionDetailId)
 			.orElseThrow(() -> new ResourceNotFoundException("OptionDetail", "ID", licenseOptionDetailId));
-		if (artImageFile == null) {
-			throw new BadRequestException("라이선스 이미지가 없습니다.");
+		if (artImageFile != null){
+			licenseOptionDetail.modifyLicenseArtUrl(s3Uploader.upload(artImageFile));
 		}
-		licenseOptionDetail.modifyLicenseOptionDetail(dto, s3Uploader.upload(artImageFile));
+		licenseOptionDetail.modifyLicenseOptionDetail(dto);
 	}
 
 	@Override

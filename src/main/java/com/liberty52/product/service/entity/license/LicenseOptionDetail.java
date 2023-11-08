@@ -76,15 +76,18 @@ public class LicenseOptionDetail {
 		this.customLicenseOption = customLicenseOption;
 	}
 
-	public void modifyLicenseOptionDetail(LicenseOptionDetailModifyDto dto, String artUrl) {
+	public void modifyLicenseOptionDetail(LicenseOptionDetailModifyDto dto) {
 		this.artName = dto.getArtName();
 		this.artistName = dto.getArtistName();
 		this.stock = dto.getStock();
 		this.onSale = dto.getOnSale();
 		this.price = dto.getPrice();
-		this.artUrl = artUrl;
 		this.startDate = dto.getStartDate();
 		this.endDate = dto.getEndDate();
+	}
+
+	public void modifyLicenseArtUrl(String artUrl) {
+		this.artUrl = artUrl;
 	}
 
 	public void updateOnSale() {
