@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.liberty52.product.service.controller.dto.LicenseOptionDetailModifyDto;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,7 +29,7 @@ public class LicenseOptionDetail {
 	@JoinColumn(name = "license_option_id")
 	private LicenseOption licenseOption;
 
-	@OneToOne(mappedBy = "licenseOptionDetail")
+	@OneToOne(mappedBy = "licenseOptionDetail" , cascade = CascadeType.ALL)
 	private CustomLicenseOption customLicenseOption;
 	@Column(nullable = false)
 	String artName;

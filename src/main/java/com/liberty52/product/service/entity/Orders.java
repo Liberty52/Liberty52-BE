@@ -117,17 +117,22 @@ public class Orders {
     private void calcTotalAmountAndSet() {
         AtomicLong totalAmount = new AtomicLong();
 
-        this.customProducts.forEach(customProduct -> {
-            // 기본금
-            totalAmount.getAndAdd(customProduct.getProduct().getPrice());
-            // 옵션 추가금액
-            customProduct.getOptions().forEach(customProductOption ->
-                        totalAmount.getAndAdd(customProductOption.getOptionDetail().getPrice()));
-            // 수량
-            totalAmount.getAndUpdate(x -> customProduct.getQuantity() * x);
-        });
-        // 배송비
-        totalAmount.getAndAdd(this.deliveryPrice);
+		this.customProducts.forEach(customProduct -> {
+			// 기본금
+			totalAmount.getAndAdd(customProduct.getProduct().getPrice());
+			// 옵션 추가금액
+			if (!customProduct.getProduct().isCustom()) {
+				totalAmount.getAndAdd(customProduct.getCustomLicenseOption().getLicenseOptionDetail().getPrice());
+			} else {
+				customProduct.getOptions().forEach(customProductOption ->
+					totalAmount.getAndAdd(customProductOption.getOptionDetail().getPrice()));
+			}
+
+			// 수량
+			totalAmount.getAndUpdate(x -> customProduct.getQuantity() * x);
+		});
+		// 배송비
+		totalAmount.getAndAdd(this.deliveryPrice);
 
         this.amount = totalAmount.get();
     }

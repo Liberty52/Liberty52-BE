@@ -53,7 +53,7 @@ public class CustomProduct {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "customProduct", cascade = CascadeType.ALL)
     private Review review;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "customProduct")
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "license_product_option_id")
     private CustomLicenseOption customLicenseOption;
 
@@ -109,7 +109,7 @@ public class CustomProduct {
         this.review = review;
         this.review.associate(this);
     }
-    public void associateWithLicenseProductOption(CustomLicenseOption customLicenseOption) {
+    public void associateWithCustomLicenseOption(CustomLicenseOption customLicenseOption) {
         Objects.requireNonNull(customLicenseOption);
         this.customLicenseOption = customLicenseOption;
     }

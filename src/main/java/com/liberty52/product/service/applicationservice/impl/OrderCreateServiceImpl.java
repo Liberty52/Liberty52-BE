@@ -19,13 +19,17 @@ import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
 import com.liberty52.product.service.controller.dto.PaymentConfirmResponseDto;
 import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.entity.*;
+import com.liberty52.product.service.entity.license.CustomLicenseOption;
+import com.liberty52.product.service.entity.license.LicenseOptionDetail;
 import com.liberty52.product.service.entity.payment.Payment;
 import com.liberty52.product.service.entity.payment.VBank;
 import com.liberty52.product.service.entity.payment.VBankPayment;
 import com.liberty52.product.service.repository.*;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,20 +43,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class OrderCreateServiceImpl implements OrderCreateService {
 
-    private static final String RESOURCE_NAME_PRODUCT = "Product";
-    private static final String PARAM_NAME_PRODUCT_NAME = "name";
-    private static final String RESOURCE_NAME_OPTION_DETAIL = "OptionDetail";
-    private static final String PARAM_NAME_OPTION_DETAIL_NAME = "name";
-    private final S3UploaderApi s3Uploader;
-    private final OptionDetailMultipleStockManageService optionDetailMultipleStockManageService;
-    private final ProductRepository productRepository;
-    private final CustomProductRepository customProductRepository;
-    private final OrdersRepository ordersRepository;
-    private final OptionDetailRepository optionDetailRepository;
-    private final CustomProductOptionRepository customProductOptionRepository;
-    private final ConfirmPaymentMapRepository confirmPaymentMapRepository;
-    private final VBankRepository vBankRepository;
-    private final ThreadManager threadManager;
+	private static final String RESOURCE_NAME_PRODUCT = "Product";
+	private static final String PARAM_NAME_PRODUCT_NAME = "name";
+	private static final String RESOURCE_NAME_OPTION_DETAIL = "OptionDetail";
+	private static final String PARAM_NAME_OPTION_DETAIL_NAME = "name";
+	private final S3UploaderApi s3Uploader;
+	private final OptionDetailMultipleStockManageService optionDetailMultipleStockManageService;
+	private final ProductRepository productRepository;
+	private final CustomProductRepository customProductRepository;
+	private final OrdersRepository ordersRepository;
+	private final OptionDetailRepository optionDetailRepository;
+	private final CustomProductOptionRepository customProductOptionRepository;
+	private final LicenseOptionDetailRepository licenseOptionDetailRepository;
+	private final ConfirmPaymentMapRepository confirmPaymentMapRepository;
+	private final VBankRepository vBankRepository;
+	private final ThreadManager threadManager;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* API method area */
@@ -137,20 +142,29 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         return PaymentVBankResponseDto.of(order.getId(), order.getOrderNum());
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* private method area */
-    private Orders saveOrder(String authId, OrderCreateRequestDto dto, MultipartFile imageFile) {
-        Product product = this.getProduct(dto);
-        List<OptionDetail> optionDetails = this.getOptionDetails(dto);
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/* private method area */
+	private Orders saveOrder(String authId, OrderCreateRequestDto dto, MultipartFile imageFile) {
+		Product product = this.getProduct(dto);
+		OrderDestination orderDestination = this.createOrderDestination(dto);
+		Orders order = ordersRepository.save(Orders.create(authId, orderDestination));
 
-        OrderDestination orderDestination = this.createOrderDestination(dto);
-        Orders order = ordersRepository.save(Orders.create(authId, orderDestination));
+		if (!product.isCustom()) {
+			LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(
+					dto.getProductDto().getOptionDetailIds().get(0))
+				.orElseThrow(() -> new ResourceNotFoundException("LICENSE_OPTION_DETAIL", "ID",
+					dto.getProductDto().getOptionDetailIds().get(0)));
+			CustomProduct customProduct = this.createLicenseCustomProduct(authId, dto, product, order, "");
+			this.createCustomLicenseOption(customProduct, licenseOptionDetail);
 
-        String imgUrl = s3Uploader.upload(imageFile);
-        CustomProduct customProduct = this.createCustomProduct(authId, dto, product, order, imgUrl);
-        for (OptionDetail detail : optionDetails) {
-            this.createCustomProductOptions(customProduct, detail);
-        }
+		} else {
+			List<OptionDetail> optionDetails = this.getOptionDetails(dto);
+			String imgUrl = s3Uploader.upload(imageFile);
+			CustomProduct customProduct = this.createCustomProduct(authId, dto, product, order, imgUrl);
+			for (OptionDetail detail : optionDetails) {
+				this.createCustomProductOptions(customProduct, detail);
+			}
+		}
 
         order.calculateTotalValueAndSet();
 
@@ -207,12 +221,25 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         return customProduct;
     }
 
+	private CustomProduct createLicenseCustomProduct(String authId, OrderCreateRequestDto dto, Product product, Orders order, String imgUrl) {
+		CustomProduct customProduct = CustomProduct.create(imgUrl, dto.getProductDto().getQuantity(), authId);
+		customProduct.associateWithProduct(product);
+		customProduct.associateWithOrder(order);
+		return customProduct;
+	}
+
     private void createCustomProductOptions(CustomProduct customProduct, OptionDetail detail) {
         CustomProductOption customProductOption = CustomProductOption.create();
         customProductOption.associate(customProduct);
         customProductOption.associate(detail);
         customProductOptionRepository.save(customProductOption);
     }
+
+	private void createCustomLicenseOption(CustomProduct customProduct, LicenseOptionDetail detail) {
+		CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
+		customLicenseOption.associate(detail);
+		customLicenseOption.associate(customProduct);
+	}
 
     private void saveCardPayment(Orders order) {
         Payment<?> payment = Payment.cardOf();
