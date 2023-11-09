@@ -1,6 +1,7 @@
 package com.liberty52.product.service.applicationservice.impl;
 
 import com.liberty52.product.global.adapter.s3.S3UploaderApi;
+import com.liberty52.product.global.exception.external.badrequest.NoRequestedDataException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.global.util.Validator;
 import com.liberty52.product.service.applicationservice.ProductModifyService;
@@ -27,6 +28,7 @@ public class ProductModifyServiceImpl implements ProductModifyService {
 
     @Override
     public Product modifyProductByAdmin(String role, String productId, ProductModifyRequestDto productRequestDto, MultipartFile productImage) {
+        if(productRequestDto==null&&productImage==null) throw new NoRequestedDataException();
         Validator.isAdmin(role);
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "ID", productId));
