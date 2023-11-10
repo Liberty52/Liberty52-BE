@@ -184,7 +184,8 @@ public class MockFactory {
                 ,MOCK_PRICE,
                 MOCK_PRODUCT_REPRESENT_URL,
                 false,
-                null);
+                null,
+                true);
     }
 
     public static OrderDetailRetrieveResponse createMockOrderDetailRetrieveResponse(){
