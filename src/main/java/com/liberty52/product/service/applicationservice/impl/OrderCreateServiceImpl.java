@@ -154,7 +154,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
 					dto.getProductDto().getOptionDetailIds().get(0))
 				.orElseThrow(() -> new ResourceNotFoundException("LICENSE_OPTION_DETAIL", "ID",
 					dto.getProductDto().getOptionDetailIds().get(0)));
-			CustomProduct customProduct = this.createLicenseCustomProduct(authId, dto, product, order, "");
+			CustomProduct customProduct = this.createLicenseCustomProduct(authId, dto, product, order);
 			this.createCustomLicenseOption(customProduct, licenseOptionDetail);
 
 		} else {
@@ -221,8 +221,8 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         return customProduct;
     }
 
-	private CustomProduct createLicenseCustomProduct(String authId, OrderCreateRequestDto dto, Product product, Orders order, String imgUrl) {
-		CustomProduct customProduct = CustomProduct.create(imgUrl, dto.getProductDto().getQuantity(), authId);
+	private CustomProduct createLicenseCustomProduct(String authId, OrderCreateRequestDto dto, Product product, Orders order) {
+		CustomProduct customProduct = CustomProduct.create("", dto.getProductDto().getQuantity(), authId);
 		customProduct.associateWithProduct(product);
 		customProduct.associateWithOrder(order);
 		return customProduct;

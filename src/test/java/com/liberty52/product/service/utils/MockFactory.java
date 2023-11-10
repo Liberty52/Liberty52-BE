@@ -5,6 +5,8 @@ import com.liberty52.product.service.controller.dto.OrderRetrieveProductResponse
 import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
 import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse;
 import com.liberty52.product.service.entity.*;
+import com.liberty52.product.service.entity.license.LicenseOption;
+import com.liberty52.product.service.entity.license.LicenseOptionDetail;
 import com.liberty52.product.service.entity.payment.BankType;
 import com.liberty52.product.service.entity.payment.VBank;
 
@@ -228,5 +230,15 @@ public class MockFactory {
         return option;
     }
 
+    public static LicenseOption createLicenseOption(String name) {
+        return LicenseOption.create(name);
+    }
 
+    public static LicenseOptionDetail createLicenseOptionDetail(String artName, String artistName, Integer stock, Boolean onSale,
+        String artUrl, Integer price, LocalDate startDate, LocalDate endDate, LicenseOption licenseOption) {
+        LicenseOptionDetail licenseOptionDetail = LicenseOptionDetail.create(artName, artistName,
+            stock, onSale, artUrl, price, startDate, endDate);
+        licenseOptionDetail.associate(licenseOption);
+        return licenseOptionDetail;
+    }
 }
