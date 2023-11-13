@@ -17,6 +17,7 @@ import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.OptionDetail;
 import com.liberty52.product.service.entity.Product;
+import com.liberty52.product.service.entity.license.CustomLicenseOption;
 import com.liberty52.product.service.entity.license.LicenseOption;
 import com.liberty52.product.service.entity.license.LicenseOptionDetail;
 import com.liberty52.product.service.entity.payment.CardPayment;
@@ -56,6 +57,7 @@ class OrderCreateServiceImplUnitTest {
     @Mock private VBankRepository vBankRepository;
     @Mock private ThreadManager threadManager;
     @Mock private LicenseOptionDetailRepository licenseOptionDetailRepository;
+    @Mock private CustomLicenseOptionRepository customLicenseOptionRepository;
 
     private PaymentCardResponseDto executeCardPaymentOrders(String authId, List<String> options, int quantity) {
         return service.createCardPaymentOrders(
@@ -129,6 +131,14 @@ class OrderCreateServiceImplUnitTest {
             .willReturn(Optional.of(licenseOptionDetail));
 
         var authId = "user_id";
+
+        CustomProduct customProduct = MockFactory.createCustomProduct("", 1, authId, mockProduct);
+        given(customProductRepository.save(any())).willReturn(customProduct);
+
+        CustomLicenseOption customLicenseOption = MockFactory.createCustomLicenseOption(customProduct,licenseOptionDetail);
+        given(customLicenseOptionRepository.save(any())).willReturn(customLicenseOption);
+
+
         var order = MockFactory.createOrder(authId);
         given(ordersRepository.save(any())).willReturn(order);
 
