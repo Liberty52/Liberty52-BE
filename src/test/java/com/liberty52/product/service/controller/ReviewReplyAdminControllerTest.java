@@ -3,7 +3,6 @@ package com.liberty52.product.service.controller;
 import static com.liberty52.product.global.constants.RoleConstants.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -28,11 +27,11 @@ import com.liberty52.product.service.applicationservice.ReviewReplyCreateService
 import com.liberty52.product.service.applicationservice.ReviewReplyModifyService;
 import com.liberty52.product.service.controller.dto.ReplyCreateRequestDto;
 
-@WebMvcTest(value = {ReviewReplyController.class, RestExceptionHandler.class})
-class ReviewReplyControllerTest {
+@WebMvcTest(value = {ReviewReplyAdminController.class, RestExceptionHandler.class})
+class ReviewReplyAdminControllerTest {
 
 	@InjectMocks
-	ReviewReplyController controller;
+    ReviewReplyAdminController controller;
 
 	@MockBean
 	ReviewReplyCreateService reviewReplyCreateService;

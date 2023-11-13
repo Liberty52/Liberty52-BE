@@ -17,7 +17,7 @@ import com.liberty52.product.service.controller.dto.ReplyModifyRequestDto;
 @Tag(name = "리뷰", description = "리뷰 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-public class ReviewReplyController {
+public class ReviewReplyAdminController {
 
 	private final ReviewReplyCreateService reviewReplyCreateService;
 	private final ReviewReplyModifyService reviewReplyModifyService;
