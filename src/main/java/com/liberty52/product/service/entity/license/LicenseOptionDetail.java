@@ -29,18 +29,16 @@ public class LicenseOptionDetail {
 	@JoinColumn(name = "license_option_id")
 	private LicenseOption licenseOption;
 
-	@OneToOne(mappedBy = "licenseOptionDetail" , cascade = CascadeType.ALL)
-	private CustomLicenseOption customLicenseOption;
 	@Column(nullable = false)
-	String artName;
+	private String artName;
 	@Column(nullable = false)
-	String artistName;
+	private String artistName;
 	@Column(nullable = false)
-	Integer stock;
+	private Integer stock;
 	@Column(nullable = false)
-	Boolean onSale;
+	private Boolean onSale;
 	@Column(nullable = false)
-	String artUrl;
+	private String artUrl;
 	@Column(nullable = false)
 	private Integer price;
 	@Column(nullable = false)
@@ -70,10 +68,6 @@ public class LicenseOptionDetail {
 	public void associate(LicenseOption licenseOption) {
 		this.licenseOption = licenseOption;
 		this.licenseOption.addDetail(this);
-	}
-
-	public void associate(CustomLicenseOption customLicenseOption) {
-		this.customLicenseOption = customLicenseOption;
 	}
 
 	public void modifyLicenseOptionDetail(LicenseOptionDetailModifyDto dto) {

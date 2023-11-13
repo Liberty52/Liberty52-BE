@@ -5,6 +5,7 @@ import com.liberty52.product.service.controller.dto.OrderRetrieveProductResponse
 import com.liberty52.product.service.controller.dto.OrdersRetrieveResponse;
 import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse;
 import com.liberty52.product.service.entity.*;
+import com.liberty52.product.service.entity.license.CustomLicenseOption;
 import com.liberty52.product.service.entity.license.LicenseOption;
 import com.liberty52.product.service.entity.license.LicenseOptionDetail;
 import com.liberty52.product.service.entity.payment.BankType;
@@ -241,5 +242,12 @@ public class MockFactory {
             stock, onSale, artUrl, price, startDate, endDate);
         licenseOptionDetail.associate(licenseOption);
         return licenseOptionDetail;
+    }
+
+    public static CustomLicenseOption createCustomLicenseOption(CustomProduct customProduct, LicenseOptionDetail licenseOptionDetail) {
+		CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
+		customLicenseOption.associate(customProduct);
+		customLicenseOption.associate(licenseOptionDetail);
+		return customLicenseOption;
     }
 }

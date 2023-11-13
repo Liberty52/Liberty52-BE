@@ -54,6 +54,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
 	private final OrdersRepository ordersRepository;
 	private final OptionDetailRepository optionDetailRepository;
 	private final CustomProductOptionRepository customProductOptionRepository;
+	private final CustomLicenseOptionRepository customLicenseOptionRepository;
 	private final LicenseOptionDetailRepository licenseOptionDetailRepository;
 	private final ConfirmPaymentMapRepository confirmPaymentMapRepository;
 	private final VBankRepository vBankRepository;
@@ -156,7 +157,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
 					dto.getProductDto().getOptionDetailIds().get(0)));
 			CustomProduct customProduct = this.createLicenseCustomProduct(authId, dto, product, order);
 			this.createCustomLicenseOption(customProduct, licenseOptionDetail);
-
+			customProductRepository.save(customProduct);
 		} else {
 			List<OptionDetail> optionDetails = this.getOptionDetails(dto);
 			String imgUrl = s3Uploader.upload(imageFile);
@@ -239,6 +240,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
 		CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
 		customLicenseOption.associate(detail);
 		customLicenseOption.associate(customProduct);
+		customLicenseOptionRepository.save(customLicenseOption);
 	}
 
     private void saveCardPayment(Orders order) {

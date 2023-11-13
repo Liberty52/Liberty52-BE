@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import com.liberty52.product.service.entity.CustomProduct;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -25,12 +24,11 @@ public class CustomLicenseOption {
 	@JoinColumn(name = "license_option_detail_id")
 	private LicenseOptionDetail licenseOptionDetail;
 
-	@OneToOne(mappedBy = "customLicenseOption" , cascade = CascadeType.PERSIST)
+	@OneToOne(mappedBy = "customLicenseOption")
 	private CustomProduct customProduct;
 
 	public void associate(LicenseOptionDetail licenseOptionDetail) {
 		this.licenseOptionDetail = licenseOptionDetail;
-		this.licenseOptionDetail.associate(this);
 	}
 
 	public void associate(CustomProduct customProduct) {
