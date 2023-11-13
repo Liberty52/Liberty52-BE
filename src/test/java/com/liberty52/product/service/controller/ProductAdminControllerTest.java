@@ -25,8 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ProductController.class)
-public class ProductControllerTest {
+@WebMvcTest(ProductAdminController.class)
+public class ProductAdminControllerTest {
     @Autowired
     private MockMvc mockMvc;
 

@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 /*ProductController 는 상품의 옵션, 소개 등 세부 정보를 제외한 상품의 가장 기본적인 데이터를 활용하는 엔드포인트들을 다루는 용도입니다.
 상품의 세부 정보와 관련된 엔드포인트들은 ProductInfoController 에서 다룹니다.*/
-public class ProductController {
+public class ProductAdminController {
 
     private final ModelMapper mapper;
     private final ProductCreateService productCreateService;

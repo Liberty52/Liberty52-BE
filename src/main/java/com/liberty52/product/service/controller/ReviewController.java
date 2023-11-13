@@ -1,41 +1,26 @@
 package com.liberty52.product.service.controller;
 
-import java.util.List;
-
+import com.liberty52.product.service.applicationservice.ReviewCreateService;
+import com.liberty52.product.service.applicationservice.ReviewModifyService;
+import com.liberty52.product.service.applicationservice.ReviewRemoveService;
+import com.liberty52.product.service.applicationservice.ReviewRetrieveService;
+import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
+import com.liberty52.product.service.controller.dto.ReviewImagesRemoveRequestDto;
+import com.liberty52.product.service.controller.dto.ReviewModifyRequestDto;
+import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.liberty52.product.service.applicationservice.ReviewCreateService;
-import com.liberty52.product.service.applicationservice.ReviewModifyService;
-import com.liberty52.product.service.applicationservice.ReviewRemoveService;
-import com.liberty52.product.service.applicationservice.ReviewRetrieveService;
-import com.liberty52.product.service.controller.dto.AdminReviewDetailResponse;
-import com.liberty52.product.service.controller.dto.AdminReviewRetrieveResponse;
-import com.liberty52.product.service.controller.dto.ReviewCreateRequestDto;
-import com.liberty52.product.service.controller.dto.ReviewImagesRemoveRequestDto;
-import com.liberty52.product.service.controller.dto.ReviewModifyRequestDto;
-import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Tag(name = "리뷰", description = "리뷰 관련 API를 제공합니다")
 @RestController
@@ -68,22 +53,6 @@ public class ReviewController {
 		ReviewRetrieveResponse response = reviewRetrieveService.retrieveReviews(
 			productId, identifier, pageable, photoFilter);
 
-		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "관리자 리뷰 조회", description = "관리자 권한으로 모든 리뷰를 조회합니다.")
-	@GetMapping("/admin/reviews")
-	public ResponseEntity<AdminReviewRetrieveResponse> retrieveReviewByAdmin(@RequestHeader("LB-Role") String role,
-		@Parameter(description = "페이지 정보", hidden = true) Pageable pageable) {
-		AdminReviewRetrieveResponse response = reviewRetrieveService.retrieveReviewByAdmin(role, pageable);
-		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "관리자 리뷰 상세 조회", description = "관리자 권한으로 특정 리뷰의 상세 정보를 조회합니다.")
-	@GetMapping("/admin/reviews/{reviewId}")
-	public ResponseEntity<AdminReviewDetailResponse> retrieveReviewDetailByAdmin(@RequestHeader("LB-Role") String role,
-		@PathVariable String reviewId) {
-		AdminReviewDetailResponse response = reviewRetrieveService.retrieveReviewDetailByAdmin(role, reviewId);
 		return ResponseEntity.ok(response);
 	}
 
@@ -132,19 +101,4 @@ public class ReviewController {
 		reviewItemRemoveService.removeReview(reviewerId, reviewId);
 	}
 
-	@Operation(summary = "관리자에 의한 고객 리뷰 삭제", description = "관리자가 고객 리뷰를 삭제합니다.")
-	@DeleteMapping("/admin/customerReviews/{reviewId}")
-	@ResponseStatus(HttpStatus.OK)
-	public void removeCustomerReviewByAdmin(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
-		@RequestHeader("LB-Role") String role, @PathVariable String reviewId) {
-		reviewItemRemoveService.removeCustomerReviewByAdmin(role, reviewId);
-	}
-
-	@Operation(summary = "관리자에 의한 리뷰 답글 삭제", description = "관리자가 리뷰 답글을 삭제합니다.")
-	@DeleteMapping("/admin/reviews/replies/{replyId}")
-	@ResponseStatus(HttpStatus.OK)
-	public void removeReplyByAdmin(@RequestHeader(HttpHeaders.AUTHORIZATION) String adminId,
-		@RequestHeader("LB-Role") String role, @PathVariable String replyId) {
-		reviewItemRemoveService.removeReplyByAdmin(adminId, role, replyId);
-	}
 }
