@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "상품", description = "상품 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-public class OptionDetailController {
+public class OptionDetailAdminController {
 
     private final OptionDetailCreateService optionDetailCreateService;
     private final OptionDetailModifyService optionDetailModifyService;
