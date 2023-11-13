@@ -1,8 +1,14 @@
 package com.liberty52.product.global.exception.external.badrequest;
 
-public class ReviewCannotWriteByOrderStatusIsNotCompleteException extends BadRequestException {
+import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-  public ReviewCannotWriteByOrderStatusIsNotCompleteException() {
-    super("배송 완료된 제품에만 리뷰를 남길 수 있습니다");
-  }
+public class ReviewCannotWriteByOrderStatusIsNotCompleteException extends BadRequestException {
+    private static final Logger logger = LoggerFactory.getLogger(ResourceNotFoundException.class);
+
+    public ReviewCannotWriteByOrderStatusIsNotCompleteException() {
+        super("배송 완료된 제품에만 리뷰를 남길 수 있습니다");
+        logger.error("ReviewAlreadyExistByCustomProductException: {}, {}, {}", getHttpStatus(), getErrorMessage(), getErrorCode());
+    }
 }

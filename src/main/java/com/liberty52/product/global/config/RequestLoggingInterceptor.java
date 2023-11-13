@@ -12,13 +12,7 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        log.info("Request Method: {}", request.getMethod());
-        log.info("Request URI: {}", request.getRequestURI());
+        log.info("Request Info: {}::{}, Response Status: {}", request.getMethod(), request.getRequestURL(), response.getStatus());
         return true;
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        log.info("Response Status: {}", response.getStatus());
     }
 }

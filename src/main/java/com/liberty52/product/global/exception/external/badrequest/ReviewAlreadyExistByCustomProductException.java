@@ -1,8 +1,14 @@
 package com.liberty52.product.global.exception.external.badrequest;
 
-public class ReviewAlreadyExistByCustomProductException extends BadRequestException {
+import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-  public ReviewAlreadyExistByCustomProductException() {
-    super("이미 제품에 대한 리뷰가 존재합니다.");
-  }
+public class ReviewAlreadyExistByCustomProductException extends BadRequestException {
+    private static final Logger logger = LoggerFactory.getLogger(ResourceNotFoundException.class);
+
+    public ReviewAlreadyExistByCustomProductException() {
+        super("이미 제품에 대한 리뷰가 존재합니다.");
+        logger.error("ReviewAlreadyExistByCustomProductException: {}, {}, {}", getHttpStatus(), getErrorMessage(), getErrorCode());
+    }
 }
