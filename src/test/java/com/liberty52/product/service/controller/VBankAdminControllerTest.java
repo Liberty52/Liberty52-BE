@@ -17,24 +17,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(VBankController.class)
-class VBankControllerTest {
+@WebMvcTest(VBankAdminController.class)
+class VBankAdminControllerTest {
 
     @MockBean
     private VBankCreateServiceImpl vBankCreateService;
-    @MockBean
-    private VBankRetrieveService vBankRetrieveService;
     @MockBean
     private VBankModifyServiceImpl vBankModifyService;
     @MockBean
