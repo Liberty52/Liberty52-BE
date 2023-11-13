@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "라이선스 상품", description = "라이선스 상품 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-public class LicenseOptionController {
+public class LicenseOptionAdminController {
 	private final LicenseOptionCreateService licenseOptionCreateService;
 	private final LicenseOptionModifyService licenseOptionModifyService;
 
