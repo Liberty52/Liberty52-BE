@@ -5,10 +5,13 @@ import java.util.UUID;
 
 import com.liberty52.product.service.controller.dto.LicenseOptionDetailModifyDto;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,17 +26,19 @@ public class LicenseOptionDetail {
 	@Id
 	private String id = UUID.randomUUID().toString();
 	@ManyToOne
+	@JoinColumn(name = "license_option_id")
 	private LicenseOption licenseOption;
+
 	@Column(nullable = false)
-	String artName;
+	private String artName;
 	@Column(nullable = false)
-	String artistName;
+	private String artistName;
 	@Column(nullable = false)
-	Integer stock;
+	private Integer stock;
 	@Column(nullable = false)
-	Boolean onSale;
+	private Boolean onSale;
 	@Column(nullable = false)
-	String artUrl;
+	private String artUrl;
 	@Column(nullable = false)
 	private Integer price;
 	@Column(nullable = false)
@@ -65,15 +70,18 @@ public class LicenseOptionDetail {
 		this.licenseOption.addDetail(this);
 	}
 
-	public void modifyLicenseOptionDetail(LicenseOptionDetailModifyDto dto, String artUrl) {
+	public void modifyLicenseOptionDetail(LicenseOptionDetailModifyDto dto) {
 		this.artName = dto.getArtName();
 		this.artistName = dto.getArtistName();
 		this.stock = dto.getStock();
 		this.onSale = dto.getOnSale();
 		this.price = dto.getPrice();
-		this.artUrl = artUrl;
 		this.startDate = dto.getStartDate();
 		this.endDate = dto.getEndDate();
+	}
+
+	public void modifyLicenseArtUrl(String artUrl) {
+		this.artUrl = artUrl;
 	}
 
 	public void updateOnSale() {

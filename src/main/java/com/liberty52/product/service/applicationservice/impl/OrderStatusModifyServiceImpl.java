@@ -49,8 +49,6 @@ public class OrderStatusModifyServiceImpl implements OrderStatusModifyService {
   @Override
   public void modifyOrderStatusOfVBankByAdmin(String role, String orderId, VBankStatusModifyDto dto) {
     Validator.isAdmin(role);
-    BankType.getBankType(dto.getDepositorBank());
-
     Orders order = ordersRepository.findById(orderId)
         .orElseThrow(() -> new OrderNotFoundByIdException(orderId));
 

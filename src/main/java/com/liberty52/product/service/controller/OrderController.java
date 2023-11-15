@@ -68,7 +68,7 @@ public class OrderController {
     public PaymentCardResponseDto createCardPaymentOrders(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
             @RequestPart("dto") @Validated OrderCreateRequestDto dto,
-            @RequestPart("imageFile") MultipartFile imageFile
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
     ) {
         return orderCreateService.createCardPaymentOrders(authId, dto, imageFile);
     }
@@ -90,7 +90,7 @@ public class OrderController {
     public PaymentVBankResponseDto createVBankPaymentOrders(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
             @RequestPart("dto") @Validated OrderCreateRequestDto dto,
-            @RequestPart("imageFile") MultipartFile imageFile
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
     ) {
         return orderCreateService.createVBankPaymentOrders(authId, dto, imageFile);
     }

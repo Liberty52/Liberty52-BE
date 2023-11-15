@@ -19,6 +19,7 @@ public class LicenseOptionDetailInfoResponseDto {
 	Integer stock;
 	Boolean onSale;
 	String artUrl;
+	Integer price;
 	LocalDate startDate;
 	LocalDate endDate;
 
@@ -27,6 +28,7 @@ public class LicenseOptionDetailInfoResponseDto {
 		artName = licenseOptionDetail.getArtName();
 		artistName = licenseOptionDetail.getArtistName();
 		stock = licenseOptionDetail.getStock();
+		price = licenseOptionDetail.getPrice();
 		onSale = licenseOptionDetail.getOnSale();
 		artUrl = licenseOptionDetail.getArtUrl();
 		startDate = licenseOptionDetail.getStartDate();

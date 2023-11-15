@@ -16,6 +16,10 @@ import com.liberty52.product.service.controller.dto.PaymentCardResponseDto;
 import com.liberty52.product.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.OptionDetail;
+import com.liberty52.product.service.entity.Product;
+import com.liberty52.product.service.entity.license.CustomLicenseOption;
+import com.liberty52.product.service.entity.license.LicenseOption;
+import com.liberty52.product.service.entity.license.LicenseOptionDetail;
 import com.liberty52.product.service.entity.payment.CardPayment;
 import com.liberty52.product.service.entity.payment.Payment;
 import com.liberty52.product.service.repository.*;
@@ -27,6 +31,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +43,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderCreateServiceImplUnitTest {
+class OrderCreateServiceImplUnitTest {
 
     @InjectMocks private OrderCreateServiceImpl service;
     @Mock private S3UploaderApi s3UploaderApi;
@@ -51,6 +56,8 @@ public class OrderCreateServiceImplUnitTest {
     @Mock private ConfirmPaymentMapRepository confirmPaymentMapRepository;
     @Mock private VBankRepository vBankRepository;
     @Mock private ThreadManager threadManager;
+    @Mock private LicenseOptionDetailRepository licenseOptionDetailRepository;
+    @Mock private CustomLicenseOptionRepository customLicenseOptionRepository;
 
     private PaymentCardResponseDto executeCardPaymentOrders(String authId, List<String> options, int quantity) {
         return service.createCardPaymentOrders(
@@ -107,6 +114,44 @@ public class OrderCreateServiceImplUnitTest {
         assertEquals(order.getOrderNum(), result.getOrderNum());
         assertEquals(order.getAmount(), result.getAmount());
     }
+
+    @Test
+    @DisplayName("라이선스 상품을 카드 주문을 요청하여 주문을 생성한다")
+    void createCardPaymentOrderForLicenseProduct() {
+        //given
+        Product mockProduct = mock(Product.class);
+        given(mockProduct.isCustom()).willReturn(false);
+        given(productRepository.findByName(anyString())).willReturn(Optional.of(mockProduct));
+
+        LicenseOption licenseOption = MockFactory.createLicenseOption("licenseOption");
+        LicenseOptionDetail licenseOptionDetail = MockFactory.createLicenseOptionDetail("licenseOptionDetail",
+            "testArtist", 10, true, "testUrl", 10000, LocalDate.now(), LocalDate.now().plusDays(3), licenseOption);
+
+        given(licenseOptionDetailRepository.findById(any()))
+            .willReturn(Optional.of(licenseOptionDetail));
+
+        var authId = "user_id";
+
+        CustomProduct customProduct = MockFactory.createCustomProduct("", 1, authId, mockProduct);
+        given(customProductRepository.save(any())).willReturn(customProduct);
+
+        CustomLicenseOption customLicenseOption = MockFactory.createCustomLicenseOption(customProduct,licenseOptionDetail);
+        given(customLicenseOptionRepository.save(any())).willReturn(customLicenseOption);
+
+
+        var order = MockFactory.createOrder(authId);
+        given(ordersRepository.save(any())).willReturn(order);
+
+        // when
+        var result = executeCardPaymentOrders(authId, List.of(licenseOptionDetail.getId()), 1);
+
+        // then
+        assertNotNull(result);
+        assertEquals(order.getId(), result.getMerchantId());
+        assertEquals(order.getOrderNum(), result.getOrderNum());
+        assertEquals(order.getAmount(), result.getAmount());
+    }
+
 
     @Test
     @DisplayName("존재하지 않는 상품을 카드결제 주문할 경우 예외가 발생한다")

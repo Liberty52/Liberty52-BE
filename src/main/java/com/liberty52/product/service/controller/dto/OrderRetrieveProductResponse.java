@@ -21,6 +21,8 @@ public class OrderRetrieveProductResponse {
     private List<String> options;
     private boolean hasReview;
 
+    private boolean isCustom;
+
 
     @QueryProjection
     public OrderRetrieveProductResponse(String name, int quantity, Long price) {
@@ -30,7 +32,8 @@ public class OrderRetrieveProductResponse {
     }
 
     @QueryProjection
-    public OrderRetrieveProductResponse(String customProductId, String name, int quantity, Long price, String productUrl, boolean hasReview, List<String> options) {
+    public OrderRetrieveProductResponse(String customProductId, String name, int quantity, Long price, String productUrl,
+        boolean hasReview, List<String> options, boolean isCustom) {
         this.customProductId = customProductId;
         this.name = name;
         this.quantity = quantity;
@@ -38,5 +41,6 @@ public class OrderRetrieveProductResponse {
         this.productUrl = productUrl;
         this.options = options;
         this.hasReview = hasReview;
+        this.isCustom = isCustom;
     }
 }

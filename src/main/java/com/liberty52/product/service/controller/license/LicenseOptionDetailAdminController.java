@@ -44,7 +44,7 @@ public class LicenseOptionDetailAdminController {
 		@RequestHeader("LB-Role") String role,
 		@PathVariable String licenseOptionDetailId,
 		@Validated @RequestPart(value = "dto") LicenseOptionDetailModifyDto dto,
-		@RequestPart(value = "file") MultipartFile imageFile
+		@RequestPart(value = "file", required = false) MultipartFile imageFile
 	) {
 		licenseOptionDetailModifyService.modifyLicenseOptionDetailByAdmin(role, licenseOptionDetailId, dto, imageFile);
 	}

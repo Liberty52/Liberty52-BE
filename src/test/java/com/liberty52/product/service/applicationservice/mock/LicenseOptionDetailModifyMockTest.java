@@ -55,7 +55,8 @@ class LicenseOptionDetailModifyMockTest {
 			artImageFile);
 
 		// Then
-		verify(mockLicenseOptionDetail, times(1)).modifyLicenseOptionDetail(dto, "modifiedArtUrl");
+		verify(mockLicenseOptionDetail, times(1)).modifyLicenseOptionDetail(dto);
+		verify(mockLicenseOptionDetail, times(1)).modifyLicenseArtUrl("modifiedArtUrl");
 	}
 
 	@Test
@@ -72,27 +73,6 @@ class LicenseOptionDetailModifyMockTest {
 
 		assertThrows(
 			ResourceNotFoundException.class,
-			() -> licenseOptionDetailModifyService.modifyLicenseOptionDetailByAdmin(ADMIN, licenseOptionDetailId, dto,
-				artImageFile));
-	}
-
-	@Test
-	void modifyLicenseOptionDetailByAdmin_When_ArtImageFileIsNullTest() {
-		// Given
-		String licenseOptionDetailId = "testLicenseOptionDetailId";
-		LocalDate startDate = LocalDate.of(2023, 1, 1);
-		LocalDate endDate = startDate.plusDays(10);
-		LicenseOptionDetailModifyDto dto = new LicenseOptionDetailModifyDto("ArtName", "ArtistName", 10, 1000, true,
-			startDate, endDate);
-		MultipartFile artImageFile = null;
-
-		LicenseOptionDetail mockLicenseOptionDetail = mock(LicenseOptionDetail.class);
-		when(licenseOptionDetailRepository.findById(licenseOptionDetailId)).thenReturn(
-			Optional.of(mockLicenseOptionDetail));
-
-		// When
-		// Then
-		assertThrows(BadRequestException.class,
 			() -> licenseOptionDetailModifyService.modifyLicenseOptionDetailByAdmin(ADMIN, licenseOptionDetailId, dto,
 				artImageFile));
 	}

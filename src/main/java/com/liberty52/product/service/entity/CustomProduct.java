@@ -2,6 +2,8 @@ package com.liberty52.product.service.entity;
 
 import com.liberty52.product.global.exception.external.badrequest.CartAddInvalidItemException;
 import com.liberty52.product.global.exception.internal.InvalidQuantityException;
+import com.liberty52.product.service.entity.license.CustomLicenseOption;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -50,6 +52,10 @@ public class CustomProduct {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "customProduct", cascade = CascadeType.ALL)
     private Review review;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "license_product_option_id")
+    private CustomLicenseOption customLicenseOption;
 
     public Map<String, String> getOptionsMap() {
         Map<String, String> optionsMap = new HashMap<>();
@@ -102,6 +108,10 @@ public class CustomProduct {
         Objects.requireNonNull(review);
         this.review = review;
         this.review.associate(this);
+    }
+    public void associateWithCustomLicenseOption(CustomLicenseOption customLicenseOption) {
+        Objects.requireNonNull(customLicenseOption);
+        this.customLicenseOption = customLicenseOption;
     }
 
     public void dissociateCart() {

@@ -57,7 +57,8 @@ public class OrdersRetrieveResponse {
                                 .sum(),
                         c.getUserCustomPictureUrl(),
                         c.getReview() != null,
-                        c.getOptions().stream().map(CustomProductOption::getDetailName).toList()
+                        c.getOptions().stream().map(CustomProductOption::getDetailName).toList(),
+                        c.getProduct().isCustom()
                 )
         ).toList();
     }
