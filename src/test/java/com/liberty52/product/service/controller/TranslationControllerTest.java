@@ -1,8 +1,8 @@
 package com.liberty52.product.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.liberty52.product.global.config.DBInitConfig;
 import com.liberty52.product.global.constants.TranslationConstants;
+import com.liberty52.product.global.data.DBInitConfig;
 import com.liberty52.product.service.applicationservice.TranslationService;
 import com.liberty52.product.service.controller.dto.TranslationDto;
 import org.junit.jupiter.api.Test;

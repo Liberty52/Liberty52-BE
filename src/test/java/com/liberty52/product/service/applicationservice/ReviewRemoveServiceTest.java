@@ -1,9 +1,9 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.MockS3Test;
-import com.liberty52.product.global.config.DBInitConfig;
-import com.liberty52.product.global.exception.external.forbidden.NotYourReviewException;
+import com.liberty52.product.global.data.DBInitConfig;
 import com.liberty52.product.global.exception.external.forbidden.InvalidRoleException;
+import com.liberty52.product.global.exception.external.forbidden.NotYourReviewException;
 import com.liberty52.product.global.exception.external.notfound.ReviewNotFoundByIdException;
 import com.liberty52.product.service.entity.Reply;
 import com.liberty52.product.service.entity.Review;

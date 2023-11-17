@@ -1,9 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
-import static com.liberty52.product.global.constants.RoleConstants.ADMIN;
-import static org.assertj.core.api.Assertions.*;
-
-import com.liberty52.product.global.config.DBInitConfig.DBInitService;
+import com.liberty52.product.global.data.DBInitConfig.DBInitService;
 import com.liberty52.product.global.exception.external.forbidden.InvalidRoleException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.product.service.controller.dto.ReplyCreateRequestDto;
@@ -14,6 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.liberty52.product.global.constants.RoleConstants.ADMIN;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 @SpringBootTest

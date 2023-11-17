@@ -1,40 +1,28 @@
 package com.liberty52.product.service.applicationservice.mock;
 
 import com.liberty52.product.MockS3Test;
-import com.liberty52.product.global.config.DBInitConfig;
-import com.liberty52.product.global.constants.ProductConstants;
-import com.liberty52.product.service.applicationservice.CartItemCreateService;
-import com.liberty52.product.service.applicationservice.CartItemRetrieveService;
 import com.liberty52.product.service.applicationservice.impl.CartItemRetrieveServiceImpl;
-import com.liberty52.product.service.controller.dto.CartItemRequest;
 import com.liberty52.product.service.controller.dto.CartItemResponse;
 import com.liberty52.product.service.controller.dto.CartOptionResponse;
 import com.liberty52.product.service.entity.*;
 import com.liberty52.product.service.repository.CartRepository;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(MockitoExtension.class)
 public class CartItemRetrieveServiceMockTest extends MockS3Test {
@@ -138,19 +126,19 @@ public class CartItemRetrieveServiceMockTest extends MockS3Test {
         Assertions.assertEquals(cartOptionResponse11.getOptionName(), "거치 방식");
         Assertions.assertEquals(cartOptionResponse11.getDetailName(), "이젤 거치형");
 //        Assertions.assertEquals(cartOptionResponse11.getPrice(), 100000);
-        Assertions.assertEquals(cartOptionResponse11.isRequire(), true);
+        Assertions.assertTrue(cartOptionResponse11.isRequire());
 
         CartOptionResponse cartOptionResponse12 = optionRequestList1.get(1);
         Assertions.assertEquals(cartOptionResponse12.getOptionName(), "기본소재");
         Assertions.assertEquals(cartOptionResponse12.getDetailName(), "1mm 두께 승화전사 인쇄용 알루미늄시트");
 //        Assertions.assertEquals(cartOptionResponse12.getPrice(), 0);
-        Assertions.assertEquals(cartOptionResponse12.isRequire(), true);
+        Assertions.assertTrue(cartOptionResponse12.isRequire());
 
         CartOptionResponse cartOptionResponse13 = optionRequestList1.get(2);
         Assertions.assertEquals(cartOptionResponse13.getOptionName(), "기본소재 옵션");
         Assertions.assertEquals(cartOptionResponse13.getDetailName(), "무광실버");
 //        Assertions.assertEquals(cartOptionResponse13.getPrice(), 400000);
-        Assertions.assertEquals(cartOptionResponse13.isRequire(), true);
+        Assertions.assertTrue(cartOptionResponse13.isRequire());
 
         CartItemResponse cartItemResponse2 = cartItemResponseList.get(1);
         Assertions.assertEquals(cartItemResponse2.getName(), "Liberty 52_Frame");
@@ -164,13 +152,13 @@ public class CartItemRetrieveServiceMockTest extends MockS3Test {
         Assertions.assertEquals(cartOptionResponse21.getOptionName(), "거치 방식");
         Assertions.assertEquals(cartOptionResponse21.getDetailName(), "벽걸이형");
 //        Assertions.assertEquals(cartOptionResponse21.getPrice(), 200000);
-        Assertions.assertEquals(cartOptionResponse21.isRequire(), true);
+        Assertions.assertTrue(cartOptionResponse21.isRequire());
 
         CartOptionResponse cartOptionResponse22 = optionRequestList2.get(1);
         Assertions.assertEquals(cartOptionResponse22.getOptionName(), "기본소재 옵션");
         Assertions.assertEquals(cartOptionResponse22.getDetailName(), "무광백색");
 //        Assertions.assertEquals(cartOptionResponse22.getPrice(), 500000);
-        Assertions.assertEquals(cartOptionResponse22.isRequire(), true);
+        Assertions.assertTrue(cartOptionResponse22.isRequire());
 
         List<CartItemResponse> cartItemResponseList1 = cartItemRetrieveService.retrieveAuthCartItem("onlyCart");
         Assertions.assertEquals(cartItemResponseList1.size(), 0);

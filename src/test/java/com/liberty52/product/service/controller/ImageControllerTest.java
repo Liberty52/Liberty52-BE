@@ -1,13 +1,11 @@
 package com.liberty52.product.service.controller;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.List;
-import java.util.UUID;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.liberty52.product.global.data.DBInitConfig;
+import com.liberty52.product.service.applicationservice.ImageGenerationService;
+import com.liberty52.product.service.applicationservice.ImageUpscalingService;
+import com.liberty52.product.service.controller.dto.ImageGenerationDto;
+import com.liberty52.product.service.controller.dto.ImageUpscalingDto;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
@@ -19,12 +17,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.liberty52.product.global.config.DBInitConfig;
-import com.liberty52.product.service.applicationservice.ImageGenerationService;
-import com.liberty52.product.service.applicationservice.ImageUpscalingService;
-import com.liberty52.product.service.controller.dto.ImageGenerationDto;
-import com.liberty52.product.service.controller.dto.ImageUpscalingDto;
+import java.util.List;
+import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ImageController.class)
 class ImageControllerTest {

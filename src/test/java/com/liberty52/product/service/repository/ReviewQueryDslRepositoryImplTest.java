@@ -1,7 +1,7 @@
 package com.liberty52.product.service.repository;
 
-import com.liberty52.product.global.config.DBInitConfig;
-import com.liberty52.product.global.config.DBInitConfig.DBInitService;
+import com.liberty52.product.global.data.DBInitConfig;
+import com.liberty52.product.global.data.DBInitConfig.DBInitService;
 import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse;
 import com.liberty52.product.service.entity.Orders;
 import com.liberty52.product.service.entity.Product;

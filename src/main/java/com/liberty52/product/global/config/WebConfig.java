@@ -1,6 +1,7 @@
 package com.liberty52.product.global.config;
 
 import com.liberty52.product.global.constants.TranslationConstants;
+import com.liberty52.product.global.intercepter.RequestLoggingInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

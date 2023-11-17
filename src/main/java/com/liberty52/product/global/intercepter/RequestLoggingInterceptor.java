@@ -1,4 +1,4 @@
-package com.liberty52.product.global.config;
+package com.liberty52.product.global.intercepter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
