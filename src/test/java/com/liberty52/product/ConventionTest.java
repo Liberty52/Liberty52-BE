@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
-public class ArchitectureTest {
+public class ConventionTest {
 
     JavaClasses javaClasses;
 
