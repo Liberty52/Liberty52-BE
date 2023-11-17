@@ -31,7 +31,7 @@ public class ProductOption {
     @Column(nullable = false)
     private boolean onSale;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "productOption")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "productOption", cascade = CascadeType.REMOVE)
     private List<OptionDetail> optionDetails = new ArrayList<>();
 
     @Builder
