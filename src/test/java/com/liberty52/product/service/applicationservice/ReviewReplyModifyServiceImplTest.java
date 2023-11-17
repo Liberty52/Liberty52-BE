@@ -1,6 +1,6 @@
 package com.liberty52.product.service.applicationservice;
 
-import com.liberty52.product.global.config.DBInitConfig.DBInitService;
+import com.liberty52.product.global.data.DBInitConfig.DBInitService;
 import com.liberty52.product.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.product.global.exception.external.forbidden.InvalidRoleException;
 import com.liberty52.product.global.exception.external.notfound.ResourceNotFoundException;

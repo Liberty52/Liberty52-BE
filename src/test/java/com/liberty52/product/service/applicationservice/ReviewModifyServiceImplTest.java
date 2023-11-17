@@ -1,7 +1,7 @@
 package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.MockS3Test;
-import com.liberty52.product.global.config.DBInitConfig;
+import com.liberty52.product.global.data.DBInitConfig;
 import com.liberty52.product.global.exception.internal.InvalidRatingException;
 import com.liberty52.product.global.exception.internal.InvalidTextSize;
 import com.liberty52.product.service.controller.dto.ReviewImagesRemoveRequestDto;
@@ -47,7 +47,7 @@ class ReviewModifyServiceImplTest extends MockS3Test {
 
     private MockMultipartFile newImageFile() {
         try {
-            return new MockMultipartFile("image", UUID.randomUUID().toString() + ".jpg", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
+            return new MockMultipartFile("image", UUID.randomUUID() + ".jpg", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

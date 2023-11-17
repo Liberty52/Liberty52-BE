@@ -2,7 +2,7 @@ package com.liberty52.product.service.applicationservice;
 
 import com.liberty52.product.TestBeanConfig;
 import com.liberty52.product.global.adapter.cloud.AuthServiceClient;
-import com.liberty52.product.global.config.DBInitConfig.DBInitService;
+import com.liberty52.product.global.data.DBInitConfig.DBInitService;
 import com.liberty52.product.service.controller.dto.AdminReviewDetailResponse;
 import com.liberty52.product.service.controller.dto.AdminReviewRetrieveResponse;
 import com.liberty52.product.service.controller.dto.ReviewRetrieveResponse;
