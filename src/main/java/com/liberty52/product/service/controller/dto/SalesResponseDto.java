@@ -1,11 +1,18 @@
 package com.liberty52.product.service.controller.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.*;
 
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SalesResponseDto {
     private Long salesMoney;
     private Long salesQuantity;
+
+    @Builder
+    public SalesResponseDto(Long salesMoney, Long salesQuantity) {
+        this.salesMoney = salesMoney;
+        this.salesQuantity = salesQuantity;
+    }
+
 }
