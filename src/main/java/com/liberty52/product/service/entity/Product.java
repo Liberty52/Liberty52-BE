@@ -32,10 +32,10 @@ public class Product {
     @Column(nullable = false)
     private boolean isCustom;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<ProductOption> productOptions = new ArrayList<>();
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private LicenseOption licenseOption;
 
     private String pictureUrl;
