@@ -1,6 +1,6 @@
 package com.liberty52.product;
 
-import com.liberty52.product.global.config.CRLFLogConverter;
+import com.liberty52.product.global.util.CRLFLogConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
