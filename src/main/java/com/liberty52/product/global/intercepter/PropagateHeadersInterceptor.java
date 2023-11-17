@@ -1,13 +1,12 @@
-package com.liberty52.product.global.config;
+package com.liberty52.product.global.intercepter;
 
-import java.util.Enumeration;
-
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import feign.RequestInterceptor;
-import feign.RequestTemplate;
+import java.util.Enumeration;
 
 /**
  * This interceptor grabs all incoming REST requests, takes all headers beginning "x-", and adds them
