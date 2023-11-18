@@ -1,8 +1,11 @@
 package com.liberty52.product.service.repository;
 
 import com.liberty52.product.global.exception.external.internalservererror.InternalServerErrorException;
+import com.liberty52.product.service.controller.dto.SalesRequestDto;
 import com.liberty52.product.service.entity.OrderStatus;
 import com.liberty52.product.service.entity.Orders;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -158,6 +163,47 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
                 .orderBy(orders.orderedAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
+    }
+
+    @Override
+    public List<Tuple> retrieveByConditions(SalesRequestDto salesRequestDto) {
+        LocalDateTime startDate = Optional.ofNullable(salesRequestDto.getStartDate())
+                .map(date -> date.atStartOfDay())
+                .orElse(null);
+
+        LocalDateTime endDate = Optional.ofNullable(salesRequestDto.getEndDate())
+                .map(date -> date.atTime(LocalTime.MAX))
+                .orElse(null);
+
+        String productName = salesRequestDto.getProductName();
+
+        JPAQuery<Tuple> query = queryFactory.select(orders.amount.sum(),customProduct.count())
+                .from(orders)
+                .join(orders.customProducts, customProduct)
+                .join(customProduct.product, product);
+
+        BooleanBuilder whereConditions = new BooleanBuilder();
+
+        if (startDate != null && endDate != null) {
+            whereConditions.and(orders.orderedAt.between(startDate, endDate));
+        } else {
+            if (startDate != null) {
+                whereConditions.and(orders.orderedAt.goe(startDate));
+            }
+            if (endDate != null) {
+                whereConditions.and(orders.orderedAt.loe(endDate));
+            }
+        }
+
+        whereConditions.and(orders.orderStatus.notIn(OrderStatus.CANCEL_REQUESTED, OrderStatus.CANCELED, OrderStatus.REFUND));
+
+        if (productName != null) {
+            whereConditions.and(product.name.eq(productName));
+        }
+
+        query.where(whereConditions);
+
+        return query.fetch();
     }
 
     private JPAQuery<Orders> selectOrdersAndAssociatedEntityWithCanceledOrders() {

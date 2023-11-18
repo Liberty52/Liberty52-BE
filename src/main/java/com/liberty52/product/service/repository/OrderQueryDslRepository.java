@@ -1,7 +1,9 @@
 package com.liberty52.product.service.repository;
 
+import com.liberty52.product.service.controller.dto.SalesRequestDto;
 import com.liberty52.product.service.entity.OrderStatus;
 import com.liberty52.product.service.entity.Orders;
+import com.querydsl.core.Tuple;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -31,4 +33,5 @@ public interface OrderQueryDslRepository {
 
     OrderQueryDslRepositoryImpl.PageInfo getCanceledOrdersPageInfo(Pageable pageable, OrderStatus... statuses);
 
+    List<Tuple> retrieveByConditions(SalesRequestDto salesRequestDto);
 }
