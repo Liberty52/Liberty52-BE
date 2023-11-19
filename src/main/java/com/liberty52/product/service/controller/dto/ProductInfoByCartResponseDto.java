@@ -18,11 +18,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProductInfoByCartResponseDto {
     String productId;
+    boolean isCustom;
     List<ProductOptionInfoByCartResponseDto> productOptionList;
     LicenseOptionByCartResponseDto licenseOption;
 
     public ProductInfoByCartResponseDto(Product product) {
         productId = product.getId();
+        isCustom = product.isCustom();
         productOptionList = product.getProductOptions().stream().filter(ProductOption::isOnSale).map(ProductOptionInfoByCartResponseDto::new).collect(Collectors.toList());
         if(!product.isCustom()) {
             licenseOption =  new LicenseOptionByCartResponseDto(product.getLicenseOption());
