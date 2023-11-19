@@ -26,9 +26,7 @@ public class CustomProductOption {
     @ManyToOne(fetch = FetchType.LAZY)
     private OptionDetail optionDetail;
     private int price;
-    private String optionId;
     private String optionName;
-    private String detailId;
     private String detailName;
 
     public static CustomProductOption create() {
@@ -51,9 +49,7 @@ public class CustomProductOption {
      */
     public void setOptionDetailAndDissociate(){
         price = optionDetail.getPrice();
-        detailId = optionDetail.getId();
         detailName = optionDetail.getName();
-        optionId = optionDetail.getProductOption().getId();
         optionName = optionDetail.getProductOption().getName();
         this.dissociateOptionDetail();
     }
