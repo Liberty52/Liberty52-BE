@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: CI
 
 on:
   pull_request:
@@ -21,7 +21,7 @@ jobs:
       - name: Create bootstrap.yml
         env:
           SECRET_CODE: ${{ secrets.BOOTSTRAP }}
-          SECRET_DIR: src/main/resources
+          SECRET_DIR: liberty-main/src/main/resources
           SECRET_FILE_NAME: bootstrap.yml
         run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
 

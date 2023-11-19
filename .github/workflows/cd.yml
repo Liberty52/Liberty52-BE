@@ -23,8 +23,8 @@ jobs:
 
       - name: 부트스트랩 파일 생성
         run: |
-          mkdir -p src/main/resources
-          cat << EOF > src/main/resources/bootstrap.yml
+          mkdir -p liberty-main/src/main/resources
+          cat << EOF > liberty-main/src/main/resources/bootstrap.yml
           encrypt:
             key: '${{ secrets.ENCRYPTKEY }}'
           EOF
