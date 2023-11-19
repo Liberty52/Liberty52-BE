@@ -4,16 +4,17 @@ import com.liberty52.product.global.adapter.s3.S3UploaderApi;
 import com.liberty52.product.global.exception.external.badrequest.CartItemRequiredButOrderItemFoundException;
 import com.liberty52.product.global.exception.external.forbidden.NotYourCartItemException;
 import com.liberty52.product.global.exception.external.notfound.CustomProductNotFoundByIdException;
+import com.liberty52.product.global.exception.external.notfound.OptionDetailNotFoundByNameException;
 import com.liberty52.product.service.applicationservice.CartItemModifyService;
 import com.liberty52.product.service.controller.dto.CartModifyRequestDto;
 import com.liberty52.product.service.entity.CustomProduct;
 import com.liberty52.product.service.entity.CustomProductOption;
 import com.liberty52.product.service.entity.OptionDetail;
+import com.liberty52.product.service.entity.license.CustomLicenseOption;
+import com.liberty52.product.service.entity.license.LicenseOptionDetail;
 import com.liberty52.product.service.event.internal.ImageRemovedEvent;
 import com.liberty52.product.service.event.internal.dto.ImageRemovedEventDto;
-import com.liberty52.product.service.repository.CustomProductOptionRepository;
-import com.liberty52.product.service.repository.CustomProductRepository;
-import com.liberty52.product.service.repository.OptionDetailRepository;
+import com.liberty52.product.service.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,9 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
   private final OptionDetailRepository optionDetailRepository;
 
   private final CustomProductOptionRepository customProductOptionRepository;
+  private final LicenseOptionDetailRepository licenseOptionDetailRepository;
+  private final CustomLicenseOptionRepository customLicenseOptionRepository;
+
 
   @Transactional
   @Override
@@ -62,13 +66,27 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
     customProduct.modifyQuantity(dto.getQuantity());
     if (!dto.getOptionDetailIds().isEmpty()){
       customProductOptionRepository.deleteAll(customProduct.getOptions());
+      boolean isLicense = false;
+      if(!customProduct.getProduct().isCustom()) {
+        isLicense = true;
+      }
       for (String optionDetailId : dto.getOptionDetailIds()){
         CustomProductOption customProductOption = CustomProductOption.create();
-        OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId)
-            .orElseThrow(() -> new CustomProductNotFoundByIdException(optionDetailId));
-        customProductOption.associate(optionDetail);
-        customProductOption.associate(customProduct);
-        customProductOptionRepository.save(customProductOption);
+        if(isLicense) {
+          LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
+          CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
+          isLicense = false;
+          customLicenseOption.associate(licenseOptionDetail);
+          customLicenseOption.associate(customProduct);
+          customLicenseOptionRepository.save(customLicenseOption);
+        } else {
+          OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId)
+                  .orElseThrow(() -> new CustomProductNotFoundByIdException(optionDetailId));
+          customProductOption.associate(optionDetail);
+          customProductOption.associate(customProduct);
+          customProductOptionRepository.save(customProductOption);
+        }
+
       }
     }
     if (imageFile != null){
