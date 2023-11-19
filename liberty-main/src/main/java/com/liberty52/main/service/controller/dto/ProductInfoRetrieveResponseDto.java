@@ -22,8 +22,8 @@ public class ProductInfoRetrieveResponseDto {
     private ProductState state;
 
     public static ProductInfoRetrieveResponseDto of(String id, String pictureUrl, String name, long price,
-                                                    float meanRating, int ratingCount, ProductState state, boolean isCustom, String content) {
-        return new ProductInfoRetrieveResponseDto(id, pictureUrl, name, price, meanRating, ratingCount, state, isCustom, content);
+                                                    float meanRating, int ratingCount, boolean isCustom, String content, ProductState state) {
+        return new ProductInfoRetrieveResponseDto(id, pictureUrl, name, price, meanRating, ratingCount, isCustom, content, state);
     }
 
 }
