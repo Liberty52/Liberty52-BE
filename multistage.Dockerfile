@@ -3,7 +3,7 @@ WORKDIR /app
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
-COPY lombok.config .
+COPY liberty-main/lombok.config .
 COPY liberty-authentication-library liberty-authentication-library
 
 RUN gradle :liberty-authentication-library:assemble
