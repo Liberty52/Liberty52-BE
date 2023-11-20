@@ -1,2 +1,4 @@
 rootProject.name = 'product'
-include('liberty-authentication-library')
+include 'liberty-authentication-library'
+include 'liberty-main'
+
