@@ -48,3 +48,7 @@ out/
 
 # trash
 spy.log
+
+liberty-main.iml
+liberty-main/src/main/resources/bootstrap.yml
+liberty-main/spy.log
