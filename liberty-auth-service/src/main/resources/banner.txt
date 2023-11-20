@@ -1,0 +1,11 @@
+
+
+    ${AnsiColor.BRIGHT_RED} █████╗ ██╗   ██╗████████╗██╗  ██╗
+    ${AnsiColor.BRIGHT_RED}██╔══██╗██║   ██║╚══██╔══╝██║  ██║
+    ${AnsiColor.BRIGHT_RED}███████║██║   ██║   ██║   ███████║
+    ${AnsiColor.BRIGHT_RED}██╔══██║██║   ██║   ██║   ██╔══██║
+    ${AnsiColor.BRIGHT_RED}██║  ██║╚██████╔╝   ██║   ██║  ██║
+    ${AnsiColor.BRIGHT_RED}╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝
+
+${AnsiColor.BRIGHT_BLUE}:: Running Spring Boot ${spring-boot.version} ::
+

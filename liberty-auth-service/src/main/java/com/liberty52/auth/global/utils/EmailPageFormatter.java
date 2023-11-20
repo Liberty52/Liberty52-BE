@@ -1,0 +1,161 @@
+package com.liberty52.auth.global.utils;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class EmailPageFormatter {
+
+    private final static String SIGN_UP_OR_DELETE_PAGE = "<table style=\"width : 100%%; margin : \n"
+            + "0; background-color: #eee;\">\n"
+            + "\n"
+            + "    <tbody>\n"
+            + "        <tr>\n"
+            + "            <td height=\"50\"></td>\n"
+            + "        </tr>\n"
+            + "        <tr>\n"
+            + "            <td>\n"
+            + "                <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%%\">\n"
+            + "                    <tbody>\n"
+            + "                        <tr>\n"
+            + "                            <td>\n"
+            + "                                <table style=\"margin:0 auto;background:#fff;max-width:600px;width:100%%\"\n"
+            + "                                cellpadding=\"0\" cellspacing=\"0\" border=\"0\"\n"
+            + "                                >\n"
+            + "                                    <tbody>\n"
+            + "                                        <tr>\n"
+            + "                                            <td width=\"5%%\" style=\"border-bottom:1px solid #eee\"></td>\n"
+
+            + "                                            <td style=\"border-bottom:1px solid #eee\">\n"
+            + "                                                <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%%\">\n"
+            + "                                                    <tbody>\n"
+            + "                                                        <tr>\n"
+            + "                                                            <th height=\"40\"></th>\n"
+            + "                                                        </tr> \n"
+            + "                                                        <tr>\n"
+            + "                                                            <td style=\"text-align:center;color:#757575;font-size:18px\">Liberty52</td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr>\n"
+            + "                                                            <th height=\"20\"></th>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr>\n"
+            + "                                                            <!-- Main Text -->\n"
+            + "                                                            <td style=\"text-align:center;font-size:26px;color:#757575\">%s</td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr>\n"
+            + "                                                            <th height=\"20\"></th>\n"
+            + "                                                        </tr>\n"
+            + "                                                    </tbody>\n"
+            + "                                                </table>\n"
+
+            + "                                                <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%%\">\n"
+            + "                                                    <tbody>\n"
+            + "                                                        <tr height=\"20\">\n"
+            + "                                                            <td></td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr>\n"
+            + "                                                            <td style=\"font-size:18px;color:#777;text-align:center\">\n"
+            + "                                                                <div style=\"padding-bottom:15px\">\n"
+            + "                                                                    <!-- sub text -->\n"
+            + "                                                                        %s\n"
+            + "                                                                </div>\n"
+            + "                                                            </td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr height=\"25\">\n"
+            + "                                                            <td></td>\n"
+            + "                                                        </tr>\n"
+            + "                                                    </tbody>\n"
+            + "                                                </table>\n"
+            + "                                                <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%%\">\n"
+            + "                                                    <tbody>\n"
+            + "                                                        <tr height=\"25\">\n"
+            + "                                                            <td>&nbsp;</td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr>\n"
+            + "                                                            <!-- name -->\n"
+            + "                                                            <td style=\"text-align:center;font-size:14px;color:#999\">이름 : %s</td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr height=\"25\">\n"
+            + "                                                            <td>&nbsp;</td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr>\n"
+            + "                                                            <td style=\"text-align:center;font-size:14px;color:#999\">\n"
+            + "                                                                <!-- 이메일 2번 -->\n"
+            + "                                                            아이디 : <a href=\"%s\">%s</a>\n"
+            + "                                                            </td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr height=\"25\">\n"
+            + "                                                            <td>&nbsp;</td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr>\n"
+            + "                                                            <td style=\"text-align:center;color:#777;font-size:14px\">\n"
+            + "                                                                <!-- dateText and date -->\n"
+            + "                                                                %s : %s\n"
+            + "\n"
+            + "                                                            </td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr height=\"50\">\n"
+            + "                                                            <td>&nbsp;</td>\n"
+            + "                                                        </tr>\n"
+            + "                                                    </tbody>\n"
+            + "                                                </table>\n"
+            + "                                            </td>\n"
+
+            + "                                            <td width=\"5%%\" style=\"border-bottom:1px solid #eee\"></td>\n"
+            + "                                        </tr>\n"
+
+            + "\n"
+            + "                                        <tr height=\"50\"><td></td></tr>\n"
+            + "                                        <tr>\n"
+            + "                                            <td width=\"5%%\">&nbsp;&nbsp;</td>\n"
+            + "                                            <td>\n"
+            + "                                                <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%%\">\n"
+            + "                                                    <tbody>\n"
+            + "                                                        <tr>\n"
+            + "                                                            <td style=\"text-align:center\">\n"
+            + "                                                                <a href=http://liberty52.com style=\"padding:12px 16px;width:270px;color:#ffffff;background-color:#212121;border-color:#00b8ff;display:inline-block;text-decoration:none;font-size:20px\">\n"
+            + "                                                                    Liberty52\n"
+            + "                                                                </a>\n"
+            + "                                                            </td>\n"
+            + "                                                        </tr>\n"
+            + "                                                        <tr height=\"50\"><td></td></tr>\n"
+            + "                                                    </tbody>\n"
+            + "                                                </table>\n"
+            + "                                            </td>\n"
+            + "                                            <td width=\"5%%\"></td>\n"
+            + "                                        </tr>\n"
+            + "                                    </tbody>\n"
+            + "                                </table>\n"
+            + "                            </td>\n"
+            + "                        </tr>\n"
+
+            + "\n"
+
+            + "                    </tbody>\n"
+            + "                </table>\n"
+            + "            </td>\n"
+            + "        </tr>\n"
+            + "    </tbody>\n"
+            + "    <tfoot style=\"background:#eee;display:block;width:600px;margin:0 auto\">\n"
+            + "        <tr style=\"display:block;text-align:center\">\n"
+            + "            <th style=\"font-size:12px;font-weight:normal;color:#767676;padding:10px 0 50px;display:block\">Liberty52</th>\n"
+            + "        </tr>\n"
+            + "\n"
+            + "    </tfoot>"
+            + "</table>";
+
+    /**
+     * 
+     * @param mainText 주요 문구
+     * @param subText 서브 문구
+     * @param name 고객 이름
+     * @param id 고객 아이디
+     * @param dateText 날짜 텍스트 (가입 날짜, 탈퇴 날짜)
+     * @param date  날짜 LocalDate toString 값을 넣어주세요
+     * @return
+     */
+    public static String formatSignUpOrDeletePage(String mainText, String subText, String name, String id, String dateText, String date){
+        return String.format(SIGN_UP_OR_DELETE_PAGE,mainText,subText,name,id,id
+        ,dateText,date);
+    }
+
+}
