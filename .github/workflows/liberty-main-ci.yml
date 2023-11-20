@@ -3,9 +3,6 @@ name: '리버티 메인 서비스 ::: CI'
 on:
   pull_request:
     paths:
-      - '!liberty-auth-service/**'
-      - '!.github/workflows/liberty-auth-ci.yml'
-      - '!.github/workflows/liberty-auth-cd.yml'
       - '.github/workflows/liberty-main-ci.yml'
 
 permissions:
