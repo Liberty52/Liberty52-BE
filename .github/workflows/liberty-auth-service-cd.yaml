@@ -24,9 +24,9 @@ jobs:
 
       - name: 부트스트랩 파일 생성
         run: |
-          mkdir -p src/main/resources
-          echo "encrypt:" > src/main/resources/bootstrap.yml
-          echo "  key: '${{ secrets.ENCRYPTKEY }}'" >> src/main/resources/bootstrap.yml
+          mkdir -p liberty-auth-service/src/main/resources
+          echo "encrypt:" > liberty-auth-service/src/main/resources/bootstrap.yml
+          echo "  key: '${{ secrets.ENCRYPTKEY }}'" >> liberty-auth-service/src/main/resources/bootstrap.yml
 
       - name: Docker 로그인
         run: echo ${{ secrets.GTOKEN }} | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
