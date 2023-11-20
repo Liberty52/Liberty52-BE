@@ -6,9 +6,7 @@ COPY liberty-main/lombok.config .
 COPY liberty-main liberty-main
 COPY liberty-authentication-library liberty-authentication-library
 
-RUN gradle :liberty-authentication-library:assemble
 RUN gradle :liberty-main:assemble
-RUN gradle assemble
 
 FROM openjdk:17-alpine
 VOLUME /tmp
