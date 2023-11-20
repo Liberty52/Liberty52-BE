@@ -3,7 +3,7 @@
 <configuration>
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
     <property name="LOG_PATTERN"
-              value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%-40.40logger{39}:%yellow(%L)]) - %msg%n"/>
+              value="%cyan([%d{yyyy-MM-dd HH:mm:ss}]) %highlight(%-5level) %yellow(%boldYellow([%-40.40logger{39}])) - %msg%n"/>
 
     <springProfile name="local">
         <include resource="console-appender.xml"/>
