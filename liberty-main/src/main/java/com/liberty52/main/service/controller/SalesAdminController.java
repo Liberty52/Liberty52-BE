@@ -22,7 +22,7 @@ public class SalesAdminController {
     private final SalesRetrieveService salesRetrieveService;
 
     @Operation(summary = "매출 조회", description = "조건에 맞는 매출과 판매량을 조회합니다.")
-    @GetMapping("admin/sales")
+    @GetMapping("/admin/sales")
     public ResponseEntity<SalesResponseDto> retrieveSalesByAdmin(@RequestHeader("LB-Role") String role, @RequestBody SalesRequestDto salesRequestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(salesRetrieveService.retrieveSales(role, salesRequestDto));
     }
