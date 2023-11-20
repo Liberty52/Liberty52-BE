@@ -206,7 +206,6 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     private List<CustomProduct> getCustomProducts(String authId, OrderCreateRequestDto dto) {
-        Product product = getProduct(dto);
         return dto.getCustomProductIdList().stream()
                 .map(customProductId -> customProductRepository.findById(customProductId)
                         .orElseThrow(() -> new ResourceNotFoundException("CUSTOM_PRODUCT", "ID", customProductId)))
@@ -215,7 +214,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                         throw new NotYourCustomProductException(authId);
                     }
 
-                    if (!product.isCustom()){
+                    if (!customProduct.getProduct().isCustom()){
                         String licenseOptionId = customProduct.getCustomLicenseOption().getLicenseOptionDetail().getId();
                         optionDetailMultipleStockManageService.decrementLicense(List.of(licenseOptionId), customProduct.getQuantity()).getOrThrow();
                     }
