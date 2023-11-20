@@ -1,6 +1,7 @@
 package com.liberty52.main.service.applicationservice.impl;
 
 import com.liberty52.main.global.util.Result;
+import com.liberty52.main.service.applicationservice.LicenseOptionDetailStockManageService;
 import com.liberty52.main.service.applicationservice.OptionDetailMultipleStockManageService;
 import com.liberty52.main.service.applicationservice.OptionDetailStockManageService;
 import com.liberty52.main.service.entity.OptionDetail;
@@ -19,7 +20,7 @@ import java.util.List;
 public class OptionDetailMultipleStockManageServiceImpl implements OptionDetailMultipleStockManageService {
 
     private final OptionDetailStockManageService optionDetailStockManageService;
-    private final LicenseOptionDetailStockManageServiceImpl licenseOptionDetailStockManageService;
+    private final LicenseOptionDetailStockManageService licenseOptionDetailStockManageService;
 
 
     /**
