@@ -38,7 +38,7 @@ public class CartItemGuestController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createGuestCartItem(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
-            @RequestPart(value = "file") MultipartFile imageFile,
+            @RequestPart(value = "file", required = false) MultipartFile imageFile,
             @RequestPart CartItemRequest dto
     ) {
         cartItemCreateService.createGuestCartItem(guestId, imageFile, dto);

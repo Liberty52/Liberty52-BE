@@ -34,7 +34,7 @@ public class CartItemController {
     @Operation(summary = "장바구니 상품 생성", description = "주어진 인증 ID, 이미지 파일 및 장바구니 상품 요청을 사용하여 사용자 장바구니 상품을 생성합니다.")
     @PostMapping("/carts/custom-products")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createAuthCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId, @RequestPart(value = "file") MultipartFile imageFile, @RequestPart CartItemRequest dto) {
+    public void createAuthCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId, @RequestPart(value = "file", required = false) MultipartFile imageFile, @RequestPart CartItemRequest dto) {
         cartItemCreateService.createAuthCartItem(authId, imageFile, dto);
     }
 
