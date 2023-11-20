@@ -6,7 +6,7 @@ on:
       - 'liberty-main/**'
       - 'liberty-authentication-library/**'
       - 'build.gradle'
-      - 'liberty-main/ci.yml'
+      - 'workflows/liberty-main/**'
 
 permissions:
   contents: read
