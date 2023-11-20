@@ -206,6 +206,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     private List<CustomProduct> getCustomProducts(String authId, OrderCreateRequestDto dto) {
+        Product product = getProduct(dto);
         return dto.getCustomProductIdList().stream()
                 .map(customProductId -> customProductRepository.findById(customProductId)
                         .orElseThrow(() -> new ResourceNotFoundException("CUSTOM_PRODUCT", "ID", customProductId)))
@@ -213,12 +214,18 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                     if (!Objects.equals(authId, customProduct.getAuthId())) {
                         throw new NotYourCustomProductException(authId);
                     }
-                    var optionIds = customProduct.getOptions().stream()
+
+                    if (!product.isCustom()){
+                        String licenseOptionId = customProduct.getCustomLicenseOption().getLicenseOptionDetail().getId();
+                        optionDetailMultipleStockManageService.decrementLicense(List.of(licenseOptionId), customProduct.getQuantity()).getOrThrow();
+                    }
+                    else{
+                        var optionIds = customProduct.getOptions().stream()
                             .map(CustomProductOption::getOptionDetail)
                             .map(OptionDetail::getId)
                             .toList();
-                    //TODO: if 써서 license option detail id 추가
-                    optionDetailMultipleStockManageService.decrement(optionIds, customProduct.getQuantity()).getOrThrow();
+                        optionDetailMultipleStockManageService.decrement(optionIds, customProduct.getQuantity()).getOrThrow();
+                    }
                 })
                 .toList();
     }
