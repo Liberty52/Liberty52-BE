@@ -1,15 +1,16 @@
-package com.liberty52.product.service.applicationservice.mock;
+package com.liberty52.main.service.applicationservice.mock;
 
-import com.liberty52.product.global.exception.external.notfound.OptionDetailNotFoundByNameException;
-import com.liberty52.product.global.exception.external.notfound.ProductNotFoundByNameException;
-import com.liberty52.product.service.applicationservice.impl.CartItemCreateServiceImpl;
-import com.liberty52.product.service.controller.dto.CartItemRequest;
-import com.liberty52.product.service.entity.Cart;
-import com.liberty52.product.service.entity.OptionDetail;
-import com.liberty52.product.service.entity.Product;
-import com.liberty52.product.service.entity.ProductState;
-import com.liberty52.product.service.entity.license.LicenseOptionDetail;
-import com.liberty52.product.service.repository.*;
+import com.liberty52.main.global.exception.external.notfound.OptionDetailNotFoundByNameException;
+import com.liberty52.main.global.exception.external.notfound.ProductNotFoundByNameException;
+import com.liberty52.main.service.applicationservice.impl.CartItemCreateServiceImpl;
+import com.liberty52.main.service.controller.dto.CartItemRequest;
+import com.liberty52.main.service.entity.Cart;
+import com.liberty52.main.service.entity.OptionDetail;
+import com.liberty52.main.service.entity.Product;
+import com.liberty52.main.service.entity.ProductState;
+import com.liberty52.main.service.entity.license.LicenseOption;
+import com.liberty52.main.service.entity.license.LicenseOptionDetail;
+import com.liberty52.main.service.repository.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,8 +27,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CartLicenseItemCreateServiceMockTest {

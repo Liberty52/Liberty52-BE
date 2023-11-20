@@ -1,17 +1,5 @@
 package com.liberty52.main.service.applicationservice.mock;
 
-<<<<<<< HEAD:src/test/java/com/liberty52/product/service/applicationservice/mock/CartItemCreateServiceMockTest.java
-import com.liberty52.product.MockS3Test;
-import com.liberty52.product.global.adapter.s3.S3UploaderApi;
-import com.liberty52.product.global.exception.external.notfound.OptionDetailNotFoundByNameException;
-import com.liberty52.product.global.exception.external.notfound.ProductNotFoundByNameException;
-import com.liberty52.product.service.applicationservice.CartItemCreateService;
-import com.liberty52.product.service.applicationservice.impl.CartItemCreateServiceImpl;
-import com.liberty52.product.service.controller.dto.CartItemRequest;
-import com.liberty52.product.service.entity.*;
-import com.liberty52.product.service.entity.license.LicenseOptionDetail;
-import com.liberty52.product.service.repository.*;
-=======
 import com.liberty52.main.MockS3Test;
 import com.liberty52.main.global.exception.external.notfound.OptionDetailNotFoundByNameException;
 import com.liberty52.main.global.exception.external.notfound.ProductNotFoundByNameException;
@@ -22,7 +10,6 @@ import com.liberty52.main.service.entity.OptionDetail;
 import com.liberty52.main.service.entity.Product;
 import com.liberty52.main.service.entity.ProductState;
 import com.liberty52.main.service.repository.*;
->>>>>>> 73d134bb762e656040fe486b3e181afef0c410e4:liberty-main/src/test/java/com/liberty52/main/service/applicationservice/mock/CartItemCreateServiceMockTest.java
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

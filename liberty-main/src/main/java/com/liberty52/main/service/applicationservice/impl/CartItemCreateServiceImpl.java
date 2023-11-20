@@ -1,24 +1,15 @@
 package com.liberty52.main.service.applicationservice.impl;
 
-<<<<<<< HEAD:src/main/java/com/liberty52/product/service/applicationservice/impl/CartItemCreateServiceImpl.java
-import com.liberty52.product.global.adapter.s3.S3UploaderApi;
-import com.liberty52.product.global.exception.external.notfound.OptionDetailNotFoundByNameException;
-import com.liberty52.product.global.exception.external.notfound.ProductNotFoundByNameException;
-import com.liberty52.product.service.applicationservice.CartItemCreateService;
-import com.liberty52.product.service.controller.dto.CartItemRequest;
-import com.liberty52.product.service.entity.*;
-import com.liberty52.product.service.entity.license.CustomLicenseOption;
-import com.liberty52.product.service.entity.license.LicenseOptionDetail;
-import com.liberty52.product.service.repository.*;
-=======
+
 import com.liberty52.main.global.adapter.s3.S3UploaderApi;
 import com.liberty52.main.global.exception.external.notfound.OptionDetailNotFoundByNameException;
 import com.liberty52.main.global.exception.external.notfound.ProductNotFoundByNameException;
 import com.liberty52.main.service.applicationservice.CartItemCreateService;
 import com.liberty52.main.service.controller.dto.CartItemRequest;
 import com.liberty52.main.service.entity.*;
+import com.liberty52.main.service.entity.license.CustomLicenseOption;
+import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import com.liberty52.main.service.repository.*;
->>>>>>> 73d134bb762e656040fe486b3e181afef0c410e4:liberty-main/src/main/java/com/liberty52/main/service/applicationservice/impl/CartItemCreateServiceImpl.java
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,9 +48,7 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
     private void createCartItem(Cart cart, String authId, MultipartFile imageFile, CartItemRequest dto) {
         Product product = productRepository.findById(dto.getProductId()).orElseThrow(() -> new ProductNotFoundByNameException(dto.getProductId())); //예외처리 해야함
         boolean isLicense = false;
-
         CustomProduct customProduct;
-
 
         if(product.isCustom() == false){
             customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), null);
@@ -71,7 +60,6 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
         customProduct.associateWithCart(cart);
         customProductRepository.save(customProduct);
 
-<<<<<<< HEAD:src/main/java/com/liberty52/product/service/applicationservice/impl/CartItemCreateServiceImpl.java
         for (String optionDetailId :dto.getOptionDetailIds()){
             if(isLicense){
                 LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
@@ -81,11 +69,6 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
                 customLicenseOption.associate(customProduct);
                 customLicenseOptionRepository.save(customLicenseOption);
             } else {
-=======
-        for (String optionDetailId : dto.getOptionDetailIds()) {
-            CustomProductOption customProductOption = CustomProductOption.create();
-            OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
->>>>>>> 73d134bb762e656040fe486b3e181afef0c410e4:liberty-main/src/main/java/com/liberty52/main/service/applicationservice/impl/CartItemCreateServiceImpl.java
 
                 CustomProductOption customProductOption = CustomProductOption.create();
                 OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
