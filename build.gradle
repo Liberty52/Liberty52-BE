@@ -24,6 +24,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
 
+
     repositories {
         maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
         mavenCentral()
@@ -63,7 +64,6 @@ subprojects {
 bootJar {
     enabled = false
 }
-
 
 bootRun {
     enabled = false
