@@ -4,11 +4,7 @@ on:
   push:
     branches:
       - dev
-    paths:
-      - 'liberty-main/**'
-      - 'liberty-authentication-library/**'
-      - 'build.gradle'
-      - '.github/workflows/product/cd.yml'
+    paths: ['liberty-main/**', 'liberty-authentication-library/**', 'build.gradle', '.github/workflows/liberty-main-cd.yml']
 
 env:
   REGISTRY: ghcr.io
