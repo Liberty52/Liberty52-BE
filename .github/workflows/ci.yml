@@ -5,7 +5,7 @@ on:
     paths:
       - 'liberty-auth-service/**'
       - '.github/workflows/liberty-auth-service/**'
-      - 'liberty-main/ci.yml'
+      - '!ci.yml'
 
 permissions:
   contents: read
