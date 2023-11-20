@@ -1,4 +1,4 @@
-name: '리버티 메인 서비스 ::: CI'
+name: 리버티 메인 서비스
 
 on:
   pull_request:
