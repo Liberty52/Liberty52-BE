@@ -1,9 +1,10 @@
-name: Build, Push, and Deploy to Kubernetes
+name: '리버티 메인 서비스 ::: 깃옵스 플로우'
 
 on:
   push:
     branches:
       - dev
+    paths: ['liberty-main/**', 'liberty-authentication-library/**', 'build.gradle', '.github/workflows/liberty-main-cd.yml']
 
 env:
   REGISTRY: ghcr.io
