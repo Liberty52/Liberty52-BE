@@ -25,7 +25,6 @@ import java.io.IOException;
 @Tag(name = "주문", description = "주문 관련 API를 제공합니다")
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(value = {"*"})
 public class OrderGuestController {
 
     private final OrderCreateService orderCreateService;
