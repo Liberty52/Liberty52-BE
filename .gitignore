@@ -48,4 +48,6 @@ bootstrap.yml
 ### trash
 spy.log
 
+### MacBook
+.DS_Store
 
