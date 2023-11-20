@@ -1,11 +1,11 @@
-name: 리버티 메인 서비스
+name: '리버티 메인 서비스 ::: CI'
 
 on:
   pull_request:
     paths-ignore:
       - 'liberty-auth-service/**'
       - '.github/workflows/liberty-auth-service/**'
-      - '.github/workflows/liberty-main/cd.yml'
+      - '.github/workflows/ci.yml'
 
 permissions:
   contents: read
