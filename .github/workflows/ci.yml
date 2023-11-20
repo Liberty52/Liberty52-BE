@@ -5,7 +5,7 @@ on:
     paths-ignore:
       - 'liberty-auth-service/**'
       - '.github/workflows/liberty-auth-service/**'
-      - 'ci.yml'
+      - '.github/workflows/ci.yml'
 
 permissions:
   contents: read
