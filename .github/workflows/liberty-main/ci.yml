@@ -4,7 +4,8 @@ on:
   pull_request:
     paths-ignore:
       - 'liberty-auth-service/**'
-      - '.github/workflows/liberty-main/ci.yml'
+      - '.github/workflows/liberty-auth-service/**'
+      - '.github/workflows/liberty-main/cd.yml'
 
 permissions:
   contents: read
