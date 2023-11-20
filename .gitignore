@@ -42,13 +42,12 @@ out/
 .vscode/
 
 ### secret
-
-/src/main/resources/bootstrap.yml
+bootstrap.yml
 /src/main/java/com/liberty52/product/global/config/CorsConfig.java
 
-# trash
+### trash
 spy.log
 
-liberty-main.iml
-liberty-main/src/main/resources/bootstrap.yml
-liberty-main/spy.log
+### MacBook
+.DS_Store
+
