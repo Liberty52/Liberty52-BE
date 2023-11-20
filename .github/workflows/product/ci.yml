@@ -1,7 +1,11 @@
-name: CI
+name: '리버티 메인 서비스 ::: CI'
 
 on:
   pull_request:
+    paths:
+      - 'liberty-main/**'
+      - 'liberty-authentication-library/**'
+      - 'build.gradle'
 
 permissions:
   contents: read
