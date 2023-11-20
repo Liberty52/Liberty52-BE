@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +47,6 @@ public class CartItemRetrieveServiceImpl implements CartItemRetrieveService {
 
         for (CustomProduct cartItem : cartItemList) {
             Product product = cartItem.getProduct();
-<<<<<<< HEAD:src/main/java/com/liberty52/product/service/applicationservice/impl/CartItemRetrieveServiceImpl.java
             CartItemResponse cartItemResponse;
             if(product.isCustom()){
                 cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getUserCustomPictureUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), product.getDeliveryOption().getCourierName(),product.getDeliveryOption().getFee(), product.isCustom());
@@ -56,9 +54,6 @@ public class CartItemRetrieveServiceImpl implements CartItemRetrieveService {
             } else {
                 cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getCustomLicenseOption().getLicenseOptionDetail().getArtUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), product.getDeliveryOption().getCourierName(),product.getDeliveryOption().getFee(), product.isCustom());
             }
-=======
-            CartItemResponse cartItemResponse = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getUserCustomPictureUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), product.getDeliveryOption().getCourierName(), product.getDeliveryOption().getFee());
->>>>>>> 73d134bb762e656040fe486b3e181afef0c410e4:liberty-main/src/main/java/com/liberty52/main/service/applicationservice/impl/CartItemRetrieveServiceImpl.java
             cartItemResponseList.add(cartItemResponse);
         }
         return cartItemResponseList;
