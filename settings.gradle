@@ -1,5 +1,5 @@
 rootProject.name = 'product'
 include 'liberty-authentication-library'
-include 'liberty-main'
+include 'liberty-main-service'
 include 'liberty-auth-service'
 

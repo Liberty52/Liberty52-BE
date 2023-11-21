@@ -1,9 +1,9 @@
 package com.liberty52.main.service.controller.dto;
 
-import com.liberty52.main.service.entity.license.LicenseOption;
-import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import com.liberty52.main.service.entity.Product;
 import com.liberty52.main.service.entity.ProductOption;
+import com.liberty52.main.service.entity.license.LicenseOption;
+import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

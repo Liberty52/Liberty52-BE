@@ -2,15 +2,15 @@ FROM gradle:7.4-jdk17 AS builder
 WORKDIR /app
 COPY build.gradle .
 COPY settings.gradle .
-COPY liberty-main/lombok.config .
-COPY liberty-main liberty-main
+COPY liberty-main-service/lombok.config .
+COPY liberty-main-service liberty-main-service
 COPY liberty-authentication-library liberty-authentication-library
 
-RUN gradle :liberty-main:assemble
+RUN gradle :liberty-main-service:assemble
 
 FROM openjdk:17-alpine
 VOLUME /tmp
-ARG LIBERTY_MAIN_JAR=/app/liberty-main/build/libs/*.jar
+ARG LIBERTY_MAIN_JAR=/app/liberty-main-service/build/libs/*.jar
 COPY --from=builder ${LIBERTY_MAIN_JAR} app.jar
 EXPOSE 8080
 ARG SPRING_PROFILES_ACTIVE=local
