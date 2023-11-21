@@ -6,12 +6,7 @@ plugins {
     id 'jacoco'
 }
 
-sonar {
-    properties {
-        property "sonar.projectKey", "Liberty52"
-        property "sonar.projectName", "Liberty52"
-    }
-}
+
 
 allprojects {
     repositories {
@@ -30,6 +25,7 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.sonarqube'
     apply plugin: 'jacoco'
 
 
@@ -67,6 +63,12 @@ subprojects {
         }
     }
 
+    sonar {
+        properties {
+            property "sonar.projectKey", "Liberty52"
+            property "sonar.projectName", "Liberty52"
+        }
+    }
 }
 
 bootJar {
