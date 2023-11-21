@@ -1,0 +1,25 @@
+name: PR 라벨러
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: 깃허브 액션 체크아웃
+        uses: actions/checkout@v2
+
+      - name: PR에 대한 라벨링 실행
+        uses: actions/labeler@v4.3.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          sync-labels: false
+          configuration-path: .github/labeler.yml
