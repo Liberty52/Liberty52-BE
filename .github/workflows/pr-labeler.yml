@@ -4,6 +4,7 @@ on:
   pull_request:
     types:
       - opened
+      - converted_to_draft
 
 jobs:
   main:
