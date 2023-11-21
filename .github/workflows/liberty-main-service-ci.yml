@@ -2,6 +2,8 @@ name: '리버티 메인 서비스 ::: CI'
 
 on:
   pull_request:
+    branches:
+      - temp
     paths: ['liberty-main-service/**', 'liberty-authentication-library/**', 'build.gradle', '.github/workflows/liberty-main-service-ci.yml']
 
 permissions:
@@ -34,3 +36,8 @@ jobs:
         with:
           arguments: :liberty-main-service:build
 
+      - name: SonarQube Analysis
+        uses: SonarSource/sonarcloud-github-action@v1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

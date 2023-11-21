@@ -2,7 +2,15 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.5'
     id 'io.spring.dependency-management' version '1.1.0'
+    id "org.sonarqube" version "4.4.1.3373"
     id 'jacoco'
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "Liberty52"
+        property "sonar.projectName", "Liberty52"
+    }
 }
 
 allprojects {
