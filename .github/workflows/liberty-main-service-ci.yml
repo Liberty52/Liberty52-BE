@@ -2,8 +2,6 @@ name: '리버티 메인 서비스 ::: CI'
 
 on:
   pull_request:
-    branches:
-      - temp
     paths: ['liberty-main-service/**', 'liberty-authentication-library/**', 'build.gradle', '.github/workflows/liberty-main-service-ci.yml']
 
 permissions:
