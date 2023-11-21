@@ -1,6 +1,6 @@
 0️⃣ Root Module:
   - 'build.gradle'
-  - 'setting.gradle']
+  - 'setting.gradle'
 1️⃣ Liberty Main Service:
   - 'liberty-main-service/*'
   - 'liberty-authentication-library/*'
