@@ -39,7 +39,7 @@ subprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
-    sonar {
+    sonarqube {
         properties {
             property "sonar.projectKey", "Liberty52"
             property "sonar.projectName", "Liberty52"
@@ -62,7 +62,7 @@ subprojects {
         reports {
             xml.required = true
             html.required = true
-            csv.required = false
+            csv.required = true
 
             xml.destination(file("build/jacoco/jacoco.xml"))
             html.destination(file("build/jacoco/jacoco.html"))
