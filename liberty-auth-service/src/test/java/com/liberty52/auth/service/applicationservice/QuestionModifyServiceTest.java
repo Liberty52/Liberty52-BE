@@ -5,10 +5,12 @@ import com.liberty52.auth.global.exception.external.internalservererror.InvalidR
 import com.liberty52.auth.global.exception.external.notfound.QuestionNotFoundById;
 import com.liberty52.auth.global.exception.internal.InvalidQuestionContentException;
 import com.liberty52.auth.global.exception.internal.InvalidQuestionTitleException;
-import com.liberty52.auth.service.controller.dto.QuestionCreateRequestDto;
-import com.liberty52.auth.service.controller.dto.QuestionModifyRequestDto;
-import com.liberty52.auth.service.entity.Question;
-import com.liberty52.auth.service.repository.QuestionRepository;
+import com.liberty52.auth.question.entity.Question;
+import com.liberty52.auth.question.repository.QuestionRepository;
+import com.liberty52.auth.question.service.QuestionCreateService;
+import com.liberty52.auth.question.service.QuestionModifyService;
+import com.liberty52.auth.question.web.dto.QuestionCreateRequestDto;
+import com.liberty52.auth.question.web.dto.QuestionModifyRequestDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

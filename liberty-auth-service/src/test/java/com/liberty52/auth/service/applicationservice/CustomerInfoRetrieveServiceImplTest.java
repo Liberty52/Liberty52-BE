@@ -1,11 +1,12 @@
 package com.liberty52.auth.service.applicationservice;
 
 import com.liberty52.auth.global.exception.external.forbidden.InvalidAdminRoleException;
-import com.liberty52.auth.service.controller.dto.CustomerInfoListResponseDto;
-import com.liberty52.auth.service.controller.dto.CustomerInfoResponseDto;
-import com.liberty52.auth.service.entity.Auth;
-import com.liberty52.auth.service.entity.Role;
-import com.liberty52.auth.service.repository.AuthRepository;
+import com.liberty52.auth.user.entity.Auth;
+import com.liberty52.auth.user.entity.Role;
+import com.liberty52.auth.user.repository.AuthRepository;
+import com.liberty52.auth.user.service.CustomerInfoRetrieveService;
+import com.liberty52.auth.user.web.dto.CustomerInfoListResponseDto;
+import com.liberty52.auth.user.web.dto.CustomerInfoResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

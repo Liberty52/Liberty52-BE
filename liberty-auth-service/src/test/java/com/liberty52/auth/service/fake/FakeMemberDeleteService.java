@@ -1,7 +1,7 @@
 package com.liberty52.auth.service.fake;
 
-import com.liberty52.auth.service.applicationservice.MemberDeleteService;
-import com.liberty52.auth.service.repository.AuthRepository;
+import com.liberty52.auth.user.repository.AuthRepository;
+import com.liberty52.auth.user.service.MemberDeleteService;
 
 public class FakeMemberDeleteService implements MemberDeleteService {
 

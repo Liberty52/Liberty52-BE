@@ -1,6 +1,6 @@
 package com.liberty52.auth.global.oauth2;
 
-import com.liberty52.auth.service.entity.Role;
+import com.liberty52.auth.user.entity.Role;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;

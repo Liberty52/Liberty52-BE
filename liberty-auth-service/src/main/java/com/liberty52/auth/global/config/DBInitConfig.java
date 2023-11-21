@@ -1,12 +1,12 @@
 package com.liberty52.auth.global.config;
 
-import com.liberty52.auth.service.entity.Auth;
-import com.liberty52.auth.service.entity.Notice;
-import com.liberty52.auth.service.entity.Question;
-import com.liberty52.auth.service.entity.QuestionReply;
-import com.liberty52.auth.service.repository.AuthRepository;
-import com.liberty52.auth.service.repository.NoticeRepository;
-import com.liberty52.auth.service.repository.QuestionRepository;
+import com.liberty52.auth.notice.entity.Notice;
+import com.liberty52.auth.notice.repository.NoticeRepository;
+import com.liberty52.auth.question.entity.Question;
+import com.liberty52.auth.question.entity.QuestionReply;
+import com.liberty52.auth.question.repository.QuestionRepository;
+import com.liberty52.auth.user.entity.Auth;
+import com.liberty52.auth.user.repository.AuthRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

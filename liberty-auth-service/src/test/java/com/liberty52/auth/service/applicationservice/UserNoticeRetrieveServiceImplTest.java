@@ -2,10 +2,11 @@ package com.liberty52.auth.service.applicationservice;
 
 import com.liberty52.auth.global.exception.external.badrequest.PageNumberOutOfRangeException;
 import com.liberty52.auth.global.exception.external.notfound.NoticeNotFoundById;
-import com.liberty52.auth.service.controller.dto.NoticeDetailResponse;
-import com.liberty52.auth.service.controller.dto.NoticeRetrieveResponse;
-import com.liberty52.auth.service.entity.Notice;
-import com.liberty52.auth.service.repository.NoticeRepository;
+import com.liberty52.auth.notice.entity.Notice;
+import com.liberty52.auth.notice.repository.NoticeRepository;
+import com.liberty52.auth.notice.service.NoticeRetrieveService;
+import com.liberty52.auth.notice.web.dto.NoticeDetailResponse;
+import com.liberty52.auth.notice.web.dto.NoticeRetrieveResponse;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

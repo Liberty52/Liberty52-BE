@@ -2,11 +2,11 @@ package com.liberty52.auth.service.applicationservice;
 
 import com.liberty52.auth.global.exception.external.forbidden.InvalidAdminRoleException;
 import com.liberty52.auth.global.exception.external.notfound.NoticeNotFoundById;
-import com.liberty52.auth.service.applicationservice.impl.NoticeRetrieveServiceImpl;
-import com.liberty52.auth.service.controller.dto.NoticeDetailResponse;
-import com.liberty52.auth.service.controller.dto.NoticeRetrieveResponse;
-import com.liberty52.auth.service.entity.Notice;
-import com.liberty52.auth.service.repository.NoticeRepository;
+import com.liberty52.auth.notice.entity.Notice;
+import com.liberty52.auth.notice.repository.NoticeRepository;
+import com.liberty52.auth.notice.service.NoticeRetrieveServiceImpl;
+import com.liberty52.auth.notice.web.dto.NoticeDetailResponse;
+import com.liberty52.auth.notice.web.dto.NoticeRetrieveResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

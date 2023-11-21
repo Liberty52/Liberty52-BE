@@ -1,14 +1,14 @@
 package com.liberty52.auth.service.applicationservice;
 
 import com.liberty52.auth.global.exception.external.forbidden.NotYourNoticeCommentException;
-import com.liberty52.auth.service.applicationservice.impl.NoticeCommentDeleteServiceImpl;
-import com.liberty52.auth.service.entity.Auth;
-import com.liberty52.auth.service.entity.Notice;
-import com.liberty52.auth.service.entity.NoticeComment;
-import com.liberty52.auth.service.entity.Role;
-import com.liberty52.auth.service.repository.AuthRepository;
-import com.liberty52.auth.service.repository.NoticeCommentRepository;
-import com.liberty52.auth.service.repository.NoticeRepository;
+import com.liberty52.auth.notice.entity.Notice;
+import com.liberty52.auth.notice.entity.NoticeComment;
+import com.liberty52.auth.notice.repository.NoticeCommentRepository;
+import com.liberty52.auth.notice.repository.NoticeRepository;
+import com.liberty52.auth.notice.service.NoticeCommentDeleteServiceImpl;
+import com.liberty52.auth.user.entity.Auth;
+import com.liberty52.auth.user.entity.Role;
+import com.liberty52.auth.user.repository.AuthRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,8 +1,9 @@
 package com.liberty52.auth.service.applicationservice;
 
-import com.liberty52.auth.service.entity.Notice;
-import com.liberty52.auth.service.repository.NoticeRepository;
-import com.liberty52.auth.service.repository.QuestionRepository;
+import com.liberty52.auth.notice.entity.Notice;
+import com.liberty52.auth.notice.repository.NoticeRepository;
+import com.liberty52.auth.notice.service.NoticeDeleteService;
+import com.liberty52.auth.question.repository.QuestionRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package com.liberty52.auth.global.jwt;
 
-import com.liberty52.auth.service.entity.Auth;
-import com.liberty52.auth.service.repository.AuthRepository;
+import com.liberty52.auth.user.entity.Auth;
+import com.liberty52.auth.user.repository.AuthRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

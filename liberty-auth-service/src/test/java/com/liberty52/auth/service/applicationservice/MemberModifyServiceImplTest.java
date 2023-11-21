@@ -1,10 +1,11 @@
 package com.liberty52.auth.service.applicationservice;
 
 import com.liberty52.auth.global.exception.external.badrequest.AuthWithInvalidPasswordException;
-import com.liberty52.auth.service.controller.dto.ModifyRequestDto;
-import com.liberty52.auth.service.controller.dto.ModifyResponseDto;
-import com.liberty52.auth.service.entity.Auth;
-import com.liberty52.auth.service.repository.AuthRepository;
+import com.liberty52.auth.user.entity.Auth;
+import com.liberty52.auth.user.repository.AuthRepository;
+import com.liberty52.auth.user.service.MemberModifyService;
+import com.liberty52.auth.user.web.dto.ModifyRequestDto;
+import com.liberty52.auth.user.web.dto.ModifyResponseDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

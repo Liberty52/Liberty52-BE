@@ -2,8 +2,9 @@ package com.liberty52.auth.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liberty52.auth.global.config.WebSecurityConfig;
-import com.liberty52.auth.service.applicationservice.ProfileRetrieveService;
-import com.liberty52.auth.service.controller.dto.ReviewerProfileResponse;
+import com.liberty52.auth.user.service.ProfileRetrieveService;
+import com.liberty52.auth.user.web.dto.ReviewerProfileResponse;
+import com.liberty52.auth.user.web.rest.ProfileRetrieveController;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;

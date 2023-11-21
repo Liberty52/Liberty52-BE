@@ -2,8 +2,9 @@ package com.liberty52.auth.service.applicationservice;
 
 import com.liberty52.auth.global.exception.external.forbidden.NotYourQuestionException;
 import com.liberty52.auth.global.exception.external.notfound.QuestionNotFoundById;
-import com.liberty52.auth.service.entity.Question;
-import com.liberty52.auth.service.repository.QuestionRepository;
+import com.liberty52.auth.question.entity.Question;
+import com.liberty52.auth.question.repository.QuestionRepository;
+import com.liberty52.auth.question.service.QuestionDeleteService;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
