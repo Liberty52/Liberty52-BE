@@ -1,0 +1,46 @@
+name: '리버티 ::: CI'
+
+on:
+  pull_request:
+    paths: ['liberty-main-service/**', 'liberty-authentication-library/**', 'build.gradle', '.github/workflows/ci.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Create bootstrap.yml
+        env:
+          SECRET_CODE: ${{ secrets.BOOTSTRAP }}
+          SECRET_DIR: liberty-main-service/src/main/resources
+          SECRET_FILE_NAME: bootstrap.yml
+        run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          arguments: jacocoRootReport sonarqube
+
