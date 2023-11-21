@@ -2,7 +2,7 @@ name: '리버티 메인 서비스 ::: CI'
 
 on:
   pull_request:
-    paths: ['liberty-main/**', 'liberty-authentication-library/**', 'build.gradle', '.github/workflows/liberty-main-ci.yml']
+    paths: ['liberty-main-service/**', 'liberty-authentication-library/**', 'build.gradle', '.github/workflows/liberty-main-service-ci.yml']
 
 permissions:
   contents: read
@@ -22,7 +22,7 @@ jobs:
       - name: Create bootstrap.yml
         env:
           SECRET_CODE: ${{ secrets.BOOTSTRAP }}
-          SECRET_DIR: liberty-main/src/main/resources
+          SECRET_DIR: liberty-main-service/src/main/resources
           SECRET_FILE_NAME: bootstrap.yml
         run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
 
@@ -32,5 +32,5 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
-          arguments: :liberty-main:build
+          arguments: :liberty-main-service-service:build
 
