@@ -19,10 +19,17 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Create bootstrap.yml
+      - name: Create bootstrap.yml for liberty-main-service
         env:
           SECRET_CODE: ${{ secrets.BOOTSTRAP }}
           SECRET_DIR: liberty-main-service/src/main/resources
+          SECRET_FILE_NAME: bootstrap.yml
+        run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
+
+      - name: Create bootstrap.yml for liberty-auth-service
+        env:
+          SECRET_CODE: ${{ secrets.BOOTSTRAP }}
+          SECRET_DIR: liberty-auth-service/src/main/resources
           SECRET_FILE_NAME: bootstrap.yml
         run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
 
