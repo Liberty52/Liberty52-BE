@@ -1,8 +1,7 @@
 name: '리버티 Auth 서비스 ::: CI'
 
 on:
-  pull_request:
-    paths: ['liberty-auth-service/**', 'build.gradle', '.github/workflows/liberty-auth-service-ci.yaml']
+  workflow_dispatch:
 
 permissions:
   contents: read
