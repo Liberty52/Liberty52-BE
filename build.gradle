@@ -12,12 +12,6 @@ allprojects {
     }
 }
 
-//sonar {
-//    properties {
-//        property "sonar.projectKey", "Liberty52"
-//        property "sonar.projectName", "Liberty52"
-//    }
-//}
 
 subprojects {
     group = 'com.liberty52'
@@ -69,8 +63,8 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
 
 sonar {
     properties {
-        property ("sonar.projectKey", "Liberty52")
-        property ("sonar.projectName", "Liberty52")
+        property ("sonar.projectKey", "Liberty52_product_AYvzlBNs7mMTlzffPuhS")
+        property ("sonar.projectName", "product")
         property ("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoRootReport.xml")
     }
 }
