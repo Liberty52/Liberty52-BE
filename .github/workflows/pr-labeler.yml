@@ -1,0 +1,23 @@
+name: PR 라벨러
+
+on:
+  pull_request:
+    types:
+      - opened
+      - closed
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Issue/PR에 대한 라벨링 실행
+        uses: actions/labeler@v4
+        with:
+          repo-token: ${{ secrets.GTOKEN }}
+          sync-labels: false
+
