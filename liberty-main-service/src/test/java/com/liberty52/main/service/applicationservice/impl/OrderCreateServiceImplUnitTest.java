@@ -151,9 +151,13 @@ class OrderCreateServiceImplUnitTest {
         CustomLicenseOption customLicenseOption = MockFactory.createCustomLicenseOption(customProduct, licenseOptionDetail);
         given(customLicenseOptionRepository.save(any())).willReturn(customLicenseOption);
 
-
         var order = MockFactory.createOrder(authId);
         given(ordersRepository.save(any())).willReturn(order);
+
+        List<LicenseOptionDetail> mockObject = List.of(licenseOptionDetail);
+
+        given(optionDetailMultipleStockManageService.decrementLicense(any(), anyInt()))
+            .willReturn(Result.success(mockObject));
 
         // when
         var result = executeCardPaymentOrders(authId, List.of(licenseOptionDetail.getId()), 1);

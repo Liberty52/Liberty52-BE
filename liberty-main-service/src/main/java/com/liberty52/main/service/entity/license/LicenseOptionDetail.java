@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -78,6 +79,23 @@ public class LicenseOptionDetail {
 
     public void updateOnSale() {
         onSale = !onSale;
+    }
+
+    public Optional<LicenseOptionDetail> sold(int quantity) {
+        synchronized (this) {
+            int stockAfterSold = stock - quantity;
+            if (!onSale || stock == 0 || stockAfterSold < 0) {
+                return Optional.empty();
+            }
+            stock = stockAfterSold;
+            return Optional.of(this);
+        }
+    }
+
+    public void rollbackStock(int quantity) {
+        synchronized (this) {
+            this.stock += quantity;
+        }
     }
 
 }

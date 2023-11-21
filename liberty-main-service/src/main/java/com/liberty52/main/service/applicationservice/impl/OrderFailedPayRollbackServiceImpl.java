@@ -1,6 +1,7 @@
 package com.liberty52.main.service.applicationservice.impl;
 
 import com.liberty52.main.global.exception.external.notfound.ResourceNotFoundException;
+import com.liberty52.main.service.applicationservice.LicenseOptionDetailStockManageService;
 import com.liberty52.main.service.applicationservice.OptionDetailStockManageService;
 import com.liberty52.main.service.applicationservice.OrderFailedPayRollbackService;
 import com.liberty52.main.service.entity.CustomProductOption;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderFailedPayRollbackServiceImpl implements OrderFailedPayRollbackService {
 
     private final OptionDetailStockManageService optionDetailStockManageService;
+    private final LicenseOptionDetailStockManageService licenseOptionDetailStockManageService;
     private final OrdersRepository ordersRepository;
 
     @Override
@@ -24,9 +26,15 @@ public class OrderFailedPayRollbackServiceImpl implements OrderFailedPayRollback
                 .orElseThrow(() -> new ResourceNotFoundException("order", "id", orderId));
 
         order.getCustomProducts().forEach(cp -> {
-            cp.getOptions().stream()
+            if(cp.getProduct().isCustom()){
+                cp.getOptions().stream()
                     .map(CustomProductOption::getOptionDetail)
                     .forEach(it -> optionDetailStockManageService.increment(it.getId(), cp.getQuantity()));
+            }else{
+                licenseOptionDetailStockManageService.increment(cp.getCustomLicenseOption().getLicenseOptionDetail().getId(), cp.getQuantity());
+            }
+
         });
     }
+
 }

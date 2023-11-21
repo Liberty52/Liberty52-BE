@@ -1,9 +1,12 @@
 package com.liberty52.main.service.applicationservice.impl;
 
 import com.liberty52.main.global.util.Result;
+import com.liberty52.main.service.applicationservice.LicenseOptionDetailStockManageService;
 import com.liberty52.main.service.applicationservice.OptionDetailMultipleStockManageService;
 import com.liberty52.main.service.applicationservice.OptionDetailStockManageService;
 import com.liberty52.main.service.entity.OptionDetail;
+import com.liberty52.main.service.entity.license.LicenseOptionDetail;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,7 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OptionDetailMultipleStockManageServiceImpl implements OptionDetailMultipleStockManageService {
 
-    private final OptionDetailStockManageService stockManageService;
+    private final OptionDetailStockManageService optionDetailStockManageService;
+    private final LicenseOptionDetailStockManageService licenseOptionDetailStockManageService;
+
 
     /**
      * 해당 메소드는 DistributedLockTransaction을 통해 각각의 옵션 디테일 별로 트랜잭션이 생성됨에 따라
@@ -33,15 +38,36 @@ public class OptionDetailMultipleStockManageServiceImpl implements OptionDetailM
             try {
                 return optionDetailIds.stream()
                         .map(it -> {
-                            var optionDetail = stockManageService.decrement(it, quantity).getOrThrow();
+                            var optionDetail = optionDetailStockManageService.decrement(it, quantity).getOrThrow();
                             rollbackList.add(optionDetail);
                             return optionDetail;
                         })
                         .toList();
             } catch (Exception e) {
-                rollbackList.forEach(it -> stockManageService.rollback(it.getId(), quantity).getOrThrow());
+                rollbackList.forEach(it -> optionDetailStockManageService.rollback(it.getId(), quantity).getOrThrow());
                 throw e;
             }
         });
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Result<List<LicenseOptionDetail>> decrementLicense(List<String> licenseOptionDetailIds, int quantity) {
+        return Result.runCatching(() -> {
+            List<LicenseOptionDetail> rollbackList = new ArrayList<>();
+            try {
+                return licenseOptionDetailIds.stream()
+                        .map(it -> {
+                            var licenseOptionDetail = licenseOptionDetailStockManageService.decrement(it, quantity).getOrThrow();
+                            rollbackList.add(licenseOptionDetail);
+                            return licenseOptionDetail;
+                        })
+                        .toList();
+            } catch (Exception e) {
+                rollbackList.forEach(it -> licenseOptionDetailStockManageService.rollback(it.getId(), quantity).getOrThrow());
+                throw e;
+            }
+        });
+
     }
 }

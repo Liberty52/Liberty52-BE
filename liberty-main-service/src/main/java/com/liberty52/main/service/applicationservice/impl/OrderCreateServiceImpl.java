@@ -43,6 +43,8 @@ public class OrderCreateServiceImpl implements OrderCreateService {
 
     private static final String RESOURCE_NAME_PRODUCT = "Product";
     private static final String PARAM_NAME_PRODUCT_NAME = "name";
+    private static final String RESOURCE_NAME_LICENSE_OPTION_DETAIL = "LicenseOptionDetail";
+    private static final String PARAM_NAME_LICENSE_OPTION_DETAIL_NAME = "licenseName";
     private static final String RESOURCE_NAME_OPTION_DETAIL = "OptionDetail";
     private static final String PARAM_NAME_OPTION_DETAIL_NAME = "name";
     private final S3UploaderApi s3Uploader;
@@ -149,12 +151,9 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         Orders order = ordersRepository.save(Orders.create(authId, orderDestination));
 
         if (!product.isCustom()) {
-            LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(
-                            dto.getProductDto().getOptionDetailIds().get(0))
-                    .orElseThrow(() -> new ResourceNotFoundException("LICENSE_OPTION_DETAIL", "ID",
-                            dto.getProductDto().getOptionDetailIds().get(0)));
+            List<LicenseOptionDetail> licenseOptionDetails = this.getLicenseOptionDetail(dto);
             CustomProduct customProduct = this.createLicenseCustomProduct(authId, dto, product, order);
-            this.createCustomLicenseOption(customProduct, licenseOptionDetail);
+            this.createCustomLicenseOption(customProduct, licenseOptionDetails.get(0));
             customProductRepository.save(customProduct);
         } else {
             List<OptionDetail> optionDetails = this.getOptionDetails(dto);
@@ -186,12 +185,23 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_PRODUCT, PARAM_NAME_PRODUCT_NAME, dto.getProductDto().getProductName()));
     }
 
+    private List<LicenseOptionDetail> getLicenseOptionDetail(OrderCreateRequestDto dto) {
+        List<String> licenseOptionDetailId = dto.getProductDto().getOptionDetailIds().stream()
+            .map(it -> licenseOptionDetailRepository.findById(it)
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_LICENSE_OPTION_DETAIL, PARAM_NAME_LICENSE_OPTION_DETAIL_NAME, it))
+                .getId())
+            .toList();
+
+        return optionDetailMultipleStockManageService.decrementLicense(licenseOptionDetailId, dto.getProductDto().getQuantity()).getOrThrow();
+    }
+
     private List<OptionDetail> getOptionDetails(OrderCreateRequestDto dto) {
         List<String> optionDetailIds = dto.getProductDto().getOptionDetailIds().stream()
                 .map(it -> optionDetailRepository.findById(it)
                         .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_OPTION_DETAIL, PARAM_NAME_OPTION_DETAIL_NAME, it))
                         .getId())
                 .toList();
+
         return optionDetailMultipleStockManageService.decrement(optionDetailIds, dto.getProductDto().getQuantity()).getOrThrow();
     }
 
@@ -203,11 +213,18 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                     if (!Objects.equals(authId, customProduct.getAuthId())) {
                         throw new NotYourCustomProductException(authId);
                     }
-                    var optionIds = customProduct.getOptions().stream()
+
+                    if (!customProduct.getProduct().isCustom()){
+                        String licenseOptionId = customProduct.getCustomLicenseOption().getLicenseOptionDetail().getId();
+                        optionDetailMultipleStockManageService.decrementLicense(List.of(licenseOptionId), customProduct.getQuantity()).getOrThrow();
+                    }
+                    else{
+                        var optionIds = customProduct.getOptions().stream()
                             .map(CustomProductOption::getOptionDetail)
                             .map(OptionDetail::getId)
                             .toList();
-                    optionDetailMultipleStockManageService.decrement(optionIds, customProduct.getQuantity()).getOrThrow();
+                        optionDetailMultipleStockManageService.decrement(optionIds, customProduct.getQuantity()).getOrThrow();
+                    }
                 })
                 .toList();
     }
