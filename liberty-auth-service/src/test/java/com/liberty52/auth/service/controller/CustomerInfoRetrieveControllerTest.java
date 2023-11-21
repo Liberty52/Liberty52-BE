@@ -2,10 +2,11 @@ package com.liberty52.auth.service.controller;
 
 import com.liberty52.auth.global.config.WebSecurityConfig;
 import com.liberty52.auth.global.exception.external.RestExceptionHandler;
-import com.liberty52.auth.service.applicationservice.CustomerInfoRetrieveService;
-import com.liberty52.auth.service.controller.dto.CustomerInfoListResponseDto;
-import com.liberty52.auth.service.controller.dto.CustomerInfoResponseDto;
-import com.liberty52.auth.service.entity.Role;
+import com.liberty52.auth.user.entity.Role;
+import com.liberty52.auth.user.service.CustomerInfoRetrieveService;
+import com.liberty52.auth.user.web.dto.CustomerInfoListResponseDto;
+import com.liberty52.auth.user.web.dto.CustomerInfoResponseDto;
+import com.liberty52.auth.user.web.rest.CustomerInfoRetrieveController;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;

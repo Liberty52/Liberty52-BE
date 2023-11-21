@@ -1,7 +1,8 @@
 package com.liberty52.auth.service.applicationservice;
 
-import com.liberty52.auth.service.controller.dto.ReviewerProfileResponse;
-import com.liberty52.auth.service.entity.Auth;
+import com.liberty52.auth.user.entity.Auth;
+import com.liberty52.auth.user.service.ProfileRetrieveService;
+import com.liberty52.auth.user.web.dto.ReviewerProfileResponse;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

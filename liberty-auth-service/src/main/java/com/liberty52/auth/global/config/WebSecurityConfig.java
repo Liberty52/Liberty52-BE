@@ -5,7 +5,7 @@ import com.liberty52.auth.global.jwt.JwtService;
 import com.liberty52.auth.global.oauth2.CustomOAuth2UserService;
 import com.liberty52.auth.global.oauth2.OAuth2LoginFailureHandler;
 import com.liberty52.auth.global.oauth2.OAuth2LoginSuccessHandler;
-import com.liberty52.auth.service.repository.AuthRepository;
+import com.liberty52.auth.user.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

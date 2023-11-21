@@ -1,11 +1,12 @@
 package com.liberty52.auth.service.applicationservice;
 
-import com.liberty52.auth.service.controller.dto.QuestionReplyModifyRequestDto;
-import com.liberty52.auth.service.entity.Question;
-import com.liberty52.auth.service.entity.QuestionReply;
-import com.liberty52.auth.service.entity.Role;
-import com.liberty52.auth.service.repository.QuestionReplyRepository;
-import com.liberty52.auth.service.repository.QuestionRepository;
+import com.liberty52.auth.question.entity.Question;
+import com.liberty52.auth.question.entity.QuestionReply;
+import com.liberty52.auth.question.repository.QuestionReplyRepository;
+import com.liberty52.auth.question.repository.QuestionRepository;
+import com.liberty52.auth.question.service.QuestionReplyModifyService;
+import com.liberty52.auth.question.web.dto.QuestionReplyModifyRequestDto;
+import com.liberty52.auth.user.entity.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -4,7 +4,7 @@ import com.liberty52.auth.global.adapter.MailSender;
 import com.liberty52.auth.global.adapter.cloud.KafkaProducer;
 import com.liberty52.auth.global.event.events.MemberDeletedEvent;
 import com.liberty52.auth.global.utils.EmailPageFormatter;
-import com.liberty52.auth.service.applicationservice.QuestionDeleteService;
+import com.liberty52.auth.question.service.QuestionDeleteService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

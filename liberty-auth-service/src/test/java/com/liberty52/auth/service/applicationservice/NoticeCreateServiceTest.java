@@ -1,9 +1,10 @@
 package com.liberty52.auth.service.applicationservice;
 
-import com.liberty52.auth.service.controller.dto.NoticeCreateRequestDto;
-import com.liberty52.auth.service.entity.Notice;
-import com.liberty52.auth.service.entity.Role;
-import com.liberty52.auth.service.repository.NoticeRepository;
+import com.liberty52.auth.notice.entity.Notice;
+import com.liberty52.auth.notice.repository.NoticeRepository;
+import com.liberty52.auth.notice.service.NoticeCreateService;
+import com.liberty52.auth.notice.web.dto.NoticeCreateRequestDto;
+import com.liberty52.auth.user.entity.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

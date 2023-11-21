@@ -1,7 +1,8 @@
 package com.liberty52.auth.service.repository;
 
-import com.liberty52.auth.service.entity.Auth;
-import com.liberty52.auth.service.entity.SocialLoginType;
+import com.liberty52.auth.user.entity.Auth;
+import com.liberty52.auth.user.entity.SocialLoginType;
+import com.liberty52.auth.user.repository.AuthRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 class AuthRepositoryTest {
 
-    @Autowired AuthRepository authRepository;
+    @Autowired
+    AuthRepository authRepository;
     @Autowired
     EntityManager em;
 

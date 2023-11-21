@@ -1,9 +1,9 @@
 package com.liberty52.auth.service.fake;
 
-import com.liberty52.auth.service.controller.dto.ReviewerProfileResponse;
-import com.liberty52.auth.service.entity.Auth;
-import com.liberty52.auth.service.entity.Role;
-import com.liberty52.auth.service.repository.AuthRepository;
+import com.liberty52.auth.user.entity.Auth;
+import com.liberty52.auth.user.entity.Role;
+import com.liberty52.auth.user.repository.AuthRepository;
+import com.liberty52.auth.user.web.dto.ReviewerProfileResponse;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

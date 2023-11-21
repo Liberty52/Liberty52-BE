@@ -1,8 +1,8 @@
 package com.liberty52.auth.service.utils;
 
-import com.liberty52.auth.service.entity.Auth;
-import com.liberty52.auth.service.entity.SocialLogin;
-import com.liberty52.auth.service.entity.SocialLoginType;
+import com.liberty52.auth.user.entity.Auth;
+import com.liberty52.auth.user.entity.SocialLogin;
+import com.liberty52.auth.user.entity.SocialLoginType;
 
 public class MockFactory {
 

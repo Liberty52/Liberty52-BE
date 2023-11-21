@@ -1,11 +1,12 @@
 package com.liberty52.auth.service.applicationservice;
 
-import com.liberty52.auth.service.controller.dto.AdminQuestionRetrieveResponse;
-import com.liberty52.auth.service.controller.dto.QuestionDetailResponseDto;
-import com.liberty52.auth.service.controller.dto.QuestionReplyResponse;
-import com.liberty52.auth.service.controller.dto.QuestionRetrieveResponseDto;
-import com.liberty52.auth.service.entity.Role;
-import com.liberty52.auth.service.repository.QuestionRepository;
+import com.liberty52.auth.question.repository.QuestionRepository;
+import com.liberty52.auth.question.service.QuestionRetrieveService;
+import com.liberty52.auth.question.web.dto.AdminQuestionRetrieveResponse;
+import com.liberty52.auth.question.web.dto.QuestionDetailResponseDto;
+import com.liberty52.auth.question.web.dto.QuestionReplyResponse;
+import com.liberty52.auth.question.web.dto.QuestionRetrieveResponseDto;
+import com.liberty52.auth.user.entity.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

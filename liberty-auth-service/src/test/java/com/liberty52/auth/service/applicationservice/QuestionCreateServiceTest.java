@@ -1,9 +1,10 @@
 package com.liberty52.auth.service.applicationservice;
 
-import com.liberty52.auth.service.controller.dto.QuestionCreateRequestDto;
-import com.liberty52.auth.service.entity.Question;
-import com.liberty52.auth.service.entity.QuestionStatus;
-import com.liberty52.auth.service.repository.QuestionRepository;
+import com.liberty52.auth.question.entity.Question;
+import com.liberty52.auth.question.entity.QuestionStatus;
+import com.liberty52.auth.question.repository.QuestionRepository;
+import com.liberty52.auth.question.service.QuestionCreateService;
+import com.liberty52.auth.question.web.dto.QuestionCreateRequestDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

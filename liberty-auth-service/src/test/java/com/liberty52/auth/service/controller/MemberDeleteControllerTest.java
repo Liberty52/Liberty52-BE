@@ -1,7 +1,8 @@
 package com.liberty52.auth.service.controller;
 
 import com.liberty52.auth.global.config.WebSecurityConfig;
-import com.liberty52.auth.service.applicationservice.MemberDeleteService;
+import com.liberty52.auth.user.service.MemberDeleteService;
+import com.liberty52.auth.user.web.rest.MemberDeleteController;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;

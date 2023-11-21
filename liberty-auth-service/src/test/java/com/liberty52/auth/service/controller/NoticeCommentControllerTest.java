@@ -2,14 +2,15 @@ package com.liberty52.auth.service.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.liberty52.auth.service.applicationservice.NoticeCommentCreateService;
-import com.liberty52.auth.service.applicationservice.NoticeCommentDeleteService;
-import com.liberty52.auth.service.applicationservice.NoticeCommentRetrieveService;
-import com.liberty52.auth.service.applicationservice.NoticeCommentUpdateService;
-import com.liberty52.auth.service.controller.dto.NoticeCommentRequestDto;
-import com.liberty52.auth.service.entity.Auth;
-import com.liberty52.auth.service.entity.Notice;
-import com.liberty52.auth.service.entity.NoticeComment;
+import com.liberty52.auth.notice.entity.Notice;
+import com.liberty52.auth.notice.entity.NoticeComment;
+import com.liberty52.auth.notice.service.NoticeCommentCreateService;
+import com.liberty52.auth.notice.service.NoticeCommentDeleteService;
+import com.liberty52.auth.notice.service.NoticeCommentRetrieveService;
+import com.liberty52.auth.notice.service.NoticeCommentUpdateService;
+import com.liberty52.auth.notice.web.dto.NoticeCommentRequestDto;
+import com.liberty52.auth.notice.web.rest.NoticeCommentController;
+import com.liberty52.auth.user.entity.Auth;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

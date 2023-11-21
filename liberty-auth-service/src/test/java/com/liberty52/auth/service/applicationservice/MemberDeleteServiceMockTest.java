@@ -1,9 +1,10 @@
 package com.liberty52.auth.service.applicationservice;
 
-import com.liberty52.auth.service.entity.Auth;
 import com.liberty52.auth.service.fake.FakeAuthRepository;
 import com.liberty52.auth.service.fake.FakeMemberDeleteService;
-import com.liberty52.auth.service.repository.AuthRepository;
+import com.liberty52.auth.user.entity.Auth;
+import com.liberty52.auth.user.repository.AuthRepository;
+import com.liberty52.auth.user.service.MemberDeleteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
