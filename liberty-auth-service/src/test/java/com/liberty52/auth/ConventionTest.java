@@ -81,7 +81,6 @@ class ConventionTest {
     }
 
 
-
     /* *******************************  repository*/
 
     @Test
@@ -101,6 +100,21 @@ class ConventionTest {
                 .that()
                 .resideInAnyPackage("..repository..")
                 .should().beInterfaces();
+        rule.check(javaClasses);
+    }
+
+
+    /* *******************************  global*/
+
+    @Test
+    @DisplayName("global.config 패키지 안의 클래스는 Config로 끝나야 합니다.")
+    void ConfigTest() {
+        ArchRule rule = classes()
+                .that()
+                .areTopLevelClasses()
+                .and()
+                .resideInAnyPackage("..global.config..")
+                .should().haveSimpleNameEndingWith("Config");
         rule.check(javaClasses);
     }
 
