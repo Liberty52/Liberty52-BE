@@ -52,5 +52,16 @@ class ConventionTest {
         rule.check(javaClasses);
     }
 
+    @Test
+    @DisplayName("Service 패키지 안의 Service로 끝나는 클래스는 인터페이스여야 합니다.")
+    void ServiceTest2() {
+        ArchRule rule = classes()
+                .that()
+                .resideInAnyPackage("..service..")
+                .and().haveSimpleNameEndingWith("Service")
+                .should().beInterfaces();
+        rule.check(javaClasses);
+    }
+
 
 }
