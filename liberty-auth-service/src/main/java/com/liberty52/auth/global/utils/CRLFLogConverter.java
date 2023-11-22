@@ -1,4 +1,4 @@
-package com.liberty52.auth.global.config;
+package com.liberty52.auth.global.utils;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.pattern.CompositeConverter;
