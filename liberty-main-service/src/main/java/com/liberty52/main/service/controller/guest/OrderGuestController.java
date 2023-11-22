@@ -40,7 +40,7 @@ public class OrderGuestController {
     public PaymentCardResponseDto preregisterCardPaymentOrdersByGuest(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
             @RequestPart("dto") @Validated OrderCreateRequestDto dto,
-            @RequestPart("imageFile") MultipartFile imageFile
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
     ) {
         return orderCreateService.createCardPaymentOrders(guestId, dto, imageFile);
     }
@@ -61,7 +61,7 @@ public class OrderGuestController {
     public PaymentVBankResponseDto registerVBankPaymentOrdersByGuest(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
             @RequestPart("dto") @Validated OrderCreateRequestDto dto,
-            @RequestPart("imageFile") MultipartFile imageFile
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
     ) {
         return orderCreateService.createVBankPaymentOrders(guestId, dto, imageFile);
     }
