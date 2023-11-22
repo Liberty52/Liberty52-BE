@@ -92,7 +92,7 @@ public class CanceledOrderRetrieveTest extends MockAdaptersTest {
 
         for (int i = 0; i < 6; i++) {
             OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestVBank(
-                    LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                    LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),"",
                     "name", "hsh47607@naver.com", "phone", "add1", "add2", "zip",
                     "하나은행 1234123412341234 리버티", "tester"
             );
@@ -111,7 +111,7 @@ public class CanceledOrderRetrieveTest extends MockAdaptersTest {
 
         for (int i = 0; i < 4; i++) {
             OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestCard(
-                    LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                    LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),"",
                     "name", "hsh47607@naver.com", "phone", "add1", "add2", "zip"
             );
             PaymentCardResponseDto responseDto = orderCreateService.createCardPaymentOrders(aid, requestDto, imageFile);
@@ -129,7 +129,7 @@ public class CanceledOrderRetrieveTest extends MockAdaptersTest {
         final String aid = UUID.randomUUID().toString();
 
         OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestVBank(
-                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(), "",
                 "name", "hsh47607@naver.com", "phone", "add1", "add2", "zip",
                 "하나은행 1234123412341234 리버티", "tester"
         );

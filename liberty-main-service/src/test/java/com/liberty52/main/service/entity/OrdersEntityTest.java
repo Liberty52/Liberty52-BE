@@ -54,7 +54,7 @@ class OrdersEntityTest extends MockS3Test {
     @Test
     void test_getTotalAmount() {
         OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestCard(
-                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),"",
                 "receiverName", "receiverEmail", "receiverPhoneNumber", "address1", "address2", "zipCode"
         );
 

@@ -22,21 +22,21 @@ public class OrderCreateRequestDto {
     private List<String> customProductIdList;
 
     public static OrderCreateRequestDto forTestCard(
-            String productName, List<String> options, int quantity, List<String> orderOptions,
+            String productName, List<String> options, int quantity, List<String> orderOptions, String licenseOptionDetailId,
             String receiverName, String receiverEmail, String receiverPhoneNumber, String address1, String address2, String zipCode) {
         return new OrderCreateRequestDto(
-                PaymentProductDto.forTest(productName, options, quantity, orderOptions),
+                PaymentProductDto.forTest(productName, options, licenseOptionDetailId, quantity, orderOptions),
                 DestinationDto.create(receiverName, receiverEmail, receiverPhoneNumber, address1, address2, zipCode),
                 null, null
         );
     }
 
     public static OrderCreateRequestDto forTestVBank(
-            String productName, List<String> options, int quantity, List<String> orderOptions,
+            String productName, List<String> options, int quantity, List<String> orderOptions, String licenseOptionDetailId,
             String receiverName, String receiverEmail, String receiverPhoneNumber, String address1, String address2, String zipCode,
             String vBankInfo, String depositorName) {
         return new OrderCreateRequestDto(
-                PaymentProductDto.forTest(productName, options, quantity, orderOptions),
+                PaymentProductDto.forTest(productName, options, licenseOptionDetailId, quantity, orderOptions),
                 DestinationDto.create(receiverName, receiverEmail, receiverPhoneNumber, address1, address2, zipCode),
                 VbankDto.forTest(vBankInfo, depositorName, false),
                 null
@@ -71,11 +71,14 @@ public class OrderCreateRequestDto {
     public static class PaymentProductDto {
         private String productName;
         private List<String> optionDetailIds;
+        @NotBlank
+        private String licenseOptionDetailId;
         private int quantity;
         private List<String> orderOptions;
 
-        private static PaymentProductDto forTest(String pName, List<String> optionDetailIds, int quantity, List<String> orderOpts) {
-            return new PaymentProductDto(pName, optionDetailIds, quantity, orderOpts);
+        private static PaymentProductDto forTest(String pName, List<String> optionDetailIds, String licenseOptionDetailId,
+            int quantity, List<String> orderOpts) {
+            return new PaymentProductDto(pName, optionDetailIds, licenseOptionDetailId,quantity, orderOpts);
         }
 
     }
