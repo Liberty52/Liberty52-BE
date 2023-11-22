@@ -58,14 +58,17 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
         xml.enabled true
         html.enabled true
         csv.enabled false
+
+        xml.destination file("build/jacoco/jacoco.xml")
+        html.destination file("build/jacoco/jacoco.html")
     }
 }
 
 sonar {
     properties {
-        property ("sonar.projectKey", "Liberty52_product_AYvzlBNs7mMTlzffPuhS")
-        property ("sonar.projectName", "product")
-        property ("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoRootReport.xml")
+        property ("sonar.projectKey", "Liberty52")
+        property ("sonar.projectName", "Liberty52")
+        property ("sonar.coverage.jacoco.xmlReportPaths", "build/jacoco/jacoco.xml")
     }
 }
 
