@@ -88,5 +88,14 @@ class ConventionTest {
         rule.check(javaClasses);
     }
 
+    @Test
+    @DisplayName("Repository 패키지 안의 Repository로 끝나는 클래스는 인터페이스여야 합니다.")
+    void RepositoryTest2() {
+        ArchRule rule = classes()
+                .that()
+                .resideInAnyPackage("..repository..")
+                .should().beInterfaces();
+        rule.check(javaClasses);
+    }
 
 }
