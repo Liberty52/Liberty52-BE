@@ -127,4 +127,17 @@ class ConventionTest {
                 .should().beAnnotatedWith(org.springframework.context.annotation.Configuration.class);
         rule.check(javaClasses);
     }
+
+
+    /* *******************************  constants*/
+
+    @Test
+    @DisplayName("constants 패키지 안의 클래스는 Constants로 끝나야 합니다.")
+    void ConstantsTest() {
+        ArchRule rule = classes()
+                .that()
+                .resideInAnyPackage("..constants..")
+                .should().haveSimpleNameEndingWith("Constants");
+        rule.check(javaClasses);
+    }
 }
