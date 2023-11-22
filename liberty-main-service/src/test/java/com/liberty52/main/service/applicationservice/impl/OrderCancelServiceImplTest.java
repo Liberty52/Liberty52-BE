@@ -52,7 +52,7 @@ class OrderCancelServiceImplTest extends MockS3Test {
     void test_cancelOrder_vbank_waiting_deposit() {
         final String aid = AUTH_ID;
         OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestVBank(
-                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of() ,"",
                 "테스터", "hsh47607@naver.com", "receiverPhoneNumber", "address1", "address2", "zipCode",
                 "하나은행 1234123412341234 리버티", "tester"
         );
@@ -81,7 +81,7 @@ class OrderCancelServiceImplTest extends MockS3Test {
     void test_cancelOrder_vbank_ordered() {
         final String aid = AUTH_ID;
         OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestVBank(
-                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),"",
                 "테스터", "hsh47607@naver.com", "receiverPhoneNumber", "address1", "address2", "zipCode",
                 "하나은행 1234123412341234 리버티", "tester"
         );
@@ -117,7 +117,7 @@ class OrderCancelServiceImplTest extends MockS3Test {
     void test_refundCustomerOrder() {
         final String aid = AUTH_ID;
         OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestVBank(
-                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),"",
                 "테스터", "hsh47607@naver.com", "receiverPhoneNumber", "address1", "address2", "zipCode",
                 "하나은행 1234123412341234 리버티", "tester"
         );
@@ -151,7 +151,7 @@ class OrderCancelServiceImplTest extends MockS3Test {
         final String aid = AUTH_ID;
         PaymentCardResponseDto dto = orderCreateService.createCardPaymentOrders(aid,
                 OrderCreateRequestDto.forTestCard(
-                        LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), 2, List.of(),
+                        LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), 2, List.of(),"",
                         "receiverName", "receiverEmail", "receiverPhoneNumber", "address1", "address2", "zipCode"),
                 imageFile);
 
@@ -169,7 +169,7 @@ class OrderCancelServiceImplTest extends MockS3Test {
         final String aid = AUTH_ID;
 
         OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestVBank(
-                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),"",
                 "테스터", "hsh47607@naver.com", "receiverPhoneNumber", "address1", "address2", "zipCode",
                 "하나은행 1234123412341234 리버티", "tester"
         );
@@ -191,7 +191,7 @@ class OrderCancelServiceImplTest extends MockS3Test {
     void test_refundCustomerOrder_when_orderIsWaitingDeposit_throw_OrderRefundException() {
         final String aid = AUTH_ID;
         OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestVBank(
-                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),"",
                 "테스터", "hsh47607@naver.com", "receiverPhoneNumber", "address1", "address2", "zipCode",
                 "하나은행 1234123412341234 리버티", "tester"
         );
@@ -209,7 +209,7 @@ class OrderCancelServiceImplTest extends MockS3Test {
     void test_refundCustomerOrder_when_requesterIsNotAdmin_throw_InvalidRoleException() {
         final String aid = AUTH_ID;
         OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestVBank(
-                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),
+                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),"",
                 "테스터", "hsh47607@naver.com", "receiverPhoneNumber", "address1", "address2", "zipCode",
                 "하나은행 1234123412341234 리버티", "tester"
         );

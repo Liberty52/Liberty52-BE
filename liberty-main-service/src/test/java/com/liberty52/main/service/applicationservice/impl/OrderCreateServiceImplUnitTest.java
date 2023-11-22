@@ -72,10 +72,11 @@ class OrderCreateServiceImplUnitTest {
     @Mock
     private CustomLicenseOptionRepository customLicenseOptionRepository;
 
-    private PaymentCardResponseDto executeCardPaymentOrders(String authId, List<String> options, int quantity) {
+    private PaymentCardResponseDto executeCardPaymentOrders(String authId, List<String> options, int quantity,
+        String licenseOptionDetailId) {
         return service.createCardPaymentOrders(
                 authId,
-                OrderCreateRequestDto.forTestCard("pn", options, quantity, List.of(), "rn",
+                OrderCreateRequestDto.forTestCard("pn", options, quantity, List.of(),licenseOptionDetailId, "rn",
                         "re", "rpn", " ad1", "ad2", "zc"),
                 null
         );
@@ -119,7 +120,7 @@ class OrderCreateServiceImplUnitTest {
 
         var options = optionDetails.stream().map(OptionDetail::getId).toList();
         // when
-        var result = executeCardPaymentOrders(authId, options, 1);
+        var result = executeCardPaymentOrders(authId, options, 1, "");
 
         // then
         assertNotNull(result);
@@ -136,6 +137,19 @@ class OrderCreateServiceImplUnitTest {
         given(mockProduct.isCustom()).willReturn(false);
         given(productRepository.findByName(anyString())).willReturn(Optional.of(mockProduct));
 
+        var productOption = MockFactory.createProductOption("po", true);
+        var optionDetails = List.of(
+            MockFactory.createOptionDetail("od_1", 10000, 10, productOption),
+            MockFactory.createOptionDetail("od_2", 20000, 10, productOption),
+            MockFactory.createOptionDetail("od_3", 30000, 10, productOption)
+        );
+        optionDetails.forEach(it -> {
+            given(optionDetailRepository.findById(it.getId()))
+                .willReturn(Optional.of(it));
+        });
+        given(optionDetailMultipleStockManageService.decrement(anyList(), anyInt()))
+            .willReturn(Result.success(optionDetails));
+
         LicenseOption licenseOption = MockFactory.createLicenseOption("licenseOption");
         LicenseOptionDetail licenseOptionDetail = MockFactory.createLicenseOptionDetail("licenseOptionDetail",
                 "testArtist", 10, true, "testUrl", 10000, LocalDate.now(), LocalDate.now().plusDays(3), licenseOption);
@@ -148,19 +162,21 @@ class OrderCreateServiceImplUnitTest {
         CustomProduct customProduct = MockFactory.createCustomProduct("", 1, authId, mockProduct);
         given(customProductRepository.save(any())).willReturn(customProduct);
 
-        CustomLicenseOption customLicenseOption = MockFactory.createCustomLicenseOption(customProduct, licenseOptionDetail);
-        given(customLicenseOptionRepository.save(any())).willReturn(customLicenseOption);
-
         var order = MockFactory.createOrder(authId);
         given(ordersRepository.save(any())).willReturn(order);
 
-        List<LicenseOptionDetail> mockObject = List.of(licenseOptionDetail);
-
         given(optionDetailMultipleStockManageService.decrementLicense(any(), anyInt()))
-            .willReturn(Result.success(mockObject));
+            .willReturn(Result.success(licenseOptionDetail));
+
+        optionDetails.forEach(it -> {
+            var cpo = MockFactory.createCustomProductOption(customProduct, it);
+            given(customProductOptionRepository.save(any())).willReturn(cpo);
+        });
+
+        var options = optionDetails.stream().map(OptionDetail::getId).toList();
 
         // when
-        var result = executeCardPaymentOrders(authId, List.of(licenseOptionDetail.getId()), 1);
+        var result = executeCardPaymentOrders(authId, options, 1, licenseOptionDetail.getId());
 
         // then
         assertNotNull(result);
@@ -182,7 +198,7 @@ class OrderCreateServiceImplUnitTest {
         // then
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> executeCardPaymentOrders(authId, options, 1)
+                () -> executeCardPaymentOrders(authId, options, 1, "")
         );
     }
 
@@ -201,7 +217,7 @@ class OrderCreateServiceImplUnitTest {
         // then
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> executeCardPaymentOrders(authId, options, 1)
+                () -> executeCardPaymentOrders(authId, options, 1, "")
         );
     }
 
@@ -230,7 +246,7 @@ class OrderCreateServiceImplUnitTest {
         // then
         assertThrows(
                 BadRequestException.class,
-                () -> executeCardPaymentOrders(authId, options, 1)
+                () -> executeCardPaymentOrders(authId, options, 1, "")
         );
     }
 
@@ -259,14 +275,14 @@ class OrderCreateServiceImplUnitTest {
         // then
         assertThrows(
                 BadRequestException.class,
-                () -> executeCardPaymentOrders(authId, options, 2)
+                () -> executeCardPaymentOrders(authId, options, 2, "")
         );
     }
 
     private PaymentVBankResponseDto executeVBankPaymentOrders(String authId, List<String> options, int quantity) {
         return service.createVBankPaymentOrders(
                 authId,
-                OrderCreateRequestDto.forTestVBank("pn", options, quantity, List.of(), "rn",
+                OrderCreateRequestDto.forTestVBank("pn", options, quantity, List.of(), "","rn",
                         "re", "rpn", " ad1", "ad2", "zc",
                         "하나은행 1234 holder", "dn"),
                 null
