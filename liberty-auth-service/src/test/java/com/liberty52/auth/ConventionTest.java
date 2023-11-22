@@ -118,4 +118,13 @@ class ConventionTest {
         rule.check(javaClasses);
     }
 
+    @Test
+    @DisplayName("global.config 패키지 안의 클래스는 Configuration 어노테이션을 가져야 합니다.")
+    void ConfigTest2() {
+        ArchRule rule = classes()
+                .that()
+                .resideInAnyPackage("..global.config..")
+                .should().beAnnotatedWith(org.springframework.context.annotation.Configuration.class);
+        rule.check(javaClasses);
+    }
 }
