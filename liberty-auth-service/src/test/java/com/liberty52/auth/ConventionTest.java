@@ -22,18 +22,24 @@ class ConventionTest {
                 .importPackages("com.liberty52.auth");
     }
 
+
+    /* *******************************  web rest*/
+
     @Test
-    @DisplayName("web.rest 패키지 내의 클래스는 Controller로 끝나고, RestController 어노테이션을 가지고 있어야 합니다")
-    void controllerClassTest() {
+    @DisplayName("web.rest 패키지 내의 클래스는 Controller로 끝나야 합니다")
+    void controllerTest() {
         ArchRule rule = classes()
                 .that().resideInAnyPackage("..web.rest")
                 .should().haveSimpleNameEndingWith("Controller");
+        rule.check(javaClasses);
+    }
 
+    @Test
+    @DisplayName("web.rest 패키지 내의 클래스는 RestController 어노테이션을 가지고 있어야 합니다")
+    void controllerTest2() {
         ArchRule annotationRule = classes()
                 .that().resideInAnyPackage("..web.rest")
                 .should().beAnnotatedWith(RestController.class);
-
-        rule.check(javaClasses);
         annotationRule.check(javaClasses);
     }
 
