@@ -37,4 +37,20 @@ class ConventionTest {
         annotationRule.check(javaClasses);
     }
 
+
+    /********************************  service*/
+
+    @Test
+    @DisplayName("Service 패키지 안의 클래스는 Impl 또는 Service로 끝나야 합니다.")
+    void ServiceTest() {
+        ArchRule rule = classes()
+                .that()
+                .resideInAnyPackage("..service..")
+                .and().areTopLevelClasses()
+                .should().haveSimpleNameEndingWith("Service")
+                .orShould().haveSimpleNameEndingWith("Impl");
+        rule.check(javaClasses);
+    }
+
+
 }
