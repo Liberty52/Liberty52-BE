@@ -1,4 +1,4 @@
-package com.liberty52.auth.global.config;
+package com.liberty52.auth.global.data;
 
 import com.liberty52.auth.notice.entity.Notice;
 import com.liberty52.auth.notice.repository.NoticeRepository;
