@@ -151,11 +151,16 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         Orders order = ordersRepository.save(Orders.create(authId, orderDestination));
 
         if (!product.isCustom()) {
-            List<LicenseOptionDetail> licenseOptionDetails = this.getLicenseOptionDetail(dto);
+            LicenseOptionDetail licenseOptionDetail = this.getLicenseOptionDetail(dto);
             CustomProduct customProduct = this.createLicenseCustomProduct(authId, dto, product, order);
-            this.createCustomLicenseOption(customProduct, licenseOptionDetails.get(0));
-            customProductRepository.save(customProduct);
-        } else {
+            this.createCustomLicenseOption(customProduct, licenseOptionDetail);
+
+            List<OptionDetail> optionDetails = this.getOptionDetails(dto);
+            for (OptionDetail detail : optionDetails) {
+                this.createCustomProductOptions(customProduct, detail);
+            }
+        }
+        else{
             List<OptionDetail> optionDetails = this.getOptionDetails(dto);
             String imgUrl = s3Uploader.upload(imageFile);
             CustomProduct customProduct = this.createCustomProduct(authId, dto, product, order, imgUrl);
@@ -185,14 +190,12 @@ public class OrderCreateServiceImpl implements OrderCreateService {
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_PRODUCT, PARAM_NAME_PRODUCT_NAME, dto.getProductDto().getProductName()));
     }
 
-    private List<LicenseOptionDetail> getLicenseOptionDetail(OrderCreateRequestDto dto) {
-        List<String> licenseOptionDetailId = dto.getProductDto().getOptionDetailIds().stream()
-            .map(it -> licenseOptionDetailRepository.findById(it)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_LICENSE_OPTION_DETAIL, PARAM_NAME_LICENSE_OPTION_DETAIL_NAME, it))
-                .getId())
-            .toList();
+    private LicenseOptionDetail getLicenseOptionDetail(OrderCreateRequestDto dto) {
+		String licenseOptionDetailId = dto.getProductDto().getLicenseOptionDetailId();
+        LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(licenseOptionDetailId)
+            .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_LICENSE_OPTION_DETAIL, PARAM_NAME_LICENSE_OPTION_DETAIL_NAME, licenseOptionDetailId));
 
-        return optionDetailMultipleStockManageService.decrementLicense(licenseOptionDetailId, dto.getProductDto().getQuantity()).getOrThrow();
+        return optionDetailMultipleStockManageService.decrementLicense(licenseOptionDetail.getId(), dto.getProductDto().getQuantity()).getOrThrow();
     }
 
     private List<OptionDetail> getOptionDetails(OrderCreateRequestDto dto) {
@@ -216,15 +219,14 @@ public class OrderCreateServiceImpl implements OrderCreateService {
 
                     if (!customProduct.getProduct().isCustom()){
                         String licenseOptionId = customProduct.getCustomLicenseOption().getLicenseOptionDetail().getId();
-                        optionDetailMultipleStockManageService.decrementLicense(List.of(licenseOptionId), customProduct.getQuantity()).getOrThrow();
+                        optionDetailMultipleStockManageService.decrementLicense(licenseOptionId, customProduct.getQuantity()).getOrThrow();
                     }
-                    else{
-                        var optionIds = customProduct.getOptions().stream()
-                            .map(CustomProductOption::getOptionDetail)
-                            .map(OptionDetail::getId)
+                    var optionIds = customProduct.getOptions().stream()
+                        .map(CustomProductOption::getOptionDetail)
+                        .map(OptionDetail::getId)
                             .toList();
                         optionDetailMultipleStockManageService.decrement(optionIds, customProduct.getQuantity()).getOrThrow();
-                    }
+
                 })
                 .toList();
     }
@@ -241,6 +243,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         CustomProduct customProduct = CustomProduct.create("", dto.getProductDto().getQuantity(), authId);
         customProduct.associateWithProduct(product);
         customProduct.associateWithOrder(order);
+        customProductRepository.save(customProduct);
         return customProduct;
     }
 

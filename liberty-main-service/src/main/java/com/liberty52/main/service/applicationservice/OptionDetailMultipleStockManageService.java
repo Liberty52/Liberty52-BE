@@ -9,5 +9,5 @@ import java.util.List;
 public interface OptionDetailMultipleStockManageService {
     Result<List<OptionDetail>> decrement(List<String> optionDetailIds, int quantity);
 
-    Result<List<LicenseOptionDetail>> decrementLicense(List<String> licenseOptionDetailIds, int quantity);
+    Result<LicenseOptionDetail> decrementLicense(String licenseOptionDetailId, int quantity);
 }
