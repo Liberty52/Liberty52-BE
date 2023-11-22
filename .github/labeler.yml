@@ -2,18 +2,18 @@
   - 'build.gradle'
   - 'setting.gradle'
 1️⃣ Liberty Main Service:
+  - 'build.gradle'
   - 'liberty-main-service/*'
   - 'liberty-authentication-library/*'
-  - 'build.gradle'
-  - '.github/workflows/liberty-main-service-ci.yml'
-  - '.github/workflows/liberty-main-service-cd.yml'
+  - 'liberty-common/*'
 2️⃣ Liberty Auth Service:
+  - 'build.gradle'
   - 'liberty-auth-service/*'
-  - 'build.gradle'
-  - '.github/workflows/liberty-auth-service-ci.yml'
-  - '.github/workflows/liberty-auth-service-cd.yaml'
+  - 'liberty-common/*'
 3️⃣ Liberty Authentication Library:
-  - 'liberty-authentication-library/*'
   - 'build.gradle'
+  - 'liberty-authentication-library/*'
+4️⃣ liberty-common:
+  - 'liberty-common/*'
 🤖 Automation:
   - '.github/workflows/*'
