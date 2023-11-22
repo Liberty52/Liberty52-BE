@@ -1,4 +1,4 @@
-package com.liberty52.auth.global.config;
+package com.liberty52.auth.global.intercepter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
