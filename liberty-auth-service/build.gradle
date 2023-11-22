@@ -38,6 +38,8 @@ dependencies {
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
+
+    testImplementation 'com.tngtech.archunit:archunit:1.1.0'
 }
 
 dependencyManagement {
