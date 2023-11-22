@@ -1,6 +1,6 @@
 package com.liberty52.auth;
 
-import com.liberty52.auth.global.utils.CRLFLogConverter;
+import com.liberty52.common.utils.CRLFLogConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
