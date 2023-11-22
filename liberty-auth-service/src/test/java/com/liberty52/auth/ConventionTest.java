@@ -70,7 +70,7 @@ class ConventionTest {
     }
 
     @Test
-    @DisplayName("Service 패키지 안의 Impl로 끝나는 클래스는 Impl로 끝나는 클래스는 인터페이스이고 service 어노테이션을 가져야 합니다.")
+    @DisplayName("Service 패키지 안의 Impl로 끝나는 클래스는 인터페이스이고 service 어노테이션을 가져야 합니다.")
     void ServiceTest3() {
         ArchRule rule = classes()
                 .that()
