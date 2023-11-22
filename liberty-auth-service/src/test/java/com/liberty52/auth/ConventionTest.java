@@ -38,7 +38,7 @@ class ConventionTest {
     }
 
 
-    /********************************  service*/
+    /* *******************************  service*/
 
     @Test
     @DisplayName("Service 패키지 안의 클래스는 Impl 또는 Service로 끝나야 합니다.")
@@ -71,6 +71,20 @@ class ConventionTest {
                 .resideInAnyPackage("..service..")
                 .and().haveSimpleNameEndingWith("Impl")
                 .should().beAnnotatedWith(org.springframework.stereotype.Service.class);
+        rule.check(javaClasses);
+    }
+
+
+
+    /* *******************************  repository*/
+
+    @Test
+    @DisplayName("Repository 패키지 안의 클래스는 Repository로 끝나야 합니다.")
+    void RepositoryTest() {
+        ArchRule rule = classes()
+                .that()
+                .resideInAnyPackage("..repository..")
+                .should().haveSimpleNameEndingWith("Repository");
         rule.check(javaClasses);
     }
 
