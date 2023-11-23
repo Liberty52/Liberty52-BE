@@ -33,6 +33,7 @@ import static com.liberty52.main.service.entity.QOrderDelivery.orderDelivery;
 import static com.liberty52.main.service.entity.QOrderDestination.orderDestination;
 import static com.liberty52.main.service.entity.QOrders.orders;
 import static com.liberty52.main.service.entity.QProduct.product;
+import static com.liberty52.main.service.entity.QProductOption.productOption;
 import static com.liberty52.main.service.entity.payment.QPayment.payment;
 
 
@@ -177,16 +178,12 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
 
         String productName = salesRequestDto.getProductName();
 
-        String optionId = salesRequestDto.getOptionId();
-
         String optionDetailId = salesRequestDto.getOptionDetailId();
 
         JPAQuery<Tuple> query = queryFactory.select(orders.amount.sum(), customProduct.quantity.sum(), orders.orderedAt.year(), orders.orderedAt.month())
                 .from(orders)
-                .join(orders.customProducts, customProduct)
-                .join(customProduct.product, product)
-                .join(customProduct.options, customProductOption)
-                .join(customProductOption.optionDetail, optionDetail);
+                .innerJoin(orders.customProducts, customProduct)
+                .innerJoin(customProduct.product, product);
 
         BooleanBuilder whereConditions = new BooleanBuilder();
 
@@ -201,24 +198,20 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
             }
         }
 
-        whereConditions.and(orders.orderStatus.notIn(OrderStatus.CANCEL_REQUESTED, OrderStatus.CANCELED, OrderStatus.REFUND));
-
         if (productName != null) {
             whereConditions.and(product.name.eq(productName));
         }
 
-        if (optionId != null) {
-            whereConditions.and(customProductOption.id.eq(optionId));
+        if (optionDetailId != null) {
+            whereConditions.and(customProduct.options.any().optionDetail.id.eq(optionDetailId));
         }
 
-        if (optionDetailId != null) {
-            whereConditions.and(optionDetail.id.eq(optionDetailId));
-        }
+        whereConditions.and(orders.orderStatus.notIn(OrderStatus.CANCEL_REQUESTED, OrderStatus.CANCELED, OrderStatus.REFUND));
 
         query.where(whereConditions);
         query.groupBy(orders.orderedAt.year(), orders.orderedAt.month());
 
-        return query.fetch();
+        return query.distinct().fetch();
     }
 
     private JPAQuery<Orders> selectOrdersAndAssociatedEntityWithCanceledOrders() {

@@ -12,6 +12,5 @@ public class SalesRequestDto {
     String productName;
     LocalDate startDate;
     LocalDate endDate;
-    String optionId;
     String optionDetailId;
 }
