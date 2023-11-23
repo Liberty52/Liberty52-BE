@@ -33,7 +33,6 @@ import static com.liberty52.main.service.entity.QOrderDelivery.orderDelivery;
 import static com.liberty52.main.service.entity.QOrderDestination.orderDestination;
 import static com.liberty52.main.service.entity.QOrders.orders;
 import static com.liberty52.main.service.entity.QProduct.product;
-import static com.liberty52.main.service.entity.QProductOption.productOption;
 import static com.liberty52.main.service.entity.payment.QPayment.payment;
 
 
