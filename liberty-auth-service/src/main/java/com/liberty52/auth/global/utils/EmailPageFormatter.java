@@ -144,7 +144,7 @@ public class EmailPageFormatter {
             + "</table>";
 
     /**
-     * 
+     *
      * @param mainText 주요 문구
      * @param subText 서브 문구
      * @param name 고객 이름

@@ -17,7 +17,6 @@ import com.liberty52.main.service.controller.dto.PaymentVBankResponseDto;
 import com.liberty52.main.service.entity.CustomProduct;
 import com.liberty52.main.service.entity.OptionDetail;
 import com.liberty52.main.service.entity.Product;
-import com.liberty52.main.service.entity.license.CustomLicenseOption;
 import com.liberty52.main.service.entity.license.LicenseOption;
 import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import com.liberty52.main.service.entity.payment.CardPayment;

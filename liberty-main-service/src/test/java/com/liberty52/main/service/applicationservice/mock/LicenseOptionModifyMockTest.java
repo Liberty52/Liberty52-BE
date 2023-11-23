@@ -20,38 +20,38 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class LicenseOptionModifyMockTest {
 
-	@InjectMocks
-	LicenseOptionModifyServiceImpl licenseOptionModifyService;
+    @InjectMocks
+    LicenseOptionModifyServiceImpl licenseOptionModifyService;
 
-	@Mock
-	LicenseOptionRepository licenseOptionRepository;
+    @Mock
+    LicenseOptionRepository licenseOptionRepository;
 
-	@Test
-	void modifyLicenseOptionByAdminTest() {
-		// Given
-		String licenseOptionId = "testLicenseOptionId";
-		LicenseOptionModifyRequestDto dto = new LicenseOptionModifyRequestDto("modifiedName");
+    @Test
+    void modifyLicenseOptionByAdminTest() {
+        // Given
+        String licenseOptionId = "testLicenseOptionId";
+        LicenseOptionModifyRequestDto dto = new LicenseOptionModifyRequestDto("modifiedName");
 
-		LicenseOption mockLicenseOption = mock(LicenseOption.class);
-		when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.of(mockLicenseOption));
+        LicenseOption mockLicenseOption = mock(LicenseOption.class);
+        when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.of(mockLicenseOption));
 
-		// When
-		licenseOptionModifyService.modifyLicenseOptionByAdmin(ADMIN, licenseOptionId, dto);
+        // When
+        licenseOptionModifyService.modifyLicenseOptionByAdmin(ADMIN, licenseOptionId, dto);
 
-		// Then
-		verify(mockLicenseOption, times(1)).modifyLicenseOption(dto.getName());
-	}
+        // Then
+        verify(mockLicenseOption, times(1)).modifyLicenseOption(dto.getName());
+    }
 
-	@Test
-	void modifyLicenseOptionByAdminTest_LicenseOptionNotFound() {
-		// Given
-		String licenseOptionId = "testLicenseOptionId";
-		LicenseOptionModifyRequestDto dto = new LicenseOptionModifyRequestDto("modifiedName");
+    @Test
+    void modifyLicenseOptionByAdminTest_LicenseOptionNotFound() {
+        // Given
+        String licenseOptionId = "testLicenseOptionId";
+        LicenseOptionModifyRequestDto dto = new LicenseOptionModifyRequestDto("modifiedName");
 
-		when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.empty());
+        when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.empty());
 
-		// Then
-		assertThrows(ResourceNotFoundException.class,
-				() -> licenseOptionModifyService.modifyLicenseOptionByAdmin(ADMIN, licenseOptionId, dto));
-	}
+        // Then
+        assertThrows(ResourceNotFoundException.class,
+                () -> licenseOptionModifyService.modifyLicenseOptionByAdmin(ADMIN, licenseOptionId, dto));
+    }
 }
