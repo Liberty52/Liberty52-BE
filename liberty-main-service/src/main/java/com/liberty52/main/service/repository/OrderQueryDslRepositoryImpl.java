@@ -177,10 +177,16 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
 
         String productName = salesRequestDto.getProductName();
 
-        JPAQuery<Tuple> query = queryFactory.select(orders.amount.sum(), customProduct.count())
+        String optionId = salesRequestDto.getOptionId();
+
+        String optionDetailId = salesRequestDto.getOptionDetailId();
+
+        JPAQuery<Tuple> query = queryFactory.select(orders.amount.sum(), customProduct.quantity.sum(), orders.orderedAt.year(), orders.orderedAt.month())
                 .from(orders)
                 .join(orders.customProducts, customProduct)
-                .join(customProduct.product, product);
+                .join(customProduct.product, product)
+                .join(customProduct.options, customProductOption)
+                .join(customProductOption.optionDetail, optionDetail);
 
         BooleanBuilder whereConditions = new BooleanBuilder();
 
@@ -201,7 +207,16 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
             whereConditions.and(product.name.eq(productName));
         }
 
+        if (optionId != null) {
+            whereConditions.and(customProductOption.id.eq(optionId));
+        }
+
+        if (optionDetailId != null) {
+            whereConditions.and(optionDetail.id.eq(optionDetailId));
+        }
+
         query.where(whereConditions);
+        query.groupBy(orders.orderedAt.year(), orders.orderedAt.month());
 
         return query.fetch();
     }

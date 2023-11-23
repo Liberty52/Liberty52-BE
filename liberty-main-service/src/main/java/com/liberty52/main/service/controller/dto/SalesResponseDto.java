@@ -5,16 +5,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SalesResponseDto {
-    private Long salesMoney;
-    private Long salesQuantity;
+    private Long totalSalesMoney;
+    private Long totalSalesQuantity;
+    private Map<String, Map<String, Object>> monthlySales = new HashMap<>();
 
     @Builder
-    public SalesResponseDto(Long salesMoney, Long salesQuantity) {
-        this.salesMoney = salesMoney;
-        this.salesQuantity = salesQuantity;
+    public SalesResponseDto(Long totalSalesMoney, Long totalSalesQuantity, Map<String, Map<String, Object>> monthlySales) {
+        this.totalSalesMoney = totalSalesMoney;
+        this.totalSalesQuantity = totalSalesQuantity;
+        this.monthlySales = monthlySales;
     }
 
 }
