@@ -3,7 +3,7 @@ filters:
     regexs:
       - /테스트/i
     events: [issues, pull_request]
-    targets: [title, comment, branch]
+    targets: [title, branch]
 
   - label: 🎨 Style
     regexs:
