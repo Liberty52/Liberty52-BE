@@ -7,6 +7,9 @@ jobs:
   add-reviews:
     runs-on: ubuntu-latest
     steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v2
+
       - uses: kentaro-m/auto-assign-action@v1.2.5
         with:
           configuration-path: '.github/auto-assign_configs.yml'
