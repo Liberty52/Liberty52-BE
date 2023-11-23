@@ -1,0 +1,26 @@
+name: Issue PR 타이틀 라벨러
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Run Issue PR Labeler
+        uses: hoho4190/issue-pr-labeler@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
