@@ -45,9 +45,6 @@ jobs:
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-          arguments: build sonar
+          arguments: build ${{ secrets.SONAR_TOKEN }}
 
