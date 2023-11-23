@@ -1,7 +1,8 @@
-name: '리버티 메인 서비스 ::: CI'
+name: '리버티 ::: CI'
 
 on:
-  workflow_dispatch:
+  pull_request:
+    paths: ['liberty-main-service/**', 'liberty-auth-service/**', 'liberty-authentication-library/**', 'build.gradle', 'setting.gradle', '.github/workflows/ci.yml']
 
 permissions:
   contents: read
@@ -18,10 +19,17 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Create bootstrap.yml
+      - name: Create bootstrap.yml for liberty-main-service
         env:
           SECRET_CODE: ${{ secrets.BOOTSTRAP }}
           SECRET_DIR: liberty-main-service/src/main/resources
+          SECRET_FILE_NAME: bootstrap.yml
+        run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
+
+      - name: Create bootstrap.yml for liberty-auth-service
+        env:
+          SECRET_CODE: ${{ secrets.BOOTSTRAP }}
+          SECRET_DIR: liberty-auth-service/src/main/resources
           SECRET_FILE_NAME: bootstrap.yml
         run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
 
@@ -41,5 +49,5 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-          arguments: :liberty-main-service:sonar --info
+          arguments: build jacocoRootReport sonar --info
 
