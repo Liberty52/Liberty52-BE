@@ -1,0 +1,90 @@
+filters:
+  - label: ✅ Test
+    regexs:
+      - /테스트/i
+    events: [issues, pull_request]
+    targets: [title, comment, branch]
+
+  - label: 🎨 Style
+    regexs:
+      - /스타일/i
+    events: [issues, pull_request]
+    targets: [title, comment, branch]
+
+  - label: 🎨 Style
+    regexs:
+      - /포맷팅/i
+    events: [issues, pull_request]
+    targets: [title, comment, branch]
+
+  - label: 🔨 Refactor
+    regexs:
+      - /리팩터링/i
+    events: [issues, pull_request]
+    targets: [title, comment, branch]
+
+  - label: 🚀 Performance
+    regexs:
+      - /성능/i
+    events: [issues, pull_request]
+    targets: [title, comment, branch]
+
+  - label: 📜 Logging
+    regexs:
+      - /로깅/i
+    events: [issues, pull_request]
+    targets: [title, comment, branch]
+
+  - label: 🔄 Integration
+    regexs:
+      - /통합/i
+    events: [issues, pull_request]
+    targets: [title, comment, branch]
+
+  - label: ✨ Feature
+    regexs:
+      - /CRUD/i
+    events: [issues, pull_request]
+    targets: [title, comment, branch]
+
+  - label: 🌏 Deploy
+    regexs:
+      - /디플로이/i
+    events: [issues, pull_request]
+    targets: [title, comment, branch]
+
+  - label: 🛠 Dependency
+    regexs:
+      - /의존성/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
+
+  - label: 🔧 Build
+    regexs:
+      - /빌드/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
+
+  - label: 🐞 BugFix
+    regexs:
+      - /버그픽스/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
+
+  - label: 🤖 Automation
+    regexs:
+      - /오토메이션/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
+
+  - label: 🔐 Authentication
+    regexs:
+      - /인증/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
+
+  - label: 🗂 Architecture
+    regexs:
+      - /아키텍처/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
