@@ -48,6 +48,16 @@ public class MockFactory {
         return Product.create(name, state, price, isPremium);
     }
 
+    public static Product createProduct(String name, ProductState state, Long price, boolean isPremium, int order) {
+        return Product.builder()
+                .name(name)
+                .productState(state)
+                .price(price)
+                .isCustom(isPremium)
+                .order(order)
+                .build();
+    }
+
     public static Product createProduct(String name) {
         return createProduct(name, ProductState.ON_SALE, 10_000_000L, true);
     }
