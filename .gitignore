@@ -51,3 +51,5 @@ spy.log
 ### MacBook
 .DS_Store
 
+### JACOCO REPORTS
+reports
