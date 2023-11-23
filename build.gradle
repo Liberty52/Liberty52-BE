@@ -68,8 +68,8 @@ subprojects {
 
     sonar {
         properties {
-            property "sonar.projectKey", "Liberty52_product_AYv-Hiw1AcchATp2k8L6"
-            property "sonar.projectName", "product"
+            property "sonar.projectKey", "Liberty52"
+            property "sonar.projectName", "Liberty52"
             property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
         }
     }
