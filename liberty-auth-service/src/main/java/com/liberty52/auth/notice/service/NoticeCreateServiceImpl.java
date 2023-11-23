@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class NoticeCreateServiceImpl implements NoticeCreateService {
-    
+
     private final NoticeRepository noticeRepository;
-    
+
     @Override
     public void createNoticeByAdmin(String role, NoticeCreateRequestDto dto) {
         AdminRoleUtils.checkRole(role);

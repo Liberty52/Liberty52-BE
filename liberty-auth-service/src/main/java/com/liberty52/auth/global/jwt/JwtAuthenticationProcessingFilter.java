@@ -59,4 +59,3 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     return reIssuedRefreshToken;
   }
 }
-

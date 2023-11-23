@@ -25,72 +25,72 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class LicenseOptionCreateMockTest {
 
-	@InjectMocks
-	LicenseOptionCreateServiceImpl licenseOptionCreateService;
+    @InjectMocks
+    LicenseOptionCreateServiceImpl licenseOptionCreateService;
 
-	@Mock
-	ProductRepository productRepository;
+    @Mock
+    ProductRepository productRepository;
 
-	@Mock
-	LicenseOptionRepository licenseOptionRepository;
+    @Mock
+    LicenseOptionRepository licenseOptionRepository;
 
-	@Test
-	void createLicenseOptionByAdminTest() {
-		// Given
-		LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
-		String productId = "testProductId";
+    @Test
+    void createLicenseOptionByAdminTest() {
+        // Given
+        LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
+        String productId = "testProductId";
 
-		Product mockProduct = mock(Product.class);
-		when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
+        Product mockProduct = mock(Product.class);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
 
-		// When
-		licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId);
-		licenseOptionRepository.save(LicenseOption.create(dto.getName()));
+        // When
+        licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId);
+        licenseOptionRepository.save(LicenseOption.create(dto.getName()));
 
-		// Then
-		ArgumentCaptor<LicenseOption> captor = ArgumentCaptor.forClass(LicenseOption.class);
-		verify(licenseOptionRepository, times(1)).save(captor.capture());
+        // Then
+        ArgumentCaptor<LicenseOption> captor = ArgumentCaptor.forClass(LicenseOption.class);
+        verify(licenseOptionRepository, times(1)).save(captor.capture());
 
-		assertEquals("testName", captor.getValue().getName());
-	}
+        assertEquals("testName", captor.getValue().getName());
+    }
 
-	@Test
-	void createLicenseOptionByAdminTest_ProductNotFound() {
-		// Given
-		LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
-		String productId = "testProductId";
-		// When
-		when(productRepository.findById(productId)).thenReturn(Optional.empty());
-		// Then
-		assertThrows(ResourceNotFoundException.class,
-				() -> licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId));
-	}
+    @Test
+    void createLicenseOptionByAdminTest_ProductNotFound() {
+        // Given
+        LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
+        String productId = "testProductId";
+        // When
+        when(productRepository.findById(productId)).thenReturn(Optional.empty());
+        // Then
+        assertThrows(ResourceNotFoundException.class,
+                () -> licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId));
+    }
 
-	@Test
-	void createLicenseOptionByAdminTest_ProductIsCustom() {
-		// Given
-		LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
-		String productId = "testProductId";
-		Product mockProduct = mock(Product.class);
-		when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
-		when(mockProduct.isCustom()).thenReturn(true);
-		// When
-		// Then
-		assertThrows(BadRequestException.class,
-				() -> licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId));
-	}
+    @Test
+    void createLicenseOptionByAdminTest_ProductIsCustom() {
+        // Given
+        LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
+        String productId = "testProductId";
+        Product mockProduct = mock(Product.class);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
+        when(mockProduct.isCustom()).thenReturn(true);
+        // When
+        // Then
+        assertThrows(BadRequestException.class,
+                () -> licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId));
+    }
 
-	@Test
-	void createLicenseOptionByAdminTest_Already_License_Option_is_Existed() {
-		// Given
-		LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
-		String productId = "testProductId";
-		Product mockProduct = mock(Product.class);
-		when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
-		when(licenseOptionRepository.findByProductId(productId)).thenReturn(Optional.of(mock(LicenseOption.class)));
-		// When
-		// Then
-		assertThrows(BadRequestException.class,
-				() -> licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId));
-	}
+    @Test
+    void createLicenseOptionByAdminTest_Already_License_Option_is_Existed() {
+        // Given
+        LicenseOptionCreateRequestDto dto = new LicenseOptionCreateRequestDto("testName");
+        String productId = "testProductId";
+        Product mockProduct = mock(Product.class);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
+        when(licenseOptionRepository.findByProductId(productId)).thenReturn(Optional.of(mock(LicenseOption.class)));
+        // When
+        // Then
+        assertThrows(BadRequestException.class,
+                () -> licenseOptionCreateService.createLicenseOptionByAdmin(ADMIN, dto, productId));
+    }
 }

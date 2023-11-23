@@ -15,4 +15,3 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     Page<Product> findByProductStateNot(ProductState productState, Pageable pageable);
 }
-
