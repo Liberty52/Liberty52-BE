@@ -26,21 +26,11 @@ jobs:
           SECRET_FILE_NAME: bootstrap.yml
         run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
 
-      - name: Cache SonarQube packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-          arguments: :liberty-main-service:sonar --info
+          arguments: :liberty-main-service:build
 
