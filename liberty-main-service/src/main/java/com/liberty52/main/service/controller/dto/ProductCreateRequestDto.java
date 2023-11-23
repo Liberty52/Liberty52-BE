@@ -25,4 +25,7 @@ public class ProductCreateRequestDto {
 
     @NotNull
     private Boolean isCustom;
+
+    @Min(1)
+    private Integer order;
 }

@@ -40,17 +40,20 @@ public class Product {
     private String pictureUrl;
     @Column(length = 10000)
     private String content = "";
+    @Column(nullable = false)
+    private Integer order;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
     private ProductDeliveryOption deliveryOption;
 
     @Builder
-    private Product(String name, ProductState productState, Long price, boolean isCustom, String pictureUrl) {
+    private Product(String name, ProductState productState, Long price, boolean isCustom, String pictureUrl, Integer order) {
         this.name = name;
         this.productState = productState;
         this.price = price;
         this.isCustom = isCustom;
         this.pictureUrl = pictureUrl;
+        this.order = order;
     }
 
     public static Product create(String name, ProductState state, Long price, boolean isCustom) {
@@ -92,5 +95,9 @@ public class Product {
         } else {
             return 0;
         }
+    }
+
+    public void updateOrder(int order) {
+        this.order = order;
     }
 }

@@ -31,6 +31,7 @@ public class ProductCreateServiceImpl implements ProductCreateService {
                 .price(productRequestDto.getPrice())
                 .isCustom(productRequestDto.getIsCustom())
                 .pictureUrl(imageUrl)
+                .order(productRequestDto.getOrder())
                 .build();
 
         return productRepository.save(newProduct);
