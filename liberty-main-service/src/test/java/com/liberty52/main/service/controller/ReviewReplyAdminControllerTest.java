@@ -72,7 +72,7 @@ class ReviewReplyAdminControllerTest {
                 .when(reviewReplyCreateService)
                 .createReviewReplyByAdmin(any(), any(), any(), any());
 
-		given(exceptionHandler.handleGlobalException(any(), any()))
+        given(exceptionHandler.handleGlobalException(any(), any()))
                 .willReturn(
                         ResponseEntity.status(HttpStatus.FORBIDDEN)
                                 .body(ErrorResponse.createErrorResponse(exception, String.format(createReplyUrl, mockReviewId)))
@@ -104,7 +104,7 @@ class ReviewReplyAdminControllerTest {
                 .when(reviewReplyCreateService)
                 .createReviewReplyByAdmin(any(), any(), any(), any());
 
-		given(exceptionHandler.handleGlobalException(any(), any()))
+        given(exceptionHandler.handleGlobalException(any(), any()))
                 .willReturn(
                         ResponseEntity.status(exception.getHttpStatus())
                                 .body(ErrorResponse.createErrorResponse(exception, String.format(createReplyUrl, mockReviewId)))

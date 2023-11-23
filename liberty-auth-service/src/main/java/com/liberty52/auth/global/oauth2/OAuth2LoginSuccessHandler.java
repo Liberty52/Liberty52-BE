@@ -42,4 +42,3 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     return new Tokens(authorizationTypePrefix + accessToken, refreshToken);
   }
 }
-

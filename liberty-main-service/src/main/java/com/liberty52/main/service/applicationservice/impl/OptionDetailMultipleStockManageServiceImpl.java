@@ -6,9 +6,7 @@ import com.liberty52.main.service.applicationservice.OptionDetailMultipleStockMa
 import com.liberty52.main.service.applicationservice.OptionDetailStockManageService;
 import com.liberty52.main.service.entity.OptionDetail;
 import com.liberty52.main.service.entity.license.LicenseOptionDetail;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,21 +49,21 @@ public class OptionDetailMultipleStockManageServiceImpl implements OptionDetailM
         });
     }
 
-	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
-	public Result<LicenseOptionDetail> decrementLicense(String licenseOptionDetailId, int quantity) {
-		return Result.runCatching(() -> {
-			List<LicenseOptionDetail> rollbackList = new ArrayList<>();
-			try {
-				var licenseOptionDetail = licenseOptionDetailStockManageService.decrement(licenseOptionDetailId, quantity).getOrThrow();
-				rollbackList.add(licenseOptionDetail);
-				return licenseOptionDetail;
-			} catch (Exception e) {
-				rollbackList.forEach(
-					it -> licenseOptionDetailStockManageService.rollback(it.getId(), quantity).getOrThrow());
-				throw e;
-			}
-		});
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Result<LicenseOptionDetail> decrementLicense(String licenseOptionDetailId, int quantity) {
+        return Result.runCatching(() -> {
+            List<LicenseOptionDetail> rollbackList = new ArrayList<>();
+            try {
+                var licenseOptionDetail = licenseOptionDetailStockManageService.decrement(licenseOptionDetailId, quantity).getOrThrow();
+                rollbackList.add(licenseOptionDetail);
+                return licenseOptionDetail;
+            } catch (Exception e) {
+                rollbackList.forEach(
+                    it -> licenseOptionDetailStockManageService.rollback(it.getId(), quantity).getOrThrow());
+                throw e;
+            }
+        });
 
-	}
+    }
 }

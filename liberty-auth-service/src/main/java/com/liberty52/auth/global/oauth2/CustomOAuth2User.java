@@ -24,4 +24,3 @@ public class CustomOAuth2User extends DefaultOAuth2User {
     this.role = role;
   }
 }
-

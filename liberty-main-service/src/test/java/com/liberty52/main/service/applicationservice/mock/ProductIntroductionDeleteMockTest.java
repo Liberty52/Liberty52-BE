@@ -18,35 +18,35 @@ import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductIntroductionDeleteMockTest {
-	@InjectMocks
-	ProductIntroductionDeleteServiceImpl productIntroductionDeleteService;
+    @InjectMocks
+    ProductIntroductionDeleteServiceImpl productIntroductionDeleteService;
 
-	@Mock
-	ProductRepository productRepository;
+    @Mock
+    ProductRepository productRepository;
 
-	@Test
-	void deleteProductIntroductionTest() {
-		// Given
-		String productId = "testProductId";
-		Product mockProduct = mock(Product.class);
-		given(productRepository.findById(anyString())).willReturn(Optional.of(mockProduct));
+    @Test
+    void deleteProductIntroductionTest() {
+        // Given
+        String productId = "testProductId";
+        Product mockProduct = mock(Product.class);
+        given(productRepository.findById(anyString())).willReturn(Optional.of(mockProduct));
 
-		// When
-		productIntroductionDeleteService.deleteProductIntroduction(ADMIN, productId);
+        // When
+        productIntroductionDeleteService.deleteProductIntroduction(ADMIN, productId);
 
-		// Then: 검증 로직 추가 (예: createContent 메소드 호출 확인)
-		verify(mockProduct).deleteContent();
-	}
+        // Then: 검증 로직 추가 (예: createContent 메소드 호출 확인)
+        verify(mockProduct).deleteContent();
+    }
 
-	@Test
-	void deleteProductIntroductionTestWhenProductIsNull() {
-		// Given
-		String productId = "testProductId";
-		// When
-		given(productRepository.findById(anyString())).willReturn(Optional.empty());
-		// Then: 검증 로직 추가 (예: 이미지가 등록되어 있을 때 예외가 발생하는지 확인)
-		assertThrows(ResourceNotFoundException.class,
-				() -> productIntroductionDeleteService.deleteProductIntroduction(ADMIN, productId));
-	}
+    @Test
+    void deleteProductIntroductionTestWhenProductIsNull() {
+        // Given
+        String productId = "testProductId";
+        // When
+        given(productRepository.findById(anyString())).willReturn(Optional.empty());
+        // Then: 검증 로직 추가 (예: 이미지가 등록되어 있을 때 예외가 발생하는지 확인)
+        assertThrows(ResourceNotFoundException.class,
+                () -> productIntroductionDeleteService.deleteProductIntroduction(ADMIN, productId));
+    }
 
 }

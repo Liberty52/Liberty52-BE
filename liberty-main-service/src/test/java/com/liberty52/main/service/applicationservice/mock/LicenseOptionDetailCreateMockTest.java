@@ -27,101 +27,101 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class LicenseOptionDetailCreateMockTest {
 
-	@InjectMocks
-	LicenseOptionDetailCreateServiceImpl licenseOptionDetailCreateService;
+    @InjectMocks
+    LicenseOptionDetailCreateServiceImpl licenseOptionDetailCreateService;
 
-	@Mock
-	LicenseOptionRepository licenseOptionRepository;
+    @Mock
+    LicenseOptionRepository licenseOptionRepository;
 
-	@Mock
-	LicenseOptionDetailRepository licenseOptionDetailRepository;
+    @Mock
+    LicenseOptionDetailRepository licenseOptionDetailRepository;
 
-	@Mock
-	S3UploaderApi s3Uploader;
+    @Mock
+    S3UploaderApi s3Uploader;
 
-	@Test
-	void createLicenseOptionDetailByAdminTest() {
-		// Given
-		LocalDate startDate = LocalDate.of(2023, 1, 1);
-		LocalDate endDate = startDate.plusDays(10);
-		String licenseOptionId = "testLicenseOptionId";
-		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-				("testArtName", "testArtistName", 100, true, 1000, startDate, endDate);
-		MultipartFile artImageFile = mock(MultipartFile.class);
-		LicenseOption mockLicenseOption = mock(LicenseOption.class);
+    @Test
+    void createLicenseOptionDetailByAdminTest() {
+        // Given
+        LocalDate startDate = LocalDate.of(2023, 1, 1);
+        LocalDate endDate = startDate.plusDays(10);
+        String licenseOptionId = "testLicenseOptionId";
+        LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
+                ("testArtName", "testArtistName", 100, true, 1000, startDate, endDate);
+        MultipartFile artImageFile = mock(MultipartFile.class);
+        LicenseOption mockLicenseOption = mock(LicenseOption.class);
 
-		when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.of(mockLicenseOption));
-		when(s3Uploader.upload(artImageFile)).thenReturn("testArtUrl");
+        when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.of(mockLicenseOption));
+        when(s3Uploader.upload(artImageFile)).thenReturn("testArtUrl");
 
-		// When
-		licenseOptionDetailCreateService.createLicenseOptionDetailByAdmin(ADMIN, dto, licenseOptionId, artImageFile);
+        // When
+        licenseOptionDetailCreateService.createLicenseOptionDetailByAdmin(ADMIN, dto, licenseOptionId, artImageFile);
 
-		// Then
-		ArgumentCaptor<LicenseOptionDetail> captor = ArgumentCaptor.forClass(LicenseOptionDetail.class);
-		verify(licenseOptionDetailRepository, times(1)).save(captor.capture());
-		LicenseOptionDetail savedLicenseOptionDetail = captor.getValue();
-		assertEquals(dto.getArtName(), savedLicenseOptionDetail.getArtName());
-		assertEquals(dto.getArtistName(), savedLicenseOptionDetail.getArtistName());
-		assertEquals(dto.getStock(), savedLicenseOptionDetail.getStock());
-		assertEquals(dto.getOnSale(), savedLicenseOptionDetail.getOnSale());
-		assertEquals(dto.getPrice(), savedLicenseOptionDetail.getPrice());
-		assertEquals("testArtUrl", savedLicenseOptionDetail.getArtUrl());
-	}
+        // Then
+        ArgumentCaptor<LicenseOptionDetail> captor = ArgumentCaptor.forClass(LicenseOptionDetail.class);
+        verify(licenseOptionDetailRepository, times(1)).save(captor.capture());
+        LicenseOptionDetail savedLicenseOptionDetail = captor.getValue();
+        assertEquals(dto.getArtName(), savedLicenseOptionDetail.getArtName());
+        assertEquals(dto.getArtistName(), savedLicenseOptionDetail.getArtistName());
+        assertEquals(dto.getStock(), savedLicenseOptionDetail.getStock());
+        assertEquals(dto.getOnSale(), savedLicenseOptionDetail.getOnSale());
+        assertEquals(dto.getPrice(), savedLicenseOptionDetail.getPrice());
+        assertEquals("testArtUrl", savedLicenseOptionDetail.getArtUrl());
+    }
 
-	@Test
-	void createLicenseOptionDetailByAdmin_WhenLicenseOptionNotFound_ThrowException() {
-		// Given
-		LocalDate startDate = LocalDate.of(2023, 1, 1);
-		LocalDate endDate = startDate.plusDays(10);
-		String licenseOptionId = "testLicenseOptionId";
-		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-				("testArtName", "testArtistName", 100, true, 1000, startDate, endDate);
-		MultipartFile artImageFile = mock(MultipartFile.class);
+    @Test
+    void createLicenseOptionDetailByAdmin_WhenLicenseOptionNotFound_ThrowException() {
+        // Given
+        LocalDate startDate = LocalDate.of(2023, 1, 1);
+        LocalDate endDate = startDate.plusDays(10);
+        String licenseOptionId = "testLicenseOptionId";
+        LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
+                ("testArtName", "testArtistName", 100, true, 1000, startDate, endDate);
+        MultipartFile artImageFile = mock(MultipartFile.class);
 
-		when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.empty());
+        when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.empty());
 
-		// When
-		// Then
-		assertThrows(RuntimeException.class, () -> {
-			licenseOptionDetailCreateService.createLicenseOptionDetailByAdmin(ADMIN, dto, licenseOptionId,
-					artImageFile);
-		});
-	}
+        // When
+        // Then
+        assertThrows(RuntimeException.class, () -> {
+            licenseOptionDetailCreateService.createLicenseOptionDetailByAdmin(ADMIN, dto, licenseOptionId,
+                    artImageFile);
+        });
+    }
 
-	@Test
-	void createLicenseOptionDetailByAdmin_WhenRoleIsNotAdmin() {
-		// Given
-		String licenseOptionId = "testLicenseOptionId";
-		LocalDate startDate = LocalDate.of(2023, 1, 1);
-		LocalDate endDate = startDate.plusDays(10);
-		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-				("testArtName", "testArtistName", 100, true, 1000, startDate, endDate);
-		MultipartFile artImageFile = mock(MultipartFile.class);
+    @Test
+    void createLicenseOptionDetailByAdmin_WhenRoleIsNotAdmin() {
+        // Given
+        String licenseOptionId = "testLicenseOptionId";
+        LocalDate startDate = LocalDate.of(2023, 1, 1);
+        LocalDate endDate = startDate.plusDays(10);
+        LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
+                ("testArtName", "testArtistName", 100, true, 1000, startDate, endDate);
+        MultipartFile artImageFile = mock(MultipartFile.class);
 
-		// When
-		// Then
-		assertThrows(RuntimeException.class, () -> {
-			licenseOptionDetailCreateService.createLicenseOptionDetailByAdmin("USER", dto, licenseOptionId,
-					artImageFile);
-		});
-	}
+        // When
+        // Then
+        assertThrows(RuntimeException.class, () -> {
+            licenseOptionDetailCreateService.createLicenseOptionDetailByAdmin("USER", dto, licenseOptionId,
+                    artImageFile);
+        });
+    }
 
-	@Test
-	void createLicenseOptionDetailByAdmin_WhenArtImageFileIsNull() {
-		// Given
-		String licenseOptionId = "testLicenseOptionId";
-		LocalDate startDate = LocalDate.of(2023, 1, 1);
-		LocalDate endDate = startDate.plusDays(10);
-		LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
-				("testArtName", "testArtistName", 100, true, 1000, startDate, endDate);
-		MultipartFile artImageFile = null;
-		LicenseOption mockLicenseOption = mock(LicenseOption.class);
+    @Test
+    void createLicenseOptionDetailByAdmin_WhenArtImageFileIsNull() {
+        // Given
+        String licenseOptionId = "testLicenseOptionId";
+        LocalDate startDate = LocalDate.of(2023, 1, 1);
+        LocalDate endDate = startDate.plusDays(10);
+        LicenseOptionDetailCreateDto dto = LicenseOptionDetailCreateDto.create
+                ("testArtName", "testArtistName", 100, true, 1000, startDate, endDate);
+        MultipartFile artImageFile = null;
+        LicenseOption mockLicenseOption = mock(LicenseOption.class);
 
-		when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.of(mockLicenseOption));
-		// When
-		// Then
-		assertThrows(BadRequestException.class,
-				() -> licenseOptionDetailCreateService.createLicenseOptionDetailByAdmin(ADMIN, dto, licenseOptionId, artImageFile));
+        when(licenseOptionRepository.findById(licenseOptionId)).thenReturn(Optional.of(mockLicenseOption));
+        // When
+        // Then
+        assertThrows(BadRequestException.class,
+                () -> licenseOptionDetailCreateService.createLicenseOptionDetailByAdmin(ADMIN, dto, licenseOptionId, artImageFile));
 
-	}
+    }
 }

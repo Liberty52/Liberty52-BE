@@ -8,4 +8,3 @@ import java.util.Optional;
 public interface SocialLoginRepository extends JpaRepository<SocialLogin, String> {
     Optional<SocialLogin> findByEmail(String email);
 }
-

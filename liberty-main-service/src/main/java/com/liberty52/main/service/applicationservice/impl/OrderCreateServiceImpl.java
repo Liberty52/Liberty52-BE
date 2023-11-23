@@ -191,7 +191,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
     }
 
     private LicenseOptionDetail getLicenseOptionDetail(OrderCreateRequestDto dto) {
-		String licenseOptionDetailId = dto.getProductDto().getLicenseOptionDetailId();
+        String licenseOptionDetailId = dto.getProductDto().getLicenseOptionDetailId();
         LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(licenseOptionDetailId)
             .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME_LICENSE_OPTION_DETAIL, PARAM_NAME_LICENSE_OPTION_DETAIL_NAME, licenseOptionDetailId));
 
