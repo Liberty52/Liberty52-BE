@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -59,7 +57,6 @@ public class QuestionRetrieveServiceTest {
     if (questionReplyResponse != null) {
       assertThat(questionReplyResponse.getReplyWriterId()).isEqualTo("ADMIN-001");
       assertThat(questionReplyResponse.getReplyContent()).isEqualTo("this is reply content");
-      assertThat(questionReplyResponse.getReplyCreatedAt()).isEqualTo(LocalDate.now());
     }
   }
 

@@ -3,6 +3,7 @@ WORKDIR /app
 COPY build.gradle .
 COPY settings.gradle .
 COPY liberty-auth-service liberty-auth-service
+COPY liberty-common liberty-common
 
 RUN gradle liberty-auth-service:assemble
 

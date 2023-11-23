@@ -1,0 +1,15 @@
+version = '0.0.1'
+
+
+
+jar {
+    enabled = true
+}
+
+bootRun {
+    enabled = false
+}
+
+bootJar {
+    enabled = false
+}

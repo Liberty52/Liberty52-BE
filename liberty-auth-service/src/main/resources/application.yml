@@ -12,3 +12,10 @@ spring:
   cloud:
     config:
       label: main
+  jpa:
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+      data-locations: classpath:db/seed.sql

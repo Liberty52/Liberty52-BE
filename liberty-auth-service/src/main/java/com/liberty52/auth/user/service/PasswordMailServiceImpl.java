@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -26,7 +26,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 @Slf4j
-@Component
+@Service
 @RequiredArgsConstructor
 public class PasswordMailServiceImpl implements PasswordMailService {
 
