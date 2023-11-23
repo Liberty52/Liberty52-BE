@@ -88,3 +88,33 @@ filters:
       - /아키텍처/i
     events: [ issues, pull_request ]
     targets: [ title, comment, branch ]
+
+  - label: 1️⃣ Liberty Main Service
+    regexs:
+      - /메인/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
+
+  - label: 1️⃣ Liberty Main Service
+    regexs:
+      - /Main/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
+
+  - label: 1️⃣ Liberty Main Service
+    regexs:
+      - /MAIN/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
+
+  - label: 2️⃣ Liberty Auth Service
+    regexs:
+      - /Auth/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
+
+  - label: 2️⃣ Liberty AUTH Service
+    regexs:
+      - /AUTH/i
+    events: [ issues, pull_request ]
+    targets: [ title, comment, branch ]
