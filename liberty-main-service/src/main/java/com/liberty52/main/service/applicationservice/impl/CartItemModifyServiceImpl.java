@@ -15,11 +15,14 @@ import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import com.liberty52.main.service.event.internal.ImageRemovedEvent;
 import com.liberty52.main.service.event.internal.dto.ImageRemovedEventDto;
 import com.liberty52.main.service.repository.*;
+import com.liberty52.product.service.controller.dto.CartModifyWithLicenseRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -46,10 +49,48 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
         modifyCartItem(guestId,dto,imageFile,customProductId);
     }
 
+    @Override
+    public void modifyUserCartItemWihLicense(String authId, CartModifyWithLicenseRequestDto dto, String customProductId) {
+        modifyCartItemWithLicence(authId,dto,customProductId);
+    }
+
+    @Override
+    public void modifyGuestCartItemWithLicense(String guestId, CartModifyWithLicenseRequestDto dto, String customProductId) {
+        modifyCartItemWithLicence(guestId,dto,customProductId);
+
+    }
+
+    private void modifyCartItemWithLicence(String ownerId, CartModifyWithLicenseRequestDto dto, String customProductId) {
+        CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
+        validCartItem(ownerId, customProduct);
+        customProduct.modifyQuantity(dto.getQuantity());
+        modifyLicenseOption(dto.getLicenseId(), customProduct);
+        modifyOptionsDetail(dto.getOptionDetailIds(), customProduct);
+    }
+
+    private void modifyLicenseOption(String licenseId, CustomProduct customProduct) {
+        LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(licenseId).orElseThrow(() -> new OptionDetailNotFoundByNameException(licenseId));
+        CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
+        customLicenseOption.associate(licenseOptionDetail);
+        customLicenseOption.associate(customProduct);
+        customLicenseOptionRepository.save(customLicenseOption);
+    }
+
     private void modifyCartItem(String ownerId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
         CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
         validCartItem(ownerId, customProduct);
-        modifyOptionsDetail(dto, customProduct,imageFile);
+        customProduct.modifyQuantity(dto.getQuantity());
+        modifyImage(customProduct, imageFile);
+        modifyOptionsDetail(dto.getOptionDetailIds(), customProduct);
+    }
+
+    private void modifyImage(CustomProduct customProduct, MultipartFile imageFile) {
+        if (imageFile != null){
+            String url = customProduct.getUserCustomPictureUrl();
+            String customPictureUrl = s3Uploader.upload(imageFile);
+            customProduct.modifyCustomPictureUrl(customPictureUrl);
+            eventPublisher.publishEvent(new ImageRemovedEvent(this, new ImageRemovedEventDto(url)));
+        }
     }
 
     private void validCartItem(String authId, CustomProduct customProduct) {
@@ -62,11 +103,11 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
         }
     }
 
-    private void modifyOptionsDetail(CartModifyRequestDto dto, CustomProduct customProduct,MultipartFile imageFile) {
-        customProduct.modifyQuantity(dto.getQuantity());
-        if (!dto.getOptionDetailIds().isEmpty()){
+    private void modifyOptionsDetail(List<String> optionDetailIds, CustomProduct customProduct) {
+
+        if (!optionDetailIds.isEmpty()){
             customProductOptionRepository.deleteAll(customProduct.getOptions());
-            for (String optionDetailId : dto.getOptionDetailIds()){
+            for (String optionDetailId : optionDetailIds){
                 CustomProductOption customProductOption = CustomProductOption.create();
                 OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId)
                         .orElseThrow(() -> new CustomProductNotFoundByIdException(optionDetailId));
@@ -74,46 +115,6 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
                 customProductOption.associate(customProduct);
                 customProductOptionRepository.save(customProductOption);
             }
-        }
-        if (imageFile != null){
-            String url = customProduct.getUserCustomPictureUrl();
-            String customPictureUrl = s3Uploader.upload(imageFile);
-            customProduct.modifyCustomPictureUrl(customPictureUrl);
-            eventPublisher.publishEvent(new ImageRemovedEvent(this, new ImageRemovedEventDto(url)));
-        }
-
-
-        customProduct.modifyQuantity(dto.getQuantity());
-        if (!dto.getOptionDetailIds().isEmpty()){
-            customProductOptionRepository.deleteAll(customProduct.getOptions());
-            boolean isLicense = false;
-            if(!customProduct.getProduct().isCustom()) {
-                isLicense = true;
-            }
-            for (String optionDetailId : dto.getOptionDetailIds()){
-                CustomProductOption customProductOption = CustomProductOption.create();
-                if(isLicense) {
-                    LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
-                    CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
-                    isLicense = false;
-                    customLicenseOption.associate(licenseOptionDetail);
-                    customLicenseOption.associate(customProduct);
-                    customLicenseOptionRepository.save(customLicenseOption);
-                } else {
-                    OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId)
-                            .orElseThrow(() -> new CustomProductNotFoundByIdException(optionDetailId));
-                    customProductOption.associate(optionDetail);
-                    customProductOption.associate(customProduct);
-                    customProductOptionRepository.save(customProductOption);
-                }
-
-            }
-        }
-        if (imageFile != null){
-            String url = customProduct.getUserCustomPictureUrl();
-            String customPictureUrl = s3Uploader.upload(imageFile);
-            customProduct.modifyCustomPictureUrl(customPictureUrl);
-            eventPublisher.publishEvent(new ImageRemovedEvent(this, new ImageRemovedEventDto(url)));
         }
     }
 }

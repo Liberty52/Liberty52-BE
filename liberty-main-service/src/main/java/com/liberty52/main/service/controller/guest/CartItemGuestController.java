@@ -9,6 +9,7 @@ import com.liberty52.main.service.controller.dto.CartItemRequest;
 import com.liberty52.main.service.controller.dto.CartItemResponse;
 import com.liberty52.main.service.controller.dto.CartModifyRequestDto;
 import com.liberty52.product.service.controller.dto.CartItemRequestWithLicense;
+import com.liberty52.product.service.controller.dto.CartModifyWithLicenseRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -83,6 +84,20 @@ public class CartItemGuestController {
             @PathVariable String customProductId
     ) {
         cartItemModifyService.modifyGuestCartItem(guestId, dto, imageFile, customProductId);
+    }
+
+    /**
+     * UPDATE
+     **/
+    @Operation(summary = "비회원 장바구니 상품 수정", description = "비회원 장바구니에 있는 상품을 수정합니다.")
+    @PatchMapping("/guest/carts/custom-products/{customProductId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void modifyGuestCartItemWithLicense(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
+            @RequestPart CartModifyWithLicenseRequestDto dto,
+            @PathVariable String customProductId
+    ) {
+        cartItemModifyService.modifyGuestCartItemWithLicense(guestId, dto, customProductId);
     }
 
     /**

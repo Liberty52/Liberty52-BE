@@ -9,6 +9,7 @@ import com.liberty52.main.service.controller.dto.CartItemRequest;
 import com.liberty52.main.service.controller.dto.CartItemResponse;
 import com.liberty52.main.service.controller.dto.CartModifyRequestDto;
 import com.liberty52.product.service.controller.dto.CartItemRequestWithLicense;
+import com.liberty52.product.service.controller.dto.CartModifyWithLicenseRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +69,17 @@ public class CartItemController {
     public void modifyUserCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId, @RequestPart CartModifyRequestDto dto,
                                    @RequestPart(value = "file", required = false) MultipartFile imageFile, @PathVariable String customProductId) {
         cartItemModifyService.modifyUserCartItem(authId, dto, imageFile, customProductId);
+    }
+
+    /**
+     * UPDATE
+     **/
+    @Operation(summary = "장바구니 라이선스 상품 수정", description = "주어진 인증 ID, 이미지 파일 및 장바구니 상품 수정 요청을 사용하여 사용자 장바구니 상품을 수정합니다.")
+    @PatchMapping("/carts/custom-products/{customProductId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void modifyUserCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId, @RequestPart CartModifyWithLicenseRequestDto dto,
+                                   @PathVariable String customProductId) {
+        cartItemModifyService.modifyUserCartItemWihLicense(authId, dto, customProductId);
     }
 
     /**
