@@ -10,6 +10,7 @@ import com.liberty52.main.service.entity.*;
 import com.liberty52.main.service.entity.license.CustomLicenseOption;
 import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import com.liberty52.main.service.repository.*;
+import com.liberty52.product.service.controller.dto.CartItemRequestWithLicense;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,12 +40,56 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
         createCartItem(cart, authId, imageFile, dto);
     }
 
+    @Override
+    public void createAuthCartItemWithLicense(String authId, CartItemRequestWithLicense dto) {
+        Cart cart = cartRepository.findByAuthId(authId).orElseGet(() -> createCart(authId));
+        createCartItemWithLicense(cart, authId, dto);
+    }
+
+    private void createCartItemWithLicense(Cart cart, String authId, CartItemRequestWithLicense dto) {
+        Product product = productRepository.findById(dto.getProductId()).orElseThrow(() -> new ProductNotFoundByNameException(dto.getProductId())); //예외처리 해야함
+        boolean isLicense = false;
+        CustomProduct customProduct;
+
+        if(product.isCustom() == false){
+            customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), null);
+            isLicense = true;
+        } else {
+            customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), s3Uploader.upload(null));
+        }
+        customProduct.associateWithProduct(product);
+        customProduct.associateWithCart(cart);
+        customProductRepository.save(customProduct);
+
+        for (String optionDetailId :dto.getOptionDetailIds()){
+            if(isLicense){
+                LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
+                CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
+                isLicense = false;
+                customLicenseOption.associate(licenseOptionDetail);
+                customLicenseOption.associate(customProduct);
+                customLicenseOptionRepository.save(customLicenseOption);
+            } else {
+
+                CustomProductOption customProductOption = CustomProductOption.create();
+                OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
+
+                customProductOption.associate(optionDetail);
+                customProductOption.associate(customProduct);
+                customProductOptionRepository.save(customProductOption);
+            }
+        }
+
+    }
+
     private Cart createCart(String authId) {
         Cart cart = Cart.create(authId);
         cart = cartRepository.save(cart);
         return cart;
     }
 
+
+    
     private void createCartItem(Cart cart, String authId, MultipartFile imageFile, CartItemRequest dto) {
         Product product = productRepository.findById(dto.getProductId()).orElseThrow(() -> new ProductNotFoundByNameException(dto.getProductId())); //예외처리 해야함
         boolean isLicense = false;
@@ -89,6 +134,8 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
         cart.updateExpiryDate(today.plusDays(7));
         createCartItem(cart, guestId, imageFile, dto);
     }
+
+
 
     private Cart createGuestCart(String guestId) {
         Cart cart = Cart.create(guestId);
