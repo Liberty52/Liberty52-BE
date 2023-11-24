@@ -69,11 +69,13 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
     }
 
     private void modifyLicenseOption(String licenseId, CustomProduct customProduct) {
-        LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(licenseId).orElseThrow(() -> new OptionDetailNotFoundByNameException(licenseId));
-        CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
-        customLicenseOption.associate(licenseOptionDetail);
-        customLicenseOption.associate(customProduct);
-        customLicenseOptionRepository.save(customLicenseOption);
+        if(licenseId != customProduct.getCustomLicenseOption().getId()) {
+            LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(licenseId).orElseThrow(() -> new OptionDetailNotFoundByNameException(licenseId));
+            CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
+            customLicenseOption.associate(licenseOptionDetail);
+            customLicenseOption.associate(customProduct);
+            customLicenseOptionRepository.save(customLicenseOption);
+        }
     }
 
     private void modifyCartItem(String ownerId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
