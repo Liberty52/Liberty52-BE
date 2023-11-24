@@ -10,6 +10,7 @@ import com.liberty52.main.service.entity.Product;
 import com.liberty52.main.service.entity.ProductState;
 import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import com.liberty52.main.service.repository.*;
+import com.liberty52.product.service.controller.dto.CartItemRequestWithLicense;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,11 +64,11 @@ public class CartLicenseItemCreateServiceMockTest {
     void 라이선스상품장바구니생성() throws IOException {
 
         //given
-        String[] option = {"licenseOption","OPT-001", "OPT-003", "OPT-005"};
-        CartItemRequest dto1 = new CartItemRequest().builder().productId("LIB-002").quantity(1).optionDetailIds(option).build();
-        CartItemRequest dto2 = new CartItemRequest().builder().productId("L").quantity(2).optionDetailIds(option).build();
-        String[] optionErr = {"err","OPT-002", "OPT-003", "OPT-005"};
-        CartItemRequest dto3 = new CartItemRequest().builder().productId("LIB-002").quantity(4).optionDetailIds(optionErr).build();
+        String[] option = {"OPT-001", "OPT-003", "OPT-005"};
+        CartItemRequestWithLicense dto1 = new CartItemRequestWithLicense().builder().productId("LIB-002").quantity(1).optionDetailIds(option).licenseOptionId("licenseOption").build();
+        CartItemRequestWithLicense dto2 = new CartItemRequestWithLicense().builder().productId("L").quantity(2).optionDetailIds(option).licenseOptionId("licenseOption").build();
+        String[] optionErr = {"OPT-002", "OPT-003", "OPT-005"};
+        CartItemRequestWithLicense dto3 = new CartItemRequestWithLicense().builder().productId("LIB-002").quantity(4).optionDetailIds(optionErr).licenseOptionId("err").build();
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
 
@@ -87,7 +88,7 @@ public class CartLicenseItemCreateServiceMockTest {
         given(optionDetailRepository.findById("OPT-005")).willReturn(Optional.ofNullable(OptionDetail.create("무광실버", 100, true, 100)));
 
         //when
-        cartItemCreateService.createAuthCartItem("testId", imageFile, dto1);
+        cartItemCreateService.createAuthCartItemWithLicense("testId", dto1);
 
         //then
         verify(cartRepository, atMostOnce()).findByAuthId(any());
@@ -95,9 +96,9 @@ public class CartLicenseItemCreateServiceMockTest {
         //verify(optionDetailRepository, times(3)).findById(any());
 
         //예외
-        Assertions.assertThrows(ProductNotFoundByNameException.class, () -> cartItemCreateService.createAuthCartItem("testId", imageFile, dto2));
+        Assertions.assertThrows(ProductNotFoundByNameException.class, () -> cartItemCreateService.createAuthCartItemWithLicense("testId", dto2));
 //
-        Assertions.assertThrows(OptionDetailNotFoundByNameException.class, () -> cartItemCreateService.createAuthCartItem("testId", imageFile, dto3));
+        Assertions.assertThrows(OptionDetailNotFoundByNameException.class, () -> cartItemCreateService.createAuthCartItemWithLicense("testId", dto3));
 
 
 

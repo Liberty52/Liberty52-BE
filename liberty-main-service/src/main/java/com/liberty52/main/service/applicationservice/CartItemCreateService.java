@@ -10,4 +10,6 @@ public interface CartItemCreateService {
     void createGuestCartItem(String guestId, MultipartFile imageFile, CartItemRequest dto);
 
     void createAuthCartItemWithLicense(String authId, CartItemRequestWithLicense dto);
+
+    void createGuestCartItemWithLicense(String guestId, CartItemRequestWithLicense dto);
 }

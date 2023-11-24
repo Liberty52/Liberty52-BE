@@ -37,49 +37,39 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
     @Override
     public void createAuthCartItem(String authId, MultipartFile imageFile, CartItemRequest dto) {
         Cart cart = cartRepository.findByAuthId(authId).orElseGet(() -> createCart(authId));
-        createCartItem(cart, authId, imageFile, dto);
+        CustomProduct customProduct = createCustomProduct(cart, dto, authId, imageFile);
+        createCartItem(customProduct, dto.getOptionDetailIds());
+    }
+
+    private CustomProduct createCustomProduct(Cart cart, CartItemRequest dto, String authId, MultipartFile imageFile) {
+        Product product = productRepository.findById(dto.getProductId()).orElseThrow(() -> new ProductNotFoundByNameException(dto.getProductId())); //예외처리 해야함
+        CustomProduct customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), s3Uploader.upload(imageFile));
+        customProduct.associateWithProduct(product);
+        customProduct.associateWithCart(cart);
+        customProductRepository.save(customProduct);
+        return customProduct;
     }
 
     @Override
     public void createAuthCartItemWithLicense(String authId, CartItemRequestWithLicense dto) {
         Cart cart = cartRepository.findByAuthId(authId).orElseGet(() -> createCart(authId));
-        createCartItemWithLicense(cart, authId, dto);
+        CustomProduct customProduct = createLicenseProduct(cart, dto, authId);
+        createCartItem(customProduct, dto.getOptionDetailIds());
     }
 
-    private void createCartItemWithLicense(Cart cart, String authId, CartItemRequestWithLicense dto) {
+    private CustomProduct createLicenseProduct(Cart cart, CartItemRequestWithLicense dto, String authId) {
         Product product = productRepository.findById(dto.getProductId()).orElseThrow(() -> new ProductNotFoundByNameException(dto.getProductId())); //예외처리 해야함
-        boolean isLicense = false;
-        CustomProduct customProduct;
-
-        if(product.isCustom() == false){
-            customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), null);
-            isLicense = true;
-        } else {
-            customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), s3Uploader.upload(null));
-        }
+        CustomProduct customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), "");
         customProduct.associateWithProduct(product);
         customProduct.associateWithCart(cart);
         customProductRepository.save(customProduct);
 
-        for (String optionDetailId :dto.getOptionDetailIds()){
-            if(isLicense){
-                LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
-                CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
-                isLicense = false;
-                customLicenseOption.associate(licenseOptionDetail);
-                customLicenseOption.associate(customProduct);
-                customLicenseOptionRepository.save(customLicenseOption);
-            } else {
-
-                CustomProductOption customProductOption = CustomProductOption.create();
-                OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
-
-                customProductOption.associate(optionDetail);
-                customProductOption.associate(customProduct);
-                customProductOptionRepository.save(customProductOption);
-            }
-        }
-
+        LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(dto.getLicenseOptionId()).orElseThrow(() -> new OptionDetailNotFoundByNameException(dto.getLicenseOptionId()));
+        CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
+        customLicenseOption.associate(licenseOptionDetail);
+        customLicenseOption.associate(customProduct);
+        customLicenseOptionRepository.save(customLicenseOption);
+        return customProduct;
     }
 
     private Cart createCart(String authId) {
@@ -87,44 +77,26 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
         cart = cartRepository.save(cart);
         return cart;
     }
-
-
     
-    private void createCartItem(Cart cart, String authId, MultipartFile imageFile, CartItemRequest dto) {
-        Product product = productRepository.findById(dto.getProductId()).orElseThrow(() -> new ProductNotFoundByNameException(dto.getProductId())); //예외처리 해야함
-        boolean isLicense = false;
-        CustomProduct customProduct;
+    private void createCartItem(CustomProduct customProduct, String[] optionDetailIds) {
+        for (String optionDetailId :optionDetailIds){
+            CustomProductOption customProductOption = CustomProductOption.create();
+            OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
 
-        if(product.isCustom() == false){
-            customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), null);
-            isLicense = true;
-        } else {
-            customProduct = CustomProduct.createCartItem(authId, dto.getQuantity(), s3Uploader.upload(imageFile));
-        }
-        customProduct.associateWithProduct(product);
-        customProduct.associateWithCart(cart);
-        customProductRepository.save(customProduct);
-
-        for (String optionDetailId :dto.getOptionDetailIds()){
-            if(isLicense){
-                LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
-                CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
-                isLicense = false;
-                customLicenseOption.associate(licenseOptionDetail);
-                customLicenseOption.associate(customProduct);
-                customLicenseOptionRepository.save(customLicenseOption);
-            } else {
-
-                CustomProductOption customProductOption = CustomProductOption.create();
-                OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId).orElseThrow(() -> new OptionDetailNotFoundByNameException(optionDetailId));
-
-                customProductOption.associate(optionDetail);
-                customProductOption.associate(customProduct);
-                customProductOptionRepository.save(customProductOption);
-            }
+            customProductOption.associate(optionDetail);
+            customProductOption.associate(customProduct);
+            customProductOptionRepository.save(customProductOption);
         }
 
+    }
 
+    @Override
+    public void createGuestCartItemWithLicense(String guestId, CartItemRequestWithLicense dto) {
+        LocalDate today = LocalDate.now();
+        Cart cart = cartRepository.findByAuthIdAndExpiryDateGreaterThanEqual(guestId, today).orElseGet(() -> createGuestCart(guestId));
+        cart.updateExpiryDate(today.plusDays(7));
+        CustomProduct customProduct = createLicenseProduct(cart, dto, guestId);
+        createCartItem(customProduct, dto.getOptionDetailIds());
     }
 
     @Override
@@ -132,10 +104,9 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
         LocalDate today = LocalDate.now();
         Cart cart = cartRepository.findByAuthIdAndExpiryDateGreaterThanEqual(guestId, today).orElseGet(() -> createGuestCart(guestId));
         cart.updateExpiryDate(today.plusDays(7));
-        createCartItem(cart, guestId, imageFile, dto);
+        CustomProduct customProduct = createCustomProduct(cart, dto, guestId, imageFile);
+        createCartItem(customProduct, dto.getOptionDetailIds());
     }
-
-
 
     private Cart createGuestCart(String guestId) {
         Cart cart = Cart.create(guestId);

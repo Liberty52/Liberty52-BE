@@ -8,6 +8,7 @@ import com.liberty52.main.service.controller.dto.CartItemListRemoveRequestDto;
 import com.liberty52.main.service.controller.dto.CartItemRequest;
 import com.liberty52.main.service.controller.dto.CartItemResponse;
 import com.liberty52.main.service.controller.dto.CartModifyRequestDto;
+import com.liberty52.product.service.controller.dto.CartItemRequestWithLicense;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,19 @@ public class CartItemGuestController {
             @RequestPart CartItemRequest dto
     ) {
         cartItemCreateService.createGuestCartItem(guestId, imageFile, dto);
+    }
+
+    /**
+     * CREATE
+     **/
+    @Operation(summary = "비회원 장바구니에 라이선스 상품 추가", description = "비회원 장바구니에 상품을 추가합니다.")
+    @PostMapping("/guest/carts/license-products")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createGuestCartItem(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
+            @RequestPart CartItemRequestWithLicense dto
+    ) {
+        cartItemCreateService.createGuestCartItemWithLicense(guestId, dto);
     }
 
     /**

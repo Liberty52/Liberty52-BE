@@ -66,6 +66,26 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
         customProduct.modifyQuantity(dto.getQuantity());
         if (!dto.getOptionDetailIds().isEmpty()){
             customProductOptionRepository.deleteAll(customProduct.getOptions());
+            for (String optionDetailId : dto.getOptionDetailIds()){
+                CustomProductOption customProductOption = CustomProductOption.create();
+                OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId)
+                        .orElseThrow(() -> new CustomProductNotFoundByIdException(optionDetailId));
+                customProductOption.associate(optionDetail);
+                customProductOption.associate(customProduct);
+                customProductOptionRepository.save(customProductOption);
+            }
+        }
+        if (imageFile != null){
+            String url = customProduct.getUserCustomPictureUrl();
+            String customPictureUrl = s3Uploader.upload(imageFile);
+            customProduct.modifyCustomPictureUrl(customPictureUrl);
+            eventPublisher.publishEvent(new ImageRemovedEvent(this, new ImageRemovedEventDto(url)));
+        }
+
+
+        customProduct.modifyQuantity(dto.getQuantity());
+        if (!dto.getOptionDetailIds().isEmpty()){
+            customProductOptionRepository.deleteAll(customProduct.getOptions());
             boolean isLicense = false;
             if(!customProduct.getProduct().isCustom()) {
                 isLicense = true;
