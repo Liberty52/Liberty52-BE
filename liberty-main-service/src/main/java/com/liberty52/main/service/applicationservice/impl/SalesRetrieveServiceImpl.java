@@ -10,8 +10,11 @@ import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.liberty52.main.service.entity.QCustomProduct.customProduct;
+import static com.liberty52.main.service.entity.QOrders.orders;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class SalesRetrieveServiceImpl implements SalesRetrieveService {
         Validator.isAdmin(role);
         List<Tuple> result = orderQueryDslRepository.retrieveByConditions(salesRequestDto);
         if (result.isEmpty()) return SalesResponseDto.builder()
-                .salesMoney(0L).salesQuantity(0L).build();
+                .totalSalesMoney(0L).totalSalesQuantity(0L).monthlySales(Collections.emptyMap()).build();
 
         Long totalSalesMoney = result.stream()
                 .map(tuple -> tuple.get(0, Long.class))
@@ -33,13 +36,32 @@ public class SalesRetrieveServiceImpl implements SalesRetrieveService {
                 .sum();
 
         Long totalSalesQuantity = result.stream()
-                .map(tuple -> tuple.get(1, Long.class))
+                .map(tuple -> tuple.get(1, Integer.class))
                 .filter(Objects::nonNull)
-                .mapToLong(Long::longValue)
+                .mapToLong(Integer::longValue)
                 .sum();
 
+        Map<String, Map<String, Object>> monthlySales = result.stream()
+                .collect(Collectors.toMap(
+                        tuple -> {
+                            Integer year = tuple.get(orders.orderedAt.year());
+                            Integer month = tuple.get(orders.orderedAt.month());
+                            if (year != null && month != null) {
+                                return year.toString() + " - " + month.toString();
+                            }
+                            return "no OrderedDate";
+                        },
+                        tuple -> {
+                            Map<String, Object> resultMap = new HashMap<>();
+                            resultMap.put("salesMoney", tuple.get(orders.amount.sum()));
+                            resultMap.put("salesQuantity", tuple.get(customProduct.quantity.sum()));
+                            return resultMap;
+                        },
+                        (existing, replacement) -> existing
+                ));
+
         return SalesResponseDto.builder()
-                .salesMoney(totalSalesMoney).salesQuantity(totalSalesQuantity).build();
+                .totalSalesMoney(totalSalesMoney).totalSalesQuantity(totalSalesQuantity).monthlySales(monthlySales).build();
 
     }
 }

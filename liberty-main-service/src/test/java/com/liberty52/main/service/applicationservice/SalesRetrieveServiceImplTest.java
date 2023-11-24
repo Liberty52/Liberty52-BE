@@ -30,7 +30,7 @@ public class SalesRetrieveServiceImplTest {
         // When
         SalesResponseDto responseDto = salesRetrieveService.retrieveSales(ADMIN, requestDto);
         // Then
-        Assertions.assertEquals(0, responseDto.getSalesQuantity());
+        Assertions.assertEquals(0, responseDto.getTotalSalesQuantity());
     }
 
     @Test
@@ -51,7 +51,7 @@ public class SalesRetrieveServiceImplTest {
                 .setParameter("param3", OrderStatus.REFUND);
         List<CustomProduct> found = query.getResultList();
         //Then
-        Assertions.assertEquals(found.size(), responseDto.getSalesQuantity());
+        Assertions.assertEquals(found.size(), responseDto.getTotalSalesQuantity());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class SalesRetrieveServiceImplTest {
             foundSalesMoney += customProduct.getOrders().getAmount();
         }
         // Then
-        Assertions.assertEquals(found.size(), responseDto.getSalesQuantity());
-        Assertions.assertEquals(foundSalesMoney, responseDto.getSalesMoney());
+        Assertions.assertEquals(found.size(), responseDto.getTotalSalesQuantity());
+        Assertions.assertEquals(foundSalesMoney, responseDto.getTotalSalesMoney());
     }
 }

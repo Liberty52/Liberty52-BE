@@ -177,10 +177,12 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
 
         String productName = salesRequestDto.getProductName();
 
-        JPAQuery<Tuple> query = queryFactory.select(orders.amount.sum(), customProduct.count())
+        String optionDetailId = salesRequestDto.getOptionDetailId();
+
+        JPAQuery<Tuple> query = queryFactory.select(orders.amount.sum(), customProduct.quantity.sum(), orders.orderedAt.year(), orders.orderedAt.month())
                 .from(orders)
-                .join(orders.customProducts, customProduct)
-                .join(customProduct.product, product);
+                .innerJoin(orders.customProducts, customProduct)
+                .innerJoin(customProduct.product, product);
 
         BooleanBuilder whereConditions = new BooleanBuilder();
 
@@ -195,15 +197,20 @@ public class OrderQueryDslRepositoryImpl implements OrderQueryDslRepository {
             }
         }
 
-        whereConditions.and(orders.orderStatus.notIn(OrderStatus.CANCEL_REQUESTED, OrderStatus.CANCELED, OrderStatus.REFUND));
-
         if (productName != null) {
             whereConditions.and(product.name.eq(productName));
         }
 
-        query.where(whereConditions);
+        if (optionDetailId != null) {
+            whereConditions.and(customProduct.options.any().optionDetail.id.eq(optionDetailId));
+        }
 
-        return query.fetch();
+        whereConditions.and(orders.orderStatus.notIn(OrderStatus.CANCEL_REQUESTED, OrderStatus.CANCELED, OrderStatus.REFUND));
+
+        query.where(whereConditions);
+        query.groupBy(orders.orderedAt.year(), orders.orderedAt.month());
+
+        return query.distinct().fetch();
     }
 
     private JPAQuery<Orders> selectOrdersAndAssociatedEntityWithCanceledOrders() {
