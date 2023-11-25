@@ -4,10 +4,7 @@ import com.liberty52.main.service.applicationservice.CartItemCreateService;
 import com.liberty52.main.service.applicationservice.CartItemModifyService;
 import com.liberty52.main.service.applicationservice.CartItemRemoveService;
 import com.liberty52.main.service.applicationservice.CartItemRetrieveService;
-import com.liberty52.main.service.controller.dto.CartItemListRemoveRequestDto;
-import com.liberty52.main.service.controller.dto.CartItemRequest;
-import com.liberty52.main.service.controller.dto.CartItemResponse;
-import com.liberty52.main.service.controller.dto.CartModifyRequestDto;
+import com.liberty52.main.service.controller.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +35,23 @@ public class CartItemGuestController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createGuestCartItem(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
-            @RequestPart(value = "file", required = false) MultipartFile imageFile,
+            @RequestPart(value = "file") MultipartFile imageFile,
             @RequestPart CartItemRequest dto
     ) {
         cartItemCreateService.createGuestCartItem(guestId, imageFile, dto);
+    }
+
+    /**
+     * CREATE
+     **/
+    @Operation(summary = "비회원 장바구니에 라이선스 상품 추가", description = "비회원 장바구니에 라이선스 상품을 추가합니다.")
+    @PostMapping("/guest/carts/license-products")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createGuestCartItem(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
+            @RequestPart CartItemRequestWithLicense dto
+    ) {
+        cartItemCreateService.createGuestCartItemWithLicense(guestId, dto);
     }
 
     /**
@@ -69,6 +79,20 @@ public class CartItemGuestController {
             @PathVariable String customProductId
     ) {
         cartItemModifyService.modifyGuestCartItem(guestId, dto, imageFile, customProductId);
+    }
+
+    /**
+     * UPDATE
+     **/
+    @Operation(summary = "비회원 장바구니 라이선스 상품 수정", description = "비회원 장바구니에 있는 라이선스 상품을 수정합니다.")
+    @PatchMapping("/guest/carts/license-products/{customProductId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void modifyGuestCartItemWithLicense(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
+            @RequestPart CartModifyWithLicenseRequestDto dto,
+            @PathVariable String customProductId
+    ) {
+        cartItemModifyService.modifyGuestCartItemWithLicense(guestId, dto, customProductId);
     }
 
     /**
