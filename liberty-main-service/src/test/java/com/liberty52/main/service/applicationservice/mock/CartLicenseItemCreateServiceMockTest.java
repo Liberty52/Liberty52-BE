@@ -9,7 +9,7 @@ import com.liberty52.main.service.entity.Product;
 import com.liberty52.main.service.entity.ProductState;
 import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import com.liberty52.main.service.repository.*;
-import com.liberty52.product.service.controller.dto.CartItemRequestWithLicense;
+import com.liberty52.main.service.controller.dto.CartItemRequestWithLicense;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

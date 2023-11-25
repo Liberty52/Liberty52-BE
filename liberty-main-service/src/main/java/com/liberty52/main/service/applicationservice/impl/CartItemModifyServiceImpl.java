@@ -15,7 +15,7 @@ import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import com.liberty52.main.service.event.internal.ImageRemovedEvent;
 import com.liberty52.main.service.event.internal.dto.ImageRemovedEventDto;
 import com.liberty52.main.service.repository.*;
-import com.liberty52.product.service.controller.dto.CartModifyWithLicenseRequestDto;
+import com.liberty52.main.service.controller.dto.CartModifyWithLicenseRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

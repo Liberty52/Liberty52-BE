@@ -1,7 +1,7 @@
 package com.liberty52.main.service.applicationservice;
 
 import com.liberty52.main.service.controller.dto.CartItemRequest;
-import com.liberty52.product.service.controller.dto.CartItemRequestWithLicense;
+import com.liberty52.main.service.controller.dto.CartItemRequestWithLicense;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface CartItemCreateService {

@@ -1,4 +1,4 @@
-package com.liberty52.product.service.controller.dto;
+package com.liberty52.main.service.controller.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

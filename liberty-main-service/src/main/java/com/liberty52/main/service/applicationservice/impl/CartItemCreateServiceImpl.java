@@ -10,7 +10,7 @@ import com.liberty52.main.service.entity.*;
 import com.liberty52.main.service.entity.license.CustomLicenseOption;
 import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import com.liberty52.main.service.repository.*;
-import com.liberty52.product.service.controller.dto.CartItemRequestWithLicense;
+import com.liberty52.main.service.controller.dto.CartItemRequestWithLicense;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
