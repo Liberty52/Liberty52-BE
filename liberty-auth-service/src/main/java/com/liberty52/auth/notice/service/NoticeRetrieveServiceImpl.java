@@ -57,7 +57,7 @@ public class NoticeRetrieveServiceImpl implements NoticeRetrieveService {
 
     @Override
     public NoticeRetrieveResponse retrieveNoticesByAdmin(String role, Pageable pageable) {
-        AdminRoleUtils.checkRole(role);
+        AdminRoleUtils.isAdmin(role);
 
         Page<Notice> notices = noticeRepository.findAllByOrderByCreatedAtDesc(pageable);
         if (CollectionUtils.isEmpty(notices.getContent())) {
@@ -70,7 +70,7 @@ public class NoticeRetrieveServiceImpl implements NoticeRetrieveService {
 
     @Override
     public NoticeDetailResponse retrieveNoticeDetailByAdmin(String role, String noticeId) {
-        AdminRoleUtils.checkRole(role);
+        AdminRoleUtils.isAdmin(role);
 
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new NoticeNotFoundById(noticeId));

@@ -15,7 +15,7 @@ public class NoticeDeleteServiceImpl implements NoticeDeleteService {
   private final NoticeRepository noticeRepository;
   @Override
   public void deleteNoticeByAdmin(String role, String noticeId) {
-    AdminRoleUtils.checkRole(role);
+    AdminRoleUtils.isAdmin(role);
     Notice notice = noticeRepository.findById(noticeId)
         .orElseThrow(() -> new ResourceNotFoundException("notice", "id", noticeId));
     noticeRepository.delete(notice);

@@ -19,7 +19,7 @@ public class QuestionReplyCreateServiceImpl implements QuestionReplyCreateServic
 
   @Override
   public void createQuestionReplyByAdmin(String adminId, String role, QuestionReplyCreateRequestDto dto) {
-    AdminRoleUtils.checkRole(role);
+    AdminRoleUtils.isAdmin(role);
     Question question = questionRepository.findById(dto.getQuestionId())
         .orElseThrow(() -> new QuestionNotFoundById(dto.getQuestionId()));
     QuestionReply questionReply = QuestionReply.create(dto.getContent(), adminId);
