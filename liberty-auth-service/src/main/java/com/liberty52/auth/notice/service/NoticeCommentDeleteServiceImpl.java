@@ -35,7 +35,7 @@ public class NoticeCommentDeleteServiceImpl implements NoticeCommentDeleteServic
 
     @Override
     public void deleteNoticeCommentByAdmin(String role, String noticeId, String commentId) {
-        AdminRoleUtils.checkRole(role);
+        AdminRoleUtils.isAdmin(role);
         noticeRepository.findById(noticeId).orElseThrow(()-> new NoticeNotFoundById(noticeId));
         NoticeComment noticeComment = noticeCommentRepository.findById(commentId).orElseThrow(()-> new NoticeCommentNotFoundById(commentId));
         noticeCommentRepository.delete(noticeComment);

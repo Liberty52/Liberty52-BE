@@ -17,7 +17,7 @@ public class QuestionReplyDeleteServiceImpl implements QuestionReplyDeleteServic
 
   @Override
   public void deleteQuestionReplyByAdmin(String adminId, String role, String questionReplyId) {
-    AdminRoleUtils.checkRole(role);
+    AdminRoleUtils.isAdmin(role);
     QuestionReply questionReply = questionReplyRepository.findById(questionReplyId)
         .orElseThrow(() -> new QuestionReplyNotFoundByIdException(questionReplyId));
     questionReply.removeQuestion();

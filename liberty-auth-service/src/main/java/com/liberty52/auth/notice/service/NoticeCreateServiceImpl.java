@@ -17,7 +17,7 @@ public class NoticeCreateServiceImpl implements NoticeCreateService {
 
     @Override
     public void createNoticeByAdmin(String role, NoticeCreateRequestDto dto) {
-        AdminRoleUtils.checkRole(role);
+        AdminRoleUtils.isAdmin(role);
         Notice notice = Notice.create(dto.getTitle(), dto.getContent(), dto.isCommentable());
         noticeRepository.save(notice);
     }

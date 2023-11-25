@@ -96,7 +96,7 @@ public class QuestionRetrieveServiceImpl implements QuestionRetrieveService {
 
   @Override
   public QuestionDetailResponseDto retrieveQuestionDetailByAdmin(String role, String questionId) {
-    AdminRoleUtils.checkRole(role);
+    AdminRoleUtils.isAdmin(role);
     Question question = questionRepository.findById(questionId)
         .orElseThrow(() -> new QuestionNotFoundById(questionId));
     QuestionReply questionReply = question.getQuestionReply();
@@ -121,7 +121,7 @@ public class QuestionRetrieveServiceImpl implements QuestionRetrieveService {
   }
 
   private void validateRoleAndPageSize(String role, int pageSize) {
-    AdminRoleUtils.checkRole(role);
+    AdminRoleUtils.isAdmin(role);
     if (pageSize <= 0) {
       throw new PageSizeException();
     }

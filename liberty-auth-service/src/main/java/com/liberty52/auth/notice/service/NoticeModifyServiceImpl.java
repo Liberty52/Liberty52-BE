@@ -16,7 +16,7 @@ public class NoticeModifyServiceImpl implements NoticeModifyService {
 
     @Override
     public void modifyNoticeByAdmin(String role, String noticeId, NoticeModifyRequestDto dto) {
-        AdminRoleUtils.checkRole(role);
+        AdminRoleUtils.isAdmin(role);
         noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new ResourceNotFoundException("notice", "id", noticeId))
                 .modify(dto.getTitle(), dto.getContent(), dto.isCommentable());

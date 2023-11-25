@@ -17,7 +17,7 @@ public class CustomerInfoRetrieveServiceImpl implements CustomerInfoRetrieveServ
 
     @Override
     public CustomerInfoListResponseDto retrieveCustomerInfoByAdmin(String role, Pageable pageable) {
-        AdminRoleUtils.checkRole(role);
+        AdminRoleUtils.isAdmin(role);
         Page<Auth> page = authRepository.findByRole(Role.USER, pageable);
         return CustomerInfoListResponseDto.of(page);
     }

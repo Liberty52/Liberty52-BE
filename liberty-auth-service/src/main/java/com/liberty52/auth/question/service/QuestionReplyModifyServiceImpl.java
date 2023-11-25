@@ -17,7 +17,7 @@ public class QuestionReplyModifyServiceImpl implements QuestionReplyModifyServic
 
     @Override
     public void modifyQuestionReplyByAdmin(String writerId, String role, String questionReplyId, QuestionReplyModifyRequestDto dto) {
-        AdminRoleUtils.checkRole(role);
+        AdminRoleUtils.isAdmin(role);
         QuestionReply questionReply = questionReplyRepository.findById(questionReplyId)
                 .orElseThrow(() -> new QuestionReplyNotFoundByIdException(questionReplyId));
         questionReply.modify(dto.getContent()); // ensure validated
