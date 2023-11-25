@@ -3,7 +3,6 @@ package com.liberty52.main.service.applicationservice.mock;
 import com.liberty52.main.global.exception.external.notfound.OptionDetailNotFoundByNameException;
 import com.liberty52.main.global.exception.external.notfound.ProductNotFoundByNameException;
 import com.liberty52.main.service.applicationservice.impl.CartItemCreateServiceImpl;
-import com.liberty52.main.service.controller.dto.CartItemRequest;
 import com.liberty52.main.service.entity.Cart;
 import com.liberty52.main.service.entity.OptionDetail;
 import com.liberty52.main.service.entity.Product;

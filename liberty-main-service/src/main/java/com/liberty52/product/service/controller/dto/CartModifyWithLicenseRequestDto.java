@@ -1,6 +1,5 @@
 package com.liberty52.product.service.controller.dto;
 
-import com.liberty52.main.service.controller.dto.CartModifyRequestDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
