@@ -4,12 +4,7 @@ import com.liberty52.main.service.applicationservice.CartItemCreateService;
 import com.liberty52.main.service.applicationservice.CartItemModifyService;
 import com.liberty52.main.service.applicationservice.CartItemRemoveService;
 import com.liberty52.main.service.applicationservice.CartItemRetrieveService;
-import com.liberty52.main.service.controller.dto.CartItemListRemoveRequestDto;
-import com.liberty52.main.service.controller.dto.CartItemRequest;
-import com.liberty52.main.service.controller.dto.CartItemResponse;
-import com.liberty52.main.service.controller.dto.CartModifyRequestDto;
-import com.liberty52.main.service.controller.dto.CartItemRequestWithLicense;
-import com.liberty52.main.service.controller.dto.CartModifyWithLicenseRequestDto;
+import com.liberty52.main.service.controller.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -75,9 +70,9 @@ public class CartItemController {
      * UPDATE
      **/
     @Operation(summary = "장바구니 라이선스 상품 수정", description = "주어진 인증 ID, 이미지 파일 및 장바구니 상품 수정 요청을 사용하여 사용자 장바구니 상품을 수정합니다.")
-    @PatchMapping("/carts/custom-products/{customProductId}")
+    @PatchMapping("/carts/license-products/{customProductId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void modifyUserCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId, @RequestPart CartModifyWithLicenseRequestDto dto,
+    public void modifyUserCartItemWithLicense(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId, @RequestPart CartModifyWithLicenseRequestDto dto,
                                    @PathVariable String customProductId) {
         cartItemModifyService.modifyUserCartItemWihLicense(authId, dto, customProductId);
     }
