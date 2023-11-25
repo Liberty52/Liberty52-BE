@@ -44,7 +44,7 @@ public class CartItemGuestController {
     /**
      * CREATE
      **/
-    @Operation(summary = "비회원 장바구니에 라이선스 상품 추가", description = "비회원 장바구니에 상품을 추가합니다.")
+    @Operation(summary = "비회원 장바구니에 라이선스 상품 추가", description = "비회원 장바구니에 라이선스 상품을 추가합니다.")
     @PostMapping("/guest/carts/license-products")
     @ResponseStatus(HttpStatus.CREATED)
     public void createGuestCartItem(
