@@ -1,7 +1,6 @@
 package com.liberty52.auth.global.event.eventhandler;
 
 import com.liberty52.auth.global.adapter.MailSender;
-import com.liberty52.auth.global.adapter.cloud.KafkaProducer;
 import com.liberty52.auth.global.event.events.MemberDeletedEvent;
 import com.liberty52.auth.global.utils.EmailPageFormatter;
 import com.liberty52.auth.question.service.QuestionDeleteService;
@@ -21,17 +20,12 @@ public class MemberDeleteEventHandler {
 
     private final MailSender mailSender;
     private final QuestionDeleteService questionDeleteService;
-    private final KafkaProducer kafkaProducer;
+
     @Async
     @EventListener(MemberDeletedEvent.class)
     public void handlingSendMailEvent(MemberDeletedEvent memberDeletedEvent) throws MessagingException {
         sendLeaveServiceMail(memberDeletedEvent);
         deleteMembersQuestion(memberDeletedEvent);
-        publishMemberReviewDeleteMessage(memberDeletedEvent);
-    }
-
-    private void publishMemberReviewDeleteMessage(MemberDeletedEvent memberDeletedEvent) {
-        kafkaProducer.publishMemberDeletedEvent(memberDeletedEvent.getAuthId());
     }
 
     private void deleteMembersQuestion(MemberDeletedEvent memberDeletedEvent) {

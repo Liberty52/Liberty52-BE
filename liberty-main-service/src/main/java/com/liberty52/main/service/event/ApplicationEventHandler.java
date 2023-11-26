@@ -1,9 +1,7 @@
 package com.liberty52.main.service.event;
 
-import com.liberty52.main.global.adapter.kafka.KafkaProducer;
 import com.liberty52.main.global.adapter.s3.S3Uploader;
 import com.liberty52.main.service.event.internal.ImageRemovedEvent;
-import com.liberty52.main.service.event.kafka.KafkaEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -13,13 +11,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class ApplicationEventHandler {
-    private final KafkaProducer kafkaProducer;
     private final S3Uploader s3Uploader;
 
-    @EventListener
-    public void handleToKafkaEvent(KafkaEvent<?> event) {
-        kafkaProducer.produceEvent(event);
-    }
 
     @EventListener
     public void deleteImageInS3OnCustomProductRemoved(ImageRemovedEvent event) {
