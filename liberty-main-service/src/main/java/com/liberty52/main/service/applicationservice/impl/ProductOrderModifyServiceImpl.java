@@ -15,16 +15,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductOrderModifyServiceImpl implements ProductOrderModifyService {
 
-	private final ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-	@Override
-	public void modifyProductOrder(String[] productIdList) {
-		for (int i = 0; i < productIdList.length; i++) {
-			String productId = productIdList[i];
-			Product product = productRepository.findById(productId)
-				.orElseThrow(() -> new ResourceNotFoundException("Product", "ID", productId));
-			product.updateOrder(i + 1);
-		}
-	}
+    @Override
+    public void modifyProductOrder(String[] productIdList) {
+        for (int i = 0; i < productIdList.length; i++) {
+            String productId = productIdList[i];
+            Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "ID", productId));
+            product.updateProductOrder(i + 1);
+        }
+    }
 
 }

@@ -73,7 +73,7 @@ public class CartLicenseItemCreateServiceMockTest {
 
         given(cartRepository.save(any())).willReturn(Cart.create("testId"));
 
-        given(productRepository.findById("LIB-002")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame", ProductState.ON_SALE,100L,false)));
+        given(productRepository.findById("LIB-002")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame", ProductState.ON_SALE,100L,false,1)));
 
         given(customLicenseOptionRepository.save(any())).willReturn(null);
         given(licenseOptionDetailRepository.findById("licenseOption")).willReturn(Optional.ofNullable(LicenseOptionDetail.create("그림명", "작가", 100, true, "url", 100, LocalDate.now(), LocalDate.now())));

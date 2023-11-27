@@ -27,5 +27,5 @@ public class ProductCreateRequestDto {
     private Boolean isCustom;
 
     @Min(1)
-    private Integer order;
+    private Integer productOrder;
 }

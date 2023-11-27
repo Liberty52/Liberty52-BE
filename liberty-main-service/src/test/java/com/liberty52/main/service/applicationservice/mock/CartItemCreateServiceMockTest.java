@@ -66,12 +66,12 @@ public class CartItemCreateServiceMockTest extends MockS3Test {
         CartItemRequest dto3 = new CartItemRequest().builder().productId("LIB-001").quantity(4).optionDetailIds(optionErr).build();
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
-        given(productRepository.findById("LIB-001")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame",ProductState.ON_SALE,100L,true)));
+        given(productRepository.findById("LIB-001")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame",ProductState.ON_SALE,100L,true,1)));
         given(optionDetailRepository.findById("OPT-002")).willReturn(Optional.ofNullable(OptionDetail.create("벽걸이형", 100, true, 100)));
 
         given(cartRepository.save(any())).willReturn(Cart.create("testId"));
 
-        given(productRepository.findById("LIB-001")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame", ProductState.ON_SALE, 100L, true)));
+        given(productRepository.findById("LIB-001")).willReturn(Optional.ofNullable(Product.create("Liberty 52_Frame", ProductState.ON_SALE, 100L, true,1)));
 
         given(customProductRepository.save(any())).willReturn(null);
         given(customProductOptionRepository.save(any())).willReturn(null);

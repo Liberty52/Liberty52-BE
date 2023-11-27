@@ -41,26 +41,27 @@ public class Product {
     @Column(length = 10000)
     private String content = "";
     @Column(nullable = false)
-    private Integer order;
+    private Integer productOrder;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
     private ProductDeliveryOption deliveryOption;
 
     @Builder
-    private Product(String name, ProductState productState, Long price, boolean isCustom, String pictureUrl, Integer order) {
+    private Product(String name, ProductState productState, Long price, boolean isCustom, String pictureUrl, Integer productOrder) {
         this.name = name;
         this.productState = productState;
         this.price = price;
         this.isCustom = isCustom;
         this.pictureUrl = pictureUrl;
-        this.order = order;
+        this.productOrder = productOrder;
     }
 
-    public static Product create(String name, ProductState state, Long price, boolean isCustom) {
+    public static Product create(String name, ProductState state, Long price, boolean isCustom, Integer productOrder) {
         return builder().name(name)
                 .productState(state)
                 .price(price)
                 .isCustom(isCustom)
+                .productOrder(productOrder)
                 .build();
     }
 
@@ -97,7 +98,7 @@ public class Product {
         }
     }
 
-    public void updateOrder(int order) {
-        this.order = order;
+    public void updateProductOrder(int productOrder) {
+        this.productOrder = productOrder;
     }
 }
