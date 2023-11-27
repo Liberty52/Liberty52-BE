@@ -11,5 +11,5 @@ public class PreviewEffectResponse {
     private String id;
     private String name;
     private Integer opacity;
-    private String str;
+    private String src;
 }
