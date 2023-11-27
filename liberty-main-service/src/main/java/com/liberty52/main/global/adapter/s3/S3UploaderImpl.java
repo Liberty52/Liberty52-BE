@@ -1,10 +1,8 @@
 package com.liberty52.main.global.adapter.s3;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.liberty52.main.global.exception.internal.FileConvertException;
 import com.liberty52.main.global.exception.internal.FileNullException;
 import com.liberty52.main.global.exception.internal.FileTypeIsNotImageException;
@@ -20,13 +18,17 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class S3UploaderImpl implements S3Uploader {
+public class S3UploaderImpl implements S3Uploader{
 
     private final AmazonS3Client amazonS3Client;
 
@@ -58,7 +60,7 @@ public class S3UploaderImpl implements S3Uploader {
         metadata.setContentType("image/png");
         String fileName = tempPath + "/" + UUID.randomUUID() + ".png";
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, new ByteArrayInputStream(b), metadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
+            .withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
@@ -91,8 +93,8 @@ public class S3UploaderImpl implements S3Uploader {
     // S3로 업로드
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(
-                new PutObjectRequest(bucket, fileName, uploadFile)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            new PutObjectRequest(bucket, fileName, uploadFile)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
 
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
@@ -139,4 +141,14 @@ public class S3UploaderImpl implements S3Uploader {
         }
     }
 
+    @Override
+    public URL generatePresignedUrl(String key, BlobContentType contentType) {
+        key = Optional.ofNullable(key).orElseGet(() -> UUID.randomUUID().toString());
+        return amazonS3Client.generatePresignedUrl(
+            new GeneratePresignedUrlRequest(bucket, tempPath + "/" + key + contentType.toExtString())
+                .withContentType(contentType.toValueString())
+                .withExpiration(new Date(System.currentTimeMillis() + Duration.ofMinutes(2).toMillis()))
+                .withMethod(HttpMethod.PUT)
+        );
+    }
 }
