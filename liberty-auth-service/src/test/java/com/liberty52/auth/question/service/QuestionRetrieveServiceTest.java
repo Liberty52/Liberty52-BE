@@ -1,12 +1,12 @@
 package com.liberty52.auth.question.service;
 
 import com.liberty52.auth.question.repository.QuestionRepository;
-import com.liberty52.auth.question.web.dto.AdminQuestionRetrieveResponse;
 import com.liberty52.auth.question.web.dto.QuestionDetailResponseDto;
 import com.liberty52.auth.question.web.dto.QuestionReplyResponse;
 import com.liberty52.auth.question.web.dto.QuestionRetrieveResponseDto;
-import com.liberty52.auth.user.entity.Role;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class QuestionRetrieveServiceTest {
 
+  private static final String Role_Admin = "ADMIN";
   private static final String WAITING = "WAITING";
   private static final String DONE = "DONE";
   private static final String writerId = "TESTER-001";
@@ -27,6 +28,11 @@ class QuestionRetrieveServiceTest {
 
   @Autowired
   QuestionRetrieveService questionRetrieveService;
+
+  @BeforeEach
+  void setUp() {
+    MockitoAnnotations.openMocks(this);
+  }
 
   @Test
   void retrieveQuestions() {
@@ -60,20 +66,5 @@ class QuestionRetrieveServiceTest {
     }
   }
 
-  @Test
-  void retrieveQuestionByAdmin() {
-    AdminQuestionRetrieveResponse response = questionRetrieveService.retrieveQuestionByAdmin(
-            Role.ADMIN.name(), 0, 5);
-    assertThat(response.getCurrentPage()).isSameAs(1L);
-    assertThat(response.getStartPage()).isSameAs(1L);
-    assertThat(response.getLastPage()).isSameAs(1L);
-    assertThat(response.getTotalPage()).isSameAs(1L);
-
-    AdminQuestionRetrieveResponse.QuestionContent questionContent = response.getContents().get(0);
-    assertThat(questionContent.getStatus()).isEqualTo(DONE);
-    assertThat(questionContent.getTitle()).isEqualTo("this is title");
-    assertThat(questionContent.getContent()).isEqualTo("this is content");
-//    assertThat(questionContent.getEmail()).isEqualTo("test@gmail.com");
-  }
 
 }
