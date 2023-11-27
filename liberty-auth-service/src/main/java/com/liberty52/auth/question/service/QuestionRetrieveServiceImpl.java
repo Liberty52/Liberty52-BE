@@ -1,5 +1,6 @@
 package com.liberty52.auth.question.service;
 
+import com.liberty52.auth.global.adapter.cloud.AuthServiceClient;
 import com.liberty52.auth.global.exception.external.badrequest.PageNumberOutOfRangeException;
 import com.liberty52.auth.global.exception.external.badrequest.PageSizeException;
 import com.liberty52.auth.global.exception.external.notfound.QuestionNotFoundById;
@@ -12,7 +13,6 @@ import com.liberty52.auth.question.web.dto.AdminQuestionRetrieveResponse;
 import com.liberty52.auth.question.web.dto.QuestionDetailResponseDto;
 import com.liberty52.auth.question.web.dto.QuestionReplyResponse;
 import com.liberty52.auth.question.web.dto.QuestionRetrieveResponseDto;
-import com.liberty52.auth.user.entity.Auth;
 import com.liberty52.auth.user.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,15 +31,17 @@ public class QuestionRetrieveServiceImpl implements QuestionRetrieveService {
   private final String totalPage = "totalPage";
   private final QuestionRepository questionRepository;
   private final AuthRepository authRepository;
+  private final AuthServiceClient authServiceClient;
+
   @Override
   public QuestionRetrieveResponseDto retrieveQuestions(String writerId, int pageNumber, int pageSize) {
-    if(authRepository.findById(writerId).isEmpty()){
+    if (authRepository.findById(writerId).isEmpty()) {
       throw new AuthNotFoundException();
     }
     if (pageSize <= 0) {//페이지당 출력할 데이터 개수를 의미
       throw new PageSizeException();
     }
-    PageRequest pageRequest = PageRequest.of(pageNumber,pageSize, Sort.by("createdAt").descending());
+    PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("createdAt").descending());
     Page<Question> questionList = questionRepository.findAllByWriterId(writerId, pageRequest);
     int totalPages = questionList.getTotalPages();
     if (totalPages == 0 && pageNumber == 0) {
@@ -128,16 +130,14 @@ public class QuestionRetrieveServiceImpl implements QuestionRetrieveService {
   }
 
   private List<String> getEmailList(Page<Question> questionList) {
-    Map<String, String> emailByWriterIdMap = new HashMap<>();
-    for (Auth auth : authRepository.findAll()) {
-      emailByWriterIdMap.put(auth.getId(), auth.getEmail());
-    }
+    List<String> writerIds = questionList.stream()
+            .map(Question::getWriterId)
+            .toList();
 
-    List<String> emailList = new ArrayList<>();
-    for (Question question : questionList) {
-      String email = emailByWriterIdMap.get(question.getWriterId());
-      emailList.add(email);
-    }
-    return emailList;
+    return writerIds.stream()
+            .map(Objects.requireNonNull(authServiceClient.getUserInfosByWriterIds(writerIds).getBody())::get)
+            .toList();
   }
+
+
 }
