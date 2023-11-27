@@ -27,7 +27,7 @@ public class SalesRetrieveServiceImpl implements SalesRetrieveService {
         Validator.isAdmin(role);
         List<Tuple> result = orderQueryDslRepository.retrieveByConditions(salesRequestDto);
         if (result.isEmpty()) return SalesResponseDto.builder()
-                .totalSalesMoney(0L).totalSalesQuantity(0L).monthlySales(Collections.emptyMap()).build();
+                .totalSalesMoney(0L).totalSalesQuantity(0L).monthlySales(Collections.emptyList()).build();
 
         Long totalSalesMoney = result.stream()
                 .map(tuple -> tuple.get(0, Long.class))
@@ -41,27 +41,26 @@ public class SalesRetrieveServiceImpl implements SalesRetrieveService {
                 .mapToLong(Integer::longValue)
                 .sum();
 
-        Map<String, Map<String, Object>> monthlySales = result.stream()
-                .collect(Collectors.toMap(
-                        tuple -> {
+        return SalesResponseDto.builder()
+                .totalSalesMoney(totalSalesMoney)
+                .totalSalesQuantity(totalSalesQuantity)
+                .monthlySales(result.stream()
+                        .map(tuple -> {
                             Integer year = tuple.get(orders.orderedAt.year());
                             Integer month = tuple.get(orders.orderedAt.month());
+                            SalesResponseDto.MonthlySales monthlySales = new SalesResponseDto.MonthlySales();
                             if (year != null && month != null) {
-                                return year.toString() + " - " + month.toString();
+                                monthlySales.setYear(year.toString());
+                                monthlySales.setMonth(month.toString());
+                            } else {
+                                monthlySales.setYear("no OrderedDate");
+                                monthlySales.setMonth("no OrderedDate");
                             }
-                            return "no OrderedDate";
-                        },
-                        tuple -> {
-                            Map<String, Object> resultMap = new HashMap<>();
-                            resultMap.put("salesMoney", tuple.get(orders.amount.sum()));
-                            resultMap.put("salesQuantity", tuple.get(customProduct.quantity.sum()));
-                            return resultMap;
-                        },
-                        (existing, replacement) -> existing
-                ));
-
-        return SalesResponseDto.builder()
-                .totalSalesMoney(totalSalesMoney).totalSalesQuantity(totalSalesQuantity).monthlySales(monthlySales).build();
-
+                            monthlySales.setSalesMoney(tuple.get(orders.amount.sum()));
+                            monthlySales.setSalesQuantity(tuple.get(customProduct.quantity.sum()));
+                            return monthlySales;
+                        })
+                        .collect(Collectors.toList()))
+                .build();
     }
 }
