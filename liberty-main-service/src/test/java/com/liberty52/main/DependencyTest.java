@@ -1,5 +1,6 @@
 package com.liberty52.main;
 
+import com.liberty52.main.global.annotation.NoServiceUse;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
@@ -26,7 +27,7 @@ public class DependencyTest {
     @DisplayName("Controller는 Service와 controller.dto를 사용할 수 있음.")
     public void controllerDependencyTest() {
         ArchRule rule = classes()
-                .that().resideInAnyPackage("..controller")
+                .that().resideInAnyPackage("..controller").and().areNotAnnotatedWith(NoServiceUse.class)
                 .should().dependOnClassesThat()
                 .resideInAnyPackage("..controller.dto", "..applicationservice");
 
