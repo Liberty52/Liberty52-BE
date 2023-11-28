@@ -42,7 +42,7 @@ public class OrdersRetrieveResponse {
         this.receiverName = orders.getOrderDestination().getReceiverName();
         this.receiverEmail = orders.getOrderDestination().getReceiverEmail();
         this.receiverPhoneNumber = orders.getOrderDestination().getReceiverPhoneNumber();
-        this.productRepresentUrl = orders.getCustomProducts().get(0).getProduct().getPictureUrl();
+        orders.getCustomProducts().stream().findFirst().ifPresent(c -> this.productRepresentUrl = c.getProduct().getPictureUrl());
         this.orderNum = orders.getOrderNum();
         Payment payment = orders.getPayment();
         if (payment != null) {
@@ -52,19 +52,19 @@ public class OrdersRetrieveResponse {
         this.products = orders.getCustomProducts().stream().map(c -> {
             Long price = (c.getCustomLicenseOption() != null && c.getCustomLicenseOption().getLicenseOptionDetail() != null)
                 ? c.getCustomLicenseOption().getLicenseOptionDetail().getPrice()
-                : 0L; // 0L 대신 원하는 기본값을 넣으세요.
+                : 0L;
 
             String artUrl = (c.getCustomLicenseOption() != null && c.getCustomLicenseOption().getLicenseOptionDetail() != null)
                 ? c.getCustomLicenseOption().getLicenseOptionDetail().getArtUrl()
-                : ""; // "" 대신 원하는 기본값을 넣으세요.
+                : "";
 
             String artName = (c.getCustomLicenseOption() != null && c.getCustomLicenseOption().getLicenseOptionDetail() != null)
                 ? c.getCustomLicenseOption().getLicenseOptionDetail().getArtName()
-                : ""; // "" 대신 원하는 기본값을 넣으세요.
+                : "";
 
             String artistName = (c.getCustomLicenseOption() != null && c.getCustomLicenseOption().getLicenseOptionDetail() != null)
                 ? c.getCustomLicenseOption().getLicenseOptionDetail().getArtistName()
-                : ""; // "" 대신 원하는 기본값을 넣으세요.
+                : "";
 
             return new OrderRetrieveProductResponse(c.getId(), c.getProduct().getName(), c.getQuantity(),
                 c.getProduct().getPrice() + c.getOptions().stream().mapToLong(CustomProductOption::getPrice).sum() + price,

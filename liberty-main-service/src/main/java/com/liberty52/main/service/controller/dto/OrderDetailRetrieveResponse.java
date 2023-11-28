@@ -47,7 +47,8 @@ public class OrderDetailRetrieveResponse {
         this.receiverName = destination.getReceiverName();
         this.receiverEmail = destination.getReceiverEmail();
         this.receiverPhoneNumber = destination.getReceiverPhoneNumber();
-        this.productRepresentUrl = orders.getCustomProducts().get(0).getProduct().getPictureUrl();
+        orders.getCustomProducts().stream().findFirst().ifPresent(c -> this.productRepresentUrl = c.getProduct().getPictureUrl());
+
         this.orderNum = orders.getOrderNum();
 
         this.products = orders.getCustomProducts().stream().map(c -> {
