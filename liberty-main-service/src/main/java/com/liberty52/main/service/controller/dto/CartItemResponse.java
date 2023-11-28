@@ -30,8 +30,10 @@ public class CartItemResponse {
 
     boolean isCustom;
 
-    public static CartItemResponse of(String id, String name, String imageUrl, long price, int quantity,  List<CartOptionResponse> options, String courierName, int deliveryFee, boolean isCustom){
-        return new CartItemResponse(id, name, imageUrl, price, quantity, options, courierName, deliveryFee, isCustom);
+    LicenseOptionResponse license;
+
+    public static CartItemResponse of(String id, String name, String imageUrl, long price, int quantity,  List<CartOptionResponse> options, String courierName, int deliveryFee, boolean isCustom, LicenseOptionResponse license){
+        return new CartItemResponse(id, name, imageUrl, price, quantity, options, courierName, deliveryFee, isCustom, license);
 
     }
 
