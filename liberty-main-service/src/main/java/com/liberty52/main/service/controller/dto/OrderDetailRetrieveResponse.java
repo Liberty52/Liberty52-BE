@@ -47,21 +47,33 @@ public class OrderDetailRetrieveResponse {
         this.receiverName = destination.getReceiverName();
         this.receiverEmail = destination.getReceiverEmail();
         this.receiverPhoneNumber = destination.getReceiverPhoneNumber();
-        this.productRepresentUrl = LIBERTY52_FRAME_REPRESENTATIVE_URL;
+        this.productRepresentUrl = orders.getCustomProducts().get(0).getProduct().getPictureUrl();
         this.orderNum = orders.getOrderNum();
 
-        this.products = orders.getCustomProducts().stream().map(c ->
-                new OrderRetrieveProductResponse(c.getId(), c.getProduct().getName(), c.getQuantity(),
-                        c.getProduct().getPrice() + c.getOptions()
-                                .stream()
-                                .mapToLong(CustomProductOption::getPrice)
-                                .sum(),
-                        c.getUserCustomPictureUrl(),
-                        c.getReview() != null,
-                        c.getOptions().stream().map(CustomProductOption::getDetailName).toList(),
-                        c.getProduct().isCustom()
-                )
-        ).toList();
+        this.products = orders.getCustomProducts().stream().map(c -> {
+            Long price = (c.getCustomLicenseOption() != null && c.getCustomLicenseOption().getLicenseOptionDetail() != null)
+                ? c.getCustomLicenseOption().getLicenseOptionDetail().getPrice()
+                : 0L;
+
+            String artUrl = (c.getCustomLicenseOption() != null && c.getCustomLicenseOption().getLicenseOptionDetail() != null)
+                ? c.getCustomLicenseOption().getLicenseOptionDetail().getArtUrl()
+                : "";
+
+            String artName = (c.getCustomLicenseOption() != null && c.getCustomLicenseOption().getLicenseOptionDetail() != null)
+                ? c.getCustomLicenseOption().getLicenseOptionDetail().getArtName()
+                : "";
+
+            String artistName = (c.getCustomLicenseOption() != null && c.getCustomLicenseOption().getLicenseOptionDetail() != null)
+                ? c.getCustomLicenseOption().getLicenseOptionDetail().getArtistName()
+                : "";
+
+            return new OrderRetrieveProductResponse(c.getId(), c.getProduct().getName(), c.getQuantity(),
+                c.getProduct().getPrice() + c.getOptions().stream().mapToLong(CustomProductOption::getPrice).sum() + price,
+                c.getUserCustomPictureUrl(), c.getReview() != null, c.getOptions().stream().map(CustomProductOption::getDetailName).toList(),
+                c.getProduct().isCustom(), artUrl, artName, artistName);
+        }).toList();
+
+
         this.deliveryFee = orders.getDeliveryPrice();
         this.totalPrice = orders.getAmount();
         this.totalProductPrice = totalPrice - deliveryFee;

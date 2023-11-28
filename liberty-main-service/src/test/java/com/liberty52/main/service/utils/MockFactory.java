@@ -188,7 +188,10 @@ public class MockFactory {
                 MOCK_PRODUCT_REPRESENT_URL,
                 false,
                 null,
-                true);
+                true,
+                MOCK_LICENSE_ART_URL,
+                MOCK_LICENSE_ART_NAME,
+                MOCK_LICENSE_ARTIST_NAME);
     }
 
     public static OrderDetailRetrieveResponse createMockOrderDetailRetrieveResponse() {

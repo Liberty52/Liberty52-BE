@@ -1,11 +1,11 @@
 package com.liberty52.main.service.controller.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
 
 @NoArgsConstructor
 @Data
@@ -22,7 +22,9 @@ public class OrderRetrieveProductResponse {
     private boolean hasReview;
 
     private boolean isCustom;
-
+    private String licenseArtUrl;
+    private String licenseArtName;
+    private String licenseArtistName;
 
     @QueryProjection
     public OrderRetrieveProductResponse(String name, int quantity, Long price) {
@@ -32,8 +34,9 @@ public class OrderRetrieveProductResponse {
     }
 
     @QueryProjection
-    public OrderRetrieveProductResponse(String customProductId, String name, int quantity, Long price, String productUrl,
-                                        boolean hasReview, List<String> options, boolean isCustom) {
+    public OrderRetrieveProductResponse(String customProductId, String name, int quantity, Long price,
+        String productUrl, boolean hasReview, List<String> options, boolean isCustom,
+        String licenseArtUrl, String licenseArtName, String licenseArtistName) {
         this.customProductId = customProductId;
         this.name = name;
         this.quantity = quantity;
@@ -42,5 +45,8 @@ public class OrderRetrieveProductResponse {
         this.options = options;
         this.hasReview = hasReview;
         this.isCustom = isCustom;
+        this.licenseArtUrl = licenseArtUrl;
+        this.licenseArtName = licenseArtName;
+        this.licenseArtistName = licenseArtistName;
     }
 }

@@ -53,7 +53,7 @@ public class CustomProduct {
     private Review review;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "license_product_option_id")
+    @JoinColumn(name = "custom_license_option_id")
     private CustomLicenseOption customLicenseOption;
 
     @Builder
