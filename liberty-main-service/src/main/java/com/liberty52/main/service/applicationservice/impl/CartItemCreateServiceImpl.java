@@ -69,6 +69,7 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
         customLicenseOption.associate(licenseOptionDetail);
         customLicenseOption.associate(customProduct);
         customLicenseOptionRepository.save(customLicenseOption);
+        customProductRepository.save(customProduct);
         return customProduct;
     }
 

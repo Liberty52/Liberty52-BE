@@ -3,7 +3,9 @@ package com.liberty52.main.service.applicationservice.impl;
 import com.liberty52.main.service.applicationservice.CartItemRetrieveService;
 import com.liberty52.main.service.controller.dto.CartItemResponse;
 import com.liberty52.main.service.controller.dto.CartOptionResponse;
+import com.liberty52.main.service.controller.dto.LicenseOptionResponse;
 import com.liberty52.main.service.entity.*;
+import com.liberty52.main.service.entity.license.LicenseOptionDetail;
 import com.liberty52.main.service.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,10 +51,12 @@ public class CartItemRetrieveServiceImpl implements CartItemRetrieveService {
             Product product = cartItem.getProduct();
             CartItemResponse cartItemResponse;
             if(product.isCustom()){
-                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getUserCustomPictureUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), product.getDeliveryOption().getCourierName(),product.getDeliveryOption().getFee(), product.isCustom());
+                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getUserCustomPictureUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), product.getDeliveryOption().getCourierName(),product.getDeliveryOption().getFee(), product.isCustom(), null);
 
             } else {
-                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getCustomLicenseOption().getLicenseOptionDetail().getArtUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), product.getDeliveryOption().getCourierName(),product.getDeliveryOption().getFee(), product.isCustom());
+                LicenseOptionDetail licenseOptionDetail = cartItem.getCustomLicenseOption().getLicenseOptionDetail();
+                LicenseOptionResponse license = LicenseOptionResponse.of(licenseOptionDetail.getLicenseOption().getId(), licenseOptionDetail.getLicenseOption().getName(), licenseOptionDetail.getId(), licenseOptionDetail.getArtName(), licenseOptionDetail.getPrice());
+                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), licenseOptionDetail.getArtUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), product.getDeliveryOption().getCourierName(),product.getDeliveryOption().getFee(), product.isCustom(), license);
             }
             cartItemResponseList.add(cartItemResponse);
         }
