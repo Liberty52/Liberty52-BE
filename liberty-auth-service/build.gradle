@@ -10,6 +10,12 @@ ext {
     set('springCloudVersion', "2022.0.1")
 }
 
+if (project.hasProperty("dev")) {
+    apply from: "gradle/profile_dev.gradle"
+} else {
+    apply from: "gradle/profile_local.gradle"
+}
+
 dependencies {
     implementation(project(":liberty-common"))
 
@@ -32,11 +38,8 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
-
     testImplementation 'com.tngtech.archunit:archunit:1.1.0'
 }
 
