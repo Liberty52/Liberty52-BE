@@ -50,13 +50,19 @@ public class CartItemRetrieveServiceImpl implements CartItemRetrieveService {
         for (CustomProduct cartItem : cartItemList) {
             Product product = cartItem.getProduct();
             CartItemResponse cartItemResponse;
+            String courierName = "";
+            int deliveryFee = 0;
+            if (product.getDeliveryOption() != null) {
+                courierName = product.getDeliveryOption().getCourierName();
+                deliveryFee = product.getDeliveryOption().getFee();
+            }
             if(product.isCustom()){
-                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getUserCustomPictureUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), product.getDeliveryOption().getCourierName(),product.getDeliveryOption().getFee(), product.isCustom(), null);
+                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getUserCustomPictureUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), courierName, deliveryFee, product.isCustom(), null);
 
             } else {
                 LicenseOptionDetail licenseOptionDetail = cartItem.getCustomLicenseOption().getLicenseOptionDetail();
                 LicenseOptionResponse license = LicenseOptionResponse.of(licenseOptionDetail.getLicenseOption().getId(), licenseOptionDetail.getLicenseOption().getName(), licenseOptionDetail.getId(), licenseOptionDetail.getArtName(), licenseOptionDetail.getPrice());
-                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), licenseOptionDetail.getArtUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), product.getDeliveryOption().getCourierName(),product.getDeliveryOption().getFee(), product.isCustom(), license);
+                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), licenseOptionDetail.getArtUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), courierName, deliveryFee, product.isCustom(), license);
             }
             cartItemResponseList.add(cartItemResponse);
         }
