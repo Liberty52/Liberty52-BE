@@ -4,6 +4,7 @@ package com.liberty52.main.service.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liberty52.main.service.applicationservice.ProductCreateService;
 import com.liberty52.main.service.applicationservice.ProductModifyService;
+import com.liberty52.main.service.applicationservice.ProductOrderModifyService;
 import com.liberty52.main.service.applicationservice.ProductRemoveService;
 import com.liberty52.main.service.controller.dto.ProductCreateRequestDto;
 import com.liberty52.main.service.entity.ProductState;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ProductAdminController.class)
-public class ProductAdminControllerTest {
+class ProductAdminControllerTest {
     final String testProductId = "LIB-001";
     @Autowired
     private MockMvc mockMvc;
@@ -40,6 +41,8 @@ public class ProductAdminControllerTest {
     private ProductModifyService productModifyService;
     @MockBean
     private ProductRemoveService productRemoveService;
+    @MockBean
+    private ProductOrderModifyService productOrderModifyService;
 
     @Test
     void 상품추가_성공() throws Exception {

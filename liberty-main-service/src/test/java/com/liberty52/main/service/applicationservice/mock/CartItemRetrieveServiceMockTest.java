@@ -37,7 +37,7 @@ public class CartItemRetrieveServiceMockTest extends MockS3Test {
 
     @BeforeEach
     void init() {
-        Product product = Product.create("Liberty 52_Frame", ProductState.ON_SALE, 100L, true);
+        Product product = Product.create("Liberty 52_Frame", ProductState.ON_SALE, 100L, true,1);
 
         ProductOption option1 = ProductOption.create("거치 방식", true, true);
         option1.associate(product);
