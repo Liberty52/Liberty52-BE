@@ -259,6 +259,7 @@ public class OrderCreateServiceImpl implements OrderCreateService {
         customLicenseOption.associate(detail);
         customLicenseOption.associate(customProduct);
         customLicenseOptionRepository.save(customLicenseOption);
+        customProductRepository.save(customProduct);
     }
 
     private void saveCardPayment(Orders order) {

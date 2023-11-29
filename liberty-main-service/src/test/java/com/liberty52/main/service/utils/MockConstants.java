@@ -13,6 +13,10 @@ public class MockConstants {
     public static final String MOCK_RECEIVER_PHONE_NUMBER = "MOCK_RECEIVER_PHONE_NUMBER";
     public static final String MOCK_PRODUCT_REPRESENT_URL = "MOCK_PRODUCT_REPRESENT_URL";
 
+    public static final String MOCK_LICENSE_ART_URL = "MOCK_LICENSE_ART_URL";
+    public static final String MOCK_LICENSE_ART_NAME = "MOCK_LICENSE_ART_NAME";
+    public static final String MOCK_LICENSE_ARTIST_NAME = "MOCK_LICENSE_ARTIST_NAME";
+
     public static final String MOCK_PRODUCT_NAME = "MOCK_PRODUCT_NAME";
     public static final int MOCK_QUANTITY = 1;
     public static final Long MOCK_PRICE = 10000000L;
