@@ -1,8 +1,10 @@
 package com.liberty52.main.service.controller;
 
 
+import com.liberty52.authentication.annotation.LBPreAuthorize;
 import com.liberty52.main.service.applicationservice.ProductCreateService;
 import com.liberty52.main.service.applicationservice.ProductModifyService;
+import com.liberty52.main.service.applicationservice.ProductOrderModifyService;
 import com.liberty52.main.service.applicationservice.ProductRemoveService;
 import com.liberty52.main.service.controller.dto.ProductCreateRequestDto;
 import com.liberty52.main.service.controller.dto.ProductModifyRequestDto;
@@ -29,6 +31,7 @@ public class ProductAdminController {
     private final ProductCreateService productCreateService;
     private final ProductModifyService productModifyService;
     private final ProductRemoveService productRemoveService;
+    private final ProductOrderModifyService productOrderModifyService;
 
     /**
      * CREATE
@@ -67,6 +70,14 @@ public class ProductAdminController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProductByAdmin(@RequestHeader("LB-Role") String role, @PathVariable String productId) {
         productRemoveService.removeProductByAdmin(role, productId);
+    }
+
+    @Operation(summary = "상품 순서 변경", description = "관리자가 상품의 순서를 변경합니다")
+    @PatchMapping("/admin/product/order")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @LBPreAuthorize
+    public void modifyProductOrder(@RequestBody String[] productIdList) {
+        productOrderModifyService.modifyProductOrder(productIdList);
     }
 
 }

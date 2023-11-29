@@ -13,7 +13,6 @@ import com.liberty52.auth.question.web.dto.AdminQuestionRetrieveResponse;
 import com.liberty52.auth.question.web.dto.QuestionDetailResponseDto;
 import com.liberty52.auth.question.web.dto.QuestionReplyResponse;
 import com.liberty52.auth.question.web.dto.QuestionRetrieveResponseDto;
-import com.liberty52.auth.user.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,14 +29,10 @@ public class QuestionRetrieveServiceImpl implements QuestionRetrieveService {
   private final String lastPage = "lastPage";
   private final String totalPage = "totalPage";
   private final QuestionRepository questionRepository;
-  private final AuthRepository authRepository;
   private final AuthServiceClient authServiceClient;
 
   @Override
   public QuestionRetrieveResponseDto retrieveQuestions(String writerId, int pageNumber, int pageSize) {
-    if (authRepository.findById(writerId).isEmpty()) {
-      throw new AuthNotFoundException();
-    }
     if (pageSize <= 0) {//페이지당 출력할 데이터 개수를 의미
       throw new PageSizeException();
     }

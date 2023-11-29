@@ -76,7 +76,7 @@ public class DBInitConfig {
 
         public void init() {
             try {
-                Product product = Product.create(LIBERTY, ProductState.ON_SALE, 100L, true);
+                Product product = Product.create(LIBERTY, ProductState.ON_SALE, 100L, true, 1);
                 Field id = product.getClass().getDeclaredField("id");
                 id.setAccessible(true);
                 id.set(product, "LIB-001");

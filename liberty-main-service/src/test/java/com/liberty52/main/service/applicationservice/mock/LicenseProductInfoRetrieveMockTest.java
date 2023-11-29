@@ -95,7 +95,7 @@ class LicenseProductInfoRetrieveMockTest {
         LocalDate startDate = LocalDate.of(2023, 1, 1);
         LocalDate endDate = startDate.plusDays(10);
 
-        Product product = Product.create("Liberty 52_Frame", ProductState.ON_SALE, 100L, true);
+        Product product = Product.create("Liberty 52_Frame", ProductState.ON_SALE, 100L, true, 1);
 
         ProductOption option1 = ProductOption.create("거치 방식", true, true);
         option1.associate(product);
