@@ -9,15 +9,9 @@ spring:
   config:
     import:
       - optional:configserver:http://config-server.liberty52.com:8888/
-  datasource:
-      url: jdbc:h2:mem:testdb
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   cloud:
     config:
-      label: main
+      label: 102-메인컨피그레이션-mariadb-연결
   output:
     ansi:
       enabled: always
