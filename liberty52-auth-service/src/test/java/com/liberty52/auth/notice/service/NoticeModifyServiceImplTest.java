@@ -1,13 +1,13 @@
 package com.liberty52.auth.notice.service;
 
 import com.liberty52.auth.global.exception.external.forbidden.InvalidAdminRoleException;
-import com.liberty52.auth.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.auth.global.exception.internal.InvalidNoticeContentException;
 import com.liberty52.auth.global.exception.internal.InvalidNoticeTitleException;
 import com.liberty52.auth.notice.entity.Notice;
 import com.liberty52.auth.notice.repository.NoticeRepository;
 import com.liberty52.auth.notice.web.dto.NoticeModifyRequestDto;
 import com.liberty52.auth.user.entity.Role;
+import com.liberty52.common.exception.external.notfound.ResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
