@@ -1,7 +1,7 @@
 package com.liberty52.main.service.applicationservice;
 
+import com.liberty52.common.exception.external.forbidden.NotYourResourceException;
 import com.liberty52.main.MockS3Test;
-import com.liberty52.main.global.exception.external.forbidden.NotYourResourceException;
 import com.liberty52.main.global.exception.external.forbidden.UnRemovableResourceException;
 import com.liberty52.main.service.controller.dto.CartItemListRemoveRequestDto;
 import com.liberty52.main.service.entity.*;

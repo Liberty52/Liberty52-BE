@@ -1,5 +1,6 @@
 package com.liberty52.main.global.exception.external.forbidden;
 
+import com.liberty52.common.exception.external.forbidden.NotYourResourceException;
 import com.liberty52.main.global.exception.external.notfound.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
