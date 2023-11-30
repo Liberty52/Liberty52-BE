@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - dev
-    paths: ['liberty-main-service/**', 'liberty-authentication-library/**', 'build.gradle', '.github/workflows/liberty-main-service-cd.yml', 'liberty-common/**']
+    paths: ['liberty52-main-service/**', 'liberty5252-authentication-library/**', 'build.gradle', '.github/workflows/liberty52-main-service-cd.yml', 'liberty52-common/**']
 
 env:
   REGISTRY: ghcr.io
   REPO_NAME: liberty52/liberty52-product-server
-  DOCKERFILE: liberty-main-service.Dockerfile
+  DOCKERFILE: liberty52-main-service.Dockerfile
   MANIFEST_PATH: kubernetes-manifests/product-server/product-server.yaml
   GIT_EMAIL: github-action-bot@example.com
   GIT_NAME: Liberty Main Service Action Bot
@@ -24,8 +24,8 @@ jobs:
 
       - name: 부트스트랩 파일 생성
         run: |
-          mkdir -p liberty-main-service/src/main/resources
-          cat << EOF > liberty-main-service/src/main/resources/bootstrap.yml
+          mkdir -p liberty52-main-service/src/main/resources
+          cat << EOF > liberty52-main-service/src/main/resources/bootstrap.yml
           encrypt:
             key: '${{ secrets.ENCRYPTKEY }}'
           EOF
