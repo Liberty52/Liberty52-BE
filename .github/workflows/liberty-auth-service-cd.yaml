@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  REPO_NAME: Liberty52/liberty52-auth-server
+  REPO_NAME: liberty52/liberty52-auth-server
   DOCKERFILE: liberty52-auth-service.Dockerfile
   MANIFEST_PATH: kubernetes-manifests/auth-server/auth-server.yaml
   GIT_EMAIL: github-action-bot@example.com
