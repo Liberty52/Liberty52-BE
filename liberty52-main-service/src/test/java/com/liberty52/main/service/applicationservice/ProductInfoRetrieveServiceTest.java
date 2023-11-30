@@ -1,6 +1,6 @@
 package com.liberty52.main.service.applicationservice;
 
-import com.liberty52.main.global.exception.external.notfound.ResourceNotFoundException;
+import com.liberty52.common.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.main.service.controller.dto.*;
 import com.liberty52.main.service.entity.*;
 import com.liberty52.main.service.repository.CartRepository;

@@ -1,7 +1,7 @@
 package com.liberty52.main.service.applicationservice.impl;
 
+import com.liberty52.common.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.main.global.adapter.s3.S3UploaderApi;
-import com.liberty52.main.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.main.global.util.Validator;
 import com.liberty52.main.service.applicationservice.LicenseOptionDetailModifyService;
 import com.liberty52.main.service.controller.dto.LicenseOptionDetailModifyDto;
