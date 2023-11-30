@@ -2,9 +2,7 @@ name: '리버티 Auth 서비스 ::: 깃옵스 플로우'
 
 on:
   push:
-    branches:
-      - dev
-    paths: ['liberty-auth-service/**', 'build.gradle', '.github/workflows/liberty-auth-service-cd.yaml', 'liberty-common/**']
+
 
 env:
   REGISTRY: ghcr.io
