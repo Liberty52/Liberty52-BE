@@ -1,6 +1,6 @@
 package com.liberty52.main.service.controller.guest;
 
-import com.liberty52.main.global.exception.external.ErrorResponse;
+import com.liberty52.common.exception.external.ErrorResponse;
 import com.liberty52.main.global.exception.external.RestExceptionHandler;
 import com.liberty52.main.global.exception.external.badrequest.CannotAccessOrderException;
 import com.liberty52.main.service.applicationservice.OrderCreateService;

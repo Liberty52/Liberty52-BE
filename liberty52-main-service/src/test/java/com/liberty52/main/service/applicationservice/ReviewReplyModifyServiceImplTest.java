@@ -1,9 +1,9 @@
 package com.liberty52.main.service.applicationservice;
 
+import com.liberty52.common.exception.external.badrequest.BadRequestException;
+import com.liberty52.common.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.main.global.data.DBInitConfig.DBInitService;
-import com.liberty52.main.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.main.global.exception.external.forbidden.InvalidRoleException;
-import com.liberty52.main.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.main.service.controller.dto.ReplyModifyRequestDto;
 import com.liberty52.main.service.entity.*;
 import com.liberty52.main.service.repository.ReplyRepository;

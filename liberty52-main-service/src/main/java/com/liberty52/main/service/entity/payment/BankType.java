@@ -1,6 +1,6 @@
 package com.liberty52.main.service.entity.payment;
 
-import com.liberty52.main.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.common.exception.external.badrequest.BadRequestException;
 import lombok.Getter;
 
 import java.util.Arrays;

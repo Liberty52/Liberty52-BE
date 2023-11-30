@@ -1,6 +1,6 @@
 package com.liberty52.main.service.applicationservice.mock;
 
-import com.liberty52.main.global.exception.external.notfound.ResourceNotFoundException;
+import com.liberty52.common.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.main.service.applicationservice.impl.ProductOptionModifyServiceImpl;
 import com.liberty52.main.service.controller.dto.ProductOptionModifyRequestDto;
 import com.liberty52.main.service.entity.ProductOption;

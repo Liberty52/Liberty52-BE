@@ -1,4 +1,4 @@
-package com.liberty52.main.global.exception.external.notfound;
+package com.liberty52.common.exception.external.notfound;
 
 public class ResourceNotFoundException extends NotFoundException {
     public ResourceNotFoundException(String resourceName, String by, String param) {

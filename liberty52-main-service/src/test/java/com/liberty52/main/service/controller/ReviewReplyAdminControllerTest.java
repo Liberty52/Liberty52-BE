@@ -1,10 +1,10 @@
 package com.liberty52.main.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.liberty52.main.global.exception.external.ErrorResponse;
+import com.liberty52.common.exception.external.ErrorResponse;
+import com.liberty52.common.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.main.global.exception.external.RestExceptionHandler;
 import com.liberty52.main.global.exception.external.forbidden.InvalidRoleException;
-import com.liberty52.main.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.main.service.applicationservice.ReviewReplyCreateService;
 import com.liberty52.main.service.applicationservice.ReviewReplyModifyService;
 import com.liberty52.main.service.controller.dto.ReplyCreateRequestDto;

@@ -1,7 +1,7 @@
 package com.liberty52.main.service.applicationservice.mock;
 
+import com.liberty52.common.exception.external.badrequest.BadRequestException;
 import com.liberty52.main.global.adapter.s3.S3UploaderApi;
-import com.liberty52.main.global.exception.external.badrequest.BadRequestException;
 import com.liberty52.main.service.applicationservice.impl.LicenseOptionDetailCreateServiceImpl;
 import com.liberty52.main.service.controller.dto.LicenseOptionDetailCreateDto;
 import com.liberty52.main.service.entity.license.LicenseOption;

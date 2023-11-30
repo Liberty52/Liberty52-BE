@@ -1,6 +1,6 @@
 package com.liberty52.main.service.applicationservice;
 
-import com.liberty52.main.global.exception.external.notfound.ResourceNotFoundException;
+import com.liberty52.common.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.main.service.controller.dto.CreateOptionDetailRequestDto;
 import com.liberty52.main.service.entity.OptionDetail;
 import com.liberty52.main.service.entity.Product;

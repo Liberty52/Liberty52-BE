@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liberty52.authentication.core.UserRole;
 import com.liberty52.authentication.test.configurer.web.LBWebMvcTest;
 import com.liberty52.authentication.test.context.support.WithLBMockUser;
-import com.liberty52.main.global.exception.external.notfound.NotFoundException;
+import com.liberty52.common.exception.external.notfound.NotFoundException;
 import com.liberty52.main.service.applicationservice.OrderCancelService;
 import com.liberty52.main.service.applicationservice.OrderCreateService;
 import com.liberty52.main.service.applicationservice.OrderDeliveryService;

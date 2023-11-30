@@ -1,6 +1,6 @@
 package com.liberty52.main.global.adapter.cloud.error;
 
-import com.liberty52.main.global.exception.external.ErrorCode;
+import com.liberty52.common.exception.external.ErrorCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 

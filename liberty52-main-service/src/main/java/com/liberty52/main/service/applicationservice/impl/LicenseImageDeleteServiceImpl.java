@@ -1,6 +1,6 @@
 package com.liberty52.main.service.applicationservice.impl;
 
-import com.liberty52.main.global.exception.external.notfound.NotFoundException;
+import com.liberty52.common.exception.external.notfound.NotFoundException;
 import com.liberty52.main.global.util.Validator;
 import com.liberty52.main.service.applicationservice.LicenseImageDeleteService;
 import com.liberty52.main.service.entity.LicenseImage;

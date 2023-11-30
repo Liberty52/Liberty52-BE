@@ -1,10 +1,10 @@
-package com.liberty52.main.global.exception.external;
+package com.liberty52.common.exception.external;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum ProductErrorCode implements ErrorCode {
+public enum ErrorCodeImpl implements ErrorCode {
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED),
     FORBIDDEN(HttpStatus.FORBIDDEN),
@@ -17,12 +17,12 @@ public enum ProductErrorCode implements ErrorCode {
 
     private final String errorCode = "P-" + "0".repeat(Math.max(4 - String.valueOf(this.ordinal() + 1).length(), 0)) + (this.ordinal() + 1);
 
-    ProductErrorCode(HttpStatus httpStatus, String errorMessage) {
+    ErrorCodeImpl(HttpStatus httpStatus, String errorMessage) {
         this.httpStatus = httpStatus;
         this.errorMessage = errorMessage;
     }
 
-    ProductErrorCode(HttpStatus httpStatus) {
+    ErrorCodeImpl(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
         this.errorMessage = "";
     }

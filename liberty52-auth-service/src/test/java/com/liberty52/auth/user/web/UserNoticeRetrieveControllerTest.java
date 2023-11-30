@@ -1,7 +1,6 @@
 package com.liberty52.auth.user.web;
 
 import com.liberty52.auth.global.config.WebSecurityConfig;
-import com.liberty52.auth.global.exception.external.ErrorResponse;
 import com.liberty52.auth.global.exception.external.RestExceptionHandler;
 import com.liberty52.auth.global.exception.external.badrequest.PageNumberOutOfRangeException;
 import com.liberty52.auth.global.exception.external.notfound.NoticeNotFoundById;
@@ -10,6 +9,7 @@ import com.liberty52.auth.notice.service.NoticeRetrieveService;
 import com.liberty52.auth.notice.web.dto.NoticeDetailResponse;
 import com.liberty52.auth.notice.web.dto.NoticeRetrieveResponse;
 import com.liberty52.auth.notice.web.rest.NoticeRetrieveController;
+import com.liberty52.common.exception.external.ErrorResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
