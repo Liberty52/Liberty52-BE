@@ -1,4 +1,4 @@
-package com.liberty52.main.global.exception.external.unauthorized;
+package com.liberty52.common.exception.external.unauthorized;
 
 import com.liberty52.common.exception.external.AbstractApiException;
 import com.liberty52.common.exception.external.ErrorCodeImpl;
