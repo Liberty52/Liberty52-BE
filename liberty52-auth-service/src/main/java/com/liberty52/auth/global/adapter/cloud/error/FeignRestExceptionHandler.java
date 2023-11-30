@@ -1,6 +1,6 @@
 package com.liberty52.auth.global.adapter.cloud.error;
 
-import com.liberty52.auth.global.exception.external.ErrorResponse;
+import com.liberty52.common.exception.external.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

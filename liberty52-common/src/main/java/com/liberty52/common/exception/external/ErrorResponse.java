@@ -1,6 +1,5 @@
-package com.liberty52.main.global.exception.external;
+package com.liberty52.common.exception.external;
 
-import com.liberty52.common.exception.external.ErrorCode;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 

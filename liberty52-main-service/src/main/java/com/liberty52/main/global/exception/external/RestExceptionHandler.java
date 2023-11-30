@@ -3,6 +3,7 @@ package com.liberty52.main.global.exception.external;
 import com.liberty52.authentication.core.exception.AuthenticationException;
 import com.liberty52.common.exception.external.AbstractApiException;
 import com.liberty52.common.exception.external.ErrorCodeImpl;
+import com.liberty52.common.exception.external.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
