@@ -2,8 +2,8 @@ FROM gradle:7.4-jdk17 AS builder
 WORKDIR /app
 COPY build.gradle .
 COPY settings.gradle .
-COPY liberty52-auth-service liberty-auth-service
-COPY liberty52-common liberty-common
+COPY liberty52-auth-service liberty52-auth-service
+COPY liberty52-common liberty52-common
 
 RUN gradle liberty52-auth-service:assemble
 
