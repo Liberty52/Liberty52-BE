@@ -1,4 +1,4 @@
-package com.liberty52.main.global.exception.external;
+package com.liberty52.common.exception.external;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class AbstractApiException extends RuntimeException implements ErrorCode 
     }
 
 
-    public AbstractApiException(ProductErrorCode errorCode, String errorMessage) {
+    public AbstractApiException(ErrorCodeImpl errorCode, String errorMessage) {
         this.httpStatus = errorCode.getHttpStatus();
         this.errorCode = errorCode.getErrorCode();
         this.errorName = errorCode.getErrorName();

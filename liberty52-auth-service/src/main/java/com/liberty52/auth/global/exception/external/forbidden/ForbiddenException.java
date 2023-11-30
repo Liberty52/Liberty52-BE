@@ -1,10 +1,11 @@
 package com.liberty52.auth.global.exception.external.forbidden;
 
-import com.liberty52.auth.global.exception.external.AbstractApiException;
-import com.liberty52.auth.global.exception.external.AuthErrorCode;
+
+import com.liberty52.common.exception.external.AbstractApiException;
+import com.liberty52.common.exception.external.ErrorCodeImpl;
 
 public class ForbiddenException extends AbstractApiException {
     public ForbiddenException(String msg) {
-        super(AuthErrorCode.FORBIDDEN, msg);
+        super(ErrorCodeImpl.FORBIDDEN, msg);
     }
 }

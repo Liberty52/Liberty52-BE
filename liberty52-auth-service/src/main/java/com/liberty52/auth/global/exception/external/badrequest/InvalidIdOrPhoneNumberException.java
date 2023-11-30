@@ -1,5 +1,7 @@
 package com.liberty52.auth.global.exception.external.badrequest;
 
+import com.liberty52.common.exception.external.badrequest.BadRequestException;
+
 public class InvalidIdOrPhoneNumberException extends BadRequestException {
 
   public InvalidIdOrPhoneNumberException() {

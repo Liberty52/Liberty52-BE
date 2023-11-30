@@ -1,4 +1,4 @@
-package com.liberty52.main.global.exception.external;
+package com.liberty52.common.exception.external;
 
 import org.springframework.http.HttpStatus;
 

@@ -1,7 +1,7 @@
 package com.liberty52.main.service.applicationservice.impl;
 
 import com.liberty52.main.global.annotation.DistributedLock;
-import com.liberty52.main.global.exception.external.badrequest.BadRequestException;
+import com.liberty52.common.exception.external.badrequest.BadRequestException;
 import com.liberty52.main.global.exception.external.notfound.ResourceNotFoundException;
 import com.liberty52.main.global.util.Result;
 import com.liberty52.main.service.applicationservice.LicenseOptionDetailStockManageService;

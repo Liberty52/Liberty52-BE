@@ -1,5 +1,6 @@
 package com.liberty52.auth.global.exception.external;
 
+import com.liberty52.common.exception.external.ErrorCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
