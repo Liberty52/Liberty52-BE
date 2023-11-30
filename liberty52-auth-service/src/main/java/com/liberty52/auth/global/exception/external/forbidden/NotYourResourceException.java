@@ -1,5 +1,7 @@
 package com.liberty52.auth.global.exception.external.forbidden;
 
+import com.liberty52.common.exception.external.forbidden.ForbiddenException;
+
 public class NotYourResourceException extends ForbiddenException {
     public NotYourResourceException(String resourceName, String id) {
         super(makeMessage(resourceName, id));

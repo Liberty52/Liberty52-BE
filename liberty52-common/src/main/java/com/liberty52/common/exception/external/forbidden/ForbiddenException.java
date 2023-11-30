@@ -1,5 +1,4 @@
-package com.liberty52.auth.global.exception.external.forbidden;
-
+package com.liberty52.common.exception.external.forbidden;
 
 import com.liberty52.common.exception.external.AbstractApiException;
 import com.liberty52.common.exception.external.ErrorCodeImpl;
