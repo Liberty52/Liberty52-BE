@@ -5,7 +5,7 @@ COPY settings.gradle .
 COPY liberty52-main-service/lombok.config .
 COPY liberty52-main-service liberty52-main-service
 COPY liberty52-authentication-library liberty52-authentication-library
-COPY liberty52-common liberty-common
+COPY liberty52-common liberty52-common
 
 RUN gradle :liberty52-main-service:assemble
 
