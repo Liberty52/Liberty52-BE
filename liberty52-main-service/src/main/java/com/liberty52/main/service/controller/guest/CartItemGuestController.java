@@ -96,20 +96,6 @@ public class CartItemGuestController {
     }
 
     /**
-     * UPDATE
-     **/
-    @Operation(summary = "비회원 장바구니 상품 수정", description = "비회원 장바구니에 있는 상품을 수정합니다.")
-    @PatchMapping("/guest/carts/custom-products/image/{customProductId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void modifyGuestCartItemImage(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
-            @RequestPart(value = "file", required = false) MultipartFile imageFile,
-            @PathVariable String customProductId
-    ) {
-        cartItemModifyService.modifyGuestCartItemImage(guestId, imageFile, customProductId);
-    }
-
-    /**
      * DELETE
      **/
     @Operation(summary = "비회원 장바구니 상품 제거", description = "비회원 장바구니에서 특정 상품을 제거합니다.")

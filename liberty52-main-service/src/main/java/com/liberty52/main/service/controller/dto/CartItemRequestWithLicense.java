@@ -17,14 +17,14 @@ public class CartItemRequestWithLicense {
     String[] optionDetailIds;
 
     @NotNull
-    String licenseOptionDetailId;
+    String licenseOptionId;
 
     @Builder
-    public CartItemRequestWithLicense(String productId, Integer quantity, String[] optionDetailIds, String licenseOptionDetailId) {
+    public CartItemRequestWithLicense(String productId, Integer quantity, String[] optionDetailIds, String licenseOptionId) {
         this.productId = productId;
         this.quantity = quantity;
         this.optionDetailIds = optionDetailIds;
-        this.licenseOptionDetailId = licenseOptionDetailId;
+        this.licenseOptionId = licenseOptionId;
     }
 
     public CartItemRequestWithLicense() {
