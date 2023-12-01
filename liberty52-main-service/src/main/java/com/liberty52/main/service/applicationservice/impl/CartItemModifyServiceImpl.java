@@ -60,6 +60,19 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
 
     }
 
+    @Override
+    public void modifyUserCartItemImage(String authId, MultipartFile imageFile, String customProductId) {
+        CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
+        modifyImage(customProduct, imageFile);
+
+    }
+
+    @Override
+    public void modifyGuestCartItemImage(String guestId, MultipartFile imageFile, String customProductId) {
+        CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
+        modifyImage(customProduct, imageFile);
+    }
+
     private void modifyCartItemWithLicence(String ownerId, CartModifyWithLicenseRequestDto dto, String customProductId) {
         CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
         validCartItem(ownerId, customProduct);

@@ -12,4 +12,8 @@ public interface CartItemModifyService {
     void modifyUserCartItemWihLicense(String authId, CartModifyWithLicenseRequestDto dto, String customProductId);
 
     void modifyGuestCartItemWithLicense(String guestId, CartModifyWithLicenseRequestDto dto, String customProductId);
+
+    void modifyUserCartItemImage(String authId, MultipartFile imageFile, String customProductId);
+
+    void modifyGuestCartItemImage(String guestId, MultipartFile imageFile, String customProductId);
 }
