@@ -78,17 +78,6 @@ public class CartItemController {
     }
 
     /**
-     * UPDATE
-     **/
-    @Operation(summary = "장바구니 상품 이미지 수정", description = "주어진 인증 ID, 이미지 파일 및 장바구니 상품 수정 요청을 사용하여 사용자 장바구니 상품 이미지을 수정합니다.")
-    @PatchMapping("/carts/custom-products/image/{customProductId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void modifyUserCartItem(@RequestHeader(HttpHeaders.AUTHORIZATION) String authId,
-                                   @RequestPart(value = "file", required = false) MultipartFile imageFile, @PathVariable String customProductId) {
-        cartItemModifyService.modifyUserCartItemImage(authId, imageFile, customProductId);
-    }
-
-    /**
      * DELETE
      **/
     @Operation(summary = "장바구니 상품 삭제", description = "주어진 인증 ID 및 장바구니 상품 ID를 사용하여 사용자 장바구니 상품을 삭제합니다.")

@@ -64,10 +64,10 @@ public class CartLicenseItemCreateServiceMockTest {
 
         //given
         String[] option = {"OPT-001", "OPT-003", "OPT-005"};
-        CartItemRequestWithLicense dto1 = new CartItemRequestWithLicense().builder().productId("LIB-002").quantity(1).optionDetailIds(option).licenseOptionDetailId("licenseOption").build();
-        CartItemRequestWithLicense dto2 = new CartItemRequestWithLicense().builder().productId("L").quantity(2).optionDetailIds(option).licenseOptionDetailId("licenseOption").build();
+        CartItemRequestWithLicense dto1 = new CartItemRequestWithLicense().builder().productId("LIB-002").quantity(1).optionDetailIds(option).licenseOptionId("licenseOption").build();
+        CartItemRequestWithLicense dto2 = new CartItemRequestWithLicense().builder().productId("L").quantity(2).optionDetailIds(option).licenseOptionId("licenseOption").build();
         String[] optionErr = {"OPT-002", "OPT-003", "OPT-005"};
-        CartItemRequestWithLicense dto3 = new CartItemRequestWithLicense().builder().productId("LIB-002").quantity(4).optionDetailIds(optionErr).licenseOptionDetailId("err").build();
+        CartItemRequestWithLicense dto3 = new CartItemRequestWithLicense().builder().productId("LIB-002").quantity(4).optionDetailIds(optionErr).licenseOptionId("err").build();
 
         MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
 

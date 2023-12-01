@@ -57,12 +57,12 @@ public class CartItemRetrieveServiceImpl implements CartItemRetrieveService {
                 deliveryFee = product.getDeliveryOption().getFee();
             }
             if(product.isCustom()){
-                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getId(), product.getName(), cartItem.getUserCustomPictureUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), courierName, deliveryFee, product.isCustom(), null);
+                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), cartItem.getUserCustomPictureUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), courierName, deliveryFee, product.isCustom(), null);
 
             } else {
                 LicenseOptionDetail licenseOptionDetail = cartItem.getCustomLicenseOption().getLicenseOptionDetail();
                 LicenseOptionResponse license = LicenseOptionResponse.of(licenseOptionDetail.getLicenseOption().getId(), licenseOptionDetail.getLicenseOption().getName(), licenseOptionDetail.getId(), licenseOptionDetail.getArtName(), licenseOptionDetail.getPrice());
-                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getId(), product.getName(), licenseOptionDetail.getArtUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), courierName, deliveryFee, product.isCustom(), license);
+                cartItemResponse  = CartItemResponse.of(cartItem.getId(), product.getName(), licenseOptionDetail.getArtUrl(), product.getPrice(), cartItem.getQuantity(), getCartOptionList(cartItem.getOptions()), courierName, deliveryFee, product.isCustom(), license);
             }
             cartItemResponseList.add(cartItemResponse);
         }
