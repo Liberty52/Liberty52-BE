@@ -71,6 +71,7 @@ public class ProductInfoRetrieveServiceImpl implements ProductInfoRetrieveServic
             float meanRate = product.getRate(productReviewList);
             dto.add(ProductInfoRetrieveResponseDto.of(product.getId(), product.getPictureUrl(), product.getName(), product.getPrice(), meanRate, productReviewList.size(), product.isCustom(), product.getContent(), product.getProductState(), product.getProductOrder()));
         }
+        dto.sort(Comparator.comparingInt(ProductInfoRetrieveResponseDto::getOrder));
         return dto;
     }
 
