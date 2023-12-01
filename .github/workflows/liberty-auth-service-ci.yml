@@ -2,7 +2,7 @@ name: '리버티 Auth 서비스 ::: CI'
 
 on:
   pull_request:
-    paths: ['liberty-auth-service/**', 'build.gradle', '.github/workflows/liberty-auth-service-ci.yaml', 'liberty-common/**']
+    paths: ['liberty52-auth-service/**', 'build.gradle', '.github/workflows/liberty52-auth-service-ci.yaml', 'liberty52-common/**']
 
 permissions:
   contents: read
@@ -22,7 +22,7 @@ jobs:
       - name: Create bootstrap.yml
         env:
           SECRET_CODE: ${{ secrets.BOOTSTRAP }}
-          SECRET_DIR: liberty-auth-service/src/main/resources
+          SECRET_DIR: liberty52-auth-service/src/main/resources
           SECRET_FILE_NAME: bootstrap.yml
         run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
 
@@ -32,5 +32,5 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
-          arguments: :liberty-auth-service:build
+          arguments: :liberty52-auth-service:build
 

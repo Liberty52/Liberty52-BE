@@ -1,0 +1,18 @@
+version = '0.0.1'
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}
+
+jar {
+    enabled = true
+}
+
+bootRun {
+    enabled = false
+}
+
+bootJar {
+    enabled = false
+}
