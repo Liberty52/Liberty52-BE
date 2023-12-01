@@ -64,7 +64,7 @@ public class CartItemCreateServiceImpl implements CartItemCreateService {
         customProduct.associateWithCart(cart);
         customProductRepository.save(customProduct);
 
-        LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(dto.getLicenseOptionId()).orElseThrow(() -> new OptionDetailNotFoundByNameException(dto.getLicenseOptionId()));
+        LicenseOptionDetail licenseOptionDetail = licenseOptionDetailRepository.findById(dto.getLicenseOptionDetailId()).orElseThrow(() -> new OptionDetailNotFoundByNameException(dto.getLicenseOptionDetailId()));
         CustomLicenseOption customLicenseOption = CustomLicenseOption.create();
         customLicenseOption.associate(licenseOptionDetail);
         customLicenseOption.associate(customProduct);
