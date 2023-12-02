@@ -103,7 +103,7 @@ public class CartItemGuestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void modifyGuestCartItemImage(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String guestId,
-            @RequestPart(value = "file", required = false) MultipartFile imageFile,
+            @RequestPart(value = "file") MultipartFile imageFile,
             @PathVariable String customProductId
     ) {
         cartItemModifyService.modifyGuestCartItemImage(guestId, imageFile, customProductId);

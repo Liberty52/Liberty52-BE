@@ -26,6 +26,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class CartItemModifyServiceImpl implements CartItemModifyService {
 
     private final S3UploaderApi s3Uploader;
@@ -38,31 +39,26 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
     private final CustomLicenseOptionRepository customLicenseOptionRepository;
 
 
-    @Transactional
     @Override
     public void modifyUserCartItem(String authId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
         modifyCartItem(authId,dto,imageFile,customProductId);
     }
-    @Transactional
     @Override
     public void modifyGuestCartItem(String guestId, CartModifyRequestDto dto, MultipartFile imageFile, String customProductId) {
         modifyCartItem(guestId,dto,imageFile,customProductId);
     }
 
-    @Transactional
     @Override
     public void modifyUserCartItemWihLicense(String authId, CartModifyWithLicenseRequestDto dto, String customProductId) {
         modifyCartItemWithLicence(authId,dto,customProductId);
     }
 
-    @Transactional
     @Override
     public void modifyGuestCartItemWithLicense(String guestId, CartModifyWithLicenseRequestDto dto, String customProductId) {
-        modifyCartItemWithLicence(guestId,dto,customProductId);
+            modifyCartItemWithLicence(guestId,dto,customProductId);
 
     }
 
-    @Transactional
     @Override
     public void modifyUserCartItemImage(String authId, MultipartFile imageFile, String customProductId) {
         CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
@@ -70,7 +66,6 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
 
     }
 
-    @Transactional
     @Override
     public void modifyGuestCartItemImage(String guestId, MultipartFile imageFile, String customProductId) {
         CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
@@ -80,9 +75,7 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
     private void modifyCartItemWithLicence(String ownerId, CartModifyWithLicenseRequestDto dto, String customProductId) {
         CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
         validCartItem(ownerId, customProduct);
-        customProduct.modifyQuantity(dto.getQuantity());
         modifyLicenseOption(dto.getLicenseId(), customProduct);
-        modifyOptionsDetail(dto.getOptionDetailIds(), customProduct);
     }
 
     private void modifyLicenseOption(String licenseId, CustomProduct customProduct) {
@@ -101,6 +94,7 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
         customProduct.modifyQuantity(dto.getQuantity());
         modifyImage(customProduct, imageFile);
         modifyOptionsDetail(dto.getOptionDetailIds(), customProduct);
+        customProductRepository.save(customProduct);
     }
 
     private void modifyImage(CustomProduct customProduct, MultipartFile imageFile) {
