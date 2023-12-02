@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,7 +14,10 @@ import java.util.stream.Collectors;
 public class ProductListResponseDto extends PageDtoBase<ProductListResponseDto.ProductInfo> {
 
     public ProductListResponseDto(Page<Product> page, List<Review> reviewList) {
-        super(page, page.getContent().stream().map(p -> new ProductInfo(p, reviewList)).toList());
+        super(page, page.getContent().stream()
+            .sorted(Comparator.comparingInt(Product::getProductOrder))
+            .map(p -> new ProductInfo(p, reviewList))
+            .toList());
     }
 
     @Data

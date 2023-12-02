@@ -310,6 +310,9 @@ public class OrderCreateServiceImpl implements OrderCreateService {
 
     private void finishCreation(Orders order) {
         order.finishCreation();
+        for (CustomProduct customProduct : order.getCustomProducts()) {
+           customProductOptionRepository.saveAll(customProduct.getOptions());
+        }
     }
 
 }
