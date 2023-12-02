@@ -55,7 +55,7 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
 
     @Override
     public void modifyGuestCartItemWithLicense(String guestId, CartModifyWithLicenseRequestDto dto, String customProductId) {
-            modifyCartItemWithLicence(guestId,dto,customProductId);
+        modifyCartItemWithLicence(guestId,dto,customProductId);
 
     }
 
@@ -63,6 +63,7 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
     public void modifyUserCartItemImage(String authId, MultipartFile imageFile, String customProductId) {
         CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
         modifyImage(customProduct, imageFile);
+        customProductRepository.save(customProduct);
 
     }
 
@@ -70,12 +71,15 @@ public class CartItemModifyServiceImpl implements CartItemModifyService {
     public void modifyGuestCartItemImage(String guestId, MultipartFile imageFile, String customProductId) {
         CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
         modifyImage(customProduct, imageFile);
+        customProductRepository.save(customProduct);
+
     }
 
     private void modifyCartItemWithLicence(String ownerId, CartModifyWithLicenseRequestDto dto, String customProductId) {
         CustomProduct customProduct = customProductRepository.findById(customProductId).orElseThrow(() -> new CustomProductNotFoundByIdException(customProductId));
         validCartItem(ownerId, customProduct);
         modifyLicenseOption(dto.getLicenseId(), customProduct);
+        customProductRepository.save(customProduct);
     }
 
     private void modifyLicenseOption(String licenseId, CustomProduct customProduct) {
