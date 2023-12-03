@@ -101,4 +101,11 @@ public class Product {
     public void updateProductOrder(int productOrder) {
         this.productOrder = productOrder;
     }
+
+    public int getDeliveryFee() {
+        if (this.deliveryOption == null) {
+            return 0;
+        }
+        return this.deliveryOption.getFee();
+    }
 }
