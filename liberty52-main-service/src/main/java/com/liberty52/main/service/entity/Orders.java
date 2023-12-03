@@ -1,6 +1,5 @@
 package com.liberty52.main.service.entity;
 
-import com.liberty52.main.global.constants.PriceConstants;
 import com.liberty52.main.global.util.Utils;
 import com.liberty52.main.service.entity.payment.Payment;
 import jakarta.persistence.*;
@@ -26,12 +25,14 @@ public class Orders {
     @Id
     private final String id = UUID.randomUUID().toString();
     private final LocalDateTime orderedAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+
     @Column(updatable = false, nullable = false)
     private String authId;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    private int deliveryPrice = PriceConstants.DEFAULT_DELIVERY_PRICE;
+    private int deliveryPrice = 0;
 
     private Long amount = 0L;
 
@@ -56,25 +57,11 @@ public class Orders {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "order")
     private OrderDelivery orderDelivery;
 
-    @Deprecated
-    private Orders(String authId, int deliveryPrice, OrderDestination orderDestination) {
-        this.authId = authId;
-        orderStatus = OrderStatus.ORDERED;
-        this.orderNum = Utils.OrderNumberBuilder.createOrderNum();
-        this.deliveryPrice = deliveryPrice;
-        this.orderDestination = orderDestination;
-    }
-
     private Orders(String authId, OrderDestination orderDestination) {
         this.authId = authId;
         this.orderStatus = OrderStatus.READY;
         this.orderNum = Utils.OrderNumberBuilder.createOrderNum();
         this.orderDestination = orderDestination;
-    }
-
-    @Deprecated
-    public static Orders create(String authId, int deliveryPrice, OrderDestination orderDestination) {
-        return new Orders(authId, deliveryPrice, orderDestination);
     }
 
     public static Orders create(String authId, OrderDestination orderDestination) {
@@ -131,7 +118,11 @@ public class Orders {
             // 수량
             totalAmount.getAndUpdate(x -> customProduct.getQuantity() * x);
         });
+
         // 배송비
+        this.deliveryPrice = this.customProducts.stream()
+                .mapToInt(CustomProduct::getDeliveryFee)
+                .sum();
         totalAmount.getAndAdd(this.deliveryPrice);
 
         this.amount = totalAmount.get();

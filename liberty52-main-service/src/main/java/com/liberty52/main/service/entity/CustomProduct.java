@@ -157,5 +157,8 @@ public class CustomProduct {
         this.quantity = quantity;
     }
 
+    public int getDeliveryFee() {
+        return this.product.getDeliveryFee();
+    }
 
 }

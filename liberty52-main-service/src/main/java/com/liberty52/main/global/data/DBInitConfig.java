@@ -1,7 +1,6 @@
 package com.liberty52.main.global.data;
 
 import com.liberty52.main.global.adapter.portone.dto.PortOnePaymentInfo;
-import com.liberty52.main.global.constants.PriceConstants;
 import com.liberty52.main.global.constants.ProductConstants;
 import com.liberty52.main.global.constants.VBankConstants;
 import com.liberty52.main.service.applicationservice.OrderCreateService;
@@ -161,10 +160,9 @@ public class DBInitConfig {
 
                 // Add Order
                 Orders order = ordersRepository.save(
-                        Orders.create(AUTH_ID, PriceConstants.DEFAULT_DELIVERY_PRICE,
-                                OrderDestination.create("receiver", "email", "01012341234",
-                                        "경기도 어딘가",
-                                        "101동 101호", "12345")));
+                        Orders.create(AUTH_ID, OrderDestination.create(
+                                "receiver", "email", "01012341234",
+                                        "경기도 어딘가", "101동 101호", "12345")));
                 DBInitService.order = order;
 
                 customProduct0 = CustomProduct.create(imageUrl, 1, AUTH_ID);
@@ -191,10 +189,9 @@ public class DBInitConfig {
                 // Add Order
                 Orders orderSub
                         = ordersRepository.save(
-                        Orders.create(AUTH_ID, PriceConstants.DEFAULT_DELIVERY_PRICE,
-                                OrderDestination.create("receiver", "email", "01012341234",
-                                        "경기도 어딘가",
-                                        "101동 101호", "12345")));
+                        Orders.create(AUTH_ID, OrderDestination.create(
+                                "receiver", "email", "01012341234",
+                                        "경기도 어딘가", "101동 101호", "12345")));
                 DBInitService.order = order;
 
                 CustomProduct customProduct = CustomProduct.create(imageUrl, 1, AUTH_ID);
@@ -226,9 +223,9 @@ public class DBInitConfig {
 
                 for (int i = 0; i < 10; i++) {
                     Orders guestOrder = Orders.create("GUEST-00" + i,
-                            PriceConstants.DEFAULT_DELIVERY_PRICE,
                             OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
                                     "101동 101호", "12345"));
+                    guestOrder.changeOrderStatusToOrdered();
 
                     Field guestOrderId = guestOrder.getClass().getDeclaredField("id");
                     guestOrderId.setAccessible(true);
@@ -261,7 +258,6 @@ public class DBInitConfig {
 
                 for (int i = 11; i < 15; i++) {
                     Orders guestOrder = Orders.create("GUEST-00" + i,
-                            PriceConstants.DEFAULT_DELIVERY_PRICE,
                             OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
                                     "101동 101호", "12345"));
                     guestOrder.changeOrderStatusToWaitingDeposit();
@@ -297,7 +293,6 @@ public class DBInitConfig {
                 // 카드 취소
                 for (; c < 5; c++) {
                     Orders c_order = Orders.create("CANCELER-00" + c,
-                            PriceConstants.DEFAULT_DELIVERY_PRICE,
                             OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
                                     "101동 101호", "12345")
                     );
@@ -333,7 +328,6 @@ public class DBInitConfig {
 
                 for (; c < 10; c++) {
                     Orders c_order = Orders.create("CANCELER-00" + c,
-                            PriceConstants.DEFAULT_DELIVERY_PRICE,
                             OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
                                     "101동 101호", "12345")
                     );
@@ -366,7 +360,6 @@ public class DBInitConfig {
 
                 for (; c < 15; c++) {
                     Orders c_order = Orders.create("CANCELER-00" + c,
-                            PriceConstants.DEFAULT_DELIVERY_PRICE,
                             OrderDestination.create("receiver", "email", "01012341234", "경기도 어딘가",
                                     "101동 101호", "12345")
                     );

@@ -1,94 +1,121 @@
 package com.liberty52.main.service.entity;
 
-import com.liberty52.main.MockS3Test;
-import com.liberty52.main.global.adapter.s3.S3UploaderApi;
-import com.liberty52.main.global.constants.PriceConstants;
-import com.liberty52.main.service.applicationservice.OrderCreateService;
-import com.liberty52.main.service.controller.dto.OrderCreateRequestDto;
-import com.liberty52.main.service.controller.dto.PaymentCardResponseDto;
-import com.liberty52.main.service.repository.OptionDetailRepository;
-import com.liberty52.main.service.repository.OrdersRepository;
-import com.liberty52.main.service.repository.ProductRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
+import com.liberty52.main.service.utils.MockFactory;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
-@SpringBootTest
-@Transactional
-@AutoConfigureMockMvc
-class OrdersEntityTest extends MockS3Test {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    private static final String LIBERTY = "Liberty 52_Frame";
-    private static final String OPTION_1 = "OPT-001";
-    private static final String OPTION_2 = "OPT-003";
-    private static final String OPTION_3 = "OPT-004";
-    private static final int QUANTITY = 2;
-    private static final int DELIVERY_PRICE = PriceConstants.DEFAULT_DELIVERY_PRICE;
-    String authId = UUID.randomUUID().toString();
-    MockMultipartFile imageFile = new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream("src/test/resources/static/test.jpg"));
-    @Autowired
-    private OrderCreateService orderCreateService;
-    @Autowired
-    private OrdersRepository ordersRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private OptionDetailRepository optionDetailRepository;
-    @Autowired
-    private S3UploaderApi s3Uploader;
-    private String orderId;
+class OrdersEntityTest {
 
-    OrdersEntityTest() throws IOException {
+    @Test
+    void calculateTotalValueAndSet_givenOneCustomProduct_success() {
+        // given
+        var authId = "users";
+        var product = givenProduct(10000L, 1000);
+        var customProduct = givenCustomProduct(
+                authId,
+                product,
+                product.getProductOptions().get(0).getOptionDetails().get(0), // 1000
+                product.getProductOptions().get(1).getOptionDetails().get(1) // 10000
+        );
+
+        var order = givenOrder(authId, customProduct);
+
+        // when
+        order.calculateTotalValueAndSet();
+
+        // then
+        var expected = 10000 + 1000 + 10000 + 1000;
+        assertEquals(expected, order.getAmount());
     }
 
     @Test
-    void test_getTotalAmount() {
-        OrderCreateRequestDto requestDto = OrderCreateRequestDto.forTestCard(
-                LIBERTY, List.of(OPTION_1, OPTION_2, OPTION_3), QUANTITY, List.of(),"",
-                "receiverName", "receiverEmail", "receiverPhoneNumber", "address1", "address2", "zipCode"
+    void calculateTotalValueAndSet_givenTwoCustomProductOfAnotherProduct_success() {
+        // given
+        var authId = "user";
+        var product_1 = givenProduct(10000L, 100);
+        var product_2 = givenProduct(100_000L, 10000);
+
+        var customProducts = List.of(
+                givenCustomProduct(
+                        authId,
+                        product_1,
+                        product_1.getProductOptions().get(0).getOptionDetails().get(1), // 100
+                        product_1.getProductOptions().get(1).getOptionDetails().get(0) // 1000
+                ),
+                givenCustomProduct(
+                        authId,
+                        product_2,
+                        product_2.getProductOptions().get(0).getOptionDetails().get(0), // 1000
+                        product_2.getProductOptions().get(1).getOptionDetails().get(1) // 10000
+                )
         );
 
-        PaymentCardResponseDto save = orderCreateService.createCardPaymentOrders(authId, requestDto, imageFile);
-        orderId = save.getMerchantId();
+        var order = givenOrder(authId, customProducts);
 
-        Orders orders = ordersRepository.findById(orderId).get();
+        // when
+        order.calculateTotalValueAndSet();
 
-        long expected = getExpectedPrice();
-        orders.calculateTotalValueAndSet();
-        long actual = orders.getAmount();
-        Assertions.assertNotNull(orders);
-        Assertions.assertEquals(expected, actual);
+        // then
+        var expected = 10000 + 100 + 1000 + 100 + 100_000 + 1000 + 10000 + 10000;
+        assertEquals(expected, order.getAmount());
     }
 
-    private Long getExpectedPrice() {
-        long expected = 0;
-        expected += productRepository.findByName(LIBERTY).get().getPrice();
-        expected += optionDetailRepository.findById(OPTION_1).get().getPrice();
-        expected += optionDetailRepository.findById(OPTION_2).get().getPrice();
-        expected += optionDetailRepository.findById(OPTION_3).get().getPrice();
-        expected *= QUANTITY;
-        expected += DELIVERY_PRICE;
-        return expected;
+    private Orders givenOrder(
+            String authId,
+            List<CustomProduct> customProducts
+    ) {
+        var order = MockFactory.createOrder(authId);
+        customProducts.forEach(it -> it.associateWithOrder(order));
+        return order;
     }
 
-    @AfterEach
-    public void deleteS3Image() {
-        Orders orders = ordersRepository.findById(orderId).get();
-        orders.getCustomProducts().forEach(customProduct -> {
-            String imageUrl = customProduct.getUserCustomPictureUrl();
-            s3Uploader.delete(imageUrl);
-        });
+    private Orders givenOrder(
+            String authId,
+            CustomProduct customProduct
+    ) {
+        return givenOrder(authId, List.of(customProduct));
     }
 
+    private CustomProduct givenCustomProduct(
+            String authId,
+            Product product,
+            OptionDetail... selectedOptions
+    ) {
+        var customProduct = MockFactory.createCustomProduct("image", 1, authId, product);
 
+        Arrays.stream(selectedOptions).forEach(it ->
+                MockFactory.createCustomProductOption(customProduct, it));
+
+        return customProduct;
+    }
+
+    private Product givenProduct(
+            Long productPrice,
+            Integer deliveryFee
+    ) {
+        var product = MockFactory.createProduct("product", productPrice);
+
+        var productOption1 = MockFactory.createProductOption("product-option-1", true);
+        var optionDetail1 = MockFactory.createOptionDetail("detail-1", 1000);
+        var optionDetail2 = MockFactory.createOptionDetail("detail-2", 100);
+        optionDetail1.associate(productOption1);
+        optionDetail2.associate(productOption1);
+
+        var productOption2 = MockFactory.createProductOption("product-option-2", true);
+        var optionDetail3 = MockFactory.createOptionDetail("detail-3", 1000);
+        var optionDetail4 = MockFactory.createOptionDetail("detail-4", 10000);
+        optionDetail3.associate(productOption2);
+        optionDetail4.associate(productOption2);
+
+        product.addOption(productOption1);
+        product.addOption(productOption2);
+
+        MockFactory.createProductDeliveryOption("cj", deliveryFee, product);
+
+        return product;
+    }
 }

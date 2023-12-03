@@ -86,6 +86,7 @@ class OrderCreateServiceImplUnitTest {
     void createCardPaymentOrder() {
         // given
         var product = MockFactory.createProduct("pd");
+        MockFactory.createProductDeliveryOption("cj", 10000, product);
         given(productRepository.findByName(anyString()))
                 .willReturn(Optional.of(product));
 
