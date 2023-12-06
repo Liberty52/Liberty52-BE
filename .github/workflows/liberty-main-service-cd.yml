@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev
-    paths: ['liberty52-main-service/**', 'liberty5252-authentication-library/**', 'build.gradle', '.github/workflows/liberty52-main-service-cd.yml', 'liberty52-common/**']
+    paths: ['liberty52-main-service/**', 'liberty52-authentication-library/**', 'build.gradle', '.github/workflows/liberty52-main-service-cd.yml', 'liberty52-common/**']
 
 env:
   REGISTRY: ghcr.io
