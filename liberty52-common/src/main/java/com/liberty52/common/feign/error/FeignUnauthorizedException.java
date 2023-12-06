@@ -1,4 +1,4 @@
-package com.liberty52.main.global.adapter.cloud.error;
+package com.liberty52.common.feign.error;
 
 public class FeignUnauthorizedException extends FeignClientException {
     public FeignUnauthorizedException() {

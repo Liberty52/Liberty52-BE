@@ -1,5 +1,9 @@
 package com.liberty52.main.global.adapter.cloud.error;
 
+import com.liberty52.common.feign.error.Feign4xxException;
+import com.liberty52.common.feign.error.Feign5xxException;
+import com.liberty52.common.feign.error.FeignClientException;
+import com.liberty52.common.feign.error.FeignUnauthorizedException;
 import com.liberty52.main.global.exception.external.internalservererror.InternalServerErrorException;
 import feign.Response;
 import feign.codec.ErrorDecoder;

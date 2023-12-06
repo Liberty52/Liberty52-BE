@@ -1,6 +1,10 @@
 package com.liberty52.auth.global.adapter.cloud.error;
 
 import com.liberty52.auth.global.exception.external.internalservererror.InternalServerErrorException;
+import com.liberty52.common.feign.error.Feign4xxException;
+import com.liberty52.common.feign.error.Feign5xxException;
+import com.liberty52.common.feign.error.FeignClientException;
+import com.liberty52.common.feign.error.FeignUnauthorizedException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;

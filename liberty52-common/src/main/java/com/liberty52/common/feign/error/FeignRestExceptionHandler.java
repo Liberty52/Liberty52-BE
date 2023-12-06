@@ -1,4 +1,4 @@
-package com.liberty52.auth.global.adapter.cloud.error;
+package com.liberty52.common.feign.error;
 
 import com.liberty52.common.exception.external.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
