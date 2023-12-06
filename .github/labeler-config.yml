@@ -89,31 +89,31 @@ filters:
     events: [ issues, pull_request ]
     targets: [ title, comment, branch ]
 
-  - label: 1️⃣ Liberty Main Service
+  - label: 1️⃣ Liberty52 Main Service
     regexs:
       - /메인/i
     events: [ issues, pull_request ]
     targets: [ title, comment, branch ]
 
-  - label: 1️⃣ Liberty Main Service
+  - label: 1️⃣ Liberty52 Main Service
     regexs:
       - /Main/i
     events: [ issues, pull_request ]
     targets: [ title, comment, branch ]
 
-  - label: 1️⃣ Liberty Main Service
+  - label: 1️⃣ Liberty52 Main Service
     regexs:
       - /MAIN/i
     events: [ issues, pull_request ]
     targets: [ title, comment, branch ]
 
-  - label: 2️⃣ Liberty Auth Service
+  - label: 2️⃣ Liberty52 Auth Service
     regexs:
       - /Auth/i
     events: [ issues, pull_request ]
     targets: [ title, comment, branch ]
 
-  - label: 2️⃣ Liberty AUTH Service
+  - label: 2️⃣ Liberty52 Auth Service
     regexs:
       - /AUTH/i
     events: [ issues, pull_request ]

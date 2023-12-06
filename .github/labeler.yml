@@ -1,17 +1,19 @@
 0️⃣ Root Module:
   - 'build.gradle'
   - 'setting.gradle'
-1️⃣ liberty52 Main Service:
+1️⃣ Liberty52 Main Service:
   - 'liberty52-main-service/**'
   - 'liberty52-authentication-library/**'
   - 'build.gradle'
   - 'liberty52-common/**'
-2️⃣ liberty52 Auth Service:
+2️⃣ Liberty52 Auth Service:
   - 'liberty52-auth-service/**'
   - 'build.gradle'
   - 'liberty52-common/**'
-3️⃣ liberty52 Authentication Library:
+3️⃣ Liberty52 Authentication Library:
   - 'liberty52-authentication-library/**'
   - 'build.gradle'
+4️⃣ Liberty52 Common:
+  - 'liberty52-common/**'
 🤖 Automation:
   - '.github/workflows/**'
