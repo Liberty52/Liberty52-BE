@@ -1,4 +1,4 @@
-rootProject.name = 'product'
+rootProject.name = 'Liberty52-BE'
 include 'liberty52-authentication-library'
 include 'liberty52-main-service'
 include 'liberty52-auth-service'
